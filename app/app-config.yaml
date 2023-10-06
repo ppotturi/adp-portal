@@ -30,6 +30,10 @@ backend:
   database:
     client: better-sqlite3
     connection: ':memory:'
+  #database:
+  #  client: better-sqlite3
+  #  connection:
+  #    directory: 'tmp'
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
 integrations:
@@ -74,30 +78,23 @@ catalog:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
   rules:
-    - allow: [Component, System, API, Resource, Location]
+    - allow: [Component, System, API, Resource, Location, Template]
   locations:
-    # Local example data, file locations are relative to the backend process, typically `packages/backend`
-    - type: file
-      target: ../../examples/entities.yaml
-
-    # Local example template
-    - type: file
-      target: ../../examples/template/template.yaml
-      rules:
-        - allow: [Template]
-
-    # Local example organizational data
-    - type: file
-      target: ../../examples/org.yaml
+    
+    - type: url
+      target: https://github.com/defra-adp-sandpit/adp-software-templates/blob/features/kb/backstage-software-templates/catalog-model/defra-org.yaml
       rules:
         - allow: [User, Group]
+
+    - type: url
+      target: https://github.com/defra-adp-sandpit/adp-software-templates/blob/features/kb/backstage-software-templates/catalog-model/all.yaml
 
     ## Uncomment these lines to add more example data
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
 
     ## Uncomment these lines to add an example org
-    # - type: url
-    #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
-    #   rules:
-    #     - allow: [User, Group]
+    #- type: url
+    #  target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
+    #  rules:
+    #    - allow: [User, Group]
