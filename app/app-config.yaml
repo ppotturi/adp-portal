@@ -86,21 +86,33 @@ catalog:
   rules:
     - allow: [Component, System, API, Resource, Location, Template, Domain, Group]
   
+  # Providers configured to scan repos in the specified organizations for components to add to the catalog.
+  # Assumes a catalog-info.yml file is present in the root of the repo.
   providers:
     github:
-      adpSandpitOrg:
+      adpSandpit:
         organization: 'defra-adp-sandpit'
-        catalogPath: '/catalog-model/defra-org.yaml'
+        catalogPath: '/catalog-info.yaml'
         filters:
-          repository: 'adp-software-templates'
+          branch: 'main'
         schedule:
-          frequency: { minutes: 5 }
-          timeout: { minutes: 3 }
-      adpSandpitCore:
-        organization: 'defra-adp-sandpit'
-        catalogPath: '/catalog-model/all.yaml'
-        filters:
-          repository: 'adp-software-templates'
-        schedule:
-          frequency: { minutes: 5 }
-          timeout: { minutes: 3 }
+          frequency: { minutes: 30 }
+          timeout: { minutes: 5 }
+      #defra:
+      #  organization: 'defra'
+      #  catalogPath: '**/catalog-info.yml'
+      #  filters:
+      #    branch: 'main'
+      #  schedule:
+      #    frequency: { minutes: 30 }
+      #    timeout: { minutes: 5 }
+
+  # Locations configured to import static data into the catalog
+  locations:
+    - type: url
+      target: https://github.com/defra-adp-sandpit/adp-software-templates/blob/main/catalog-model/defra-org.yaml
+      rules:
+        - allow: [User, Group]
+
+    - type: url
+      target: https://github.com/defra-adp-sandpit/adp-software-templates/blob/main/catalog-model/all.yaml
