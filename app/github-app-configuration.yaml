@@ -1,0 +1,9 @@
+# Name: Defra - Backstage
+appId: ${GITHUB_APP_ID}
+webhookUrl: https://smee.io/
+clientId: ${GITHUB_CLIENT_ID}
+clientSecret: ${GITHUB_CLIENT_SECRET}
+webhookSecret: ThisIsRequiredButNotUsed
+privateKey:
+  $file: defra-backstage.private-key.pem
+
