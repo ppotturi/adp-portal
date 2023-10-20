@@ -16,12 +16,16 @@ The Azure Development Platform Portal built using [Backstage](https://backstage.
 See the [Backstage Getting Started documentation](https://backstage.io/docs/getting-started/#prerequisites) for the full list of prerequisites.
 
 ### Integrations
-We integrate with GitHub via a GitHub app. To get this working locally, the following script will initialize the required environment variables:
+Backstage integrates with GitHub to import and create repository data, and Azure AD for authentication. To get these integrations working locally, you will need to create a GitHub app and an App Registration in Azure AD. Update and run the following script to set the credentials required to run the application:
 
 ```sh
-EXPORT GITHUB_APP_ID=<REPLACE>
-EXPORT GITHUB_CLIENT_ID=<REPLACE>
-EXPORT GITHUB_CLIENT_SECRET=<REPLACE>
+export GITHUB_APP_ID=<REPLACE>
+export GITHUB_CLIENT_ID=<REPLACE>
+export GITHUB_CLIENT_SECRET=<REPLACE>
+
+export AUTH_MICROSOFT_CLIENT_ID=<REPLACE>
+export AUTH_MICROSOFT_CLIENT_SECRET=<REPLACE>
+export AUTH_MICROSOFT_TENANT_ID=<REPLACE>
 ```
 
 The GitHub integration also requires a private key. Generate and copy this from your GitHub app to the path specified in [github-app-configuration.yaml](app/github-app-configuration.yaml).
