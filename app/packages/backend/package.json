@@ -16,6 +16,7 @@
     "build-image": "docker build ../.. -f Dockerfile --tag backstage"
   },
   "dependencies": {
+    "@antoniobergas/scaffolder-backend-module-azure-pipelines": "^2.0.0",
     "@backstage/backend-common": "^0.19.5",
     "@backstage/backend-tasks": "^0.5.8",
     "@backstage/catalog-client": "^1.4.4",
