@@ -52,3 +52,4 @@ site
 
 *.sqlite
 *.private-key.pem
+env.sh
