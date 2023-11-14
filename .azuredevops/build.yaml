@@ -30,7 +30,7 @@ resources:
 jobs:
 - job: Build
   pool:
-    vmImage: 'ubuntu-latest'
+    name: 'DEFRA-ADP-SND1-ubuntu2204'
   variables:
     - name: acrName
       value: 'ssvadpinfcr3401'
@@ -53,8 +53,7 @@ jobs:
       scriptType: pscore
       scriptLocation: inlineScript
       workingDirectory: app
-      inlineScript: |        
-        yarn config set "strict-ssl" false
+      inlineScript: |                
         docker buildx build -t backstage -f ./packages/backend/Dockerfile --platform=linux/amd64 .
         az acr login -n $(acrName)
         docker tag backstage $(acrName).azurecr.io/backstage:$(Build.BuildId)
