@@ -1,0 +1,64 @@
+pr:
+  branches:
+    include:
+      - main
+      - master
+  paths:
+    exclude:
+      - test-output/*
+      - bin/*
+      - obj/*
+  drafts: false
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - "*"
+  paths:
+    exclude:
+      - test-output/*
+      - bin/*
+      - obj/*
+
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: refs/heads/main
+
+jobs:
+- job: Build
+  pool:
+    vmImage: ubuntu-latest
+  variables:
+    - name: acrName
+      value: 'ssvadpinfcr3401'
+  steps:
+  - checkout: self
+    clean: true
+    fetchTags: false
+    persistCredentials: True
+  - task: PowerShell@2
+    inputs:
+      targetType: inline
+      script: >-
+        yarn install --frozen-lockfile
+        yarn tsc
+        yarn build:backend
+      errorActionPreference: silentlyContinue
+      warningPreference: silentlyContinue
+      pwsh: true
+      workingDirectory: app
+  - task: AzureCLI@2
+    displayName: 'Azure CLI '
+    inputs:
+      azureSubscription: 'AZD-CDO-SSV3'
+      scriptType: pscore
+      scriptLocation: inlineScript
+      workingDirectory: app
+      inlineScript: |
+        docker buildx build -t backstage -f .\packages\backend\Dockerfile --platform=linux/amd64 .
+        az acr login -n $(acrName)
+        docker tag backstage $(acrName).azurecr.io/backstage:$(Build.BuildId)
+        docker push $(acrName).azurecr.io/backstage:$(Build.BuildId)
