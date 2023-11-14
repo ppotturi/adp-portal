@@ -39,17 +39,14 @@ jobs:
     clean: true
     fetchTags: false
     persistCredentials: True
-  - task: PowerShell@2
-    inputs:
-      targetType: inline
-      script: >-
-        yarn add --frozen-lockfile --ignore-workspace-root-check
-        yarn tsc
-        yarn build:backend
-      errorActionPreference: silentlyContinue
-      warningPreference: silentlyContinue
-      pwsh: true
-      workingDirectory: app
+  - pwsh: |
+      yarn install --frozen-lockfile
+      yarn tsc
+      yarn build:backend
+    errorActionPreference: silentlyContinue
+    warningPreference: silentlyContinue
+    workingDirectory: app
+    displayName: 'Yarn Build'
   - task: AzureCLI@2
     displayName: 'Azure CLI '
     inputs:
