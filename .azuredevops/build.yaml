@@ -58,3 +58,12 @@ jobs:
         az acr login -n $(acrName)
         docker tag backstage $(acrName).azurecr.io/backstage:$(Build.BuildId)
         docker push $(acrName).azurecr.io/backstage:$(Build.BuildId)
+  - task: AzureCLI@2
+    displayName: 'Deploy to ContainerApps'
+    inputs:
+      azureSubscription: 'AZD-CDO-SSV3'
+      scriptType: pscore
+      scriptLocation: inlineScript
+      workingDirectory: app
+      inlineScript: |  
+        az containerapp update  -n backstage -g SSVADPINFRG3402 --image ssvadpinfcr3401.azurecr.io/backstage:$(Build.BuildId)
