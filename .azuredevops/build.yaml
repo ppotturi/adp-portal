@@ -44,7 +44,6 @@ jobs:
       yarn tsc
       yarn build:backend
     errorActionPreference: silentlyContinue
-    warningPreference: silentlyContinue
     workingDirectory: app
     displayName: 'Yarn Build'
   - task: AzureCLI@2
