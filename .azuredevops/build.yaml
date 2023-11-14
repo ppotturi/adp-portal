@@ -47,14 +47,14 @@ jobs:
     workingDirectory: app
     displayName: 'Yarn Build'
   - task: AzureCLI@2
-    displayName: 'Azure CLI '
+    displayName: 'Docker Build and Push'
     inputs:
       azureSubscription: 'AZD-CDO-SSV3'
       scriptType: pscore
       scriptLocation: inlineScript
       workingDirectory: app
       inlineScript: |
-        docker buildx build -t backstage -f .\packages\backend\Dockerfile --platform=linux/amd64 .
+        docker buildx build -t backstage -f ./packages/backend/Dockerfile --platform=linux/amd64 .
         az acr login -n $(acrName)
         docker tag backstage $(acrName).azurecr.io/backstage:$(Build.BuildId)
         docker push $(acrName).azurecr.io/backstage:$(Build.BuildId)
