@@ -43,6 +43,7 @@ jobs:
       yarn install --frozen-lockfile
       yarn tsc
       yarn build:backend
+      docker buildx build -t backstage -f ./packages/backend/Dockerfile --platform=linux/amd64 .
     errorActionPreference: silentlyContinue
     workingDirectory: app
     displayName: 'Yarn Build'
@@ -53,8 +54,7 @@ jobs:
       scriptType: pscore
       scriptLocation: inlineScript
       workingDirectory: app
-      inlineScript: |
-        docker buildx build -t backstage -f ./packages/backend/Dockerfile --platform=linux/amd64 .
+      inlineScript: |        
         az acr login -n $(acrName)
         docker tag backstage $(acrName).azurecr.io/backstage:$(Build.BuildId)
         docker push $(acrName).azurecr.io/backstage:$(Build.BuildId)
