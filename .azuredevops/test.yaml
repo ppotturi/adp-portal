@@ -1,0 +1,28 @@
+identity:
+  type: 'UserAssigned'
+  userAssignedIdentities: {
+     /subscriptions/7dc5bbdf-72d7-42ca-ac23-eb5eea3764b4/resourcegroups/SSVADPINFRG3402/providers/Microsoft.ManagedIdentity/userAssignedIdentities/ssvadpinfmid1401-portal
+  }
+properties:
+  managedEnvironmentId: /subscriptions/7dc5bbdf-72d7-42ca-ac23-eb5eea3764b4/resourceGroups/SSVADPINFRG3402/providers/Microsoft.App/managedEnvironments/SSVADPINFCA3401
+  configuration:
+    ingress:
+      external: true
+      allowInsecure: false
+      targetPort: 80
+    registries:
+      - server: ssvadpinfcr3401.azurecr.io
+        identity: /subscriptions/7dc5bbdf-72d7-42ca-ac23-eb5eea3764b4/resourcegroups/SSVADPINFRG3402/providers/Microsoft.ManagedIdentity/userAssignedIdentities/ssvadpinfmid1401-portal
+    secrets:
+      - name: test
+        keyVaultUrl: https://SSVADPINFVT3402.vault.azure.net/secrets/BACKSTAGE-BACKEND-SECRET
+        identity: /subscriptions/7dc5bbdf-72d7-42ca-ac23-eb5eea3764b4/resourcegroups/SSVADPINFRG3402/providers/Microsoft.ManagedIdentity/userAssignedIdentities/ssvadpinfmid1401-portal      
+  template:
+    containers:
+      - image: ssvadpinfcr3401.azurecr.io/backstage:latest
+        name: test
+        env:
+          - name: HTTP_PORT
+            value: 80
+          - name: secret_name_test
+            secretRef: test
