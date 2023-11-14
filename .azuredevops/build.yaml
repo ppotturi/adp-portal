@@ -30,7 +30,7 @@ resources:
 jobs:
 - job: Build
   pool:
-    name: 'DEFRA-ADP-SND1-ubuntu2204'
+    vmImage: 'ubuntu-latest'
   variables:
     - name: acrName
       value: 'ssvadpinfcr3401'
