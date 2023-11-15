@@ -57,8 +57,8 @@ properties:
         identity: {{userAssignedIdentity}}
   template:
     containers:
-      - image: {{acrName}}.azurecr.io/{{appName}}:{{appVersion}}
-        name: {{appName}}
+      - image: {{acrName}}.azurecr.io/image/{{imageRepoName}}:{{appVersion}}
+        name: {{imageRepoName}}
         env:
           - name: POSTGRES_PORT
             value: 5432
