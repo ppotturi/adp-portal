@@ -1,8 +1,11 @@
 type: Microsoft.App/containerApps
-tags:
-  ServiceCode : ADP
+identity:
+  type: 'UserAssigned'
+  userAssignedIdentities: {
+     {{userAssignedIdentity}}
+  }
 properties:
-  managedEnvironmentId: /subscriptions/7dc5bbdf-72d7-42ca-ac23-eb5eea3764b4/resourceGroups/SSVADPINFRG3402/providers/Microsoft.App/managedEnvironments/SSVADPINFCA3401
+  managedEnvironmentId: {{managedEnvironmentId}}
   configuration:
     ingress:
       external: true
@@ -12,18 +15,54 @@ properties:
         - latestRevision: true
           weight: 100
       transport: Auto
+    registries:
+      - server: {{acrName}}.azurecr.io
+        identity: {{userAssignedIdentity}}
+    secrets:
+      - name: github-app-id
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/GITHUB-APP-ID
+        identity: {{userAssignedIdentity}}      
+      - name: github-client-id
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/GITHUB-CLIENT-ID
+        identity: {{userAssignedIdentity}}
+      - name: github-client-secret
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/GITHUB-CLIENT-SECRET
+        identity: {{userAssignedIdentity}}
+      - name: authm-client-id
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/AUTH-MICROSOFT-CLIENT-ID
+        identity: {{userAssignedIdentity}}
+      - name: authm-client-secret
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/AUTH-MICROSOFT-CLIENT-SECRET
+        identity: {{userAssignedIdentity}}
+      - name: authm-tenant-id
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/AUTH-MICROSOFT-TENANT-ID
+        identity: {{userAssignedIdentity}}        
+      - name: backend-secret
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/BACKSTAGE-BACKEND-SECRET
+        identity: {{userAssignedIdentity}}
+      - name: postgres-host
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/POSTGRES-HOST
+        identity: {{userAssignedIdentity}}
+      - name: postgres-user
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/POSTGRES-USER
+        identity: {{userAssignedIdentity}}
+      - name: postgres-password
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/POSTGRES-PASSWORD
+        identity: {{userAssignedIdentity}}
+      - name: github-private-key
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/GITHUB-PRIVATE-KEY
+        identity: {{userAssignedIdentity}}
   template:
-    revisionSuffix: backstage
     containers:
-      - image: ssvadpinfcr3401.azurecr.io/backstage:latest
-        name: backstage
+      - image: {{acrName}}.azurecr.io/{{appName}}:{{appVersion}}
+        name: {{appName}}
         env:
           - name: POSTGRES_PORT
             value: 5432
           - name: APP_BASE_URL
-            value: https://portal.snd1.adp.defra.gov.uk
+            value: {{appBaseUrl}}
           - name: APP_BACKEND_BASE_URL
-            value: https://portal.snd1.adp.defra.gov.uk
+            value: {{appBaseUrl}}
           - name: GITHUB_APP_ID
             secretRef: github-app-id
           - name: GITHUB_CLIENT_ID
