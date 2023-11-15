@@ -29,6 +29,17 @@ export AUTH_MICROSOFT_TENANT_ID=<REPLACE>
 ```
 
 The GitHub integration also requires a private key. Generate and copy this from your GitHub app to the path specified in [github-app-configuration.yaml](app/github-app-configuration.yaml).
+To use github private key as a string value, use the following script : 
+``` 
+#Powershell
+$rsaprivkey = (Get-Content "private-key.pem" | Out-String) -replace "`r`n", "\n"
+
+or
+
+#Shell 
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' private-key.pem > rsaprivkey.txt
+
+```
 
 ### Running locally
 Run the following commands from the `/app` directory:
