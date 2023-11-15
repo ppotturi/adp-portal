@@ -100,7 +100,7 @@ jobs:
         scriptLocation: inlineScript
         workingDirectory: '$(Pipeline.Workspace)/s'
         inlineScript: |  
-          az containerapp create -n $(appName) -g $resourceGroup --yaml "./.azuredevops/backstage.yaml"        
+          az containerapp create -n $(appName) -g $(resourceGroup) --yaml "./.azuredevops/backstage.yaml"        
   - ${{ if eq(parameters.recreate, false) }}:
     - task: AzureCLI@2
       displayName: 'Deploy to ContainerApp'
@@ -110,4 +110,4 @@ jobs:
         scriptLocation: inlineScript
         workingDirectory: app
         inlineScript: |  
-          az containerapp update  -n $(appName) -g $resourceGroup --image $(acrName).azurecr.io/$(appName):$(Build.BuildId)
+          az containerapp update  -n $(appName) -g $(resourceGroup) --image $(acrName).azurecr.io/$(appName):$(Build.BuildId)
