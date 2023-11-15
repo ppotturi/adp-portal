@@ -68,7 +68,7 @@ jobs:
   - task: AzureCLI@2
     displayName: 'Docker Build and Push'
     inputs:
-      azureSubscription: $(serviceConnection)
+      azureSubscription: 'AZD-CDO-SSV3'
       scriptType: pscore
       scriptLocation: inlineScript
       workingDirectory: app
@@ -95,7 +95,7 @@ jobs:
     - task: AzureCLI@2
       displayName: 'Create ContainerApp'
       inputs:
-        azureSubscription: $(serviceConnection)
+        azureSubscription: 'AZD-CDO-SSV3'
         scriptType: pscore
         scriptLocation: inlineScript
         workingDirectory: '$(Pipeline.Workspace)/s'
@@ -105,7 +105,7 @@ jobs:
     - task: AzureCLI@2
       displayName: 'Deploy to ContainerApp'
       inputs:
-        azureSubscription: $(serviceConnection)
+        azureSubscription: 'AZD-CDO-SSV3'
         scriptType: pscore
         scriptLocation: inlineScript
         workingDirectory: app
