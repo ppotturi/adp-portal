@@ -41,7 +41,7 @@ extends:
     deployFromFeature: ${{ parameters.deployFromFeature }}
     appBuildConfig:
       appFrameworkType: "nodejs"  
-      projectPath: "package.json"
+      projectPath: "./package.json"
       appPath: "/app"
       dockerfilePath: "./packages/backend/Dockerfile"
       imageRepoName: "backstage"
