@@ -53,7 +53,7 @@ properties:
         keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/GITHUB-PRIVATE-KEY
         identity: {{userAssignedIdentity}}
       - name: ado-pat
-        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/ADO_PAT
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/ADO-PAT
         identity: {{userAssignedIdentity}}
   template:
     containers:
