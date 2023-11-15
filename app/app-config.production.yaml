@@ -6,12 +6,7 @@ integrations:
   github:
     - host: github.com
       apps:
-        - appId: ${GITHUB_APP_ID}
-          webhookUrl: https://smee.io/
-          clientId: ${GITHUB_CLIENT_ID}
-          clientSecret: ${GITHUB_CLIENT_SECRET}
-          webhookSecret: ThisIsRequiredButNotUsed
-          privateKey: ${GITHUB_PRIVATE_KEY}
+        - $include: github-app-configuration.yaml
 
 backend:
   # Note that the baseUrl should be the URL that the browser and other clients
