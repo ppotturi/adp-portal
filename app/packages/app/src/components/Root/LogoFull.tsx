@@ -1,9 +1,9 @@
 import React from 'react';
-import DefraLogoWhiteFull from './DefraLogoWhite.png';
+import DefraLogo from './DefraLogo.png';
 
 const LogoFull = () => {
   return (
-     <img src={DefraLogoWhiteFull} width={'auto'} height={80} alt="DEFRA logo"/>
+     <img src={DefraLogo} width={'auto'} height={80} alt="DEFRA logo"/>
   );
 };
 
