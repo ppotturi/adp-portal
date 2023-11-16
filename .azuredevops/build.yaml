@@ -89,7 +89,8 @@ jobs:
           acrName: $(acrName) 
           appName: $(appName)
           appVersion: $(Build.BuildId)
-          appBaseUrl: $(appBaseUrl)       
+          appBaseUrl: $(appBaseUrl)     
+          imageRepoName: $(appName)  
         targetFiles: |
           $(Pipeline.Workspace)/s/.azuredevops/backstage.yaml
     - task: AzureCLI@2
