@@ -53,3 +53,4 @@ site
 *.sqlite
 *.private-key.pem
 env.sh
+rsaprivkey.txt

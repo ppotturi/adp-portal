@@ -53,6 +53,8 @@ jobs:
       value: '/subscriptions/7dc5bbdf-72d7-42ca-ac23-eb5eea3764b4/resourceGroups/SSVADPINFRG3402/providers/Microsoft.App/managedEnvironments/SSVADPINFCA3401'
     - name: appBaseUrl
       value: 'https://portal.snd1.adp.defra.gov.uk'
+    - name: grafanaEndpoint
+      value: https://SSVADPINFMG3401-apa8eed9b2hsc2an.suk.grafana.azure.com 
   steps:
   - checkout: self
     clean: true
@@ -89,7 +91,8 @@ jobs:
         appName: $(appName)
         appVersion: $(Build.BuildId)
         appBaseUrl: $(appBaseUrl)     
-        imageRepoName: $(appName)  
+        imageRepoName: $(appName)
+        grafanaEndpoint: $(grafanaEndpoint)
       targetFiles: |
         $(Pipeline.Workspace)/s/.azuredevops/backstage.yaml
   - task: AzureCLI@2

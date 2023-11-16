@@ -55,6 +55,9 @@ properties:
       - name: ado-pat
         keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/ADO-PAT
         identity: {{userAssignedIdentity}}
+      - name: grafana-token
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/GRAFANA-TOKEN
+        identity: {{userAssignedIdentity}}
   template:
     containers:
       - image: {{acrName}}.azurecr.io/{{imageRepoName}}:{{appVersion}}
@@ -92,6 +95,10 @@ properties:
             secretRef: ado-pat
           - name: ADO_ORG
             value: defragovuk
+          - name: GRAFANA_TOKEN
+            secretRef: grafana-token
+          - name: GRAFANA_ENDPOINT
+            value: {{grafanaEndpoint}}
         resources:
           cpu: 0.5
           memory: 1Gi
