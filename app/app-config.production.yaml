@@ -52,6 +52,17 @@ catalog:
           frequency: { minutes: 60 }
           timeout: { minutes: 10 }
 
+    github:
+      defra:
+        organization: 'defra'
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          branch: 'master'
+          repository: '(ffc-.+|adp-.+)'
+        schedule:
+          frequency: { minutes: 30 }
+          timeout: { minutes: 5 }
+          
 proxy:
   '/grafana/api':
     target: ${GRAFANA_ENDPOINT}

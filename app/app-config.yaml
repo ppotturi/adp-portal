@@ -23,6 +23,9 @@ backend:
     origin: http://localhost:3000
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
+  reading:
+    allow:
+      - host: 'raw.githubusercontent.com'
   database:
     client: better-sqlite3
     connection: ':memory:'
@@ -103,9 +106,10 @@ catalog:
           timeout: { minutes: 5 }
       #defra:
       #  organization: 'defra'
-      #  catalogPath: '**/catalog-info.yml'
+      #  catalogPath: '/catalog-info.yaml'
       #  filters:
-      #    branch: 'main'
+      #    branch: 'master'
+      #    repository: '(ffc-.+|adp-.+)'
       #  schedule:
       #    frequency: { minutes: 30 }
       #    timeout: { minutes: 5 }
