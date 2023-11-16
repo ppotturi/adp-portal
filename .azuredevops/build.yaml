@@ -77,37 +77,27 @@ jobs:
         az acr login -n $(acrName)
         docker tag $(appName) $(acrName).azurecr.io/$(appName):$(Build.BuildId)
         docker push $(acrName).azurecr.io/$(appName):$(Build.BuildId)
-  - ${{ if eq(parameters.recreate, true) }}:
-    - task: replacetokens@5
-      displayName: 'Replace tokens in config'
-      inputs:
-        tokenPattern: doublebraces
-        inlineVariables: |
-          keyvaultName:  $(keyvaultName)
-          userAssignedIdentity: $(userAssignedIdentity)  
-          managedEnvironmentId: $(managedEnvironmentId)
-          acrName: $(acrName) 
-          appName: $(appName)
-          appVersion: $(Build.BuildId)
-          appBaseUrl: $(appBaseUrl)       
-        targetFiles: |
-          $(Pipeline.Workspace)/s/.azuredevops/backstage.yaml
-    - task: AzureCLI@2
-      displayName: 'Create ContainerApp'
-      inputs:
-        azureSubscription: 'AZD-CDO-SSV3'
-        scriptType: pscore
-        scriptLocation: inlineScript
-        workingDirectory: '$(Pipeline.Workspace)/s'
-        inlineScript: |  
-          az containerapp create -n $(appName) -g $(resourceGroup) --yaml "./.azuredevops/backstage.yaml"        
-  - ${{ if eq(parameters.recreate, false) }}:
-    - task: AzureCLI@2
-      displayName: 'Deploy to ContainerApp'
-      inputs:
-        azureSubscription: 'AZD-CDO-SSV3'
-        scriptType: pscore
-        scriptLocation: inlineScript
-        workingDirectory: app
-        inlineScript: |  
-          az containerapp update  -n $(appName) -g $(resourceGroup) --image $(acrName).azurecr.io/$(appName):$(Build.BuildId)
+  - task: replacetokens@5
+    displayName: 'Replace tokens in config'
+    inputs:
+      tokenPattern: doublebraces
+      inlineVariables: |
+        keyvaultName:  $(keyvaultName)
+        userAssignedIdentity: $(userAssignedIdentity)  
+        managedEnvironmentId: $(managedEnvironmentId)
+        acrName: $(acrName) 
+        appName: $(appName)
+        appVersion: $(Build.BuildId)
+        appBaseUrl: $(appBaseUrl)     
+        imageRepoName: $(appName)  
+      targetFiles: |
+        $(Pipeline.Workspace)/s/.azuredevops/backstage.yaml
+  - task: AzureCLI@2
+    displayName: 'Create ContainerApp'
+    inputs:
+      azureSubscription: 'AZD-CDO-SSV3'
+      scriptType: pscore
+      scriptLocation: inlineScript
+      workingDirectory: '$(Pipeline.Workspace)/s'
+      inlineScript: |  
+        az containerapp create -n $(appName) -g $(resourceGroup) --yaml "./.azuredevops/backstage.yaml"        
