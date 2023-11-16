@@ -1,8 +1,8 @@
 parameters:
-  - name: deployFromFeature
-    displayName: "Deploy from Feature Branch"
+  - name: recreate
+    displayName: "Recreate the container app?"
     type: boolean
-    default: false
+    default: false    
 pr:
   branches:
     include:
@@ -28,26 +28,86 @@ trigger:
 
 resources:
   repositories:
-    - repository: DEFRA-ADPPipelineCommon
-      name: DEFRA/adp-pipeline-common
-      endpoint: DEFRA
-      type: github
-      ref: refs/heads/rv/263292-portal
+  - repository: self
+    type: git
+    ref: refs/heads/main
 
-extends:
-  template: /pipelines/common-portal-app-build.yaml@DEFRA-ADPPipelineCommon
-  parameters:
-    serviceName: "demobackstage"
-    deployFromFeature: ${{ parameters.deployFromFeature }}
-    appBuildConfig:
-      appFrameworkType: "nodejs"  
-      projectPath: "./package.json"
-      appPath: "/app"
-      dockerfilePath: "./packages/backend/Dockerfile"
-      imageRepoName: "backstage"
-    appDeployConfig:
-      filepath: ".azuredevops/backstage.yaml"  
-      variableGroups: 
-        - ffc-adp-portal
-      variables:
-        - backstage-TEST
+jobs:
+- job: Build
+  pool:
+    name: 'DEFRA-ADP-SND1-ubuntu2204'
+  variables:
+    - name: appName
+      value: 'backstage'
+    - name: acrName
+      value: 'ssvadpinfcr3401'
+    - name: serviceConnection
+      value: 'AZD-CDO-SSV3'
+    - name: resourceGroup
+      value: 'SSVADPINFRG3402'
+    - name: userAssignedIdentity
+      value: '/subscriptions/7dc5bbdf-72d7-42ca-ac23-eb5eea3764b4/resourcegroups/SSVADPINFRG3402/providers/Microsoft.ManagedIdentity/userAssignedIdentities/ssvadpinfmid1401-portal'
+    - name: keyvaultName
+      value: 'SSVADPINFVT3402'
+    - name: managedEnvironmentId
+      value: '/subscriptions/7dc5bbdf-72d7-42ca-ac23-eb5eea3764b4/resourceGroups/SSVADPINFRG3402/providers/Microsoft.App/managedEnvironments/SSVADPINFCA3401'
+    - name: appBaseUrl
+      value: 'https://portal.snd1.adp.defra.gov.uk'
+  steps:
+  - checkout: self
+    clean: true
+    fetchTags: false
+    persistCredentials: True
+  - pwsh: |
+      yarn install --frozen-lockfile
+      yarn tsc
+      yarn build:backend
+    errorActionPreference: silentlyContinue
+    workingDirectory: app
+    displayName: 'Yarn Build'
+  - task: AzureCLI@2
+    displayName: 'Docker Build and Push'
+    inputs:
+      azureSubscription: 'AZD-CDO-SSV3'
+      scriptType: pscore
+      scriptLocation: inlineScript
+      workingDirectory: app
+      inlineScript: |                
+        docker buildx build -t $(appName) -f ./packages/backend/Dockerfile --platform=linux/amd64 .
+        az acr login -n $(acrName)
+        docker tag $(appName) $(acrName).azurecr.io/$(appName):$(Build.BuildId)
+        docker push $(acrName).azurecr.io/$(appName):$(Build.BuildId)
+  - ${{ if eq(parameters.recreate, true) }}:
+    - task: replacetokens@5
+      displayName: 'Replace tokens in config'
+      inputs:
+        tokenPattern: doublebraces
+        inlineVariables: |
+          keyvaultName:  $(keyvaultName)
+          userAssignedIdentity: $(userAssignedIdentity)  
+          managedEnvironmentId: $(managedEnvironmentId)
+          acrName: $(acrName) 
+          appName: $(appName)
+          appVersion: $(Build.BuildId)
+          appBaseUrl: $(appBaseUrl)       
+        targetFiles: |
+          $(Pipeline.Workspace)/s/.azuredevops/backstage.yaml
+    - task: AzureCLI@2
+      displayName: 'Create ContainerApp'
+      inputs:
+        azureSubscription: 'AZD-CDO-SSV3'
+        scriptType: pscore
+        scriptLocation: inlineScript
+        workingDirectory: '$(Pipeline.Workspace)/s'
+        inlineScript: |  
+          az containerapp create -n $(appName) -g $(resourceGroup) --yaml "./.azuredevops/backstage.yaml"        
+  - ${{ if eq(parameters.recreate, false) }}:
+    - task: AzureCLI@2
+      displayName: 'Deploy to ContainerApp'
+      inputs:
+        azureSubscription: 'AZD-CDO-SSV3'
+        scriptType: pscore
+        scriptLocation: inlineScript
+        workingDirectory: app
+        inlineScript: |  
+          az containerapp update  -n $(appName) -g $(resourceGroup) --image $(acrName).azurecr.io/$(appName):$(Build.BuildId)
