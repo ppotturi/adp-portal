@@ -36,36 +36,6 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 
 import { microsoftAuthApiRef } from '@backstage/core-plugin-api';
 import { SignInPage } from '@backstage/core-components';
-import {
-  UnifiedThemeProvider,
-  createUnifiedTheme,
-  palettes,
-  themes
-} from '@backstage/theme';
-
-export const multicolorTheme = createUnifiedTheme({  
-  palette: {  
-    ...palettes.light,  // Take everything from the default light theme, then change what you want
-    primary: {  
-      main: '#1d70b8', // Brand colour  
-    },  
-    secondary: {  
-      main: '#ffffff',
-    },  
-    background: {  
-      default: '#FFFFFF',  
-    },  
-    navigation: {  
-      background: '#0b0c0c', 
-      indicator: '#008938', // Red color for the selected indicator  
-      selectedColor: '#008938', // White text color for the selected item  
-      color: '#D2D5D7', // Light gray text color for unselected items  
-      navItem: {  
-        hoverBackground: '#505a5f', // Darker red for the hover background  
-      },  
-    },
-  },
-});
 
 const app = createApp({
   components: {
@@ -83,27 +53,6 @@ const app = createApp({
     )
   },
   apis,
-  themes: [
-    // Keeping the original themes is completely optional
-    {
-      id: 'default-dark',
-      title: 'Default Dark',
-      variant: 'dark',
-      Provider: ({ children }) => <UnifiedThemeProvider theme={themes.dark} children={children} />,
-    },
-    {
-      id: 'default-light',
-      title: 'Default Light',
-      variant: 'light',
-      Provider: ({ children }) => <UnifiedThemeProvider theme={themes.light} children={children} />,
-    },
-    {
-    id: 'multicolor-theme',
-    title: 'Multicolor Theme',
-    variant: 'light',
-    Provider: ({ children }) => <UnifiedThemeProvider theme={multicolorTheme} children={children} />,
-    }
-  ],
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,
