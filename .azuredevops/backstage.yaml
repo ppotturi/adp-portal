@@ -61,7 +61,7 @@ properties:
       - name: grafana-endpoint
         keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/GRAFANA-ENDPOINT
         identity: {{userAssignedIdentity}}
-      - name: app-base-Url
+      - name: app-base-url
         keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/APP-BASE-URL
         identity: {{userAssignedIdentity}}
   template:
@@ -72,9 +72,9 @@ properties:
           - name: POSTGRES_PORT
             value: 5432
           - name: APP_BASE_URL
-            secretRef: app-base-Url
+            secretRef: app-base-url
           - name: APP_BACKEND_BASE_URL
-            secretRef: app-base-Url
+            secretRef: app-base-url
           - name: GITHUB_APP_ID
             secretRef: github-app-id
           - name: GITHUB_CLIENT_ID
