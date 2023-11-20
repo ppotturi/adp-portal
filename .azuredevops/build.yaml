@@ -36,12 +36,10 @@ resources:
 extends:
   template: /pipelines/common-portal-app-build.yaml@DEFRA-ADPPipelineCommon
   parameters:
-    serviceName: "demobackstage"
+    serviceName: "backstage"
     deployFromFeature: ${{ parameters.deployFromFeature }}
     appBuildConfig:
-      appFrameworkType: ""
-      dockerfilePath: "./packages/backend/Dockerfile"
-      imageRepoName: "demobackstage"
+      imageRepoName: "backstage"
     appDeployConfig:
       filepath: ".azuredevops/backstage.yaml"  
       variableGroups: 
