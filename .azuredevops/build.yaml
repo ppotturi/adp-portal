@@ -47,6 +47,7 @@ extends:
     appDeployConfig:
       filepath: ".azuredevops/backstage.yaml"  
       variableGroups: 
-        - ffc-adp-portal
+        - ffc-adp-portal-ssv3
       variables:
         - GRAFANA-ENDPOINT
+        - APP-BASE-URL
