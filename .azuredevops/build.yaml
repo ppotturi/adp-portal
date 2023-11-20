@@ -39,6 +39,7 @@ extends:
     serviceName: "demobackstage"
     deployFromFeature: ${{ parameters.deployFromFeature }}
     appBuildConfig:
+      appFrameworkType: ""
       dockerfilePath: "./packages/backend/Dockerfile"
       imageRepoName: "backstage"
     appDeployConfig:
