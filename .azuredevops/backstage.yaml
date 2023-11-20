@@ -58,9 +58,12 @@ properties:
       - name: grafana-token
         keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/GRAFANA-TOKEN
         identity: {{userAssignedIdentity}}
+      - name: grafana-endpoint
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/GRAFANA-ENDPOINT
+        identity: {{userAssignedIdentity}}
   template:
     containers:
-      - image: {{acrName}}.azurecr.io/{{imageRepoName}}:{{appVersion}}
+      - image: {{acrName}}.azurecr.io/image/{{imageRepoName}}:{{appVersion}}
         name: {{imageRepoName}}
         env:
           - name: POSTGRES_PORT
@@ -98,7 +101,7 @@ properties:
           - name: GRAFANA_TOKEN
             secretRef: grafana-token
           - name: GRAFANA_ENDPOINT
-            value: {{grafanaEndpoint}}
+            value: grafana-endpoint
         resources:
           cpu: 0.5
           memory: 1Gi
