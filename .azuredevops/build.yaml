@@ -41,7 +41,7 @@ extends:
     appBuildConfig:
       appFrameworkType: ""
       dockerfilePath: "./packages/backend/Dockerfile"
-      imageRepoName: "backstage"
+      imageRepoName: "demobackstage"
     appDeployConfig:
       filepath: ".azuredevops/backstage.yaml"  
       variableGroups: 
