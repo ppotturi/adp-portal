@@ -37,6 +37,34 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { microsoftAuthApiRef } from '@backstage/core-plugin-api';
 import { SignInPage } from '@backstage/core-components';
 
+import LightIcon from  '@material-ui/icons/WbSunnyRounded';
+import NightIcon from '@material-ui/icons/Brightness2Rounded';
+
+import {
+  UnifiedThemeProvider,
+  createUnifiedTheme,
+  palettes,
+  genPageTheme,                  
+} from '@backstage/theme';
+
+const lightTheme = createUnifiedTheme({
+  palette: {...palettes.light},
+  defaultPageTheme: 'home',
+  pageTheme: {
+    home: genPageTheme({ colors: ['#171717'], shape: 'none' }),
+  },
+  fontFamily: "Helvetica",
+});
+
+const darkTheme = createUnifiedTheme({
+  palette: {...palettes.dark},
+  defaultPageTheme: 'home',
+  pageTheme: {
+    home: genPageTheme({ colors: ['#424242'], shape: 'none' }),
+  },
+  fontFamily: "Helvetica"
+});
+
 const app = createApp({
   components: {
     SignInPage: props => (
@@ -53,6 +81,22 @@ const app = createApp({
     )
   },
   apis,
+  themes: [
+    {
+      id: 'default-light',
+      title: 'Default Light',
+      variant: 'light',
+      icon: <LightIcon />,
+      Provider: ({ children }) => <UnifiedThemeProvider theme={lightTheme} children={children} />,
+    },
+    {
+      id: 'default-dark',
+      title: 'Default Dark',
+      variant: 'dark',
+      icon: <NightIcon />,
+      Provider: ({ children }) => <UnifiedThemeProvider theme={darkTheme} children={children} />,
+    },
+  ],
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,
