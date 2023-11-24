@@ -63,6 +63,7 @@ import {
   EntityGrafanaAlertsCard,
 } from '@k-phoen/backstage-plugin-grafana';
 import { EntityGithubPullRequestsContent } from '@roadiehq/backstage-plugin-github-pull-requests';
+import { EntityGithubPullRequestsOverviewCard } from '@roadiehq/backstage-plugin-github-pull-requests';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -136,7 +137,9 @@ const overviewContent = (
     <Grid item md={6} xs={12}>
       <EntityCatalogGraphCard variant="gridItem" height={400} />
     </Grid>
-
+    <Grid item md={6}>
+        <EntityGithubPullRequestsOverviewCard />
+      </Grid>
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
     </Grid>
