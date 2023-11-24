@@ -62,6 +62,7 @@ import {
   EntityGrafanaDashboardsCard,
   EntityGrafanaAlertsCard,
 } from '@k-phoen/backstage-plugin-grafana';
+import { EntityGithubPullRequestsContent } from '@roadiehq/backstage-plugin-github-pull-requests';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -156,6 +157,14 @@ const grafanaContent = (
   </Grid>
 )
 
+const pullRequest = (
+  <Grid container spacing={3} alignItems='stretch'>
+    <Grid item md={12}>
+      < EntityGithubPullRequestsContent />
+    </Grid>
+  </Grid>
+)
+
 const serviceEntityPage = (
   <EntityLayout>
     <EntityLayout.Route path="/" title="Overview">
@@ -166,6 +175,10 @@ const serviceEntityPage = (
       {cicdContent}
     </EntityLayout.Route>
 
+    <EntityLayout.Route path="/pull-requests" title="Pull Requests">
+      {pullRequest}
+    </EntityLayout.Route>
+    
     <EntityLayout.Route path="/grafana" title="Grafana">
       {grafanaContent}
     </EntityLayout.Route>
