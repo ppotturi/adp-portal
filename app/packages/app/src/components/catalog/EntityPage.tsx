@@ -63,6 +63,9 @@ import {
   EntityGrafanaAlertsCard,
 } from '@k-phoen/backstage-plugin-grafana';
 
+import { EntityTeamPullRequestsCard } from '@backstage/plugin-github-pull-requests-board';
+import { EntityTeamPullRequestsContent } from '@backstage/plugin-github-pull-requests-board';
+
 const techdocsContent = (
   <EntityTechdocsContent>
     <TechDocsAddons>
@@ -335,7 +338,13 @@ const groupPage = (
         <Grid item xs={12}>
           <EntityMembersListCard />
         </Grid>
+        <Grid item xs={12}>
+          <EntityTeamPullRequestsCard />
+        </Grid>
       </Grid>
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/pull-requests" title="Pull Requests">
+      <EntityTeamPullRequestsContent />
     </EntityLayout.Route>
   </EntityLayout>
 );
