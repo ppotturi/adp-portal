@@ -3069,6 +3069,18 @@
     "@rjsf/utils" "5.13.6"
     "@types/react" "^16.13.1 || ^17.0.0"
 
+"@backstage/plugin-home-react@^0.1.4":
+  version "0.1.5"
+  resolved "https://registry.npmjs.org/@backstage/plugin-home-react/-/plugin-home-react-0.1.5.tgz#e2c9e8e33ab33b9755e04174ab740515ac37e094"
+  integrity sha512-GInQBteTbsptpyhwpav2MebXx5zZgl63yQYMUJWDniAH0mzn0gn901tCKsKAnd9jeuS6d2qsBzMJNoz6xUrPEg==
+  dependencies:
+    "@backstage/core-components" "^0.13.8"
+    "@backstage/core-plugin-api" "^1.8.0"
+    "@material-ui/core" "^4.12.2"
+    "@material-ui/icons" "^4.9.1"
+    "@rjsf/utils" "5.13.6"
+    "@types/react" "^16.13.1 || ^17.0.0"
+
 "@backstage/plugin-org@^0.6.15":
   version "0.6.16"
   resolved "https://registry.yarnpkg.com/@backstage/plugin-org/-/plugin-org-0.6.16.tgz#066a11d8778ee5bd4e7dcccf2368e94ab1ca1887"
