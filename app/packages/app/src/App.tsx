@@ -50,7 +50,7 @@ const app = createApp({
           message: 'Sign in using Azure AD',
           apiRef: microsoftAuthApiRef
         }}
-        />
+      />
     )
   },
   apis,
@@ -117,7 +117,11 @@ const routes = (
     <Route
       path="/docs/:namespace/:kind/:name/*"
       element={<TechDocsReaderPage />}
-    />
+    >
+      <TechDocsAddons>
+        <ReportIssue />
+      </TechDocsAddons>
+    </Route>
   </FlatRoutes>
 );
 
