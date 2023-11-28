@@ -3494,9 +3494,9 @@
     d3-force "^3.0.0"
     react-use "^17.2.4"
 
-"@backstage/plugin-techdocs-backend@^1.8.0":
+"@backstage/plugin-techdocs-backend@^1.9.0":
   version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@backstage/plugin-techdocs-backend/-/plugin-techdocs-backend-1.9.0.tgz#126df640aa927b5b5f637d9ef6b5a3505c5bf0fb"
+  resolved "https://registry.npmjs.org/@backstage/plugin-techdocs-backend/-/plugin-techdocs-backend-1.9.0.tgz#126df640aa927b5b5f637d9ef6b5a3505c5bf0fb"
   integrity sha512-b0yGCPe+l23+yEZOD2fC/ShRNlCAMNDjqXOAzWodwgA8av1M9BK136SxVSHa71nqo5LmuTDSwPb9vjK2oIR1UQ==
   dependencies:
     "@backstage/backend-common" "^0.19.9"
@@ -3589,37 +3589,6 @@
     "@material-ui/lab" "4.0.0-alpha.61"
     "@material-ui/styles" "^4.11.0"
     "@types/react" "^16.13.1 || ^17.0.0"
-    jss "~10.10.0"
-    lodash "^4.17.21"
-    react-helmet "6.1.0"
-    react-use "^17.2.4"
-
-"@backstage/plugin-techdocs@^1.8.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@backstage/plugin-techdocs/-/plugin-techdocs-1.9.0.tgz#5377f52cd5cdfb061d9eb34565b2bcb6408cd12f"
-  integrity sha512-LQnqsXWOEuDIs1OlH+bvn4tIiLZpCV1CSFd4V6DKHK3zSPiOs0mImFkllsuE9GF6QtVlpm/k8zJ3HGxXInpHgA==
-  dependencies:
-    "@backstage/catalog-model" "^1.4.3"
-    "@backstage/config" "^1.1.1"
-    "@backstage/core-components" "^0.13.8"
-    "@backstage/core-plugin-api" "^1.8.0"
-    "@backstage/errors" "^1.2.3"
-    "@backstage/frontend-plugin-api" "^0.3.0"
-    "@backstage/integration" "^1.7.2"
-    "@backstage/integration-react" "^1.1.21"
-    "@backstage/plugin-catalog-react" "^1.9.0"
-    "@backstage/plugin-search-common" "^1.2.8"
-    "@backstage/plugin-search-react" "^1.7.2"
-    "@backstage/plugin-techdocs-react" "^1.1.13"
-    "@backstage/theme" "^0.4.4"
-    "@material-ui/core" "^4.12.2"
-    "@material-ui/icons" "^4.9.1"
-    "@material-ui/lab" "4.0.0-alpha.61"
-    "@material-ui/styles" "^4.10.0"
-    "@types/react" "^16.13.1 || ^17.0.0"
-    dompurify "^2.2.9"
-    event-source-polyfill "1.0.25"
-    git-url-parse "^13.0.0"
     jss "~10.10.0"
     lodash "^4.17.21"
     react-helmet "6.1.0"
@@ -9193,7 +9162,7 @@ anymatch@^3.0.3, anymatch@~3.1.2:
     "@backstage/plugin-search" "^1.4.1"
     "@backstage/plugin-search-react" "^1.7.1"
     "@backstage/plugin-tech-radar" "^0.6.9"
-    "@backstage/plugin-techdocs" "^1.8.0"
+    "@backstage/plugin-techdocs" "^1.9.1"
     "@backstage/plugin-techdocs-module-addons-contrib" "^1.1.1"
     "@backstage/plugin-techdocs-react" "^1.1.12"
     "@backstage/plugin-user-settings" "^0.7.11"
