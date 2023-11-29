@@ -54,6 +54,10 @@ import {
   RELATION_PART_OF,
   RELATION_PROVIDES_API,
 } from '@backstage/catalog-model';
+import {
+  EntityAzurePipelinesContent,
+  isAzurePipelinesAvailable,
+} from '@backstage/plugin-azure-devops';
 
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
@@ -79,6 +83,10 @@ const cicdContent = (
   // This is an example of how you can implement your company's logic in entity page.
   // You can for example enforce that all components of type 'service' should use GitHubActions
   <EntitySwitch>
+    <EntitySwitch.Case if={isAzurePipelinesAvailable}>
+      <EntityAzurePipelinesContent defaultLimit={25} />
+    </EntitySwitch.Case>
+
     <EntitySwitch.Case if={isGithubActionsAvailable}>
       <EntityGithubActionsContent />
     </EntitySwitch.Case>
@@ -266,19 +274,19 @@ const defaultEntityPage = (
 
 const componentPage = (
   <EntitySwitch>
-    <EntitySwitch.Case if={isComponentType('service')}>
-      {serviceEntityPage}
-    </EntitySwitch.Case>
-
     <EntitySwitch.Case if={isComponentType('backend')}>
       {serviceEntityPage}
     </EntitySwitch.Case>
 
-    <EntitySwitch.Case if={isComponentType('website')}>
-      {websiteEntityPage}
+    <EntitySwitch.Case if={isComponentType('service')}>
+      {serviceEntityPage}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isComponentType('frontend')}>
+      {websiteEntityPage}
+    </EntitySwitch.Case>
+
+    <EntitySwitch.Case if={isComponentType('website')}>
       {websiteEntityPage}
     </EntitySwitch.Case>
 

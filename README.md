@@ -41,6 +41,8 @@ awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' private-key.pem > rsaprivkey.txt
 
 ```
 
+The ADO dashboard plugin requires a Personal Access Token (PAT) with build permissions. Currently this cannot be configured to use a Managed Identity.
+
 ### Running locally
 Run the following commands from the `/app` directory:
 

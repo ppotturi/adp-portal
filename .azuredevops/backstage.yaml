@@ -55,6 +55,9 @@ properties:
       - name: ado-pat
         keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/ADO-PAT
         identity: {{userAssignedIdentity}}
+      - name: ado-organization
+        keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/ADO-ORGANIZATION
+        identity: {{userAssignedIdentity}}
       - name: grafana-token
         keyVaultUrl: https://{{keyvaultName}}.vault.azure.net/secrets/GRAFANA-TOKEN
         identity: {{userAssignedIdentity}}
@@ -99,8 +102,8 @@ properties:
             secretRef: github-private-key
           - name: ADO_PAT
             secretRef: ado-pat
-          - name: ADO_ORG
-            value: defragovuk
+          - name: ADO_ORGANIZATION
+            secretRef: ado-organization
           - name: GRAFANA_TOKEN
             secretRef: grafana-token
           - name: GRAFANA_ENDPOINT
