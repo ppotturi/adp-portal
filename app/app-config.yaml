@@ -85,6 +85,11 @@ auth:
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
+azureDevOps:
+  host: dev.azure.com
+  token: ${ADO_PAT}
+  organization: ${ADO_ORGANIZATION}
+
 catalog:
   import:
     entityFilename: catalog-info.yaml
