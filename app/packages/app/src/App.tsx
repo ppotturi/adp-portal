@@ -47,22 +47,52 @@ import {
   genPageTheme,                  
 } from '@backstage/theme';
 
+import 'style-loader!file-loader!css-loader!sass-loader?{"sassOptions": {"quietDeps": true}}!./index.scss';
+
 const lightTheme = createUnifiedTheme({
-  palette: {...palettes.light},
+  palette: {
+    ...palettes.light,
+    navigation: {
+      background: '#171717',
+      indicator: '#005EA5',
+      color: '#b5b5b5',
+      selectedColor: '#FFF',
+      navItem: {
+        hoverBackground: '#404040',
+      },
+    },
+    primary:{
+      main: '#1d70b8',
+    },
+    link:'#1d70b8',
+    linkHover: '#003078',
+    errorText: '#d4351c',
+  },
   defaultPageTheme: 'home',
   pageTheme: {
     home: genPageTheme({ colors: ['#171717'], shape: 'none' }),
   },
-  fontFamily: "Helvetica",
+  components: {
+    BackstageHeader: {
+      styleOverrides: {
+        header: {
+          borderBottom: `4px solid #1d70b8`, //needs to be $govuk-blue
+        },
+      },
+    },
+  },
+  fontFamily: "'GDS Transport',arial, sans-serif"
 });
 
 const darkTheme = createUnifiedTheme({
-  palette: {...palettes.dark},
+  palette: {
+    ...palettes.dark,
+  },
   defaultPageTheme: 'home',
   pageTheme: {
     home: genPageTheme({ colors: ['#424242'], shape: 'none' }),
   },
-  fontFamily: "Helvetica"
+  fontFamily: "'GDS Transport',arial, sans-serif"
 });
 
 const app = createApp({
