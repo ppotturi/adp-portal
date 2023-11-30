@@ -50,6 +50,7 @@ grafana:
 # https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
 techdocs:
   builder: 'external' # Options - 'local' or 'external'
+    type: 'azureBlobStorage'
   generator:
     runIn: 'docker' # Alternatives - 'local'
   publisher:
