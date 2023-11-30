@@ -47,7 +47,7 @@ import {
   genPageTheme,                  
 } from '@backstage/theme';
 
-import 'style-loader!file-loader!css-loader!sass-loader?{"sassOptions": {"quietDeps": true}}!./index.scss';
+import 'style-loader!file-loader!css-loader!sass-loader?{"sassOptions": {"quietDeps": true}}!./style.module.scss';
 
 const lightTheme = createUnifiedTheme({
   palette: {

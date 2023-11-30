@@ -1,0 +1,6 @@
+ @import "../../node_modules/govuk-frontend/govuk/all";
+
+$colorBackground: $govuk-brand-colour;
+:export {
+  colorBackgroundCanvas: $colorBackground;
+}
