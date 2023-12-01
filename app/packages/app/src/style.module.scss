@@ -1,6 +1,9 @@
- @import "../../node_modules/govuk-frontend/govuk/all";
+$govuk-assets-path: "~govuk-frontend/govuk/assets/";
+@import "~govuk-frontend/govuk/all";
 
-$colorBackground: $govuk-brand-colour;
 :export {
-  colorBackgroundCanvas: $colorBackground;
+  primaryColour: $govuk-brand-colour; 
+  errorColour: $govuk-error-colour;
+  linkColour: $govuk-link-colour;
+  linkHoverColour: $govuk-link-hover-colour;
 }

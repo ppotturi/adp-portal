@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, Route } from 'react-router-dom';
 import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 import {
@@ -47,7 +47,7 @@ import {
   genPageTheme,                  
 } from '@backstage/theme';
 
-import 'style-loader!file-loader!css-loader!sass-loader?{"sassOptions": {"quietDeps": true}}!./style.module.scss';
+import styles from 'style-loader!css-loader?{"modules": {"auto": true}}!sass-loader?{"sassOptions": {"quietDeps": true}}!./style.module.scss';
 
 const lightTheme = createUnifiedTheme({
   palette: {
@@ -62,11 +62,11 @@ const lightTheme = createUnifiedTheme({
       },
     },
     primary:{
-      main: '#1d70b8',
+      main: styles.primaryColour,
     },
-    link:'#1d70b8',
-    linkHover: '#003078',
-    errorText: '#d4351c',
+    link: styles.linkColour,
+    linkHover: styles.linkHoverColour,
+    errorText: styles.errorColour,
   },
   defaultPageTheme: 'home',
   pageTheme: {
@@ -76,7 +76,7 @@ const lightTheme = createUnifiedTheme({
     BackstageHeader: {
       styleOverrides: {
         header: {
-          borderBottom: `4px solid #1d70b8`, //needs to be $govuk-blue
+          borderBottom: `4px solid ${styles.primaryColour}`, //needs to be $govuk-blue
         },
       },
     },
@@ -84,9 +84,13 @@ const lightTheme = createUnifiedTheme({
   fontFamily: "'GDS Transport',arial, sans-serif"
 });
 
+
 const darkTheme = createUnifiedTheme({
   palette: {
     ...palettes.dark,
+    link: styles.linkColour,
+    linkHover: styles.linkHoverColour,
+    errorText: styles.errorColour,
   },
   defaultPageTheme: 'home',
   pageTheme: {
