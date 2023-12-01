@@ -50,16 +50,16 @@ grafana:
 # https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
 techdocs:
   builder: 'external' # Options - 'local' or 'external'
+  generator:
+    runIn: 'docker' # Alternatives - 'local'
+  publisher:
+    #type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
     type: 'azureBlobStorage'
     azureBlobStorage:
       containerName: 'adp-wiki-techdocs'
       credentials:
         accountName: ${TECHDOCS_AZURE_BLOB_STORAGE_ACCOUNT_NAME}
         accountKey: ${TECHDOCS_AZURE_BLOB_STORAGE_ACCOUNT_KEY}
-  generator:
-    runIn: 'docker' # Alternatives - 'local'
-  publisher:
-    type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 integrations:
   azure:
