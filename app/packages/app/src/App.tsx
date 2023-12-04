@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Navigate, Route } from 'react-router-dom';
 import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 import {
@@ -76,7 +76,7 @@ const lightTheme = createUnifiedTheme({
     BackstageHeader: {
       styleOverrides: {
         header: {
-          borderBottom: `4px solid ${styles.primaryColour}`, //needs to be $govuk-blue
+          borderBottom: `4px solid ${styles.primaryColour}`, 
         },
       },
     },
