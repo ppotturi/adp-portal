@@ -54,7 +54,7 @@ const lightTheme = createUnifiedTheme({
     ...palettes.light,
     navigation: {
       background: '#171717',
-      indicator: '#005EA5',
+      indicator: styles.primaryColour,
       color: '#b5b5b5',
       selectedColor: '#FFF',
       navItem: {
@@ -84,10 +84,18 @@ const lightTheme = createUnifiedTheme({
   fontFamily: "'GDS Transport',arial, sans-serif"
 });
 
-
 const darkTheme = createUnifiedTheme({
   palette: {
-    ...palettes.dark,
+    ...palettes.dark, 
+    navigation: {
+      background: '#424242',
+      indicator: styles.primaryColour,
+      color: '#b5b5b5',
+      selectedColor: '#FFF',
+      navItem: {
+        hoverBackground: '#404040',
+      },
+    },
     link: styles.linkColour,
     linkHover: styles.linkHoverColour,
     errorText: styles.errorColour,
