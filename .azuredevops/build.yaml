@@ -31,7 +31,7 @@ resources:
       name: DEFRA/adp-pipeline-common
       endpoint: DEFRA
       type: github
-      ref: refs/heads/main
+      ref: refs/heads/rv/263292-backstageportal2
 
 extends:
   template: /pipelines/common-portal-app-build.yaml@DEFRA-ADPPipelineCommon
@@ -45,17 +45,12 @@ extends:
       variableGroups: 
         - adp-portal-ssv3
       variables:        
-        - APP-BASE-URL
         - ADO-ORGANIZATION
         - ADO-PAT
-        - AUTH-MICROSOFT-CLIENT-ID
-        - AUTH-MICROSOFT-CLIENT-SECRET
-        - AUTH-MICROSOFT-TENANT-ID
         - BACKSTAGE-BACKEND-SECRET
         - GITHUB-APP-ID
         - GITHUB-CLIENT-ID
         - GITHUB-CLIENT-SECRET
         - GITHUB-PRIVATE-KEY
         - GRAFANA-ENDPOINT
-        - TECHDOCS-AZURE-BLOB-STORAGE-ACCOUNT-NAME
-        - TECHDOCS-AZURE-BLOB-STORAGE-ACCOUNT-KEY
+        - GRAFANA-TOKEN
