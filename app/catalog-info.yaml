@@ -4,9 +4,9 @@ metadata:
   name: adp-portal
   description: An example of a Backstage application.
   # Example for optional annotations
-  # annotations:
-  #   github.com/project-slug: backstage/backstage
-  #   backstage.io/techdocs-ref: dir:.
+  annotations:
+    github.com/project-slug: defra-adp-sandpit/adp-portal
+    backstage.io/techdocs-ref: url:https://defragovuk@dev.azure.com/defragovuk/DEFRA-FFC/_git/DEFRA-FFC.wiki
 spec:
   type: website
   owner: john@example.com
