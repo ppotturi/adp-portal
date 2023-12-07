@@ -83,15 +83,6 @@ const routes = (
     >
       {entityPage}
     </Route>
-    <Route path="/docs" element={<TechDocsIndexPage />} />
-    <Route
-      path="/docs/:namespace/:kind/:name/*"
-      element={<TechDocsReaderPage />}
-    >
-      <TechDocsAddons>
-        <ReportIssue />
-      </TechDocsAddons>
-    </Route>
     <Route path="/create" element={<ScaffolderPage />} />
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route

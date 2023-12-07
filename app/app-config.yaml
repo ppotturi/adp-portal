@@ -49,10 +49,8 @@ grafana:
 # and an external cloud storage when deploying TechDocs for production use-case.
 # https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
 techdocs:
-  #builder: 'external' # Options - 'local' or 'external'
-  builder: 'local' # Options - 'local' or 'external'
+  builder: 'external' # Options - 'local' or 'external'
   generator:
-    #runIn: 'docker' # Alternatives - 'local'
     runIn: 'local' # Alternatives - 'docker'
     dockerImage: 'spotify/techdocs'
     pullImage: true 
@@ -60,9 +58,6 @@ techdocs:
       omitTechdocsCorePlugin: false
       defaultPlugins: ['techdocs-core']
   publisher:
-    # type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
-    # local:
-    #   publishDirectory: '/path/to/local/directory'
     type: 'azureBlobStorage'
     azureBlobStorage:
       containerName: 'adp-wiki-techdocs'
