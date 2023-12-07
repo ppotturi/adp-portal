@@ -49,11 +49,9 @@ grafana:
 # and an external cloud storage when deploying TechDocs for production use-case.
 # https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
 techdocs:
-  builder: 'external' # Options - 'local' or 'external'
+  builder: 'local' # Options - 'local' or 'external'
   generator:
-    runIn: 'local' # Alternatives - 'docker'
-    dockerImage: 'spotify/techdocs'
-    pullImage: true 
+    runIn: 'local'
     mkdocs:
       omitTechdocsCorePlugin: false
       defaultPlugins: ['techdocs-core']
@@ -64,6 +62,9 @@ techdocs:
       credentials:
         accountName: ${TECHDOCS_AZURE_BLOB_STORAGE_ACCOUNT_NAME}
         accountKey: ${TECHDOCS_AZURE_BLOB_STORAGE_ACCOUNT_KEY}
+  cache:
+    ttl: 3600000
+    readTimeout: 500
 integrations:
   azure:
     - host: dev.azure.com

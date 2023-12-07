@@ -6,7 +6,7 @@ metadata:
   # Example for optional annotations
   annotations:
     github.com/project-slug: defra-adp-sandpit/adp-portal
-    backstage.io/techdocs-ref: url:https://defragovuk@dev.azure.com/defragovuk/DEFRA-FFC/_git/DEFRA-FFC.wiki
+    backstage.io/techdocs-ref: url:https://dev.azure.com/defragovuk/DEFRA-FFC/_git/DEFRA-FFC.wiki
 spec:
   type: website
   owner: john@example.com
