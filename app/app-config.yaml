@@ -63,7 +63,7 @@ techdocs:
     # type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
     # local:
     #   publishDirectory: '/path/to/local/directory'
-    # type: 'azureBlobStorage'
+    type: 'azureBlobStorage'
     azureBlobStorage:
       containerName: 'adp-wiki-techdocs'
       credentials:
