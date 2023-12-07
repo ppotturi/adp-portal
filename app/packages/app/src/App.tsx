@@ -44,7 +44,7 @@ import {
   UnifiedThemeProvider,
   createUnifiedTheme,
   palettes,
-  genPageTheme,                  
+  genPageTheme,         
 } from '@backstage/theme';
 
 import styles from 'style-loader!css-loader?{"modules": {"auto": true}}!sass-loader?{"sassOptions": {"quietDeps": true}}!./style.module.scss';
@@ -52,7 +52,7 @@ import styles from 'style-loader!css-loader?{"modules": {"auto": true}}!sass-loa
 const lightTheme = createUnifiedTheme({
   palette: {
     ...palettes.light,
-    navigation: {
+      navigation: {
       background: '#171717',
       indicator: styles.primaryColour,
       color: '#b5b5b5',
@@ -71,17 +71,41 @@ const lightTheme = createUnifiedTheme({
   defaultPageTheme: 'home',
   pageTheme: {
     home: genPageTheme({ colors: ['#171717'], shape: 'none' }),
-  },
-  components: {
+  },  
+  fontFamily: "'GDS Transport',arial, sans-serif",
+  components: { 
     BackstageHeader: {
       styleOverrides: {
         header: {
           borderBottom: `4px solid ${styles.primaryColour}`, 
-        },
-      },
+        }
+      }
     },
+    MuiFormHelperText: {
+      styleOverrides:{
+        root: { 
+           color: styles.secondaryTextColour,
+           "&$error": {
+            color: styles.secondaryTextColour,
+          }
+        }
+      }
+    },
+    MuiInputLabel:{
+      styleOverrides: {
+        root: { 
+          color: styles.secondaryTextColour,
+        }
+      }
+    },
+    MuiTypography: {
+      styleOverrides:{
+        caption: { 
+          color: ` ${styles.secondaryTextColour} !important`,
+        }
+      }
+    }
   },
-  fontFamily: "'GDS Transport',arial, sans-serif"
 });
 
 const darkTheme = createUnifiedTheme({
@@ -104,7 +128,16 @@ const darkTheme = createUnifiedTheme({
   pageTheme: {
     home: genPageTheme({ colors: ['#424242'], shape: 'none' }),
   },
-  fontFamily: "'GDS Transport',arial, sans-serif"
+  fontFamily: "'GDS Transport',arial, sans-serif",
+  components: {
+    MuiTypography: {
+      styleOverrides:{
+        h2: { 
+          color: `${styles.lightGrey} !important`,
+        },
+      }
+    }
+  }
 });
 
 const app = createApp({
