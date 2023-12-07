@@ -60,10 +60,10 @@ techdocs:
       omitTechdocsCorePlugin: false
       defaultPlugins: ['techdocs-core']
   publisher:
-    #type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
-    #local:
-      #publishDirectory: '/path/to/local/directory'
-    type: 'azureBlobStorage'
+    # type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+    # local:
+    #   publishDirectory: '/path/to/local/directory'
+    # type: 'azureBlobStorage'
     azureBlobStorage:
       containerName: 'adp-wiki-techdocs'
       credentials:
