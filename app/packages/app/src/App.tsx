@@ -53,12 +53,12 @@ const lightTheme = createUnifiedTheme({
   palette: {
     ...palettes.light,
       navigation: {
-      background: '#171717',
+      background: styles.lightThemeNav,
       indicator: styles.primaryColour,
-      color: '#b5b5b5',
-      selectedColor: '#FFF',
+      color: styles.unselectedNavText,
+      selectedColor: styles.white,
       navItem: {
-        hoverBackground: '#404040',
+        hoverBackground: styles.navHoverBackground,
       },
     },
     primary:{
@@ -70,7 +70,7 @@ const lightTheme = createUnifiedTheme({
   },
   defaultPageTheme: 'home',
   pageTheme: {
-    home: genPageTheme({ colors: ['#171717'], shape: 'none' }),
+    home: genPageTheme({ colors: [`${styles.lightThemeNav}`], shape: 'none' }),
   },  
   fontFamily: "'GDS Transport',arial, sans-serif",
   components: { 
@@ -112,12 +112,12 @@ const darkTheme = createUnifiedTheme({
   palette: {
     ...palettes.dark, 
     navigation: {
-      background: '#424242',
+      background: styles.darkThemeNav,
       indicator: styles.primaryColour,
-      color: '#b5b5b5',
-      selectedColor: '#FFF',
+      color: styles.unselectedNavText,
+      selectedColor: styles.white,
       navItem: {
-        hoverBackground: '#404040',
+        hoverBackground: styles.navHoverBackground,
       },
     },
     link: styles.linkColour,
@@ -126,7 +126,7 @@ const darkTheme = createUnifiedTheme({
   },
   defaultPageTheme: 'home',
   pageTheme: {
-    home: genPageTheme({ colors: ['#424242'], shape: 'none' }),
+    home: genPageTheme({ colors:  [`${styles.darkThemeNav}`], shape: 'none' }),
   },
   fontFamily: "'GDS Transport',arial, sans-serif",
   components: {
