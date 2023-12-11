@@ -3510,7 +3510,7 @@
     d3-force "^3.0.0"
     react-use "^17.2.4"
 
-"@backstage/plugin-techdocs-backend@^1.8.0":
+"@backstage/plugin-techdocs-backend@^1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@backstage/plugin-techdocs-backend/-/plugin-techdocs-backend-1.9.0.tgz#126df640aa927b5b5f637d9ef6b5a3505c5bf0fb"
   integrity sha512-b0yGCPe+l23+yEZOD2fC/ShRNlCAMNDjqXOAzWodwgA8av1M9BK136SxVSHa71nqo5LmuTDSwPb9vjK2oIR1UQ==
@@ -3610,7 +3610,7 @@
     react-helmet "6.1.0"
     react-use "^17.2.4"
 
-"@backstage/plugin-techdocs@^1.8.0":
+"@backstage/plugin-techdocs@^1.9.1":
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/@backstage/plugin-techdocs/-/plugin-techdocs-1.9.1.tgz#e630488b429026c0de5e5ffb617af575b45cd0dd"
   integrity sha512-TOhnGf/SJ2PKdUBAnnqd+hQsu9e9mKJQlQDQcbUvKuqCSkY2v8sreyP0Kgm5Fc7zGPTCfu9Xach3qwGevbc43w==
@@ -9174,7 +9174,7 @@ anymatch@^3.0.3, anymatch@~3.1.2:
     "@backstage/plugin-search" "^1.4.1"
     "@backstage/plugin-search-react" "^1.7.1"
     "@backstage/plugin-tech-radar" "^0.6.9"
-    "@backstage/plugin-techdocs" "^1.8.0"
+    "@backstage/plugin-techdocs" "^1.9.1"
     "@backstage/plugin-techdocs-module-addons-contrib" "^1.1.1"
     "@backstage/plugin-techdocs-react" "^1.1.12"
     "@backstage/plugin-user-settings" "^0.7.11"

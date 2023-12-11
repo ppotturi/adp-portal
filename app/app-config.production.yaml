@@ -45,9 +45,9 @@ catalog:
         clientId: ${AUTH_MICROSOFT_CLIENT_ID}
         clientSecret: ${AUTH_MICROSOFT_CLIENT_SECRET}
         userGroupMember:
-          filter: "displayName eq 'AG-Azure-CDO-ADP-PlatformEngineers'"
+          filter: "displayName eq 'AG-Azure-CDO-ADP-PlatformEngineers' or displayName eq 'AAG-Users-ADP-Portal'"
         group:
-          filter: "displayName eq 'AG-Azure-CDO-ADP-PlatformEngineers'"
+          filter: "displayName eq 'AG-Azure-CDO-ADP-PlatformEngineers' or displayName eq 'AAG-Users-ADP-Portal'"
         schedule:
           frequency: { minutes: 60 }
           timeout: { minutes: 10 }
