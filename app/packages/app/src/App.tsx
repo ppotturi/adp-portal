@@ -38,6 +38,109 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { microsoftAuthApiRef } from '@backstage/core-plugin-api';
 import { SignInPage } from '@backstage/core-components';
 
+import LightIcon from  '@material-ui/icons/WbSunnyRounded';
+import NightIcon from '@material-ui/icons/Brightness2Rounded';
+
+import {
+  UnifiedThemeProvider,
+  createUnifiedTheme,
+  palettes,
+  genPageTheme,         
+} from '@backstage/theme';
+
+import styles from 'style-loader!css-loader?{"modules": {"auto": true}}!sass-loader?{"sassOptions": {"quietDeps": true}}!./style.module.scss';
+
+const lightTheme = createUnifiedTheme({
+  palette: {
+    ...palettes.light,
+      navigation: {
+      background: styles.lightThemeNav,
+      indicator: styles.primaryColour,
+      color: styles.unselectedNavText,
+      selectedColor: styles.white,
+      navItem: {
+        hoverBackground: styles.navHoverBackground,
+      },
+    },
+    primary:{
+      main: styles.primaryColour,
+    },
+    link: styles.linkColour,
+    linkHover: styles.linkHoverColour,
+    errorText: styles.errorColour,
+  },
+  defaultPageTheme: 'home',
+  pageTheme: {
+    home: genPageTheme({ colors: [`${styles.lightThemeNav}`], shape: 'none' }),
+  },  
+  fontFamily: "'GDS Transport',arial, sans-serif",
+  components: { 
+    BackstageHeader: {
+      styleOverrides: {
+        header: {
+          borderBottom: `4px solid ${styles.primaryColour}`, 
+        }
+      }
+    },
+    MuiFormHelperText: {
+      styleOverrides:{
+        root: { 
+           color: styles.secondaryTextColour,
+           "&$error": {
+            color: styles.secondaryTextColour,
+          }
+        }
+      }
+    },
+    MuiInputLabel:{
+      styleOverrides: {
+        root: { 
+          color: styles.secondaryTextColour,
+        }
+      }
+    },
+    MuiTypography: {
+      styleOverrides:{
+        caption: { 
+          color: ` ${styles.secondaryTextColour} !important`,
+        }
+      }
+    }
+  },
+});
+
+const darkTheme = createUnifiedTheme({
+  palette: {
+    ...palettes.dark, 
+    navigation: {
+      background: styles.darkThemeNav,
+      indicator: styles.primaryColour,
+      color: styles.unselectedNavText,
+      selectedColor: styles.white,
+      navItem: {
+        hoverBackground: styles.navHoverBackground,
+      },
+    },
+    link: styles.linkColour,
+    linkHover: styles.linkHoverColour,
+    errorText: styles.errorColour,
+  },
+  defaultPageTheme: 'home',
+  pageTheme: {
+    home: genPageTheme({ colors:  [`${styles.darkThemeNav}`], shape: 'none' }),
+  },
+  fontFamily: "'GDS Transport',arial, sans-serif",
+  components: {
+    MuiTypography: {
+      styleOverrides:{
+        h2: { 
+          color: `${styles.lightGrey} !important`,
+        },
+      }
+    }
+  }
+});
+
 const app = createApp({
   components: {
     SignInPage: props => (
@@ -54,6 +157,22 @@ const app = createApp({
     )
   },
   apis,
+  themes: [
+    {
+      id: 'default-light',
+      title: 'Default Light',
+      variant: 'light',
+      icon: <LightIcon />,
+      Provider: ({ children }) => <UnifiedThemeProvider theme={lightTheme} children={children} />,
+    },
+    {
+      id: 'default-dark',
+      title: 'Default Dark',
+      variant: 'dark',
+      icon: <NightIcon />,
+      Provider: ({ children }) => <UnifiedThemeProvider theme={darkTheme} children={children} />,
+    },
+  ],
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,
