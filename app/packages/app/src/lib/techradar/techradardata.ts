@@ -4,7 +4,7 @@ import { TechRadarApi } from './techradarapi';
   
   export class AdpDataTechRadarApi implements TechRadarApi {
     async load(id: string | undefined) {
-      var rawData = "https://raw.githubusercontent.com/defra-adp-sandpit/adp-software-templates/main/tech-radars/development-tech-radar";
+      const rawData = "https://raw.githubusercontent.com/defra-adp-sandpit/adp-software-templates/main/tech-radars/development-tech-radar";
 
       const data = await fetch(rawData).then(res => res.json());
 
