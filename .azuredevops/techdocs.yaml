@@ -1,7 +1,7 @@
 pr:
   branches:
     include:
-      - main
+      - none
   paths:
     exclude:
       - test-output/*
@@ -15,7 +15,7 @@ resources:
       name: DEFRA/adp-pipeline-common
       endpoint: DEFRA
       type: github
-      ref: refs/heads/rv/279550-techdocs
+      ref: refs/heads/main
 
     - repository: techdocs-wiki
       name: defra-adp-sandpit/techdocs-wiki
