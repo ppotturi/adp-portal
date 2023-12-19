@@ -88,6 +88,8 @@
   },
   "files": [
     "dist",
-    "public/assets/fonts"
-  ]
+    "public/assets/fonts",
+    "src/lib/techradar/techradarConfig.json"
+  ],
+  "configSchema": "src/lib/techradar/techradarConfig.json"
 }

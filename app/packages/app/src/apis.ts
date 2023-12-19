@@ -17,6 +17,10 @@ export const apis: AnyApiFactory[] = [
     deps: { configApi: configApiRef },
     factory: ({ configApi }) => ScmIntegrationsApi.fromConfig(configApi),
   }),
-  createApiFactory(techRadarApiRef, new AdpDataTechRadarApi()),
+  createApiFactory({
+    api: techRadarApiRef,
+    deps: {configApi: configApiRef},
+    factory: ({configApi}) => new AdpDataTechRadarApi(configApi),
+  }),
   ScmAuth.createDefaultApiFactory(),
 ];
