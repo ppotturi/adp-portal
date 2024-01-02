@@ -13,7 +13,11 @@ app:
 organization:
   name: "Azure Development Platform: "
 
+permission:
+  enabled: true
+
 backend:
+
   baseUrl: http://localhost:7007
   listen:
     port: 7007
