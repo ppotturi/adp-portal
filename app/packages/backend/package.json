@@ -29,6 +29,7 @@
     "@backstage/plugin-catalog-backend": "^1.14.0",
     "@backstage/plugin-catalog-backend-module-github": "^0.4.4",
     "@backstage/plugin-catalog-backend-module-msgraph": "^0.5.13",
+    "@backstage/plugin-permission-backend": "^0.5.29",
     "@backstage/plugin-permission-common": "^0.7.9",
     "@backstage/plugin-permission-node": "^0.7.17",
     "@backstage/plugin-proxy-backend": "^0.4.4",
