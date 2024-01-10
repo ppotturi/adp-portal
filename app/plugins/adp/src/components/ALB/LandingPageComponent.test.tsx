@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExampleComponent } from './ExampleComponent';
+import { LandingPageComponent } from './LandingPageComponent';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { screen } from '@testing-library/react';
@@ -8,7 +8,7 @@ import {
   renderInTestApp,
 } from "@backstage/test-utils";
 
-describe('ExampleComponent', () => {
+describe('LandingPageComponent', () => {
   const server = setupServer();
   // Enable sane handlers for network requests
   setupRequestMockHandlers(server);
@@ -21,7 +21,7 @@ describe('ExampleComponent', () => {
   });
 
   it('should render', async () => {
-    await renderInTestApp(<ExampleComponent />);
+    await renderInTestApp(<LandingPageComponent />);
     expect(screen.getByText('Azure Development Portal: Data')).toBeInTheDocument();
   });
 });
