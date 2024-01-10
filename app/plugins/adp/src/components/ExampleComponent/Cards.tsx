@@ -10,7 +10,7 @@ export default {
     title: 'Layout/Item Cards',
    };
 
-export const CardExample = ({cardTitle, cardSubTitle, cardText}: {cardTitle: string, cardSubTitle:string, cardText:string}) => {
+export const CardExample = ({cardTitle, cardSubTitle, cardText, pathToAdd,pathToView}: {cardTitle: string, cardSubTitle:string, cardText:string, pathToAdd:string, pathToView:string}) => {
        return (
            <Card>
              <CardMedia>
@@ -20,10 +20,10 @@ export const CardExample = ({cardTitle, cardSubTitle, cardText}: {cardTitle: str
                {cardText}
              </CardContent>
              <CardActions>
-               <LinkButton color="primary" to="/catalog">
+               <LinkButton color="primary" to={pathToAdd}>
                  Add
                </LinkButton>
-               <LinkButton color="primary" to="/catalog">
+               <LinkButton color="primary" to={pathToView}>
                  View
                </LinkButton>
              </CardActions>
