@@ -22,6 +22,6 @@ describe('ExampleComponent', () => {
 
   it('should render', async () => {
     await renderInTestApp(<ExampleComponent />);
-    expect(screen.getByText('Welcome to adp!')).toBeInTheDocument();
+    expect(screen.getByText('Azure Development Portal: Data')).toBeInTheDocument();
   });
 });

@@ -256,10 +256,11 @@ export const DenseTable = ({ users }: DenseTableProps) => {
   const classes = useStyles();
 
   const columns: TableColumn[] = [
-    { title: 'Avatar', field: 'avatar' },
-    { title: 'Name', field: 'name' },
-    { title: 'Email', field: 'email' },
-    { title: 'Nationality', field: 'nationality' },
+    { title: 'ALB Name', field: 'avatar' },
+    { title: 'ALB Short-Form', field: 'name' },
+    { title: 'Creator', field: 'email' },
+    { title: 'Last Edit', field: 'nationality' },
+    { title: 'Action', field: 'nationality' },
   ];
 
   const data = users.map(user => {
