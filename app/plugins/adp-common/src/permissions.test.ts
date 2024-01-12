@@ -1,4 +1,4 @@
-import { adpProgrammmeCreatePermission, adpProjectCreatePermission, adpProjectUserCreatePermission, todoListPermissions } from './permissions';
+import { adpProgrammmeCreatePermission, adpProjectCreatePermission, adpProjectUserCreatePermission, adpPluginPermissions } from './permissions';
 
 describe('Permissions', () => {
   it('should have the correct attributes', () => {
@@ -14,12 +14,12 @@ describe('Permissions', () => {
   });
 });
 
-describe('todoListPermissions', () => {
+describe('adpPluginPermissions', () => {
     it('should contain the correct permissions', () => {
       const expectedPermissions = [adpProgrammmeCreatePermission, adpProjectCreatePermission,adpProjectUserCreatePermission];
-      expect(todoListPermissions).toHaveLength(expectedPermissions.length);
+      expect(adpPluginPermissions).toHaveLength(expectedPermissions.length);
       expectedPermissions.forEach(permission => {
-        expect(todoListPermissions).toContain(permission);
+        expect(adpPluginPermissions).toContain(permission);
       });
     });
 });  
