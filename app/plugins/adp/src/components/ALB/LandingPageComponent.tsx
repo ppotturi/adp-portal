@@ -6,9 +6,9 @@ import {
   Content,
   ContentHeader,
   SupportButton,
+  ItemCardGrid
 } from '@backstage/core-components';
 import { CardTemplate } from './CardComponent';
-import { ItemCardGrid } from '@backstage/core-components';
   
   export const LandingPageComponent = () => (
     <Page themeId="tool">

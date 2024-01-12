@@ -3,8 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';;
-import { LinkButton } from '@backstage/core-components';
-import { ItemCardHeader } from '@backstage/core-components';
+import { LinkButton, ItemCardHeader } from '@backstage/core-components';
 
 export const CardTemplate = ({cardTitle, cardSubTitle, cardText, pathToAdd,pathToView}: {cardTitle: string, cardSubTitle:string, cardText:string, pathToAdd:string, pathToView:string}) => {
   return (
