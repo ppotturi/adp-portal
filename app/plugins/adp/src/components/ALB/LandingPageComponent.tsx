@@ -26,22 +26,22 @@ import { ItemCardGrid } from '@backstage/core-components';
           cardTitle="Arms Length Bodies"
           cardSubTitle="ADP"
           cardText="Arms Length Bodies (ALB's) are a specific category of central government public bodies that are administratively classified by the Cabinet Office. Each Arms Length Body may contain multiple delivery programmes."
-          pathToAdd="/catalog"
-          pathToView="/catalog"
+          pathToAdd="/"
+          pathToView="/"
         />
         <CardTemplate 
           cardTitle="Delivery Programmes"
           cardSubTitle="ADP"
           cardText="Delivery Programmes coordinate and oversee multiple related delivery teams or projects to realise outcomes and benefits related to a strategic objective set by DEFRA or an Arms Length Body. Each delivery programme may contain multiple delivery teams."
-          pathToAdd='/catalog'
-          pathToView='/catalog'
+          pathToAdd='/'
+          pathToView='/'
         />
         <CardTemplate 
           cardTitle="Delivery Team"
           cardSubTitle="ADP"
           cardText="Delivery Teams are responsible for creating and maintaining platform services to realise benefits and outcomes for delivery programmes through the Azure Developer Platform. Each delivery team must be part of a delivery programme and team members are able to scaffold platform services through this portal." 
-          pathToAdd='/catalog'
-          pathToView='/catalog'
+          pathToAdd='/'
+          pathToView='/'
         />
         </ItemCardGrid>
         </Content>
