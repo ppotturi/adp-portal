@@ -9,10 +9,6 @@ import {
 } from '@backstage/core-components';
 import { CardTemplate } from './CardComponent';
 import { ItemCardGrid } from '@backstage/core-components';
-
-export default {
-   title: 'Layout/Item Cards',
-  };
   
   export const LandingPageComponent = () => (
     <Page themeId="tool">
@@ -20,25 +16,30 @@ export default {
     </Header>
     <Content>
       <ContentHeader title="ADP Data">
-        <SupportButton>A description of your plugin goes here.</SupportButton>
+        <SupportButton>View or manage units within the DEFRA delivery organization on the Azure Developer Platform.</SupportButton>
       </ContentHeader>
       <Typography paragraph>
-          The most basic setup is to place a bunch of cards into a large grid,
-          leaving styling to the defaults. Try to resize the window to see how they
-          rearrange themselves to fit the viewport.
+        View or add Arms Length Bodies, Delivery Programmes & Delivery Teams to the Azure Developer Platform.
         </Typography>
         <ItemCardGrid>
         <CardTemplate 
-          cardTitle='ALB'
-          cardSubTitle='ADP' 
-          cardText='Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+          cardTitle="Arms Length Bodies"
+          cardSubTitle="ADP"
+          cardText="Arms Length Bodies (ALB's) are a specific category of central government public bodies that are administratively classified by the Cabinet Office. Each Arms Length Body may contain multiple delivery programmes."
+          pathToAdd="/catalog"
+          pathToView="/catalog"
+        />
+        <CardTemplate 
+          cardTitle="Delivery Programmes"
+          cardSubTitle="ADP"
+          cardText="Delivery Programmes coordinate and oversee multiple related delivery teams or projects to realise outcomes and benefits related to a strategic objective set by DEFRA or an Arms Length Body. Each delivery programme may contain multiple delivery teams."
           pathToAdd='/catalog'
           pathToView='/catalog'
         />
         <CardTemplate 
-          cardTitle='Delivery Programmes'
-          cardSubTitle='ADP' 
-          cardText='Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+          cardTitle="Delivery Team"
+          cardSubTitle="ADP"
+          cardText="Delivery Teams are responsible for creating and maintaining platform services to realise benefits and outcomes for delivery programmes through the Azure Developer Platform. Each delivery team must be part of a delivery programme and team members are able to scaffold platform services through this portal." 
           pathToAdd='/catalog'
           pathToView='/catalog'
         />
