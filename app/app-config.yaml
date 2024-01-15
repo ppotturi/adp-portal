@@ -30,8 +30,18 @@ backend:
     allow:
       - host: 'raw.githubusercontent.com'
   database:
-    client: better-sqlite3
-    connection: ':memory:'
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+    knexConfig:
+      pool:
+        min: 3
+        max: 12
+        acquireTimeoutMillis: 60000
+        idleTimeoutMillis: 60000
 
 proxy:
   '/grafana/api':
