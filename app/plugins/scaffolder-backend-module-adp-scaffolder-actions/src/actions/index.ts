@@ -1,1 +1,1 @@
-export * from './example';
+export * from './azure-devops';
