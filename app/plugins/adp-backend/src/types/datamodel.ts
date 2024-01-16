@@ -5,7 +5,7 @@ export type ArmsLengthBody = {
     ownerEmail: string;
     creatorSameAsOwner: boolean;
     name: string;
-    shortName: string;
+    shortName?: string;
     description?: string;
     id: string;
     timestamp: number;

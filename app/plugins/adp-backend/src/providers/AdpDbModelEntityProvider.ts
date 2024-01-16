@@ -13,7 +13,7 @@ import {
   } from '@backstage/catalog-model';
   import { Logger } from 'winston';
   import * as uuid from 'uuid';
-  import { getAllArmsLengthBodys } from '../service/armsLengthBody';
+  import { getAllArmsLengthBodies } from '../service/armsLengthBody';
   import { GroupTransformer, defaultGroupTransformer } from './transformers';
   
   /**
@@ -126,7 +126,7 @@ import {
   
       const { markReadComplete } = this.trackProgress(logger);
   
-      const entities = await this.readDeliveryProgrammes(logger);
+      const entities = await this.readArmsLengthBodies(logger);
   
       const { markCommitComplete } = markReadComplete(entities);
   
@@ -140,17 +140,17 @@ import {
       markCommitComplete(entities);
     }
   
-    private async readDeliveryProgrammes(logger: Logger): Promise<GroupEntity[]> {
-      logger.info('Discovering All Delivery Programmes');
+    private async readArmsLengthBodies(logger: Logger): Promise<GroupEntity[]> {
+      logger.info('Discovering All Arms Length Body');
   
-      const deliveryProgrammes = getAllArmsLengthBodys();
+      const armsLengthBodies = getAllArmsLengthBodies();
   
       const entities: GroupEntity[] = [];
   
-      logger.info(`Discovered ${deliveryProgrammes.length} delivery programmes`);
+      logger.info(`Discovered ${armsLengthBodies.length} Arms Length Body`);
   
-      for (const deliveryProgramme of deliveryProgrammes) {
-        const entity = await defaultGroupTransformer(deliveryProgramme);
+      for (const armsLengthBody of armsLengthBodies) {
+        const entity = await defaultGroupTransformer(armsLengthBody);
         if (entity) {
           entities.push(entity);
         }

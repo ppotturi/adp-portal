@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { NotFoundError } from '@backstage/errors';
 import { ArmsLengthBody } from '../types';
 
-const TABLE_NAME = 'delivery_programmes';
+const TABLE_NAME = 'arms_length_body';
 type Row = {
     creatorUsername: string;
     creatorEmail: string;
@@ -19,11 +19,11 @@ type Row = {
     updated_by: string;
   };
 
-export class ArmsLengthBodyStore {
+export class ArmsLengthBodiestore {
   constructor(private readonly client: Knex) {}
 
   async getAll(): Promise<ArmsLengthBody[]> {
-    const armsLengthBodys = await this.client<Row>(TABLE_NAME)
+    const ArmsLengthBodies = await this.client<Row>(TABLE_NAME)
       .select(
         'creatorUsername',
         'creatorEmail',
@@ -38,15 +38,15 @@ export class ArmsLengthBodyStore {
       )
       .orderBy('created_at');
 
-    return armsLengthBodys.map(row => ({
+    return ArmsLengthBodies.map(row => ({
       creatorUsername: row.creatorUsername,
       creatorEmail: row.creatorEmail,
       ownerUsername: row.ownerUsername,
       ownerEmail: row.ownerEmail,
       creatorSameAsOwner: row.creatorSameAsOwner,
-      description: row.description,
+      description: row?.description,
       name: row.name,
-      shortName: row.shortName,
+      shortName: row?.shortName,
       id: row.id,
       timestamp: new Date(row.created_at).getMilliseconds(),
     }));
@@ -107,7 +107,7 @@ export class ArmsLengthBodyStore {
 
     if (insertResult.length < 1) {
       throw new Error(
-        `Could not insert delivery programme ${armsLengthBody.name}`,
+        `Could not insert Arms Length Body ${armsLengthBody.name}`,
       );
     }
 
@@ -122,10 +122,10 @@ export class ArmsLengthBodyStore {
     armsLengthBody: Omit<ArmsLengthBody, 'timestamp'>,
     updatedBy: string,
   ): Promise<ArmsLengthBody> {
-    const existingProgramme = await this.get(armsLengthBody.id);
-    if (!existingProgramme) {
+    const existingALB = await this.get(armsLengthBody.id);
+    if (!existingALB) {
       throw new NotFoundError(
-        `Could not find delivery programme with ID ${armsLengthBody.id}`,
+        `Could not find Arms Length Body with ID ${armsLengthBody.id}`,
       );
     }
 

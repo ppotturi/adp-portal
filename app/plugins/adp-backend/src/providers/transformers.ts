@@ -7,25 +7,29 @@ export type GroupTransformer = (
 
 
 export const defaultGroupTransformer: GroupTransformer = async (
-  deliveryProgramme
+  armsLengthBody
 ): Promise<GroupEntity | undefined> => {
 
   return {
     apiVersion: 'backstage.io/v1beta1',
     kind: 'Group',
     metadata: {
-      name: deliveryProgramme.name,
-      title: deliveryProgramme.title,
-      description: deliveryProgramme?.description,
+      creatorUsername: armsLengthBody.creatorUsername,
+      creatorEmail: armsLengthBody.creatorEmail,
+      ownerUsername: armsLengthBody.ownerUsername,
+      ownerEmail: armsLengthBody.ownerEmail,
+      creatorSameAsOwner: armsLengthBody.creatorSameAsOwner,
+      description: armsLengthBody?.description,
+      name: armsLengthBody.name,
+      shortName: armsLengthBody?.shortName,
       tags: [],
       annotations: {
-        'backstage.io/managed-by-location': `adp:delivery-programme\\${deliveryProgramme.name}`,
-        'backstage.io/managed-by-origin-location': '`adp:delivery-programme\\${deliveryProgramme.name}`',
+        'backstage.io/managed-by-location': `adp:arms-length-body\\${armsLengthBody.name}`,
+        'backstage.io/managed-by-origin-location': '`adp:arms-length-body\\${armsLengthBody.name}`',
       }
     },
     spec: {
-      type: 'delivery-programme',
-      parent: deliveryProgramme?.armLengthBody,
+      type: 'arms-length-body',
       children: [],
     },
   };

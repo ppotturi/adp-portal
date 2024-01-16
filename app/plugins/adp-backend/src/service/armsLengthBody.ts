@@ -13,7 +13,7 @@ export type ArmsLengthBodyFilters =
   | { not: ArmsLengthBodyFilters }
   | ArmsLengthBodyFilter;
 
-const armsLengthBodys: { [key: string]: ArmsLengthBody } = {};
+const ArmsLengthBodies: { [key: string]: ArmsLengthBody } = {};
 
 const matches = (armsLengthBody: ArmsLengthBody, filters?: ArmsLengthBodyFilters): boolean => {
   if (!filters) {
@@ -35,8 +35,8 @@ const matches = (armsLengthBody: ArmsLengthBody, filters?: ArmsLengthBodyFilters
   return filters.values.includes(armsLengthBody[filters.property]);
 };
 
-export function getAllArmsLengthBodys(filter?: ArmsLengthBodyFilters) {
-  return Object.values(armsLengthBodys)
+export function getAllArmsLengthBodies(filter?: ArmsLengthBodyFilters) {
+  return Object.values(ArmsLengthBodies)
     .filter(value => matches(value, filter))
     .sort((a, b) => b.timestamp - a.timestamp);
 }
