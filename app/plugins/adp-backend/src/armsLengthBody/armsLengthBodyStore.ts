@@ -19,7 +19,7 @@ type Row = {
     updated_by: string;
   };
 
-export class ArmsLengthBodiestore {
+export class ArmsLengthBodyStore {
   constructor(private readonly client: Knex) {}
 
   async getAll(): Promise<ArmsLengthBody[]> {

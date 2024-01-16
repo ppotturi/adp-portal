@@ -160,7 +160,6 @@ import {
   
     }
   
-  
     /**
    * Tracks the progress of the PuppetDB read and commit operations.
    *
