@@ -13,7 +13,7 @@ export type ArmsLengthBodyFilters =
   | { not: ArmsLengthBodyFilters }
   | ArmsLengthBodyFilter;
 
-const ArmsLengthBodies: { [key: string]: ArmsLengthBody } = {};
+const armsLengthBodys: { [key: string]: ArmsLengthBody } = {};
 
 const matches = (armsLengthBody: ArmsLengthBody, filters?: ArmsLengthBodyFilters): boolean => {
   if (!filters) {
@@ -32,11 +32,18 @@ const matches = (armsLengthBody: ArmsLengthBody, filters?: ArmsLengthBodyFilters
     return !matches(armsLengthBody, filters.not);
   }
 
-  return filters.values.includes(armsLengthBody[filters.property]);
+  const value =  filters.values.includes(armsLengthBody[filters.property]);
+  if (typeof value === 'boolean') {
+    // Convert boolean to string (or other appropriate type) for comparison
+    return filters.values.includes(value.toString());
+} else {
+    // Handle other types as before
+    return filters.values.includes(value);
+}
 };
 
-export function getAllArmsLengthBodies(filter?: ArmsLengthBodyFilters) {
-  return Object.values(ArmsLengthBodies)
+export function getAllArmsLengthBodys(filter?: ArmsLengthBodyFilters) {
+  return Object.values(armsLengthBodys)
     .filter(value => matches(value, filter))
     .sort((a, b) => b.timestamp - a.timestamp);
 }

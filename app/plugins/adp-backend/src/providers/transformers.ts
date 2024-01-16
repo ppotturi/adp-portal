@@ -19,9 +19,9 @@ export const defaultGroupTransformer: GroupTransformer = async (
       ownerUsername: armsLengthBody.ownerUsername,
       ownerEmail: armsLengthBody.ownerEmail,
       creatorSameAsOwner: armsLengthBody.creatorSameAsOwner,
-      description: armsLengthBody?.description,
       name: armsLengthBody.name,
       shortName: armsLengthBody?.shortName,
+      description: armsLengthBody?.description,
       tags: [],
       annotations: {
         'backstage.io/managed-by-location': `adp:arms-length-body\\${armsLengthBody.name}`,

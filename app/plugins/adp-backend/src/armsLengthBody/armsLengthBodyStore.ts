@@ -10,7 +10,7 @@ type Row = {
     ownerEmail: string;
     creatorSameAsOwner: boolean;
     name: string;
-    shortName: string;
+    shortName?: string;
     description?: string;
     id: string;
     created_at: Date;
@@ -44,9 +44,9 @@ export class ArmsLengthBodiestore {
       ownerUsername: row.ownerUsername,
       ownerEmail: row.ownerEmail,
       creatorSameAsOwner: row.creatorSameAsOwner,
-      description: row?.description,
       name: row.name,
       shortName: row?.shortName,
+      description: row?.description,
       id: row.id,
       timestamp: new Date(row.created_at).getMilliseconds(),
     }));
