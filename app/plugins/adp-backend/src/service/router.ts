@@ -61,11 +61,11 @@ export async function createRouter(
     response.json({ status: 'ok' });
   });
 
-  router.get('/armLengthBody', async (_req, res) => {
+  router.get('/armsLengthBody', async (_req, res) => {
     res.json(await armsLengthBodiesStore.getAll());
   });
 
-  router.post('/armLengthBody', async (req, res) => {
+  router.post('/armsLengthBody', async (req, res) => {
     if (!isArmsLengthBodyCreateRequest(req.body)) {
       throw new InputError('Invalid payload');
     }
@@ -78,7 +78,7 @@ export async function createRouter(
     res.json(armsLengthBody);
   });
 
-  router.put('/armLengthBody', async (req, res) => {
+  router.put('/armsLengthBody', async (req, res) => {
     if (!isArmsLengthBodyUpdateRequest(req.body)) {
       throw new InputError('Invalid payload');
     }
