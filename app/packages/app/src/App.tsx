@@ -50,6 +50,7 @@ import {
 
 import styles from 'style-loader!css-loader?{"modules": {"auto": true}}!sass-loader?{"sassOptions": {"quietDeps": true}}!./style.module.scss';
 import { AdpPage } from '@internal/plugin-adp';
+import { AlbViewPageComponent } from '@internal/plugin-adp/src/components/ALB/AlbViewPageComponent';
 
 const lightTheme = createUnifiedTheme({
   palette: {
@@ -197,6 +198,7 @@ const routes = (
   <FlatRoutes>
     <Route path="/" element={<Navigate to="catalog" />} />
     <Route path="/catalog" element={<CatalogIndexPage />} />
+    <Route path="/alb" element={<AlbViewPageComponent />} />
     <Route
       path="/catalog/:namespace/:kind/:name"
       element={<CatalogEntityPage />}

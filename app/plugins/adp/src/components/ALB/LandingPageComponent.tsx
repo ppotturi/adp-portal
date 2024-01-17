@@ -27,7 +27,7 @@ import { CardTemplate } from './CardComponent';
           cardSubTitle="ADP"
           cardText="Arms Length Bodies (ALB's) are a specific category of central government public bodies that are administratively classified by the Cabinet Office. Each Arms Length Body may contain multiple delivery programmes."
           pathToAdd="/"
-          pathToView="/"
+          pathToView="/alb"
         />
         <CardTemplate 
           cardTitle="Delivery Programmes"
