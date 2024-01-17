@@ -66,46 +66,46 @@ export async function createRouter(
   });
 
   router.post('/armLengthBody', async (req, res) => {
-    if (!isDeliveryProgrammeCreateRequest(req.body)) {
+    if (!isArmsLengthBodyCreateRequest(req.body)) {
       throw new InputError('Invalid payload');
     }
 
     const author = await getCurrentUsername(identity, req);
-    const deliveryProgramme = await armsLengthBodiesStore.add(
+    const armsLengthBody = await armsLengthBodiesStore.add(
       req.body,
       author,
     );
-    res.json(deliveryProgramme);
+    res.json(armsLengthBody);
   });
 
   router.put('/armLengthBody', async (req, res) => {
-    if (!isDeliveryProgrammeUpdateRequest(req.body)) {
+    if (!isArmsLengthBodyUpdateRequest(req.body)) {
       throw new InputError('Invalid payload');
     }
 
     const author = await getCurrentUsername(identity, req);
-    const deliveryProgramme = await armsLengthBodiesStore.update(
+    const armsLengthBody = await armsLengthBodiesStore.update(
       req.body,
       author,
     );
-    res.json(deliveryProgramme);
+    res.json(armsLengthBody);
   });
 
   router.use(errorHandler());
   return router;
 }
 
-function isDeliveryProgrammeCreateRequest(
+function isArmsLengthBodyCreateRequest(
   request: Omit<ArmsLengthBody, 'id' | 'timestamp'>,
 ) {
   return typeof request?.name === 'string';
 }
 
-function isDeliveryProgrammeUpdateRequest(
+function isArmsLengthBodyUpdateRequest(
   request: Omit<ArmsLengthBody, 'timestamp'>,
 ) {
   return (
-    typeof request?.id === 'string' && isDeliveryProgrammeCreateRequest(request)
+    typeof request?.id === 'string' && isArmsLengthBodyCreateRequest(request)
   );
 }
 
