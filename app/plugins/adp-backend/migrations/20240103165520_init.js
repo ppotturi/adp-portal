@@ -40,7 +40,7 @@ exports.up = async function up(knex) {
       .timestamp('created_at', { useTz: false })
       .notNullable()
       .defaultTo(knex.fn.now())
-      .comment('Creation time of the delivery programme');
+      .comment('Creation time of the ALB');
     table
       .uuid('id')
       .primary()
@@ -49,7 +49,7 @@ exports.up = async function up(knex) {
     table
       .string('created_by')
       .notNullable()
-      .comment('Username of the person who created the delivery programme');
+      .comment('Username of the person who created the ALB');
     table
       .timestamp('updated_at', { useTz: false })
       .notNullable()
@@ -59,7 +59,7 @@ exports.up = async function up(knex) {
       .string('updated_by')
       .notNullable()
       .comment(
-        'Username of the person who last updated the delivery programme',
+        'Username of the person who last updated the ALB',
       );
   });
 };
