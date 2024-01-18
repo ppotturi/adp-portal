@@ -52,8 +52,6 @@ RUN tar xzf skeleton.tar.gz && rm skeleton.tar.gz
 
 RUN yarn config set "strict-ssl" false
 
-#To avoid self signed certificate in certificate chain error
-RUN export NODE_TLS_REJECT_UNAUTHORIZED=0
 
 RUN --mount=type=cache,target=/home/node/.cache/yarn,sharing=locked,uid=1000,gid=1000 \
     yarn install --frozen-lockfile --production --network-timeout 300000
