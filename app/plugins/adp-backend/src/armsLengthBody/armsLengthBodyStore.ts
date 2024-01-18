@@ -4,13 +4,13 @@ import { ArmsLengthBody } from '../types';
 
 const TABLE_NAME = 'arms_length_body';
 type Row = {
-    creatorUsername: string;
-    creatorEmail: string;
-    ownerUsername: string;
-    ownerEmail: string;
-    creatorSameAsOwner: boolean;
+    creator_username: string;
+    creator_email: string;
+    owner_username: string;
+    owner_email: string;
+    creator_same_as_owner: boolean;
     name: string;
-    shortName?: string;
+    short_name?: string;
     description?: string;
     id: string;
     created_at: Date;
@@ -25,13 +25,13 @@ export class ArmsLengthBodyStore {
   async getAll(): Promise<ArmsLengthBody[]> {
     const ArmsLengthBodies = await this.client<Row>(TABLE_NAME)
       .select(
-        'creatorUsername',
-        'creatorEmail',
-        'ownerUsername',
-        'ownerEmail',
-        'creatorSameAsOwner',
+        'creator_username',
+        'creator_email',
+        'owner_username',
+        'owner_email',
+        'creator_same_as_owner',
         'name',
-        'shortName',
+        'short_name',
         'description',
         'id',
         'created_at',
@@ -39,13 +39,13 @@ export class ArmsLengthBodyStore {
       .orderBy('created_at');
 
     return ArmsLengthBodies.map(row => ({
-      creatorUsername: row.creatorUsername,
-      creatorEmail: row.creatorEmail,
-      ownerUsername: row.ownerUsername,
-      ownerEmail: row.ownerEmail,
-      creatorSameAsOwner: row.creatorSameAsOwner,
+      creator_username: row.creator_username,
+      creator_email: row.creator_email,
+      owner_username: row.owner_username,
+      owner_email: row.owner_email,
+      creator_same_as_owner: row.creator_same_as_owner,
       name: row.name,
-      shortName: row?.shortName,
+      short_name: row?.short_name,
       description: row?.description,
       id: row.id,
       timestamp: new Date(row.created_at).getMilliseconds(),
@@ -56,13 +56,13 @@ export class ArmsLengthBodyStore {
     const row = await this.client<Row>(TABLE_NAME)
       .where('id', id)
       .select(
-        'creatorUsername',
-        'creatorEmail',
-        'ownerUsername',
-        'ownerEmail',
-        'creatorSameAsOwner',
+        'creator_username',
+        'creator_email',
+        'owner_username',
+        'owner_email',
+        'creator_same_as_owner',
         'name',
-        'shortName',
+        'short_name',
         'description',
         'id',
         'created_at',
@@ -71,13 +71,13 @@ export class ArmsLengthBodyStore {
 
     return row
       ? {
-        creatorUsername: row.creatorUsername,
-        creatorEmail: row.creatorEmail,
-        ownerUsername: row.ownerUsername,
-        ownerEmail: row.ownerEmail,
-        creatorSameAsOwner: row.creatorSameAsOwner,
+        creator_username: row.creator_username,
+        creator_email: row.creator_email,
+        owner_username: row.owner_username,
+        owner_email: row.owner_email,
+        creator_same_as_owner: row.creator_same_as_owner,
         name: row.name,
-        shortName: row.shortName,
+        short_name: row.short_name,
         description: row.description,
         id: row.id,
         timestamp: new Date(row.created_at).getMilliseconds(),
@@ -91,13 +91,13 @@ export class ArmsLengthBodyStore {
   ): Promise<ArmsLengthBody> {
     const insertResult = await this.client<Row>(TABLE_NAME).insert(
       {
-        creatorUsername: armsLengthBody.creatorUsername,
-        creatorEmail: armsLengthBody.creatorEmail,
-        ownerUsername: armsLengthBody.ownerUsername,
-        ownerEmail: armsLengthBody.ownerEmail,
-        creatorSameAsOwner: armsLengthBody.creatorSameAsOwner,
+        creator_username: armsLengthBody.creator_username,
+        creator_email: armsLengthBody.creator_email,
+        owner_username: armsLengthBody.owner_username,
+        owner_email: armsLengthBody.owner_email,
+        creator_same_as_owner: armsLengthBody.creator_same_as_owner,
         name: armsLengthBody.name,
-        shortName: armsLengthBody.shortName,
+        short_name: armsLengthBody.short_name,
         description: armsLengthBody.description,
         created_by: createdBy,
         updated_by: createdBy,
@@ -133,13 +133,13 @@ export class ArmsLengthBodyStore {
     await this.client<Row>(TABLE_NAME)
       .where('id', armsLengthBody.id)
       .update({
-        creatorUsername: armsLengthBody.creatorUsername,
-        creatorEmail: armsLengthBody.creatorEmail,
-        ownerUsername: armsLengthBody.ownerUsername,
-        ownerEmail: armsLengthBody.ownerEmail,
-        creatorSameAsOwner: armsLengthBody.creatorSameAsOwner,
+        creator_username: armsLengthBody.creator_username,
+        creator_email: armsLengthBody.creator_email,
+        owner_username: armsLengthBody.owner_username,
+        owner_email: armsLengthBody.owner_email,
+        creator_same_as_owner: armsLengthBody.creator_same_as_owner,
         name: armsLengthBody.name,
-        shortName: armsLengthBody.shortName,
+        short_name: armsLengthBody.short_name,
         description: armsLengthBody.description,
         updated_at: updated,
         updated_by: updatedBy,

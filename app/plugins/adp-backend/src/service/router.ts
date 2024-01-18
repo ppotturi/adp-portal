@@ -27,26 +27,26 @@ export async function createRouter(
   // Seed test data
   armsLengthBodiesStore.add(
     {
-      creatorUsername: 'john',
-      creatorEmail: 'john@example.com',
-      ownerUsername: 'john',
-      ownerEmail: 'john@example',
-      creatorSameAsOwner: true,
+      creator_username: 'john',
+      creator_email: 'john@example.com',
+      owner_username: 'john',
+      owner_email: 'john@example',
+      creator_same_as_owner: true,
       name: 'example ALB 1',
-      shortName: 'ALB 1',
+      short_name: 'ALB 1',
       description: 'Lorem Ipsum',
     },
     'Seed',
   );
   armsLengthBodiesStore.add(
     {
-      creatorUsername: 'john',
-      creatorEmail: 'john@example.com',
-      ownerUsername: 'john',
-      ownerEmail: 'john@example',
-      creatorSameAsOwner: true,
+      creator_username: 'john',
+      creator_email: 'john@example.com',
+      owner_username: 'john',
+      owner_email: 'john@example',
+      creator_same_as_owner: true,
       name: 'example ALB 1',
-      shortName: 'ALB 1',
+      short_name: 'ALB 1',
       description: 'Lorem Ipsum',
     },
     'Seed',
