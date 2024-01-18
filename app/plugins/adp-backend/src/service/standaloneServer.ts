@@ -33,7 +33,7 @@ export async function startStandaloneServer(
         },
       },
     }),
-  ).forPlugin('todo-list');
+  ).forPlugin('adp-plugin');
 
   const router = await createRouter({
     logger,
