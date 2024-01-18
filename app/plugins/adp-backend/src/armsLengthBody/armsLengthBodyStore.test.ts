@@ -29,7 +29,7 @@ describe('armsLengthBodyStore', () => {
         description: 'This is an example ALB',
       };
 
-      const addResult = await store.add(expectedProgramme, 'test@test.com');
+      const addResult = await store.add(expectedProgramme, 'test');
 
       expect(addResult.id).toBeDefined();
       expect(addResult.timestamp).toBeDefined();
@@ -140,7 +140,7 @@ describe('armsLengthBodyStore', () => {
       expect(getResult?.name).toBe('ALB Example 2');
       expect(getResult?.short_name).toBe('ALB 2');
       expect(getResult?.owner_username).toBe('johnD');
-      expect(getResult?.creator_same_as_owner).toBe(false);
+      expect(getResult?.creator_same_as_owner).toBe(0);
     },
   );
 
