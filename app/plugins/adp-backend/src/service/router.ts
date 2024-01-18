@@ -24,7 +24,6 @@ export async function createRouter(
     await adpDatabase.get(),
   );
 
-  // Seed test data
   armsLengthBodiesStore.add(
     {
       creator_username: 'john',
@@ -45,8 +44,8 @@ export async function createRouter(
       owner_username: 'john',
       owner_email: 'john@example',
       creator_same_as_owner: true,
-      name: 'example ALB 1',
-      short_name: 'ALB 1',
+      name: 'example ALB 2',
+      short_name: 'ALB 2',
       description: 'Lorem Ipsum',
     },
     'Seed',
@@ -109,7 +108,7 @@ function isArmsLengthBodyUpdateRequest(
   );
 }
 
-async function getCurrentUsername(
+export async function getCurrentUsername(
   identity: IdentityApi,
   req: express.Request,
 ): Promise<string> {

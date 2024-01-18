@@ -8,6 +8,7 @@ import express from 'express';
 import request from 'supertest';
 import { createRouter } from './router';
 import { ConfigReader } from '@backstage/config';
+import { getCurrentUsername } from '../service/router';
 
 describe('createRouter', () => {
   let app: express.Express;
@@ -46,4 +47,32 @@ describe('createRouter', () => {
       expect(response.body).toEqual({ status: 'ok' });
     });
   });
+
+  describe('GET /armsLengthBody', () => {
+    it('returns ok', async () => {
+      const response = await request(app).get('/armsLengthBody');
+      expect(response.status).toEqual(200);
+    });
+  });
+
+  describe('getCurrentUsername', () => {
+    const mockIdentityApi = {
+      getIdentity: jest.fn().mockResolvedValue({
+        identity: { userEntityRef: 'user:default/johndoe' }
+      })
+    };
+
+    it('returns the username when identity is found', async () => {
+      mockIdentityApi.getIdentity.mockResolvedValue({ identity: { userEntityRef: 'user:default/johndoe' } });
+      
+      await expect(getCurrentUsername(mockIdentityApi, express.request)).resolves.toBe('user:default/johndoe');
+    });
+  
+    it('returns "unknown" when identity is not found', async () => {
+      mockIdentityApi.getIdentity.mockResolvedValue(null);
+      
+      await expect(getCurrentUsername(mockIdentityApi, express.request)).resolves.toBe('unknown');
+    });
+  });
+  
 });
