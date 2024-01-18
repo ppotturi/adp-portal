@@ -1,2 +1,2 @@
 export * from './azure-devops';
-export * from './github-team';
+export * from './github';
