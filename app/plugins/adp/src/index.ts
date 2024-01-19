@@ -1,2 +1,1 @@
-//export { adpPlugin, AdpPage } from './plugin';
-export { adpPlugin, DeliveryProgrammePage } from './plugin';
+export { adpPlugin, AdpPage } from './plugin';

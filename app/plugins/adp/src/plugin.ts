@@ -9,20 +9,11 @@ export const adpPlugin = createPlugin({
   },
 });
 
-// export const DeliveryProgrammePage = adpPlugin.provide(
-//   createRoutableExtension({
-//     name: 'DeliveryProgrammePage',
-//     component: () =>
-//       import('./components/ExampleComponent').then(m => m.ExampleComponent),
-//     mountPoint: rootRouteRef,
-//   }),
-// );
-
-export const DeliveryProgrammePage = adpPlugin.provide(
+export const AdpPage = adpPlugin.provide(
   createRoutableExtension({
-    name: 'DeliveryProgrammePage',
+    name: 'AdpPage',
     component: () =>
-      import('./components_1/DeliveryProgrammeListPage').then(m => m.DeliveryProgrammeListPage),
+      import('./components/ALB').then(m => m.LandingPageComponent),
     mountPoint: rootRouteRef,
   }),
 );
