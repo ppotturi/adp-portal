@@ -170,7 +170,6 @@ async function createTeam(
     ctx.logger.error(
       `Creating team ${githubTeamName} failed with error: ${err}`,
     );
-    teamCreated = false;
     throw new InputError(`Creating team failed`);
   }
   return teamCreated;
