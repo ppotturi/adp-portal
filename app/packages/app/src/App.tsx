@@ -37,6 +37,7 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 
 import { microsoftAuthApiRef } from '@backstage/core-plugin-api';
 import { SignInPage } from '@backstage/core-components';
+import { DeliveryProgrammePage } from '@internal/plugin-adp';
 
 import LightIcon from  '@material-ui/icons/WbSunnyRounded';
 import NightIcon from '@material-ui/icons/Brightness2Rounded';
@@ -49,7 +50,6 @@ import {
 } from '@backstage/theme';
 
 import styles from 'style-loader!css-loader?{"modules": {"auto": true}}!sass-loader?{"sassOptions": {"quietDeps": true}}!./style.module.scss';
-import { AdpPage } from '@internal/plugin-adp';
 
 const lightTheme = createUnifiedTheme({
   palette: {
@@ -226,6 +226,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/adp" element={<DeliveryProgrammePage />} />
     <Route path="/docs" element={<TechDocsIndexPage />}>
       <DefaultTechDocsHome />
     </Route>
@@ -237,7 +238,6 @@ const routes = (
         <ReportIssue />
       </TechDocsAddons>
     </Route>
-    <Route path="/adp" element={<AdpPage />} />
   </FlatRoutes>
 );
 

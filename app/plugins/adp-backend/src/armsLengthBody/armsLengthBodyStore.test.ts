@@ -174,18 +174,6 @@ describe('armsLengthBodyStore', () => {
           created_by: 'test',
           updated_by: 'test',
         },
-        {
-          creator_username: 'john',
-          creator_email: 'john@example.com',
-          owner_username: 'john',
-          owner_email: 'john@example.com',
-          creator_same_as_owner: true,
-          name: 'ALB Example 3',
-          short_name: 'ALB 3',
-          description: 'This is an example ALB 3',
-          created_by: 'test',
-          updated_by: 'test',
-        },
       ]);
 
       const getResult = await store.get('12345');
@@ -222,18 +210,6 @@ describe('armsLengthBodyStore', () => {
             name: 'ALB Example 2',
             short_name: 'ALB 2',
             description: 'This is an example ALB 2',
-            created_by: 'test',
-            updated_by: 'test',
-          },
-          {
-            creator_username: 'john',
-            creator_email: 'john@example.com',
-            owner_username: 'john',
-            owner_email: 'john@example.com',
-            creator_same_as_owner: true,
-            name: 'ALB Example 3',
-            short_name: 'ALB 3',
-            description: 'This is an example ALB 3',
             created_by: 'test',
             updated_by: 'test',
           },
