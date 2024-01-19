@@ -10,4 +10,7 @@ Details about actions (inputs, outputs, and how to use them) are available in [t
   - Run pipeline
   - Create Pipeline
 
+- GitHub
+  - Create GitHub Team
+  
 _This plugin was created through the Backstage CLI_
