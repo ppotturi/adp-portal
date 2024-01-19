@@ -23,7 +23,6 @@ describe('armsLengthBodyStore', () => {
         creator_email: 'john@example.com',
         owner_username: 'john',
         owner_email: 'john@example.com',
-        creator_same_as_owner: true,
         name: 'ALB Example',
         short_name: 'ALB',
         description: 'This is an example ALB',
@@ -41,42 +40,36 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      await knex('arms_length_body').insert([
+      await knex('arms_length_bodies').insert([
         {
           creator_username: 'john',
           creator_email: 'john@example.com',
           owner_username: 'john',
           owner_email: 'john@example.com',
-          creator_same_as_owner: true,
           name: 'ALB Example 1',
           short_name: 'ALB 1',
           description: 'This is an example ALB 1',
-          created_by: 'test',
-          updated_by: 'test',
+          updated_by: 'john',
         },
         {
           creator_username: 'john',
           creator_email: 'john@example.com',
           owner_username: 'johnD',
           owner_email: 'johnD@example.com',
-          creator_same_as_owner: false,
           name: 'ALB Example 2',
           short_name: 'ALB 2',
           description: 'This is an example ALB 2',
-          created_by: 'test',
-          updated_by: 'test',
+          updated_by: 'john',
         },
         {
           creator_username: 'john',
           creator_email: 'john@example.com',
           owner_username: 'john',
           owner_email: 'john@example.com',
-          creator_same_as_owner: true,
           name: 'ALB Example 3',
           short_name: 'ALB 3',
           description: 'This is an example ALB 3',
-          created_by: 'test',
-          updated_by: 'test',
+          updated_by: 'john',
         },
       ]);
 
@@ -90,43 +83,37 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      const insertedIds = await knex('arms_length_body').insert(
+      const insertedIds = await knex('arms_length_bodies').insert(
         [
           {
             creator_username: 'john',
             creator_email: 'john@example.com',
             owner_username: 'john',
             owner_email: 'john@example.com',
-            creator_same_as_owner: true,
             name: 'ALB Example 1',
             short_name: 'ALB 1',
             description: 'This is an example ALB 1',
-            created_by: 'test',
-            updated_by: 'test',
+            updated_by: 'john',
           },
           {
             creator_username: 'john',
             creator_email: 'john@example.com',
             owner_username: 'johnD',
             owner_email: 'johnD@example.com',
-            creator_same_as_owner: false,
             name: 'ALB Example 2',
             short_name: 'ALB 2',
             description: 'This is an example ALB 2',
-            created_by: 'test',
-            updated_by: 'test',
+            updated_by: 'john',
           },
           {
             creator_username: 'john',
             creator_email: 'john@example.com',
             owner_username: 'john',
             owner_email: 'john@example.com',
-            creator_same_as_owner: true,
             name: 'ALB Example 3',
             short_name: 'ALB 3',
             description: 'This is an example ALB 3',
-            created_by: 'test',
-            updated_by: 'test',
+            updated_by: 'john',
           },
         ],
         ['id'],
@@ -140,7 +127,6 @@ describe('armsLengthBodyStore', () => {
       expect(getResult?.name).toBe('ALB Example 2');
       expect(getResult?.short_name).toBe('ALB 2');
       expect(getResult?.owner_username).toBe('johnD');
-      expect(getResult?.creator_same_as_owner).toBe(0);
     },
   );
 
@@ -149,30 +135,26 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      await knex('arms_length_body').insert([
+      await knex('arms_length_bodies').insert([
         {
           creator_username: 'john',
           creator_email: 'john@example.com',
           owner_username: 'john',
           owner_email: 'john@example.com',
-          creator_same_as_owner: true,
           name: 'ALB Example 1',
           short_name: 'ALB 1',
           description: 'This is an example ALB 1',
-          created_by: 'test',
-          updated_by: 'test',
+          updated_by: 'john',
         },
         {
           creator_username: 'john',
           creator_email: 'john@example.com',
           owner_username: 'johnD',
           owner_email: 'johnD@example.com',
-          creator_same_as_owner: false,
           name: 'ALB Example 2',
           short_name: 'ALB 2',
           description: 'This is an example ALB 2',
-          created_by: 'test',
-          updated_by: 'test',
+          updated_by: 'john',
         },
       ]);
 
@@ -187,31 +169,27 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      const insertedIds = await knex('arms_length_body').insert(
+      const insertedIds = await knex('arms_length_bodies').insert(
         [
           {
             creator_username: 'john',
             creator_email: 'john@example.com',
             owner_username: 'john',
             owner_email: 'john@example.com',
-            creator_same_as_owner: true,
             name: 'ALB Example 1',
             short_name: 'ALB 1',
             description: 'This is an example ALB 1',
-            created_by: 'test',
-            updated_by: 'test',
+            updated_by: 'john',
           },
           {
             creator_username: 'john',
             creator_email: 'john@example.com',
             owner_username: 'johnD',
             owner_email: 'johnD@example.com',
-            creator_same_as_owner: false,
             name: 'ALB Example 2',
             short_name: 'ALB 2',
             description: 'This is an example ALB 2',
-            created_by: 'test',
-            updated_by: 'test',
+            updated_by: 'john',
           },
         ],
         ['id'],
@@ -225,7 +203,6 @@ describe('armsLengthBodyStore', () => {
         creator_email: 'john@example.com',
         owner_username: 'johnD',
         owner_email: 'johnD@example.com',
-        creator_same_as_owner: false,
         name: 'ALB Example 2',
         short_name: 'ALB 2',
         description: 'This is an example ALB 2',
@@ -245,42 +222,36 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      await knex('arms_length_body').insert([
+      await knex('arms_length_bodies').insert([
         {
           creator_username: 'john',
           creator_email: 'john@example.com',
           owner_username: 'john',
           owner_email: 'john@example.com',
-          creator_same_as_owner: true,
           name: 'ALB Example 1',
           short_name: 'ALB 1',
           description: 'This is an example ALB 1',
-          created_by: 'test',
-          updated_by: 'test',
+          updated_by: 'john',
         },
         {
           creator_username: 'john',
           creator_email: 'john@example.com',
           owner_username: 'johnD',
           owner_email: 'johnD@example.com',
-          creator_same_as_owner: false,
           name: 'ALB Example 2',
           short_name: 'ALB 2',
           description: 'This is an example ALB 2',
-          created_by: 'test',
-          updated_by: 'test',
+          updated_by: 'john',
         },
         {
           creator_username: 'john',
           creator_email: 'john@example.com',
           owner_username: 'john',
           owner_email: 'john@example.com',
-          creator_same_as_owner: true,
           name: 'ALB Example 3',
           short_name: 'ALB 3',
           description: 'This is an example ALB 3',
-          created_by: 'test',
-          updated_by: 'test',
+          updated_by: 'john',
         },
       ]);
 
@@ -293,7 +264,6 @@ describe('armsLengthBodyStore', () => {
               creator_email: 'n/a',
               owner_username: 'n/a',
               owner_email: 'n/a',
-              creator_same_as_owner: true,
               name: 'Non-existent ALB',
               short_name: 'Non-existent ALB',
               description: 'n/a',

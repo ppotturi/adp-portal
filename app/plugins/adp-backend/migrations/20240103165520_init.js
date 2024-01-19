@@ -2,7 +2,7 @@
  * @param {import('knex').Knex} knex
  */
 exports.up = async function up(knex) {
-  return knex.schema.createTable('arms_length_body', table => {
+  return knex.schema.createTable('arms_length_bodies', table => {
     table.comment('Stores ALB data');
     table
       .string('creator_username')
@@ -20,10 +20,6 @@ exports.up = async function up(knex) {
       .string('owner_email')
       .notNullable()
       .comment('Email of the ALB owner');
-    table
-      .boolean('creator_same_as_owner')
-      .notNullable()
-      .comment('Is creator details the same as the owner details');
     table
       .string('name')
       .notNullable()
@@ -47,10 +43,6 @@ exports.up = async function up(knex) {
       .defaultTo(knex.fn.uuid())
       .comment('Auto-generated ALB ID');
     table
-      .string('created_by')
-      .notNullable()
-      .comment('Username of the person who created the ALB');
-    table
       .timestamp('updated_at', { useTz: false })
       .notNullable()
       .defaultTo(knex.fn.now())
@@ -68,5 +60,5 @@ exports.up = async function up(knex) {
  * @param {import('knex').Knex} knex
  */
 exports.down = async function down(knex) {
-  return knex.schema.dropTable('armsLengthBody');
+  return knex.schema.dropTable('arms_length_bodies');
 };

@@ -2,20 +2,18 @@ import { Knex } from 'knex';
 import { NotFoundError } from '@backstage/errors';
 import { ArmsLengthBody } from '../types';
 
-const TABLE_NAME = 'arms_length_body';
+const TABLE_NAME = 'arms_length_bodies';
 type Row = {
     creator_username: string;
     creator_email: string;
     owner_username: string;
     owner_email: string;
-    creator_same_as_owner: boolean;
     name: string;
     short_name?: string;
     description?: string;
     id: string;
     created_at: Date;
     updated_at: Date;
-    created_by: string;
     updated_by: string;
   };
 
@@ -29,7 +27,6 @@ export class ArmsLengthBodyStore {
         'creator_email',
         'owner_username',
         'owner_email',
-        'creator_same_as_owner',
         'name',
         'short_name',
         'description',
@@ -43,7 +40,6 @@ export class ArmsLengthBodyStore {
       creator_email: row.creator_email,
       owner_username: row.owner_username,
       owner_email: row.owner_email,
-      creator_same_as_owner: row.creator_same_as_owner,
       name: row.name,
       short_name: row?.short_name,
       description: row?.description,
@@ -60,7 +56,6 @@ export class ArmsLengthBodyStore {
         'creator_email',
         'owner_username',
         'owner_email',
-        'creator_same_as_owner',
         'name',
         'short_name',
         'description',
@@ -75,7 +70,6 @@ export class ArmsLengthBodyStore {
         creator_email: row.creator_email,
         owner_username: row.owner_username,
         owner_email: row.owner_email,
-        creator_same_as_owner: row.creator_same_as_owner,
         name: row.name,
         short_name: row.short_name,
         description: row.description,
@@ -87,7 +81,7 @@ export class ArmsLengthBodyStore {
 
   async add(
     armsLengthBody: Omit<ArmsLengthBody, 'id' | 'timestamp'>,
-    createdBy: string,
+    creator_username: string,
   ): Promise<ArmsLengthBody> {
     const insertResult = await this.client<Row>(TABLE_NAME).insert(
       {
@@ -95,12 +89,10 @@ export class ArmsLengthBodyStore {
         creator_email: armsLengthBody.creator_email,
         owner_username: armsLengthBody.owner_username,
         owner_email: armsLengthBody.owner_email,
-        creator_same_as_owner: armsLengthBody.creator_same_as_owner,
         name: armsLengthBody.name,
         short_name: armsLengthBody.short_name,
         description: armsLengthBody.description,
-        created_by: createdBy,
-        updated_by: createdBy,
+        updated_by: creator_username,
       },
       ['id', 'created_at'],
     );
@@ -137,7 +129,6 @@ export class ArmsLengthBodyStore {
         creator_email: armsLengthBody.creator_email,
         owner_username: armsLengthBody.owner_username,
         owner_email: armsLengthBody.owner_email,
-        creator_same_as_owner: armsLengthBody.creator_same_as_owner,
         name: armsLengthBody.name,
         short_name: armsLengthBody.short_name,
         description: armsLengthBody.description,
