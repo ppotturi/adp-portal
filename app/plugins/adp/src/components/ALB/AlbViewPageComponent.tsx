@@ -1,5 +1,5 @@
-import React from 'react';
-import { Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Button, Typography } from '@material-ui/core';
 import {
   Header,
   Page,
@@ -9,8 +9,32 @@ import {
   TableColumn,
 } from '@backstage/core-components';
 import { DefaultTable } from '../../utils/Table';
+import { EditModal } from '../../utils/EditModal';
 
 export const AlbViewPageComponent = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [formData, setFormData] = useState({});
+
+
+  const handleEdit = (ArmsLengthBody: React.SetStateAction<{}>) => {
+    setFormData(ArmsLengthBody);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setFormData({});
+  };
+
+  const handleCrudSubmit = (data: Record<string, any>) => {
+    //update database
+    //get timestamp 
+    //refresh display - through state 
+    console.log('Performing action with data:', data);
+    handleCloseModal();
+  };
+
+
   const columns: TableColumn[] = [
     {
       title: 'Name',
@@ -36,6 +60,18 @@ export const AlbViewPageComponent = () => {
       highlight: false,
       type: 'date',
     },
+
+    {
+      title: 'Action',
+      render: ArmsLengthBody => {
+        return (
+          <Button variant="contained" color="primary" onClick={() => handleEdit(ArmsLengthBody)}>
+            Edit
+          </Button>
+        )
+      }
+
+    },
   ];
 
   const testData10 = Array.from({ length: 7 }, (_, index) => ({
@@ -59,6 +95,21 @@ export const AlbViewPageComponent = () => {
           View or add Arms Length Bodies to the Azure Developer Platform.
         </Typography>
         <DefaultTable data={testData10} columns={columns} title="View all" />
+
+        <EditModal
+          open={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleCrudSubmit}
+          initialValues={formData}
+          fields={[
+            { label: 'Owner Name', name: 'customField1' },
+            { label: 'Owner Email', name: 'customField2' },
+            { label: 'ALB Name', name: 'customField3' },
+            { label: 'Short-Form Name', name: 'customField4' },
+            { label: 'ALB Description', name: 'customField5' },
+
+          ]} />
+
       </Content>
     </Page>
   );
