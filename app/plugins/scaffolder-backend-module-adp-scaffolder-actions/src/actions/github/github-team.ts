@@ -1,4 +1,7 @@
-import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
+import {
+  ActionContext,
+  createTemplateAction,
+} from '@backstage/plugin-scaffolder-node';
 import {
   ScmIntegrationRegistry,
   DefaultGithubCredentialsProvider,
@@ -82,73 +85,124 @@ export function createGithubTeamAction(options: {
         auth: credentials.token,
       });
 
-      let teamCreated;
-      try {
-        const team = await octokit.rest.teams.getByName({
-          org: organization,
-          team_slug: githubTeamName,
-        });
-        if (team.status === 200) {
-          ctx.logger.info(
-            `Team ${ctx.input.githubTeamName} already exists in github org ${organization}`,
-          );
-          teamCreated = true;
-        }
-      } catch (error) {
-        ctx.logger.error(`Error in getting GitHub team: ${error}`);
-        if ((error as unknown as RequestError).status === 404) {
-          teamCreated = false;
-        }
-      }
+      let teamCreated = await checkTeamExists(
+        octokit,
+        organization,
+        githubTeamName,
+        ctx,
+      );
 
       if (!teamCreated) {
-        try {
-          const createdTeam = await octokit.rest.teams.create({
-            org: organization,
-            name: githubTeamName,
-            description: githubTeamDescription,
-            privacy: visibility,
-          });
-          if (createdTeam.status === 201) {
-            ctx.logger.info(
-              `Created team ${ctx.input.githubTeamName} in github org ${organization}`,
-            );
-            teamCreated = true;
-          }
-        } catch (err) {
-          ctx.logger.error(
-            `Creating team ${githubTeamName} failed with error: ${err}`,
-          );
-          teamCreated = false;
-          throw new InputError(`Creating team failed`);
-        }
+        teamCreated = await createTeam(
+          octokit,
+          organization,
+          githubTeamName,
+          githubTeamDescription,
+          visibility,
+          ctx,
+        );
       }
 
       if (teamCreated && users !== undefined && users.length > 0) {
         const usernames = users.split(',').map(u => u.trim());
-        await Promise.all(
-          usernames.map(async user => {
-            try {
-              let userAdded =
-                await octokit.rest.teams.addOrUpdateMembershipForUserInOrg({
-                  org: organization,
-                  team_slug: githubTeamName,
-                  username: user,
-                });
-              if (userAdded.status === 200) {
-                ctx.logger.info(`Added user ${user} to the team successfully`);
-              }
-            } catch (err) {
-              ctx.logger.error(
-                `Adding user ${user} to the team failed with error: ${err}`,
-              );
-              throw new InputError(
-                `Adding user to the team failed with error: ${err}`,
-              );
-            }
-          }),
+        await addUsersToTeam(
+          octokit,
+          organization,
+          githubTeamName,
+          usernames,
+          ctx,
         );
       }
     },
   });
+}
+
+async function checkTeamExists(
+  octokit: Octokit,
+  organization: string,
+  githubTeamName: string,
+  ctx,
+) {
+  let teamCreated;
+  try {
+    const team = await octokit.rest.teams.getByName({
+      org: organization,
+      team_slug: githubTeamName,
+    });
+    if (team.status === 200) {
+      ctx.logger.info(
+        `Team ${ctx.input.githubTeamName} already exists in github org ${organization}`,
+      );
+      teamCreated = true;
+    }
+  } catch (error) {
+    ctx.logger.error(`Error in getting GitHub team: ${error}`);
+    if ((error as unknown as RequestError).status === 404) {
+      teamCreated = false;
+    }
+  }
+  return teamCreated;
+}
+
+async function createTeam(
+  octokit: Octokit,
+  organization: string,
+  githubTeamName: string,
+  githubTeamDescription: string,
+  visibility: 'secret' | 'closed',
+  ctx,
+) {
+  let teamCreated;
+  try {
+    const createdTeam = await octokit.rest.teams.create({
+      org: organization,
+      name: githubTeamName,
+      description: githubTeamDescription,
+      privacy: visibility,
+    });
+    if (createdTeam.status === 201) {
+      ctx.logger.info(
+        `Created team ${ctx.input.githubTeamName} in github org ${organization}`,
+      );
+      teamCreated = true;
+    }
+  } catch (err) {
+    ctx.logger.error(
+      `Creating team ${githubTeamName} failed with error: ${err}`,
+    );
+    teamCreated = false;
+    throw new InputError(`Creating team failed`);
+  }
+  return teamCreated;
+}
+
+async function addUsersToTeam(
+  octokit: Octokit,
+  organization: string,
+  githubTeamName: string,
+  usernames: string[],
+  ctx,
+) {
+  await Promise.all(
+    usernames.map(async user => {
+      try {
+        let userAdded =
+          await octokit.rest.teams.addOrUpdateMembershipForUserInOrg({
+            org: organization,
+            team_slug: githubTeamName,
+            username: user,
+          });
+        if (userAdded.status === 200) {
+          ctx.logger.info(`Added user ${user} to the team successfully`);
+        }
+      } catch (err) {
+        ctx.logger.error(
+          `Adding user ${user} to the team failed with error: ${err}`,
+        );
+        throw new InputError(
+          `Adding user to the team failed with error: ${err}`,
+        );
+      }
+    }),
+  );
 }
