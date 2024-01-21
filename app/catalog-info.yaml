@@ -12,4 +12,288 @@ spec:
   type: website
   owner: john@example.com
   lifecycle: experimental
-  
+
+---
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: test-template
+  title: "Test ADP Frontend Template Node"
+  description: "Test Template."
+  tags:
+    - node
+    - hapi
+    - aks
+spec:
+  owner: adp
+  type: service
+
+  parameters:
+    # - title: Component Information
+    #   description: Enter properties describing this component.
+    #   required:
+    #     - component_id
+    #     - description
+    #     - owner
+    #     - component_type
+    #     - component_lifecycle
+    #   properties:
+    #     component_id:
+    #       title: Component Name
+    #       type: string
+    #       description: Unique name of the component which will be used for the repository, package, and image names. This should be in the format <program>-<workstream>-<repo>. Maximum 64 characters.
+    #       ui:field: EntityNamePicker
+    #       ui:autofocus: true
+
+    #     description:
+    #       title: Description
+    #       type: string
+    #       description: Describe what this component does
+
+    #     system:
+    #       title: System
+    #       type: string
+    #       description: Select the system that this component will be a part of
+    #       ui:field: EntityPicker
+    #       ui:options:
+    #         allowArbitraryValues: false
+    #         catalogFilter:
+    #           - kind: System
+
+    #     component_type:
+    #       title: Component Type
+    #       type: string
+    #       description: Select the type of this component. Allowed values - Backend API (a backend service or API), Frontend UI (a web application)
+    #       default: backend
+    #       enum:
+    #         - backend
+    #         - frontend
+    #       enumNames:
+    #         - Backend API
+    #         - Frontend UI
+
+    #     component_lifecycle:
+    #       title: Component Lifecycle
+    #       type: string
+    #       description: Select this component's lifecycle. These are aligned to GDS project phases.
+    #       default: alpha
+    #       enum:
+    #         - discovery
+    #         - alpha
+    #         - beta
+    #       enumNames:
+    #         - Discovery
+    #         - Alpha
+    #         - Beta
+
+    #     owner:
+    #       title: Owner
+    #       type: string
+    #       description: Select the team who will own this component
+    #       ui:field: OwnerPicker
+    #       ui:options:
+    #         catalogFilter:
+    #           - kind: Group
+    #             spec.type: team
+
+    # - title: Git Repository
+    #   description: To encourage coding in the open the repository will be public by default. Refer to the [GDS service manual](https://www.gov.uk/service-manual/technology/making-source-code-open-and-reusable) for more information.
+    #   required:
+    #     - repoUrl
+    #   properties:
+    #     repoUrl:
+    #       title: Repository Location
+    #       type: string
+    #       ui:field: RepoUrlPicker
+    #       ui:options:
+    #         allowedHosts:
+    #           - github.com
+    #         allowedOrganizations:
+    #           - defra-adp-sandpit
+    #           - defra
+    #         requestUserCredentials:
+    #           secretsKey: USER_OAUTH_TOKEN
+    #           additionalScopes:
+    #             github:
+    #               - workflow
+
+    # - title: Git Collaborators
+    #   description: Add collaborators to the github organization
+    #   required:
+    #     - github_team_name
+    #     - github_team_description
+    #     - github_organization_name
+    #     - github_team_users
+    #     - github_team_visibility
+    #   properties:
+    #     github_team_name:
+    #       title: GitHub Team Name
+    #       type: string
+    #       description: Team name to be created in github to added as collaborator to the repository.
+
+    #     github_team_description:
+    #       title: GitHub Team Description
+    #       type: string
+    #       description: Describe what the team is for.
+
+    #     github_organization_name:
+    #       title: GitHub Organization Name
+    #       type: string
+    #       description: GitHub organization name
+    #       default: defra-adp-sandpit
+    #       enum:
+    #         - defra-adp-sandpit
+    #         - defra
+    #       enumNames:
+    #         - defra-adp-sandpit
+    #         - defra
+
+    #     github_team_users:
+    #       title: GitHub usernames
+    #       type: string
+    #       description: List of github usernames (separated by comma) to add to github team
+
+    #     github_team_visibility:
+    #       title: GitHub Team Visibility
+    #       type: string
+    #       description: GitHub team visibility
+    #       default: closed
+    #       enum:
+    #         - closed
+    #         - secret
+    #       enumNames:
+    #         - closed
+    #         - secret
+
+    - title: Add Team to Git Repo
+      description: Add Team to the github Repository
+      required:
+        - github_team_names
+        - github_repo_name
+        - github_organization_name
+        - github_owner_name
+        - github_team_permission
+        -
+      properties:
+        github_team_names:
+          title: GitHub Team Names
+          type: string
+          description: List of github team names (separated by comma) to be added as collaborator to the repository.
+
+        github_repo_name:
+          title: GitHub Repo Name
+          type: string
+          description: Name of the GitHub repository
+
+        github_organization_name:
+          title: GitHub Organization Name
+          type: string
+          description: GitHub organization name
+          default: defra-adp-sandpit
+          enum:
+            - defra-adp-sandpit
+            - defra
+          enumNames:
+            - defra-adp-sandpit
+            - defra
+
+        github_owner_name:
+          title: GitHub Repo Owner
+          type: string
+          description: GitHub Repo Owner
+          default: defra-adp-sandpit
+          enum:
+            - defra-adp-sandpit
+            - defra
+          enumNames:
+            - defra-adp-sandpit
+            - defra
+
+        github_team_permission:
+          title: GitHub Team permission
+          type: string
+          description: GitHub team permission
+          default: push
+          enum:
+            - pull
+            - triage
+            - push
+            - maintain
+            - admin
+          enumNames:
+            - pull
+            - triage
+            - push
+            - maintain
+            - admin
+
+  steps:
+    # - id: template
+    #   name: Fetch Skeleton + Template
+    #   action: fetch:template
+    #   input:
+    #     url: https://github.com/defra/adp-software-templates/blob/main/templates/adp-frontend-template-node/skeleton
+    #     values:
+    #       component_id: ${{ parameters.component_id }}
+    #       project_name: ${{ parameters.component_id }}
+    #       description: ${{ parameters.description }}
+    #       owner: ${{ parameters.owner }}
+    #       workstream: ${{ parameters.owner | parseEntityRef | pick('name') }}
+    #       repo_url: ${{ parameters.repoUrl }}
+    #       repo_project_slug: ${{ parameters.repoUrl | projectSlug }}
+    #       component_type: ${{ parameters.component_type }}
+    #       component_lifecycle: ${{ parameters.component_lifecycle }}
+    #       system: ${{ parameters.system }}
+
+    # - id: publish
+    #   name: Publish
+    #   action: publish:github
+    #   input:
+    #     allowedHosts: ["github.com"]
+    #     description: ${{ parameters.description }}
+    #     repoUrl: ${{ parameters.repoUrl }}
+    #     token: ${{ secrets.USER_OAUTH_TOKEN }}
+    #     requireCodeOwnerReviews: true
+    #     dismissStaleReviews: true
+    #     requiredConversationResolution: true
+    #     requiredStatusCheckContexts: []
+    #     repoVisibility: public
+    #     defaultBranch: main
+    #     gitAuthorEmail: ${{ user.entity.spec.profile.email }}
+    #     gitAuthorName: ${{ user.entity.metadata.name }}
+    #     requiredCommitSigning: true
+
+    # - id: register
+    #   name: Register
+    #   action: catalog:register
+    #   input:
+    #     repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+    #     catalogInfoPath: "/catalog-info.yaml"
+
+    # - id: github-team-create
+    #   name: Create github team
+    #   action: adp:github:team:create
+    #   input:
+    #     githubTeamName: ${{ parameters.github_team_name }}
+    #     githubTeamDescription: ${{ parameters.github_team_description }}
+    #     orgName: ${{ parameters.github_organization_name }}
+    #     users: ${{ parameters.github_team_users }}
+    #     visibility: ${{ parameters.github_team_visibility }}
+
+    - id: github-team-add
+      name: Add github team
+      action: adp:github:team:add
+      input:
+        teamNames: ${{ parameters.github_team_names }}
+        repoName: ${{ parameters.github_repo_name }}
+        orgName: ${{ parameters.github_organization_name }}
+        owner: ${{ parameters.github_owner_name }}
+        permission: ${{ parameters.github_team_permission }}
+
+  # output:
+  #   links:
+  #     - title: Repository
+  #       url: ${{ steps.publish.output.remoteUrl }}
+  #     - title: Open in catalog
+  #       icon: catalog
+  #       entityRef: ${{ steps.register.output.entityRef }}
