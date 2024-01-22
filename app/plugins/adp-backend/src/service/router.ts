@@ -90,35 +90,38 @@ export async function createRouter(
   });
 
   router.get('/armsLengthBody', async (_req, res) => {
-    res.json(await armsLengthBodiesStore.getAll());
+    const data = await armsLengthBodiesStore.getAll();
+    res.json(data);
   });
 
   router.post('/armsLengthBody', async (req, res) => {
-    if (!isArmsLengthBodyCreateRequest(req.body)) {
-      throw new InputError('Invalid payload');
+    try {
+      if (!isArmsLengthBodyCreateRequest(req.body)) {
+        throw new InputError('Invalid payload');
+      }
+      const author = await getCurrentUsername(identity, req);
+      const armsLengthBody = await armsLengthBodiesStore.add(req.body, author);
+      res.json(armsLengthBody);
+    } catch (error) {
+      throw new InputError('Error');
     }
-
-    const author = await getCurrentUsername(identity, req);
-    const armsLengthBody = await armsLengthBodiesStore.add(
-      req.body,
-      author,
-    );
-    res.json(armsLengthBody);
   });
 
   router.put('/armsLengthBody', async (req, res) => {
-    if (!isArmsLengthBodyUpdateRequest(req.body)) {
-      throw new InputError('Invalid payload');
+    try {
+      if (!isArmsLengthBodyUpdateRequest(req.body)) {
+        throw new InputError('Invalid payload');
+      }
+      const author = await getCurrentUsername(identity, req);
+      const armsLengthBody = await armsLengthBodiesStore.update(
+        req.body,
+        author,
+      );
+      res.json(armsLengthBody);
+    } catch (error) {
+      throw new InputError('Error');
     }
-
-    const author = await getCurrentUsername(identity, req);
-    const armsLengthBody = await armsLengthBodiesStore.update(
-      req.body,
-      author,
-    );
-    res.json(armsLengthBody);
   });
-
   router.use(errorHandler());
   return router;
 }

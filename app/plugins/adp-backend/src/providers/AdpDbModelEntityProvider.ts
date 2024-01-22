@@ -5,16 +5,13 @@ import {
   import { Config } from '@backstage/config';
   import { PluginTaskScheduler, TaskRunner } from '@backstage/backend-tasks';
   import {
-    ANNOTATION_LOCATION,
-    ANNOTATION_ORIGIN_LOCATION,
     Entity,
     GroupEntity,
-    UserEntity,
   } from '@backstage/catalog-model';
   import { Logger } from 'winston';
   import * as uuid from 'uuid';
   import { getAllArmsLengthBodies } from '../service/armsLengthBody';
-  import { GroupTransformer, defaultGroupTransformer } from './transformers';
+  import { defaultGroupTransformer } from './transformers';
   
   /**
    * An entity provider that adds the ADP Data Model entities to the catalog.
