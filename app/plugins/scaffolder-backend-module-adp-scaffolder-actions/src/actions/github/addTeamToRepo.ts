@@ -119,7 +119,7 @@ async function checkTeamExists(
     });
     if (team.status === 200) {
       ctx.logger.info(
-        `Team ${ctx.input.githubTeamName} exists in github org ${organization}`,
+        `Team ${githubTeamName} exists in github org ${organization}`,
       );
       isTeamExists = true;
     }
