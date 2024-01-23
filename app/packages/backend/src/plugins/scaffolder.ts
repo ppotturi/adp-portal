@@ -12,6 +12,7 @@ import {
 import {
   createPipelineAction,
   getServiceConnectionAction,
+  permitPipelineAction,
   runPipelineAction,
   createGithubTeamAction,
 } from '@internal/backstage-plugin-scaffolder-backend-module-adp-scaffolder-actions';
@@ -34,12 +35,15 @@ export default async function createPlugin(
 
   const actions = [
     ...builtInActions,
-    permitAzurePipelineAction({ integrations }),
     createPipelineAction({
       integrations: integrations,
       config: env.config,
     }),
     getServiceConnectionAction({
+      integrations: integrations,
+      config: env.config,
+    }),
+    permitPipelineAction({
       integrations: integrations,
       config: env.config,
     }),

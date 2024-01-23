@@ -9,6 +9,7 @@ Details about actions (inputs, outputs, and how to use them) are available in [t
   - Get Service Connection
   - Run pipeline
   - Create Pipeline
+  - Permit pipeline
 
 - GitHub
   - Create GitHub Team
