@@ -10,6 +10,7 @@ import { permitAzurePipelineAction } from '@antoniobergas/scaffolder-backend-mod
 import {
   createPipelineAction,
   getServiceConnectionAction,
+  permitPipelineAction,
   runPipelineAction,
   createGithubTeamAction,
   addGithubTeamToRepoAction,
@@ -33,12 +34,15 @@ export default async function createPlugin(
 
   const actions = [
     ...builtInActions,
-    permitAzurePipelineAction({ integrations }),
     createPipelineAction({
       integrations: integrations,
       config: env.config,
     }),
     getServiceConnectionAction({
+      integrations: integrations,
+      config: env.config,
+    }),
+    permitPipelineAction({
       integrations: integrations,
       config: env.config,
     }),
