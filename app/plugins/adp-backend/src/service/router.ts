@@ -26,58 +26,58 @@ export async function createRouter(
 
   armsLengthBodiesStore.add(
     {
-      creator_username: 'ADP',
-      creator_email: 'ADP',
-      owner_username: 'ADP',
-      owner_email: 'ADP',
+      creator: 'ADP',
+      owner: 'ADP',
       name: 'Environment Agency',
       short_name: 'EA',
+      title: 'environment-agency',
+      description: ''
     },
-    'Seed',
+    'Seed'
   );
   armsLengthBodiesStore.add(
     {
-      creator_username: 'ADP',
-      creator_email: 'ADP',
-      owner_username: 'ADP',
-      owner_email: 'ADP',
-      name: 'Animal & Plan Health',
+      creator: 'ADP',
+      owner: 'ADP',
+      name: 'Animal & Plant Health',
       short_name: 'APHA',
+      title: 'animal-and-plant-health',
+      description: ''
     },
-    'Seed',
+    'Seed'
   );
   armsLengthBodiesStore.add(
     {
-      creator_username: 'ADP',
-      creator_email: 'ADP',
-      owner_username: 'ADP',
-      owner_email: 'ADP',
+      creator: 'ADP',
+      owner: 'ADP',
       name: 'Rural Payments Agency',
       short_name: 'RPA',
+      title: 'rural-payments-agency',
+      description: ''
     },
-    'Seed',
+    'Seed'
   );
   armsLengthBodiesStore.add(
     {
-      creator_username: 'ADP',
-      creator_email: 'ADP',
-      owner_username: 'ADP',
-      owner_email: 'ADP',
+      creator: 'ADP',
+      owner: 'ADP',
       name: 'Natural England',
       short_name: 'NE',
+      title: 'natural-england',
+      description: ''
     },
-    'Seed',
+    'Seed'
   );
   armsLengthBodiesStore.add(
     {
-      creator_username: 'ADP',
-      creator_email: 'ADP',
-      owner_username: 'ADP',
-      owner_email: 'ADP',
+      creator: 'ADP',
+      owner: 'ADP',
       name: 'Marine & Maritime',
       short_name: 'MMO',
+      title: 'marine-and-maritime',
+      description: ''
     },
-    'Seed',
+    'Seed'
   );
 
   const router = Router();

@@ -1,21 +1,21 @@
 import { Knex } from 'knex';
 import { NotFoundError } from '@backstage/errors';
 import { ArmsLengthBody } from '../types';
+import { createTitle } from '../utils';
 
 const TABLE_NAME = 'arms_length_bodies';
 type Row = {
-    creator_username: string;
-    creator_email: string;
-    owner_username: string;
-    owner_email: string;
-    name: string;
-    short_name?: string;
-    description?: string;
-    id: string;
-    created_at: Date;
-    updated_at: Date;
-    updated_by: string;
-  };
+  id: string;
+  creator: string;
+  owner: string;
+  name: string;
+  short_name?: string;
+  description: string;
+  title: string;
+  created_at: Date;
+  updated_by?: string;
+  updated_at?: Date;
+};
 
 export class ArmsLengthBodyStore {
   constructor(private readonly client: Knex) {}
@@ -23,28 +23,26 @@ export class ArmsLengthBodyStore {
   async getAll(): Promise<ArmsLengthBody[]> {
     const ArmsLengthBodies = await this.client<Row>(TABLE_NAME)
       .select(
-        'creator_username',
-        'creator_email',
-        'owner_username',
-        'owner_email',
+        'creator',
+        'owner',
         'name',
         'short_name',
         'description',
         'id',
+        'title',
         'created_at',
       )
       .orderBy('created_at');
 
     return ArmsLengthBodies.map(row => ({
-      creator_username: row.creator_username,
-      creator_email: row.creator_email,
-      owner_username: row.owner_username,
-      owner_email: row.owner_email,
+      creator: row.creator,
+      owner: row.owner,
       name: row.name,
       short_name: row?.short_name,
       description: row?.description,
       id: row.id,
       timestamp: new Date(row.created_at).getMilliseconds(),
+      title: createTitle(row.name),
     }));
   }
 
@@ -52,47 +50,44 @@ export class ArmsLengthBodyStore {
     const row = await this.client<Row>(TABLE_NAME)
       .where('id', id)
       .select(
-        'creator_username',
-        'creator_email',
-        'owner_username',
-        'owner_email',
+        'creator',
+        'owner',
         'name',
         'short_name',
         'description',
         'id',
+        'title',
         'created_at',
       )
       .first();
 
     return row
       ? {
-        creator_username: row.creator_username,
-        creator_email: row.creator_email,
-        owner_username: row.owner_username,
-        owner_email: row.owner_email,
-        name: row.name,
-        short_name: row.short_name,
-        description: row.description,
-        id: row.id,
-        timestamp: new Date(row.created_at).getMilliseconds(),
+          creator: row.creator,
+          owner: row.owner,
+          name: row.name,
+          short_name: row?.short_name,
+          description: row?.description,
+          id: row.id,
+          timestamp: new Date(row.created_at).getMilliseconds(),
+          title: createTitle(row.name),
         }
       : null;
   }
 
   async add(
     armsLengthBody: Omit<ArmsLengthBody, 'id' | 'timestamp'>,
-    creator_username: string,
+    creator: string,
   ): Promise<ArmsLengthBody> {
     const insertResult = await this.client<Row>(TABLE_NAME).insert(
       {
-        creator_username: armsLengthBody.creator_username,
-        creator_email: armsLengthBody.creator_email,
-        owner_username: armsLengthBody.owner_username,
-        owner_email: armsLengthBody.owner_email,
+        creator: creator,
+        owner: creator,
         name: armsLengthBody.name,
-        short_name: armsLengthBody.short_name,
-        description: armsLengthBody.description,
-        updated_by: creator_username,
+        short_name: armsLengthBody?.short_name,
+        description: armsLengthBody?.description,
+        title: createTitle(armsLengthBody.name),
+        updated_by: creator,
       },
       ['id', 'created_at'],
     );
@@ -122,19 +117,15 @@ export class ArmsLengthBodyStore {
     }
 
     const updated = new Date();
-    await this.client<Row>(TABLE_NAME)
-      .where('id', armsLengthBody.id)
-      .update({
-        creator_username: armsLengthBody.creator_username,
-        creator_email: armsLengthBody.creator_email,
-        owner_username: armsLengthBody.owner_username,
-        owner_email: armsLengthBody.owner_email,
-        name: armsLengthBody.name,
-        short_name: armsLengthBody.short_name,
-        description: armsLengthBody.description,
-        updated_at: updated,
-        updated_by: updatedBy,
-      });
+    await this.client<Row>(TABLE_NAME).where('id', armsLengthBody.id).update({
+      creator: armsLengthBody.creator,
+      owner: armsLengthBody.owner,
+      name: armsLengthBody.name,
+      short_name: armsLengthBody?.short_name,
+      description: armsLengthBody?.description,
+      updated_at: updated,
+      updated_by: updatedBy,
+    });
 
     return { ...armsLengthBody, timestamp: updated.getMilliseconds() };
   }

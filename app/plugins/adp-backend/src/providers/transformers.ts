@@ -25,7 +25,8 @@ export const defaultGroupTransformer: GroupTransformer = async (
     },
     spec: {
       type: 'arms-length-body',
-      children: [],
+      children: [] // write query to get children from database
+    
     },
   };
 };

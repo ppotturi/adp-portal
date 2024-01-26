@@ -3,9 +3,9 @@ import { defaultGroupTransformer } from './transformers';
 describe('defaultGroupTransformer', () => {
   it('should transform valid ArmsLengthBody to GroupEntity', async () => {
     const armsLengthBody = {
-      creator_username: 'ADP',
+      creator: 'ADP',
       creator_email: 'ADP',
-      owner_username: 'ADP',
+      owner: 'ADP',
       owner_email: 'ADP',
       name: 'testName',
       short_name: 'testShortName',

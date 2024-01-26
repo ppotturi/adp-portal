@@ -5,32 +5,28 @@ exports.up = async function up(knex) {
   return knex.schema.createTable('arms_length_bodies', table => {
     table.comment('Stores ALB data');
     table
-      .string('creator_username')
+      .string('creator')
       .notNullable()
       .comment('Username of the ALB creator');
     table
-      .string('creator_email')
-      .notNullable()
-      .comment('Email of the ALB creator');
-    table
-      .string('owner_username')
+      .string('owner')
       .notNullable()
       .comment('Username of the ALB owner');
-    table
-      .string('owner_email')
-      .notNullable()
-      .comment('Email of the ALB owner');
     table
       .string('name')
       .notNullable()
       .comment('ALB name');
     table
-      .string('short_name')
+      .string('title')
       .notNullable()
+      .comment('ALB name in lower case and hyphens instead of spaces');
+    table
+      .string('short_name')
+      .nullable()
       .comment('Short form of ALB name');
     table
       .string('description')
-      .nullable()
+      .notNullable()
       .comment('Description of the ALB');
     table
       .timestamp('created_at', { useTz: false })
