@@ -4,12 +4,11 @@ describe('defaultGroupTransformer', () => {
   it('should transform valid ArmsLengthBody to GroupEntity', async () => {
     const armsLengthBody = {
       creator: 'ADP',
-      creator_email: 'ADP',
       owner: 'ADP',
-      owner_email: 'ADP',
       name: 'testName',
       short_name: 'testShortName',
       description: 'testDescription',
+      title: 'testName',
       id: '1234',
       timestamp: Date.now(),
     };

@@ -29,10 +29,10 @@ describe('ArmsLengthBody Filtering', () => {
 
   test('getAllArmsLengthBodies with "not" filter', () => {
     const results = getAllArmsLengthBodies({
-      not: { property: 'owner_username', values: ['ADP'] },
+      not: { property: 'owner', values: ['ADP'] },
     });
     results.forEach(item => {
-      expect(item.owner_username).not.toBe('ADP');
+      expect(item.owner).not.toBe('ADP');
     });
   });
 
