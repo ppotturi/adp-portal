@@ -99,6 +99,17 @@ export async function createRouter(
       if (!isArmsLengthBodyCreateRequest(req.body)) {
         throw new InputError('Invalid payload');
       }
+
+      const data: ArmsLengthBody[] = await armsLengthBodiesStore.getAll();
+
+      const isDuplicate: boolean = await checkForDuplicateName(
+        data,
+        req.body.name,
+      );
+      if (isDuplicate) {
+        res.status(406).json({ error: 'ALB Name already exists' });
+      }
+
       const author = await getCurrentUsername(identity, req);
       const armsLengthBody = await armsLengthBodiesStore.add(req.body, author);
       res.json(armsLengthBody);
@@ -112,6 +123,20 @@ export async function createRouter(
       if (!isArmsLengthBodyUpdateRequest(req.body)) {
         throw new InputError('Invalid payload');
       }
+
+      const data: ArmsLengthBody[] = await armsLengthBodiesStore.getAll();
+
+      const currentData = data.find(object => object.id === req.body.id);
+      if (currentData?.name !== req.body.name) {
+        const isDuplicate: boolean = await checkForDuplicateName(
+          data,
+          req.body.name,
+        );
+        if (isDuplicate) {
+          res.status(406).json({ error: 'ALB Name already exists' });
+        }
+      }
+
       const author = await getCurrentUsername(identity, req);
       const armsLengthBody = await armsLengthBodiesStore.update(
         req.body,
@@ -146,4 +171,17 @@ export async function getCurrentUsername(
 ): Promise<string> {
   const user = await identity.getIdentity({ request: req });
   return user?.identity.userEntityRef ?? 'unknown';
+}
+
+async function checkForDuplicateName(
+  store: ArmsLengthBody[],
+  name: string,
+): Promise<boolean> {
+  name = name.trim().toLowerCase();
+
+  const duplicate = store.find(
+    object => object.name.trim().toLowerCase() === name,
+  );
+
+  return duplicate !== undefined;
 }

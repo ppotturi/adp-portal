@@ -11,7 +11,7 @@ type Row = {
   name: string;
   short_name?: string;
   description: string;
-  title: string;
+  readonly title?: string;
   created_at: Date;
   updated_by?: string;
   updated_at?: Date;
@@ -29,7 +29,6 @@ export class ArmsLengthBodyStore {
         'short_name',
         'description',
         'id',
-        'title',
         'created_at',
       )
       .orderBy('created_at');
@@ -42,7 +41,6 @@ export class ArmsLengthBodyStore {
       description: row?.description,
       id: row.id,
       timestamp: new Date(row.created_at).getMilliseconds(),
-      title: createTitle(row.name),
     }));
   }
 
@@ -56,7 +54,6 @@ export class ArmsLengthBodyStore {
         'short_name',
         'description',
         'id',
-        'title',
         'created_at',
       )
       .first();
@@ -70,7 +67,6 @@ export class ArmsLengthBodyStore {
           description: row?.description,
           id: row.id,
           timestamp: new Date(row.created_at).getMilliseconds(),
-          title: createTitle(row.name),
         }
       : null;
   }
