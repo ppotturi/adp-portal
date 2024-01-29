@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@material-ui/core';
 
 interface Field {
@@ -13,23 +13,39 @@ interface EditModalProps {
   onSubmit: ( data: Record<string, any>) => void;
   initialValues: Record<string, any>;
   fields: Field[];
+  titleData: Record<string,any>;
 }
 
-export const EditModal: FC<EditModalProps> = ({ open, onClose, onSubmit,initialValues, fields }) => {
+export const EditModal: FC<EditModalProps> = ({ open, onClose, onSubmit,initialValues, fields, titleData }) => {
+  const [formValues, setFormValues] = useState(initialValues);
+
+  const handleFieldChange = (name: string, value: any) => {
+    setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
+  };
+
+
   const handleSubmit = () => {
-    onSubmit(initialValues);
+    onSubmit(formValues);
     onClose();
+  };
+
+  const getTitle = () => {
+    if (titleData && titleData.name) {
+      return `Edit ${titleData.name}`;
+    }
+    return '';
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Edit Item</DialogTitle>
+      <DialogTitle>{getTitle()}</DialogTitle> 
       <DialogContent>
         {fields.map((field) => (
           <TextField
             key={field.name}
             label={field.label}
-            defaultValue={initialValues[field.name]}
+            defaultValue={initialValues[field.name] || ""}
+            onChange={(e) => handleFieldChange(field.name, e.target.value)}
             fullWidth
             margin="dense"
           />
@@ -46,5 +62,6 @@ export const EditModal: FC<EditModalProps> = ({ open, onClose, onSubmit,initialV
     </Dialog>
   );
 };
+
 
 

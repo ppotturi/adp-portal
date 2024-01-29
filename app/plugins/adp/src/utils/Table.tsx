@@ -10,7 +10,7 @@ type DefaultTableProps = {
 export const DefaultTable = ({ data, columns, title }: DefaultTableProps) => {
   return (
     <Table
-      options={{ paging: false }}
+      options={{ paging: true }}
       data={data}
       columns={columns}
       title={title}

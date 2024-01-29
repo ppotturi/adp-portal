@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { Button, Typography } from '@material-ui/core';
 import {
   Header,
@@ -10,11 +10,42 @@ import {
 } from '@backstage/core-components';
 import { DefaultTable } from '../../utils/Table';
 import { EditModal } from '../../utils/EditModal';
+import {
+  useApi,
+  discoveryApiRef,
+  fetchApiRef,
+  alertApiRef,
+} from '@backstage/core-plugin-api';
+import { ArmsLengthBody } from '@internal/plugin-adp-backend';
+
+
 
 export const AlbViewPageComponent = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({});
+  const [tableData, setTableData] = useState([]);
+  const [key, refetchArmsLengthBody] = useReducer(i => i + 1, 0);
+  const alertApi = useApi(alertApiRef);
 
+  const discoveryApi = useApi(discoveryApiRef);
+  const { fetch } = useApi(fetchApiRef);
+
+  const fetchTableData = async () => {
+    try {
+      const response = await fetch(
+        `${await discoveryApi.getBaseUrl('adp')}/armsLengthBody`,
+      );
+      const data = await response.json();
+      console.log(data);
+      setTableData(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTableData();
+  }, []);
 
   const handleEdit = (ArmsLengthBody: React.SetStateAction<{}>) => {
     setFormData(ArmsLengthBody);
@@ -26,11 +57,33 @@ export const AlbViewPageComponent = () => {
     setFormData({});
   };
 
-  const handleCrudSubmit = (data: Record<string, any>) => {
-    //update database
-    //get timestamp 
-    //refresh display - through state 
-    console.log('Performing action with data:', data);
+  const handleUpdate = async (armsLengthBody: ArmsLengthBody) => {
+    
+    try {
+      console.log('Updating with data:', armsLengthBody);
+      const response = await fetch(
+        `${await discoveryApi.getBaseUrl('adp')}/armsLengthBody`,
+        {
+          method: 'PUT',
+          body: JSON.stringify({ ...armsLengthBody }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+       
+      );
+      if (!response.ok) {
+        const { error } = await response.json();
+        alertApi.post({
+          message: error.message,
+          severity: 'error',
+        });
+        return;
+      }
+      refetchArmsLengthBody();
+    } catch (e: any) {
+      alertApi.post({ message: e.message, severity: 'error' });
+    }
     handleCloseModal();
   };
 
@@ -38,48 +91,36 @@ export const AlbViewPageComponent = () => {
   const columns: TableColumn[] = [
     {
       title: 'Name',
-      field: 'col1',
+      field: 'name',
       highlight: true,
       type: 'string',
     },
     {
-      title: 'Short-Form Name',
-      field: 'col2',
-      highlight: true,
-      type: 'string',
-    },
-    {
-      title: 'Owner',
-      field: 'col3',
+      title: 'Description',
+      field: 'description',
       highlight: true,
       type: 'string',
     },
     {
       title: 'Last Edit',
-      field: 'date',
+      field: 'created_at',
       highlight: false,
       type: 'date',
+      render: e => new Date(e.timestamp).toLocaleString(),
     },
-
     {
       title: 'Action',
-      render: ArmsLengthBody => {
-        return (
-          <Button variant="contained" color="primary" onClick={() => handleEdit(ArmsLengthBody)}>
-            Edit
-          </Button>
-        )
-      }
-
+      render: ArmsLengthBody => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleEdit(ArmsLengthBody)}
+        >
+          Edit
+        </Button>
+      ),
     },
   ];
-
-  const testData10 = Array.from({ length: 7 }, (_, index) => ({
-    col1: `ALB-Name-${index}`,
-    col2: `Short-Form-Name_${index}`,
-    col3: `Owner_Name${index}`,
-    date: new Date(Math.abs(Math.sin(index)) * 10000000000000),
-  }));
 
   return (
     <Page themeId="tool">
@@ -94,22 +135,23 @@ export const AlbViewPageComponent = () => {
         <Typography paragraph>
           View or add Arms Length Bodies to the Azure Developer Platform.
         </Typography>
-        <DefaultTable data={testData10} columns={columns} title="View all" />
+        <DefaultTable
+          data={tableData}
+          columns={columns}
+          title="View all"
+        />
 
         <EditModal
           open={isModalOpen}
           onClose={handleCloseModal}
-          onSubmit={handleCrudSubmit}
+          onSubmit={handleUpdate}
           initialValues={formData}
           fields={[
-            { label: 'Owner Name', name: 'customField1' },
-            { label: 'Owner Email', name: 'customField2' },
-            { label: 'ALB Name', name: 'customField3' },
-            { label: 'Short-Form Name', name: 'customField4' },
-            { label: 'ALB Description', name: 'customField5' },
-
-          ]} />
-
+            { label: 'Name', name: 'name' },
+            { label: 'ALB Description', name: 'description' },
+          ]}
+          titleData={formData}
+        />
       </Content>
     </Page>
   );
