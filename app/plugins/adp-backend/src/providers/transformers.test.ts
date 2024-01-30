@@ -5,24 +5,24 @@ describe('defaultGroupTransformer', () => {
     const armsLengthBody = {
       creator: 'ADP',
       owner: 'ADP',
-      name: 'testName',
+      name: 'testname',
       short_name: 'testShortName',
       description: 'testDescription',
-      title: 'testName',
+      title: 'testname',
       id: '1234',
-      timestamp: Date.now(),
+      timestamp: new Date(),
     };
 
     const expectedGroupEntity = {
       apiVersion: 'backstage.io/v1beta1',
       kind: 'Group',
       metadata: {
-        name: 'testName',
-        displayName: 'testShortName',
+        name: 'testname',
+        title: 'testShortName',
         description: 'testDescription',
         tags: [],
         annotations: {
-          'backstage.io/managed-by-location': 'adp:arms-length-body\\testName',
+          'backstage.io/managed-by-location': 'adp:arms-length-body\\testname',
           'backstage.io/managed-by-origin-location':
             '`adp:arms-length-body\\${armsLengthBody.name}`',
         },

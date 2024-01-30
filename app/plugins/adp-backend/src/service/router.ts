@@ -5,7 +5,10 @@ import { Logger } from 'winston';
 import { InputError } from '@backstage/errors';
 import { IdentityApi } from '@backstage/plugin-auth-node';
 import { AdpDatabase } from '../database/adpDatabase';
-import { ArmsLengthBodyStore } from '../armsLengthBody/armsLengthBodyStore';
+import {
+  ArmsLengthBodyStore,
+  PartialArmsLenghBody,
+} from '../armsLengthBody/armsLengthBodyStore';
 import { ArmsLengthBody } from '../types';
 
 export interface RouterOptions {
@@ -31,9 +34,9 @@ export async function createRouter(
       name: 'Environment Agency',
       short_name: 'EA',
       title: 'environment-agency',
-      description: ''
+      description: '',
     },
-    'Seed'
+    'Seed',
   );
   armsLengthBodiesStore.add(
     {
@@ -42,9 +45,9 @@ export async function createRouter(
       name: 'Animal & Plant Health',
       short_name: 'APHA',
       title: 'animal-and-plant-health',
-      description: ''
+      description: '',
     },
-    'Seed'
+    'Seed',
   );
   armsLengthBodiesStore.add(
     {
@@ -53,9 +56,9 @@ export async function createRouter(
       name: 'Rural Payments Agency',
       short_name: 'RPA',
       title: 'rural-payments-agency',
-      description: ''
+      description: '',
     },
-    'Seed'
+    'Seed',
   );
   armsLengthBodiesStore.add(
     {
@@ -64,9 +67,9 @@ export async function createRouter(
       name: 'Natural England',
       short_name: 'NE',
       title: 'natural-england',
-      description: ''
+      description: '',
     },
-    'Seed'
+    'Seed',
   );
   armsLengthBodiesStore.add(
     {
@@ -75,9 +78,9 @@ export async function createRouter(
       name: 'Marine & Maritime',
       short_name: 'MMO',
       title: 'marine-and-maritime',
-      description: ''
+      description: '',
     },
-    'Seed'
+    'Seed',
   );
 
   const router = Router();
@@ -101,42 +104,48 @@ export async function createRouter(
       }
 
       const data: ArmsLengthBody[] = await armsLengthBodiesStore.getAll();
-
       const isDuplicate: boolean = await checkForDuplicateName(
         data,
         req.body.name,
       );
-      if (isDuplicate) {
+
+      console.log(isDuplicate)
+      if (!isDuplicate) {
+        const author = await getCurrentUsername(identity, req);
+        const armsLengthBody = await armsLengthBodiesStore.add(
+          req.body,
+          author,
+        );
+        res.json(armsLengthBody);
+      } else {
         res.status(406).json({ error: 'ALB Name already exists' });
       }
-
-      const author = await getCurrentUsername(identity, req);
-      const armsLengthBody = await armsLengthBodiesStore.add(req.body, author);
-      res.json(armsLengthBody);
     } catch (error) {
       throw new InputError('Error');
     }
   });
 
-  router.put('/armsLengthBody', async (req, res) => {
+  router.patch('/armsLengthBody', async (req, res) => {
     try {
       if (!isArmsLengthBodyUpdateRequest(req.body)) {
         throw new InputError('Invalid payload');
       }
-
       const data: ArmsLengthBody[] = await armsLengthBodiesStore.getAll();
-
       const currentData = data.find(object => object.id === req.body.id);
-      if (currentData?.name !== req.body.name) {
+      const updatedName = req.body?.name;
+      const currentName = currentData?.name;
+      const isNameChanged = updatedName && currentName !== updatedName;
+
+      if (isNameChanged) {
         const isDuplicate: boolean = await checkForDuplicateName(
           data,
-          req.body.name,
+          updatedName,
         );
         if (isDuplicate) {
           res.status(406).json({ error: 'ALB Name already exists' });
+          return;
         }
       }
-
       const author = await getCurrentUsername(identity, req);
       const armsLengthBody = await armsLengthBodiesStore.update(
         req.body,
@@ -158,11 +167,9 @@ function isArmsLengthBodyCreateRequest(
 }
 
 function isArmsLengthBodyUpdateRequest(
-  request: Omit<ArmsLengthBody, 'timestamp'>,
+  request: Omit<PartialArmsLenghBody, 'timestamp'>,
 ) {
-  return (
-    typeof request?.id === 'string' && isArmsLengthBodyCreateRequest(request)
-  );
+  return typeof request?.id === 'string';
 }
 
 export async function getCurrentUsername(
@@ -173,7 +180,7 @@ export async function getCurrentUsername(
   return user?.identity.userEntityRef ?? 'unknown';
 }
 
-async function checkForDuplicateName(
+export async function checkForDuplicateName(
   store: ArmsLengthBody[],
   name: string,
 ): Promise<boolean> {

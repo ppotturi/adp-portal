@@ -11,11 +11,13 @@ type Row = {
   name: string;
   short_name?: string;
   description: string;
-  readonly title?: string;
+  readonly title: string;
   created_at: Date;
   updated_by?: string;
   updated_at?: Date;
 };
+
+export type PartialArmsLenghBody = Partial<ArmsLengthBody>;
 
 export class ArmsLengthBodyStore {
   constructor(private readonly client: Knex) {}
@@ -28,6 +30,7 @@ export class ArmsLengthBodyStore {
         'name',
         'short_name',
         'description',
+        'title',
         'id',
         'created_at',
       )
@@ -38,9 +41,10 @@ export class ArmsLengthBodyStore {
       owner: row.owner,
       name: row.name,
       short_name: row?.short_name,
-      description: row?.description,
+      description: row.description,
+      title: row.title,
       id: row.id,
-      timestamp: new Date(row.created_at).getMilliseconds(),
+      timestamp: new Date(row.created_at),
     }));
   }
 
@@ -53,6 +57,7 @@ export class ArmsLengthBodyStore {
         'name',
         'short_name',
         'description',
+        'title',
         'id',
         'created_at',
       )
@@ -64,9 +69,11 @@ export class ArmsLengthBodyStore {
           owner: row.owner,
           name: row.name,
           short_name: row?.short_name,
-          description: row?.description,
+          description: row.description,
+          title: row.title,
           id: row.id,
-          timestamp: new Date(row.created_at).getMilliseconds(),
+          timestamp: new Date(row.created_at),
+          
         }
       : null;
   }
@@ -81,7 +88,7 @@ export class ArmsLengthBodyStore {
         owner: creator,
         name: armsLengthBody.name,
         short_name: armsLengthBody?.short_name,
-        description: armsLengthBody?.description,
+        description: armsLengthBody.description,
         title: createTitle(armsLengthBody.name),
         updated_by: creator,
       },
@@ -97,15 +104,22 @@ export class ArmsLengthBodyStore {
     return {
       ...armsLengthBody,
       id: insertResult[0].id,
-      timestamp: new Date(insertResult[0].created_at).getMilliseconds(),
+      timestamp: new Date(insertResult[0].created_at),
     };
   }
 
   async update(
-    armsLengthBody: Omit<ArmsLengthBody, 'timestamp'>,
+    armsLengthBody: Omit<PartialArmsLenghBody, 'timestamp'>,
     updatedBy: string,
   ): Promise<ArmsLengthBody> {
+    if (armsLengthBody.id === undefined) {
+      throw new NotFoundError(
+        `Could not find Arms Length Body with ID ${armsLengthBody.id}`,
+      );
+    }
+
     const existingALB = await this.get(armsLengthBody.id);
+
     if (!existingALB) {
       throw new NotFoundError(
         `Could not find Arms Length Body with ID ${armsLengthBody.id}`,
@@ -113,16 +127,30 @@ export class ArmsLengthBodyStore {
     }
 
     const updated = new Date();
-    await this.client<Row>(TABLE_NAME).where('id', armsLengthBody.id).update({
-      creator: armsLengthBody.creator,
-      owner: armsLengthBody.owner,
-      name: armsLengthBody.name,
-      short_name: armsLengthBody?.short_name,
-      description: armsLengthBody?.description,
-      updated_at: updated,
-      updated_by: updatedBy,
-    });
 
-    return { ...armsLengthBody, timestamp: updated.getMilliseconds() };
+    const updatedData: Partial<ArmsLengthBody> = {};
+    if (armsLengthBody.name !== undefined) {
+      updatedData.name = armsLengthBody.name;
+    }
+    if (armsLengthBody.short_name !== undefined) {
+      updatedData.short_name = armsLengthBody.short_name;
+    }
+    if (armsLengthBody.description !== undefined) {
+      updatedData.description = armsLengthBody.description;
+    }
+
+    if (Object.keys(updatedData).length === 0) {
+      return existingALB;
+    }
+
+    await this.client<Row>(TABLE_NAME)
+      .where('id', armsLengthBody.id)
+      .update({
+        ...updatedData,
+        updated_at: updated,
+        updated_by: updatedBy,
+      });
+
+    return { ...existingALB, ...updatedData, timestamp: updated };
   }
 }

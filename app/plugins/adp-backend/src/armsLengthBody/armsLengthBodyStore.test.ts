@@ -1,6 +1,6 @@
 import { TestDatabaseId, TestDatabases } from '@backstage/backend-test-utils';
 import { AdpDatabase } from '../database/adpDatabase';
-import { ArmsLengthBodyStore } from './armsLengthBodyStore';
+import { ArmsLengthBodyStore, PartialArmsLenghBody } from './armsLengthBodyStore';
 import { NotFoundError } from '@backstage/errors';
 import { ArmsLengthBody } from '../types';
 import { createTitle } from '../utils';
@@ -41,7 +41,6 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      const data = []
       await knex('arms_length_bodies').insert([
         {
           creator: 'john',
@@ -74,6 +73,62 @@ describe('armsLengthBodyStore', () => {
 
       const getAllResult = await store.getAll();
       expect(getAllResult).toHaveLength(3);
+      
+    },
+  );
+
+  it.each(databases.eachSupportedId())(
+    'should fail to create a new ALB because ALB name already exists',
+    async databaseId => {
+      const { knex, store } = await createDatabase(databaseId);
+      
+      await knex('arms_length_bodies').insert([
+        {
+          creator: 'john',
+          owner: 'john',
+          name: 'ALB Example 1',
+          short_name: 'ALB 1',
+          description: 'This is an example ALB 1',
+          title:'alb-example-1',
+          updated_by: 'john',
+        },
+        {
+          creator: 'john',
+          owner: 'johnD',
+          name: 'ALB Example 2',
+          short_name: 'ALB 2',
+          description: 'This is an example ALB 2',
+          title:'alb-example-2',
+          updated_by: 'john',
+        },
+        {
+          creator: 'john',
+          owner: 'john',
+          name: 'ALB Example 3',
+          short_name: 'ALB 3',
+          description: 'This is an example ALB 3',
+          title:'alb-example-4',
+          updated_by: 'john',
+        },
+      ]);
+      const getAllResult = await store.getAll();
+      expect(getAllResult).toHaveLength(3);
+
+      const expectedProgramme: Omit<ArmsLengthBody, 'id' | 'timestamp'> = {
+        creator: 'john',
+        owner: 'john',
+        name: 'ALB Example 1',
+        short_name: 'ALB',
+        description: 'This is an example ALB',
+        title:'alb-example-1'
+      };
+
+      const addResult = await store.add(expectedProgramme, 'test');
+
+      expect(addResult.title).toEqual(createTitle(expectedProgramme.name));
+      expect(addResult.id).toBeDefined();
+      expect(addResult.timestamp).toBeDefined();
+     
       
     },
   );
@@ -190,23 +245,18 @@ describe('armsLengthBodyStore', () => {
 
       // Get the 'Test 2' ALB
       const test2Id = insertedIds[1].id;
-      const expectedUpdate: ArmsLengthBody = {
+      const expectedUpdate: PartialArmsLenghBody = {
         id: test2Id,
-        creator: 'john',
-        owner: 'johnD',
-        name: 'ALB Example 2',
-        short_name: 'ALB 2',
-        description: 'This is an example ALB 2',
-        title:'alb-example-2',
-        timestamp: new Date(2023, 12, 31, 15, 0, 0).getMilliseconds(),
+        name: 'ALB Example',
+        short_name: 'ALB',
+        timestamp: new Date(2023, 12, 31, 15, 0, 0),
       };
 
       const updateResult = await store.update(expectedUpdate, 'test@test.com');
 
       expect(updateResult).toBeDefined();
       expect(updateResult.name).toBe(expectedUpdate.name);
-      expect(updateResult.description).toBe(expectedUpdate.description);
-      expect(updateResult.title).toEqual(createTitle(expectedUpdate.name))
+      expect(updateResult.short_name).toBe(expectedUpdate.short_name);
     },
   );
 

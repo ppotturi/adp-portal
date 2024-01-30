@@ -14,9 +14,9 @@ export const defaultGroupTransformer: GroupTransformer = async (
     apiVersion: 'backstage.io/v1beta1',
     kind: 'Group',
     metadata: {
-      name: armsLengthBody.name,
-      displayName: armsLengthBody?.short_name,
-      description: armsLengthBody?.description,
+      title: armsLengthBody?.short_name,
+      description: armsLengthBody.description,
+      name: armsLengthBody.title,
       tags: [],
       annotations: {
         'backstage.io/managed-by-location': `adp:arms-length-body\\${armsLengthBody.name}`,
