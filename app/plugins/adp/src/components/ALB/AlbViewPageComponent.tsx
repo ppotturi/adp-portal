@@ -27,6 +27,7 @@ export const AlbViewPageComponent = () => {
   const [key, refetchArmsLengthBody] = useReducer(i => i + 1, 0);
   const alertApi = useApi(alertApiRef);
 
+
   const discoveryApi = useApi(discoveryApiRef);
   const { fetch } = useApi(fetchApiRef);
 
@@ -45,7 +46,16 @@ export const AlbViewPageComponent = () => {
 
   useEffect(() => {
     fetchTableData();
-  }, []);
+  }, [key]);
+
+  useEffect(() => {
+    // Clear the form data when the modal is closed
+    if (!isModalOpen) {
+      setFormData({});
+    }
+  }, [isModalOpen]);
+
+
 
   const handleEdit = (ArmsLengthBody: React.SetStateAction<{}>) => {
     setFormData(ArmsLengthBody);
@@ -53,8 +63,9 @@ export const AlbViewPageComponent = () => {
   };
 
   const handleCloseModal = () => {
+    setFormData({})
     setModalOpen(false);
-    setFormData({});
+
   };
 
   const handleUpdate = async (armsLengthBody: ArmsLengthBody) => {
@@ -64,7 +75,7 @@ export const AlbViewPageComponent = () => {
       const response = await fetch(
         `${await discoveryApi.getBaseUrl('adp')}/armsLengthBody`,
         {
-          method: 'PUT',
+          method: 'PATCH',
           body: JSON.stringify({ ...armsLengthBody }),
           headers: {
             'Content-Type': 'application/json',
@@ -78,15 +89,19 @@ export const AlbViewPageComponent = () => {
           message: error.message,
           severity: 'error',
         });
+        setFormData({})
         return;
       }
       refetchArmsLengthBody();
+    
     } catch (e: any) {
+      console.error('Error updating arms length body:', e.message);
       alertApi.post({ message: e.message, severity: 'error' });
+
+      setFormData({})
     }
     handleCloseModal();
   };
-
 
   const columns: TableColumn[] = [
     {
@@ -96,20 +111,27 @@ export const AlbViewPageComponent = () => {
       type: 'string',
     },
     {
-      title: 'Description',
-      field: 'description',
+      title: 'Short Name',
+      field: 'short_name',
       highlight: true,
       type: 'string',
     },
     {
-      title: 'Last Edit',
-      field: 'created_at',
+      title: 'Description',
+      field: 'description',
       highlight: false,
-      type: 'date',
-      render: e => new Date(e.timestamp).toLocaleString(),
+      type: 'string',
     },
     {
+      title: 'Last Edit',
+      field: 'timestamp',
+      highlight: false,
+      type: 'date',
+    },
+  
+    {
       title: 'Action',
+      highlight: true,
       render: ArmsLengthBody => (
         <Button
           variant="contained"
@@ -148,7 +170,9 @@ export const AlbViewPageComponent = () => {
           initialValues={formData}
           fields={[
             { label: 'Name', name: 'name' },
+            { label: 'Short Name', name: 'short_name' },
             { label: 'ALB Description', name: 'description' },
+
           ]}
           titleData={formData}
         />

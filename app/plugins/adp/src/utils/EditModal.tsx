@@ -1,31 +1,42 @@
 import React, { FC, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@material-ui/core';
+import { ArmsLengthBody } from '@internal/plugin-adp-backend';
+
 
 interface Field {
-    label: string;
-    name: string;
-  }
+  label: string;
+  name: string;
+}
 
 
 interface EditModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: ( data: Record<string, any>) => void;
+  onSubmit: (armsLengthBody: ArmsLengthBody) => void;
   initialValues: Record<string, any>;
   fields: Field[];
-  titleData: Record<string,any>;
+  titleData: Record<string, any>;
 }
 
-export const EditModal: FC<EditModalProps> = ({ open, onClose, onSubmit,initialValues, fields, titleData }) => {
-  const [formValues, setFormValues] = useState(initialValues);
+export const EditModal: FC<EditModalProps> = ({ open, onClose, onSubmit, initialValues, fields, titleData }) => {
+  const [formValues, setFormValues] = useState(initialValues.id);
 
   const handleFieldChange = (name: string, value: any) => {
-    setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
+    console.log('Before Update:', formValues);
+    setFormValues((prevValues: any) => {
+      const updatedValues = { ...prevValues, [name]: value };
+      console.log('After Update:', updatedValues);
+      return updatedValues;
+    });
   };
 
 
+
   const handleSubmit = () => {
-    onSubmit(formValues);
+    console.log('Submitting:', formValues);
+    console.log('Submittingid:', initialValues.id);
+  
+    onSubmit({ ...formValues, id: initialValues.id });;
     onClose();
   };
 
@@ -38,7 +49,7 @@ export const EditModal: FC<EditModalProps> = ({ open, onClose, onSubmit,initialV
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{getTitle()}</DialogTitle> 
+      <DialogTitle>{getTitle()}</DialogTitle>
       <DialogContent>
         {fields.map((field) => (
           <TextField
