@@ -109,16 +109,16 @@ export async function createRouter(
         req.body.name,
       );
 
-      console.log(isDuplicate)
-      if (!isDuplicate) {
+      if (isDuplicate) {
+        res.status(406).json({ error: 'ALB Name already exists' });
+        return;
+      } else {
         const author = await getCurrentUsername(identity, req);
         const armsLengthBody = await armsLengthBodiesStore.add(
           req.body,
           author,
         );
         res.json(armsLengthBody);
-      } else {
-        res.status(406).json({ error: 'ALB Name already exists' });
       }
     } catch (error) {
       throw new InputError('Error');

@@ -6,19 +6,9 @@ import {
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
 import express from 'express';
 import request from 'supertest';
-import { checkForDuplicateName, createRouter } from './router';
+import { createRouter } from './router';
 import { ConfigReader } from '@backstage/config';
 import { getCurrentUsername } from '../service/router';
-import { TestDatabaseId, TestDatabases } from '@backstage/backend-test-utils';
-import { AdpDatabase } from '../database/adpDatabase';
-import { ArmsLengthBody } from '../types';
-import {
-  ArmsLengthBodyStore,
-  PartialArmsLenghBody,
-} from '../armsLengthBody/armsLengthBodyStore';
-import { createTitle } from '../utils';
-import { createResponseComposition } from 'msw';
-
 describe('createRouter', () => {
   let app: express.Express;
 
@@ -66,16 +56,16 @@ describe('createRouter', () => {
 
   describe('POST /armsLengthBody', () => {
     it('returns ok', async () => {
-      const creator='John'
-      const expectedProgramme = {
+      const creator='unknown'
+      const expectedALB = {
         creator: creator,
         owner: creator,
         name: 'Test ALB',
         short_name: 'ALB',
         description: 'This is an example ALB',
       }
-      console.log(expectedProgramme)
-      const response = await request(app).post('/armsLengthBody').send(expectedProgramme)
+      console.log(expectedALB)
+      const response = await request(app).post('/armsLengthBody').send(expectedALB)
       console.log(response)
       expect(response.status).toEqual(200);
     
@@ -85,15 +75,14 @@ describe('createRouter', () => {
   describe('POST /armsLengthBody', () => {
     it('returns 406 when ALB Name already exists', async () => {
       const creator='John'
-      const expectedProgramme = {
+      const expectedALB = {
         creator: creator,
         owner: creator,
         name: 'Marine & Maritime',
         short_name: 'ALB',
         description: 'This is an example ALB',
       }
-      console.log(expectedProgramme)
-      const response = await request(app).post('/armsLengthBody').send(expectedProgramme)
+      const response = await request(app).post('/armsLengthBody').send(expectedALB)
       expect(response.status).toEqual(406);
       expect(response.text).toEqual("{\"error\":\"ALB Name already exists\"}")
     
@@ -116,9 +105,9 @@ describe('createRouter', () => {
         id: "",
         name: 'Test ALB',
       }
-      console.log(updatedData)
+      // console.log(updatedData)
       const response = await request(app).patch('/armsLengthBody').send(updatedData)
-      console.log(response)
+      // console.log(response)
       expect(response.status).toEqual(200);
     
     });
