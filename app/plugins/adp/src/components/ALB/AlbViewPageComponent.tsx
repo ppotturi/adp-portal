@@ -18,15 +18,12 @@ import {
 } from '@backstage/core-plugin-api';
 import { ArmsLengthBody } from '@internal/plugin-adp-backend';
 
-
-
 export const AlbViewPageComponent = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({});
   const [tableData, setTableData] = useState([]);
   const [key, refetchArmsLengthBody] = useReducer(i => i + 1, 0);
   const alertApi = useApi(alertApiRef);
-
 
   const discoveryApi = useApi(discoveryApiRef);
   const { fetch } = useApi(fetchApiRef);
@@ -48,30 +45,18 @@ export const AlbViewPageComponent = () => {
     fetchTableData();
   }, [key]);
 
-  useEffect(() => {
-    // Clear the form data when the modal is closed
-    if (!isModalOpen) {
-      setFormData({});
-    }
-  }, [isModalOpen]);
-
-
-
   const handleEdit = (ArmsLengthBody: React.SetStateAction<{}>) => {
     setFormData(ArmsLengthBody);
     setModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setFormData({})
+    setFormData({});
     setModalOpen(false);
-
   };
 
   const handleUpdate = async (armsLengthBody: ArmsLengthBody) => {
-    
     try {
-      console.log('Updating with data:', armsLengthBody);
       const response = await fetch(
         `${await discoveryApi.getBaseUrl('adp')}/armsLengthBody`,
         {
@@ -81,7 +66,6 @@ export const AlbViewPageComponent = () => {
             'Content-Type': 'application/json',
           },
         },
-       
       );
       if (!response.ok) {
         const { error } = await response.json();
@@ -89,16 +73,15 @@ export const AlbViewPageComponent = () => {
           message: error.message,
           severity: 'error',
         });
-        setFormData({})
+        setFormData({});
         return;
       }
       refetchArmsLengthBody();
-    
     } catch (e: any) {
       console.error('Error updating arms length body:', e.message);
       alertApi.post({ message: e.message, severity: 'error' });
 
-      setFormData({})
+      setFormData({});
     }
     handleCloseModal();
   };
@@ -123,12 +106,12 @@ export const AlbViewPageComponent = () => {
       type: 'string',
     },
     {
-      title: 'Last Edit',
+      title: 'Created at',
       field: 'timestamp',
       highlight: false,
       type: 'date',
     },
-  
+
     {
       title: 'Action',
       highlight: true,
@@ -146,7 +129,10 @@ export const AlbViewPageComponent = () => {
 
   return (
     <Page themeId="tool">
-      <Header title="Azure Development Platform: Data" subtitle="ADP Data" />
+      <Header
+        title="Azure Development Platform: Data"
+        subtitle="ADP Platform Configuration"
+      />
       <Content>
         <ContentHeader title="Arms Length Bodies">
           <SupportButton>
@@ -157,11 +143,7 @@ export const AlbViewPageComponent = () => {
         <Typography paragraph>
           View or add Arms Length Bodies to the Azure Developer Platform.
         </Typography>
-        <DefaultTable
-          data={tableData}
-          columns={columns}
-          title="View all"
-        />
+        <DefaultTable data={tableData} columns={columns} title="View all" />
 
         <EditModal
           open={isModalOpen}
@@ -172,7 +154,6 @@ export const AlbViewPageComponent = () => {
             { label: 'Name', name: 'name' },
             { label: 'Short Name', name: 'short_name' },
             { label: 'ALB Description', name: 'description' },
-
           ]}
           titleData={formData}
         />
