@@ -21,7 +21,7 @@ import { ArmsLengthBody } from '@internal/plugin-adp-backend';
 export const AlbViewPageComponent = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({});
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState<ArmsLengthBody[]>([]);
   const [key, refetchArmsLengthBody] = useReducer(i => i + 1, 0);
   const alertApi = useApi(alertApiRef);
 
@@ -34,7 +34,6 @@ export const AlbViewPageComponent = () => {
         `${await discoveryApi.getBaseUrl('adp')}/armsLengthBody`,
       );
       const data = await response.json();
-      console.log(data);
       setTableData(data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -68,14 +67,18 @@ export const AlbViewPageComponent = () => {
         },
       );
       if (!response.ok) {
-        const { error } = await response.json();
+        const responseBody = await response.json();
+        const errorMessage =
+          responseBody?.error ||
+          'An error occurred while updating the arms length body';
         alertApi.post({
-          message: error.message,
+          message: errorMessage,
           severity: 'error',
         });
         setFormData({});
         return;
       }
+
       refetchArmsLengthBody();
     } catch (e: any) {
       console.error('Error updating arms length body:', e.message);
@@ -151,12 +154,31 @@ export const AlbViewPageComponent = () => {
           onSubmit={handleUpdate}
           initialValues={formData}
           fields={[
-            { label: 'Name', name: 'name' },
-            { label: 'Short Name', name: 'short_name' },
-            { label: 'ALB Description', name: 'description' },
+            {
+              label: 'Name',
+              name: 'name',
+              helperText:
+                'This must be unique - use letters, numbers, or separators such as "_", "-"',
+              validations: {
+                required: true,
+              },
+            },
+            {
+              label: 'Short Name',
+              name: 'short_name',
+              helperText: 'Optional - a short form name to identify the body',
+            },
+            {
+              label: 'ALB Description',
+              name: 'description',
+              helperText: 'Max 200 Chars',
+              validations: {
+                required: true,
+              },
+            },
           ]}
           titleData={formData}
-        />
+                  />
       </Content>
     </Page>
   );

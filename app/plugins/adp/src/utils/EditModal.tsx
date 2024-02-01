@@ -9,19 +9,26 @@ import {
 } from '@material-ui/core';
 import { ArmsLengthBody } from '@internal/plugin-adp-backend';
 
-interface Field {
-  label: string;
-  name: string;
-}
+
 
 interface EditModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (armsLengthBody: ArmsLengthBody) => void;
   initialValues: Record<string, any>;
-  fields: Field[];
+  fields: {
+    label: string;
+    name: string;
+    helperText?: string;
+    validations?: {
+      required?: boolean;
+      maxChars?: number;
+    };
+  }[];
   titleData: Record<string, any>;
+  validateFormData?: (values: Record<string,any>) => Record<string,string>
 }
+
 
 export const EditModal: FC<EditModalProps> = ({
   open,
@@ -37,7 +44,7 @@ export const EditModal: FC<EditModalProps> = ({
     setFormValues((prevValues: any) => ({ ...prevValues, [name]: value }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     onSubmit({ ...formValues, id: initialValues.id });
     setFormValues({});
     onClose();
@@ -56,13 +63,15 @@ export const EditModal: FC<EditModalProps> = ({
       <DialogTitle>{getTitle()}</DialogTitle>
       <DialogContent>
         {fields.map(field => (
-          <TextField
+          <TextField //controller 
             key={field.name}
             label={field.label}
             defaultValue={initialValues[field.name] || ''}
             onChange={e => handleFieldChange(field.name, e.target.value)}
             fullWidth
             margin="dense"
+            required={field.validations?.required}
+            helperText={field.helperText}
           />
         ))}
       </DialogContent>
