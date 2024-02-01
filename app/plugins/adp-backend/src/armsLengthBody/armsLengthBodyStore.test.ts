@@ -1,6 +1,9 @@
 import { TestDatabaseId, TestDatabases } from '@backstage/backend-test-utils';
 import { AdpDatabase } from '../database/adpDatabase';
-import { ArmsLengthBodyStore, PartialArmsLenghBody } from './armsLengthBodyStore';
+import {
+  ArmsLengthBodyStore,
+  PartialArmsLenghBody,
+} from './armsLengthBodyStore';
 import { NotFoundError } from '@backstage/errors';
 import { ArmsLengthBody } from '../types';
 import { createTitle } from '../utils';
@@ -25,7 +28,8 @@ describe('armsLengthBodyStore', () => {
         name: 'ALB Example',
         short_name: 'ALB',
         description: 'This is an example ALB',
-        title:'alb-example'
+        url: 'http://www.example.com/index.html',
+        title: 'alb-example',
       };
 
       const addResult = await store.add(expectedALB, 'test');
@@ -41,14 +45,15 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      await knex('arms_length_bodies').insert([
+      await knex('arms_length_body').insert([
         {
           creator: 'john',
           owner: 'john',
           name: 'ALB Example 1',
           short_name: 'ALB 1',
           description: 'This is an example ALB 1',
-          title:'alb-example-1',
+          url: 'http://www.example.com/index.html',
+          title: 'alb-example-1',
           updated_by: 'john',
         },
         {
@@ -57,7 +62,7 @@ describe('armsLengthBodyStore', () => {
           name: 'ALB Example 2',
           short_name: 'ALB 2',
           description: 'This is an example ALB 2',
-          title:'alb-example-2',
+          title: 'alb-example-2',
           updated_by: 'john',
         },
         {
@@ -66,14 +71,14 @@ describe('armsLengthBodyStore', () => {
           name: 'ALB Example 3',
           short_name: 'ALB 3',
           description: 'This is an example ALB 3',
-          title:'alb-example-4',
+          url: 'http://www.example.com/index.html',
+          title: 'alb-example-4',
           updated_by: 'john',
         },
       ]);
 
       const getAllResult = await store.getAll();
       expect(getAllResult).toHaveLength(3);
-      
     },
   );
 
@@ -82,7 +87,7 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      const insertedIds = await knex('arms_length_bodies').insert(
+      const insertedIds = await knex('arms_length_body').insert(
         [
           {
             creator: 'john',
@@ -90,8 +95,9 @@ describe('armsLengthBodyStore', () => {
             name: 'ALB Example 1',
             short_name: 'ALB 1',
             description: 'This is an example ALB 1',
+            url: 'http://www.example.com/index.html',
             updated_by: 'john',
-            title:'alb-example-1',
+            title: 'alb-example-1',
           },
           {
             creator: 'john',
@@ -99,8 +105,9 @@ describe('armsLengthBodyStore', () => {
             name: 'ALB Example 2',
             short_name: 'ALB 2',
             description: 'This is an example ALB 2',
+            url: 'http://www.example.com/index.html',
             updated_by: 'john',
-            title:'alb-example-2',
+            title: 'alb-example-2',
           },
           {
             creator: 'john',
@@ -108,8 +115,9 @@ describe('armsLengthBodyStore', () => {
             name: 'ALB Example 3',
             short_name: 'ALB 3',
             description: 'This is an example ALB 3',
+            url: 'http://www.example.com/index.html',
             updated_by: 'john',
-            title:'alb-example-3',
+            title: 'alb-example-3',
           },
         ],
         ['id'],
@@ -122,7 +130,10 @@ describe('armsLengthBodyStore', () => {
       expect(getResult).toBeDefined();
       expect(getResult?.name).toBe('ALB Example 2');
       expect(getResult?.short_name).toBe('ALB 2');
+      expect(getResult?.description).toBe('This is an example ALB 2');
+      expect(getResult?.creator).toBe('john');
       expect(getResult?.owner).toBe('johnD');
+      expect(getResult?.url).toBe('http://www.example.com/index.html');
     },
   );
 
@@ -131,7 +142,7 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      await knex('arms_length_bodies').insert([
+      await knex('arms_length_body').insert([
         {
           creator: 'john',
           owner: 'john',
@@ -139,7 +150,7 @@ describe('armsLengthBodyStore', () => {
           short_name: 'ALB 1',
           description: 'This is an example ALB 1',
           updated_by: 'john',
-          title:'alb-example-1',
+          title: 'alb-example-1',
         },
         {
           creator: 'john',
@@ -148,7 +159,7 @@ describe('armsLengthBodyStore', () => {
           short_name: 'ALB 2',
           description: 'This is an example ALB 2',
           updated_by: 'john',
-          title:'alb-example-2',
+          title: 'alb-example-2',
         },
       ]);
 
@@ -163,7 +174,7 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      const insertedIds = await knex('arms_length_bodies').insert(
+      const insertedIds = await knex('arms_length_body').insert(
         [
           {
             creator: 'john',
@@ -172,7 +183,7 @@ describe('armsLengthBodyStore', () => {
             short_name: 'ALB 1',
             description: 'This is an example ALB 1',
             updated_by: 'john',
-            title:'alb-example-1',
+            title: 'alb-example-1',
           },
           {
             creator: 'john',
@@ -181,7 +192,7 @@ describe('armsLengthBodyStore', () => {
             short_name: 'ALB 2',
             description: 'This is an example ALB 2',
             updated_by: 'john',
-            title:'alb-example-2',
+            title: 'alb-example-2',
           },
         ],
         ['id'],
@@ -193,6 +204,8 @@ describe('armsLengthBodyStore', () => {
         id: test2Id,
         name: 'ALB Example',
         short_name: 'ALB',
+        description: 'This is an example ALB 2',
+        url: 'http://www.example.com/index.html',
         timestamp: new Date(2023, 12, 31, 15, 0, 0),
       };
 
@@ -201,6 +214,7 @@ describe('armsLengthBodyStore', () => {
       expect(updateResult).toBeDefined();
       expect(updateResult.name).toBe(expectedUpdate.name);
       expect(updateResult.short_name).toBe(expectedUpdate.short_name);
+      expect(updateResult.url).toBe(expectedUpdate.url);
     },
   );
 
@@ -209,7 +223,7 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      await knex('arms_length_bodies').insert([
+      await knex('arms_length_body').insert([
         {
           creator: 'john',
           owner: 'john',
@@ -217,7 +231,7 @@ describe('armsLengthBodyStore', () => {
           short_name: 'ALB 1',
           description: 'This is an example ALB 1',
           updated_by: 'john',
-          title:'alb-example-1',
+          title: 'alb-example-1',
         },
         {
           creator: 'john',
@@ -226,7 +240,7 @@ describe('armsLengthBodyStore', () => {
           short_name: 'ALB 2',
           description: 'This is an example ALB 2',
           updated_by: 'john',
-          title:'alb-example-2',
+          title: 'alb-example-2',
         },
         {
           creator: 'john',
@@ -235,7 +249,7 @@ describe('armsLengthBodyStore', () => {
           short_name: 'ALB 3',
           description: 'This is an example ALB 3',
           updated_by: 'john',
-          title:'alb-example-3',
+          title: 'alb-example-3',
         },
       ]);
 
@@ -248,7 +262,7 @@ describe('armsLengthBodyStore', () => {
               owner: 'n/a',
               name: 'Non-existent ALB',
               short_name: 'Non-existent ALB',
-              title:'non-existent-alb',
+              title: 'non-existent-alb',
               description: 'n/a',
             },
             'test@test.com',

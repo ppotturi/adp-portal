@@ -3,7 +3,7 @@ import { NotFoundError } from '@backstage/errors';
 import { ArmsLengthBody } from '../types';
 import { createTitle } from '../utils';
 
-const TABLE_NAME = 'arms_length_bodies';
+const TABLE_NAME = 'arms_length_body';
 type Row = {
   id: string;
   creator: string;
@@ -11,6 +11,7 @@ type Row = {
   name: string;
   short_name?: string;
   description: string;
+  url?: string;
   readonly title: string;
   created_at: Date;
   updated_by?: string;
@@ -30,6 +31,7 @@ export class ArmsLengthBodyStore {
         'name',
         'short_name',
         'description',
+        'url',
         'title',
         'id',
         'created_at',
@@ -42,6 +44,7 @@ export class ArmsLengthBodyStore {
       name: row.name,
       short_name: row?.short_name,
       description: row.description,
+      url: row?.url,
       title: row.title,
       id: row.id,
       timestamp: new Date(row.created_at),
@@ -57,6 +60,7 @@ export class ArmsLengthBodyStore {
         'name',
         'short_name',
         'description',
+        'url',
         'title',
         'id',
         'created_at',
@@ -70,10 +74,10 @@ export class ArmsLengthBodyStore {
           name: row.name,
           short_name: row?.short_name,
           description: row.description,
+          url: row?.url,
           title: row.title,
           id: row.id,
           timestamp: new Date(row.created_at),
-          
         }
       : null;
   }
@@ -89,6 +93,7 @@ export class ArmsLengthBodyStore {
         name: armsLengthBody.name,
         short_name: armsLengthBody?.short_name,
         description: armsLengthBody.description,
+        url: armsLengthBody?.url,
         title: createTitle(armsLengthBody.name),
         updated_by: creator,
       },
@@ -138,7 +143,9 @@ export class ArmsLengthBodyStore {
     if (armsLengthBody.description !== undefined) {
       updatedData.description = armsLengthBody.description;
     }
-
+    if (armsLengthBody.url !== undefined) {
+      updatedData.url = armsLengthBody.url;
+    }
     if (Object.keys(updatedData).length === 0) {
       return existingALB;
     }

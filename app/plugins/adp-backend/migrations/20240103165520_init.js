@@ -2,7 +2,7 @@
  * @param {import('knex').Knex} knex
  */
 exports.up = async function up(knex) {
-  return knex.schema.createTable('arms_length_bodies', table => {
+  return knex.schema.createTable('arms_length_body', table => {
     table.comment('Stores ALB data');
     table
       .string('creator')
@@ -28,6 +28,10 @@ exports.up = async function up(knex) {
       .string('description')
       .notNullable()
       .comment('Description of the ALB');
+    table
+      .string('url')
+      .nullable()
+      .comment('ALB URL');
     table
       .timestamp('created_at', { useTz: false })
       .notNullable()
@@ -56,5 +60,5 @@ exports.up = async function up(knex) {
  * @param {import('knex').Knex} knex
  */
 exports.down = async function down(knex) {
-  return knex.schema.dropTable('arms_length_bodies');
+  return knex.schema.dropTable('arms_length_body');
 };

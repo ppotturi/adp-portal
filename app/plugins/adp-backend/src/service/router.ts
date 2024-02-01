@@ -27,61 +27,65 @@ export async function createRouter(
     await adpDatabase.get(),
   );
 
-  armsLengthBodiesStore.add(
-    {
-      creator: 'ADP',
-      owner: 'ADP',
-      name: 'Environment Agency',
-      short_name: 'EA',
-      title: 'environment-agency',
-      description: '',
-    },
-    'Seed',
-  );
-  armsLengthBodiesStore.add(
-    {
-      creator: 'ADP',
-      owner: 'ADP',
-      name: 'Animal & Plant Health',
-      short_name: 'APHA',
-      title: 'animal-and-plant-health',
-      description: '',
-    },
-    'Seed',
-  );
-  armsLengthBodiesStore.add(
-    {
-      creator: 'ADP',
-      owner: 'ADP',
-      name: 'Rural Payments Agency',
-      short_name: 'RPA',
-      title: 'rural-payments-agency',
-      description: '',
-    },
-    'Seed',
-  );
-  armsLengthBodiesStore.add(
-    {
-      creator: 'ADP',
-      owner: 'ADP',
-      name: 'Natural England',
-      short_name: 'NE',
-      title: 'natural-england',
-      description: '',
-    },
-    'Seed',
-  );
-  armsLengthBodiesStore.add(
-    {
-      creator: 'ADP',
-      owner: 'ADP',
-      name: 'Marine & Maritime',
-      short_name: 'MMO',
-      title: 'marine-and-maritime',
-      description: '',
-    },
-    'Seed',
-  );
+  const getAllArmsLengthBodies = await armsLengthBodiesStore.getAll();
+
+  if (getAllArmsLengthBodies.length == 0) {
+    armsLengthBodiesStore.add(
+      {
+        creator: 'ADP',
+        owner: 'ADP',
+        name: 'Environment Agency',
+        short_name: 'EA',
+        title: 'environment-agency',
+        description: '',
+      },
+      'Seed',
+    );
+    armsLengthBodiesStore.add(
+      {
+        creator: 'ADP',
+        owner: 'ADP',
+        name: 'Animal & Plant Health',
+        short_name: 'APHA',
+        title: 'animal-and-plant-health',
+        description: '',
+      },
+      'Seed',
+    );
+    armsLengthBodiesStore.add(
+      {
+        creator: 'ADP',
+        owner: 'ADP',
+        name: 'Rural Payments Agency',
+        short_name: 'RPA',
+        title: 'rural-payments-agency',
+        description: '',
+      },
+      'Seed',
+    );
+    armsLengthBodiesStore.add(
+      {
+        creator: 'ADP',
+        owner: 'ADP',
+        name: 'Natural England',
+        short_name: 'NE',
+        title: 'natural-england',
+        description: '',
+      },
+      'Seed',
+    );
+    armsLengthBodiesStore.add(
+      {
+        creator: 'ADP',
+        owner: 'ADP',
+        name: 'Marine & Maritime',
+        short_name: 'MMO',
+        title: 'marine-and-maritime',
+        description: '',
+      },
+      'Seed',
+    );
+  }
 
   const router = Router();
   router.use(express.json());
@@ -108,10 +112,8 @@ export async function createRouter(
         data,
         req.body.name,
       );
-
       if (isDuplicate) {
         res.status(406).json({ error: 'ALB Name already exists' });
-        return;
       } else {
         const author = await getCurrentUsername(identity, req);
         const armsLengthBody = await armsLengthBodiesStore.add(

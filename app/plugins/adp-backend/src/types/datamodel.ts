@@ -6,5 +6,6 @@ export type ArmsLengthBody = {
     name: string;
     short_name?: string;
     description: string;
+    url?: string;
     readonly title: string
 }
