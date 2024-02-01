@@ -158,7 +158,7 @@ import {
     }
   
     /**
-   * Tracks the progress of the PuppetDB read and commit operations.
+   * Tracks the progress of the AdpDb read and commit operations.
    *
    * @param logger - The instance of a {@link Logger}.
    */
