@@ -130,6 +130,39 @@ export const AlbViewPageComponent = () => {
     },
   ];
 
+  const fields = [
+    {
+      label: 'Name',
+      name: 'name',
+      helperText:
+        'This must be unique - use letters, numbers, or separators such as "_", "-"',
+      validations: {
+        required: true,
+        pattern: {
+          value: /^([a-zA-Z0-9]+[-_.]?)*[a-zA-Z0-9]+$/,
+          message: 'Invalid ALB name format. Use letters, numbers, or "-", "_", "." as separators.',
+        },
+        
+      },
+    },
+    {
+      label: 'Short Name',
+      name: 'short_name',
+      helperText: 'Optional - a short form name to identify the body',
+    },
+    {
+      label: 'ALB Description',
+      name: 'description',
+      helperText: 'Max 200 Chars',
+      validations: {
+        required: true,
+        maxLength: 200,
+      },
+      multiline: true,
+      maxRows: 4,
+    },
+  ]
+
   return (
     <Page themeId="tool">
       <Header
@@ -147,38 +180,15 @@ export const AlbViewPageComponent = () => {
           View or add Arms Length Bodies to the Azure Developer Platform.
         </Typography>
         <DefaultTable data={tableData} columns={columns} title="View all" />
-
-        <EditModal
-          open={isModalOpen}
-          onClose={handleCloseModal}
-          onSubmit={handleUpdate}
-          initialValues={formData}
-          fields={[
-            {
-              label: 'Name',
-              name: 'name',
-              helperText:
-                'This must be unique - use letters, numbers, or separators such as "_", "-"',
-              validations: {
-                required: true,
-              },
-            },
-            {
-              label: 'Short Name',
-              name: 'short_name',
-              helperText: 'Optional - a short form name to identify the body',
-            },
-            {
-              label: 'ALB Description',
-              name: 'description',
-              helperText: 'Max 200 Chars',
-              validations: {
-                required: true,
-              },
-            },
-          ]}
-          titleData={formData}
-                  />
+        {isModalOpen && (
+          <EditModal
+            open={isModalOpen}
+            onClose={handleCloseModal}
+            onSubmit={handleUpdate}
+            initialValues={formData}
+            fields={fields}
+          />
+        )}
       </Content>
     </Page>
   );

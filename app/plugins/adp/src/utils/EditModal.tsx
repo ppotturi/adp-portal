@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -7,14 +7,23 @@ import {
   Button,
   TextField,
 } from '@material-ui/core';
-import { ArmsLengthBody } from '@internal/plugin-adp-backend';
+import { useForm } from 'react-hook-form';
 
-
+interface ArmsLengthBody {
+  id: string;
+  timestamp: Date;
+  creator: string;
+  owner: string;
+  name: string;
+  short_name?: string;
+  description: string;
+  readonly title?: string;
+}
 
 interface EditModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (armsLengthBody: ArmsLengthBody) => void;
+  onSubmit: (armsLengthBody: ArmsLengthBody) => Promise<void>;
   initialValues: Record<string, any>;
   fields: {
     label: string;
@@ -22,13 +31,16 @@ interface EditModalProps {
     helperText?: string;
     validations?: {
       required?: boolean;
-      maxChars?: number;
+      maxLength?: number;
+      pattern?: { 
+        value: RegExp;
+        message: string;
+      };
     };
+    multiline?: boolean;
+    maxRows?: number;
   }[];
-  titleData: Record<string, any>;
-  validateFormData?: (values: Record<string,any>) => Record<string,string>
 }
-
 
 export const EditModal: FC<EditModalProps> = ({
   open,
@@ -36,53 +48,73 @@ export const EditModal: FC<EditModalProps> = ({
   onSubmit,
   initialValues,
   fields,
-  titleData,
 }) => {
-  const [formValues, setFormValues] = useState(initialValues.id);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: initialValues,
+  });
 
-  const handleFieldChange = (name: string, value: any) => {
-    setFormValues((prevValues: any) => ({ ...prevValues, [name]: value }));
-  };
-
-  const handleSubmit = async() => {
-    onSubmit({ ...formValues, id: initialValues.id });
-    setFormValues({});
+  const onFormSubmit = (data: any) => {
+    onSubmit(data);
+    reset();
     onClose();
   };
-
-  const handleCancel = () => {
-    setFormValues({});
-    onClose();
-  };
-
-  const getTitle = () =>
-    titleData && titleData.name ? `Edit ${titleData.name}` : '';
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{getTitle()}</DialogTitle>
-      <DialogContent>
-        {fields.map(field => (
-          <TextField //controller 
-            key={field.name}
-            label={field.label}
-            defaultValue={initialValues[field.name] || ''}
-            onChange={e => handleFieldChange(field.name, e.target.value)}
-            fullWidth
-            margin="dense"
-            required={field.validations?.required}
-            helperText={field.helperText}
-          />
-        ))}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCancel} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit} color="primary">
-          Update
-        </Button>
-      </DialogActions>
+      <DialogTitle>{`Edit: ${initialValues.name || 'Record'}`}</DialogTitle>
+      <form onSubmit={handleSubmit(onFormSubmit)}>
+        <DialogContent>
+          {fields.map(field => (
+            <TextField
+              key={field.name}
+              label={field.label}
+              variant="outlined"
+              fullWidth
+              margin="dense"
+              {...register(field.name, {
+                required: field.validations?.required
+                  ? 'This field is required'
+                  : undefined,
+                maxLength: field.validations?.maxLength
+                  ? {
+                      value: field.validations.maxLength,
+                      message: `Maximum length is ${field.validations.maxLength} characters`,
+                    }
+                  : undefined,
+                  pattern: field.validations?.pattern ? {
+                    value: field.validations.pattern.value,
+                    message: field.validations.pattern.message,
+                  } : undefined,
+              })}
+              error={!!errors[field.name]}
+              helperText={errors[field.name]?.message || field.helperText}
+              multiline={field.multiline}
+              maxRows={field.maxRows}
+            />
+          ))}
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              reset(initialValues);
+              onClose();
+            }}
+            color="primary"
+          >
+            Cancel
+          </Button>
+          <Button type="submit" color="primary">
+            Update
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };
+
+export default EditModal;
