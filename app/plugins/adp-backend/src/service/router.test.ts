@@ -18,12 +18,6 @@ describe('createRouter', () => {
     }),
   };
 
-  mockIdentityApi.getIdentity.mockResolvedValue({
-    identity: { userEntityRef: 'user:default/johndoe' },
-  });
-
-  //TODO: Author still shows as unknown
-
   function createTestDatabase(): PluginDatabaseManager {
     return DatabaseManager.fromConfig(
       new ConfigReader({
@@ -68,8 +62,10 @@ describe('createRouter', () => {
 
   describe('POST /armsLengthBody', () => {
     it('returns ok', async () => {
+      mockIdentityApi.getIdentity.mockResolvedValue({
+        identity: { userEntityRef: 'user:default/johndoe' },
+      });
       const author = await getCurrentUsername(mockIdentityApi, express.request);
-
       const expectedALB = {
         creator: author,
         owner: author,
@@ -101,6 +97,9 @@ describe('createRouter', () => {
 
   describe('PATCH /armsLengthBody', () => {
     it('returns ok', async () => {
+      mockIdentityApi.getIdentity.mockResolvedValue({
+        identity: { userEntityRef: 'user:default/johndoe' },
+      });
       const author = await getCurrentUsername(mockIdentityApi, express.request);
 
       const expectedALB = {
