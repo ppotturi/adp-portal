@@ -3,14 +3,26 @@ import {
   PluginDatabaseManager,
   getVoidLogger,
 } from '@backstage/backend-common';
-import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
 import express from 'express';
 import request from 'supertest';
 import { createRouter } from './router';
 import { ConfigReader } from '@backstage/config';
 import { getCurrentUsername } from '../service/router';
+
 describe('createRouter', () => {
   let app: express.Express;
+
+  const mockIdentityApi = {
+    getIdentity: jest.fn().mockResolvedValue({
+      identity: { userEntityRef: 'user:default/johndoe' },
+    }),
+  };
+
+  mockIdentityApi.getIdentity.mockResolvedValue({
+    identity: { userEntityRef: 'user:default/johndoe' },
+  });
+
+  //TODO: Author still shows as unknown
 
   function createTestDatabase(): PluginDatabaseManager {
     return DatabaseManager.fromConfig(
@@ -28,7 +40,7 @@ describe('createRouter', () => {
   beforeAll(async () => {
     const router = await createRouter({
       logger: getVoidLogger(),
-      identity: {} as DefaultIdentityClient,
+      identity: mockIdentityApi,
       database: createTestDatabase(),
     });
     app = express().use(router);
@@ -56,60 +68,58 @@ describe('createRouter', () => {
 
   describe('POST /armsLengthBody', () => {
     it('returns ok', async () => {
-      const creator='unknown'
+      const author = await getCurrentUsername(mockIdentityApi, express.request);
+
       const expectedALB = {
-        creator: creator,
-        owner: creator,
-        name: 'Test ALB',
+        creator: author,
+        owner: author,
+        name: 'Test ALB example',
         short_name: 'ALB',
         description: 'This is an example ALB',
-      }
-      console.log(expectedALB)
-      const response = await request(app).post('/armsLengthBody').send(expectedALB)
-      console.log(response)
+      };
+      const response = await request(app)
+        .post('/armsLengthBody')
+        .send(expectedALB);
       expect(response.status).toEqual(200);
-    
     });
   });
 
   describe('POST /armsLengthBody', () => {
     it('returns 406 when ALB Name already exists', async () => {
-      const creator='John'
       const expectedALB = {
-        creator: creator,
-        owner: creator,
         name: 'Marine & Maritime',
         short_name: 'ALB',
         description: 'This is an example ALB',
-      }
-      const response = await request(app).post('/armsLengthBody').send(expectedALB)
+      };
+      const response = await request(app)
+        .post('/armsLengthBody')
+        .send(expectedALB);
       expect(response.status).toEqual(406);
-      expect(response.text).toEqual("{\"error\":\"ALB Name already exists\"}")
-    
+      expect(response.text).toEqual('{"error":"ALB Name already exists"}');
     });
   });
 
   describe('PATCH /armsLengthBody', () => {
     it('returns ok', async () => {
-      const creator='John'
-      const data = {
-        creator: creator,
-        owner: creator,
+      const author = await getCurrentUsername(mockIdentityApi, express.request);
+
+      const expectedALB = {
+        creator: author,
+        owner: author,
         name: 'Test ALB',
         short_name: 'ALB',
         description: 'This is an example ALB',
+      };
+      const postRequest = await request(app).post('/armsLengthBody').send(expectedALB);
+      expect(postRequest.status).toEqual(200);
+      const getCurrentData = await request(app).get('/armsLengthBody');
+      const currentDataId = getCurrentData.body.find((e: {name: string}) => e.name === 'Test ALB').id
+      const updatedALB = {
+        name: 'Test ALB updated',
+        id: currentDataId
       }
-      console.log(data)
-      await request(app).post('/armsLengthBody').send(data)
-      const updatedData = {
-        id: "",
-        name: 'Test ALB',
-      }
-      // console.log(updatedData)
-      const response = await request(app).patch('/armsLengthBody').send(updatedData)
-      // console.log(response)
-      expect(response.status).toEqual(200);
-    
+      const patchRequest = await request(app).patch('/armsLengthBody').send(updatedALB);
+      expect (patchRequest.status).toEqual(200);
     });
   });
 
