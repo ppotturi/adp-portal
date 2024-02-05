@@ -1,18 +1,18 @@
 import { Knex } from 'knex';
 import { NotFoundError } from '@backstage/errors';
 import { ArmsLengthBody } from '../types';
-import { createTitle } from '../utils';
+import { createName } from '../utils';
 
 const TABLE_NAME = 'arms_length_body';
 type Row = {
   id: string;
   creator: string;
   owner: string;
-  name: string;
+  title: string;
   short_name?: string;
   description: string;
   url?: string;
-  readonly title: string;
+  readonly name: string;
   created_at: Date;
   updated_by?: string;
   updated_at?: Date;
@@ -28,11 +28,11 @@ export class ArmsLengthBodyStore {
       .select(
         'creator',
         'owner',
-        'name',
+        'title',
         'short_name',
         'description',
         'url',
-        'title',
+        'name',
         'id',
         'created_at',
       )
@@ -41,11 +41,11 @@ export class ArmsLengthBodyStore {
     return ArmsLengthBodies.map(row => ({
       creator: row.creator,
       owner: row.owner,
-      name: row.name,
+      title: row.title,
       short_name: row?.short_name,
       description: row.description,
       url: row?.url,
-      title: row.title,
+      name: row.name,
       id: row.id,
       timestamp: new Date(row.created_at),
     }));
@@ -57,11 +57,11 @@ export class ArmsLengthBodyStore {
       .select(
         'creator',
         'owner',
-        'name',
+        'title',
         'short_name',
         'description',
         'url',
-        'title',
+        'name',
         'id',
         'created_at',
       )
@@ -71,11 +71,11 @@ export class ArmsLengthBodyStore {
       ? {
           creator: row.creator,
           owner: row.owner,
-          name: row.name,
+          title: row.title,
           short_name: row?.short_name,
           description: row.description,
           url: row?.url,
-          title: row.title,
+          name: row.name,
           id: row.id,
           timestamp: new Date(row.created_at),
         }
@@ -90,11 +90,11 @@ export class ArmsLengthBodyStore {
       {
         creator: creator,
         owner: creator,
-        name: armsLengthBody.name,
+        title: armsLengthBody.title,
         short_name: armsLengthBody?.short_name,
         description: armsLengthBody.description,
         url: armsLengthBody?.url,
-        title: createTitle(armsLengthBody.name),
+        name: createName(armsLengthBody.title),
         updated_by: creator,
       },
       ['id', 'created_at'],
@@ -102,7 +102,7 @@ export class ArmsLengthBodyStore {
 
     if (insertResult.length < 1) {
       throw new Error(
-        `Could not insert Arms Length Body ${armsLengthBody.name}`,
+        `Could not insert Arms Length Body ${armsLengthBody.title}`,
       );
     }
 
@@ -134,8 +134,8 @@ export class ArmsLengthBodyStore {
     const updated = new Date();
 
     const updatedData: Partial<ArmsLengthBody> = {};
-    if (armsLengthBody.name !== undefined) {
-      updatedData.name = armsLengthBody.name;
+    if (armsLengthBody.title !== undefined) {
+      updatedData.title = armsLengthBody.title;
     }
     if (armsLengthBody.short_name !== undefined) {
       updatedData.short_name = armsLengthBody.short_name;

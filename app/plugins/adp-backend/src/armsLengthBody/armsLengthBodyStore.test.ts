@@ -6,7 +6,7 @@ import {
 } from './armsLengthBodyStore';
 import { NotFoundError } from '@backstage/errors';
 import { ArmsLengthBody } from '../types';
-import { createTitle } from '../utils';
+import { createName } from '../utils';
 
 describe('armsLengthBodyStore', () => {
   const databases = TestDatabases.create();
@@ -25,16 +25,16 @@ describe('armsLengthBodyStore', () => {
       const expectedALB: Omit<ArmsLengthBody, 'id' | 'timestamp'> = {
         creator: 'john',
         owner: 'john',
-        name: 'ALB Example',
+        title: 'ALB Example',
         short_name: 'ALB',
         description: 'This is an example ALB',
         url: 'http://www.example.com/index.html',
-        title: 'alb-example',
+        name: 'alb-example',
       };
 
       const addResult = await store.add(expectedALB, 'test');
 
-      expect(addResult.title).toEqual(createTitle(expectedALB.name));
+      expect(addResult.name).toEqual(createName(expectedALB.title));
       expect(addResult.id).toBeDefined();
       expect(addResult.timestamp).toBeDefined();
     },
@@ -49,30 +49,30 @@ describe('armsLengthBodyStore', () => {
         {
           creator: 'john',
           owner: 'john',
-          name: 'ALB Example 1',
+          title: 'ALB Example 1',
           short_name: 'ALB 1',
           description: 'This is an example ALB 1',
           url: 'http://www.example.com/index.html',
-          title: 'alb-example-1',
+          name: 'alb-example-1',
           updated_by: 'john',
         },
         {
           creator: 'john',
           owner: 'johnD',
-          name: 'ALB Example 2',
+          title: 'ALB Example 2',
           short_name: 'ALB 2',
           description: 'This is an example ALB 2',
-          title: 'alb-example-2',
+          name: 'alb-example-2',
           updated_by: 'john',
         },
         {
           creator: 'john',
           owner: 'john',
-          name: 'ALB Example 3',
+          title: 'ALB Example 3',
           short_name: 'ALB 3',
           description: 'This is an example ALB 3',
           url: 'http://www.example.com/index.html',
-          title: 'alb-example-4',
+          name: 'alb-example-4',
           updated_by: 'john',
         },
       ]);
@@ -92,32 +92,32 @@ describe('armsLengthBodyStore', () => {
           {
             creator: 'john',
             owner: 'john',
-            name: 'ALB Example 1',
+            title: 'ALB Example 1',
             short_name: 'ALB 1',
             description: 'This is an example ALB 1',
             url: 'http://www.example.com/index.html',
             updated_by: 'john',
-            title: 'alb-example-1',
+            name: 'alb-example-1',
           },
           {
             creator: 'john',
             owner: 'johnD',
-            name: 'ALB Example 2',
+            title: 'ALB Example 2',
             short_name: 'ALB 2',
             description: 'This is an example ALB 2',
             url: 'http://www.example.com/index.html',
             updated_by: 'john',
-            title: 'alb-example-2',
+            name: 'alb-example-2',
           },
           {
             creator: 'john',
             owner: 'john',
-            name: 'ALB Example 3',
+            title: 'ALB Example 3',
             short_name: 'ALB 3',
             description: 'This is an example ALB 3',
             url: 'http://www.example.com/index.html',
             updated_by: 'john',
-            title: 'alb-example-3',
+            name: 'alb-example-3',
           },
         ],
         ['id'],
@@ -128,7 +128,7 @@ describe('armsLengthBodyStore', () => {
       const getResult = await store.get(test2Id);
 
       expect(getResult).toBeDefined();
-      expect(getResult?.name).toBe('ALB Example 2');
+      expect(getResult?.title).toBe('ALB Example 2');
       expect(getResult?.short_name).toBe('ALB 2');
       expect(getResult?.description).toBe('This is an example ALB 2');
       expect(getResult?.creator).toBe('john');
@@ -146,20 +146,20 @@ describe('armsLengthBodyStore', () => {
         {
           creator: 'john',
           owner: 'john',
-          name: 'ALB Example 1',
+          title: 'ALB Example 1',
           short_name: 'ALB 1',
           description: 'This is an example ALB 1',
           updated_by: 'john',
-          title: 'alb-example-1',
+          name: 'alb-example-1',
         },
         {
           creator: 'john',
           owner: 'johnD',
-          name: 'ALB Example 2',
+          title: 'ALB Example 2',
           short_name: 'ALB 2',
           description: 'This is an example ALB 2',
           updated_by: 'john',
-          title: 'alb-example-2',
+          name: 'alb-example-2',
         },
       ]);
 
@@ -179,20 +179,20 @@ describe('armsLengthBodyStore', () => {
           {
             creator: 'john',
             owner: 'john',
-            name: 'ALB Example 1',
+            title: 'ALB Example 1',
             short_name: 'ALB 1',
             description: 'This is an example ALB 1',
             updated_by: 'john',
-            title: 'alb-example-1',
+            name: 'alb-example-1',
           },
           {
             creator: 'john',
             owner: 'johnD',
-            name: 'ALB Example 2',
+            title: 'ALB Example 2',
             short_name: 'ALB 2',
             description: 'This is an example ALB 2',
             updated_by: 'john',
-            title: 'alb-example-2',
+            name: 'alb-example-2',
           },
         ],
         ['id'],
@@ -202,7 +202,7 @@ describe('armsLengthBodyStore', () => {
       const test2Id = insertedIds[1].id;
       const expectedUpdate: PartialArmsLenghBody = {
         id: test2Id,
-        name: 'ALB Example',
+        title: 'ALB Example',
         short_name: 'ALB',
         description: 'This is an example ALB 2',
         url: 'http://www.example.com/index.html',
@@ -212,7 +212,7 @@ describe('armsLengthBodyStore', () => {
       const updateResult = await store.update(expectedUpdate, 'test@test.com');
 
       expect(updateResult).toBeDefined();
-      expect(updateResult.name).toBe(expectedUpdate.name);
+      expect(updateResult.title).toBe(expectedUpdate.title);
       expect(updateResult.short_name).toBe(expectedUpdate.short_name);
       expect(updateResult.url).toBe(expectedUpdate.url);
     },
@@ -227,29 +227,29 @@ describe('armsLengthBodyStore', () => {
         {
           creator: 'john',
           owner: 'john',
-          name: 'ALB Example 1',
+          title: 'ALB Example 1',
           short_name: 'ALB 1',
           description: 'This is an example ALB 1',
           updated_by: 'john',
-          title: 'alb-example-1',
+          name: 'alb-example-1',
         },
         {
           creator: 'john',
           owner: 'johnD',
-          name: 'ALB Example 2',
+          title: 'ALB Example 2',
           short_name: 'ALB 2',
           description: 'This is an example ALB 2',
           updated_by: 'john',
-          title: 'alb-example-2',
+          name: 'alb-example-2',
         },
         {
           creator: 'john',
           owner: 'john',
-          name: 'ALB Example 3',
+          title: 'ALB Example 3',
           short_name: 'ALB 3',
           description: 'This is an example ALB 3',
           updated_by: 'john',
-          title: 'alb-example-3',
+          name: 'alb-example-3',
         },
       ]);
 
@@ -260,9 +260,9 @@ describe('armsLengthBodyStore', () => {
               id: '1234567',
               creator: 'n/a',
               owner: 'n/a',
-              name: 'Non-existent ALB',
+              title: 'Non-existent ALB',
               short_name: 'Non-existent ALB',
-              title: 'non-existent-alb',
+              name: 'non-existent-alb',
               description: 'n/a',
             },
             'test@test.com',

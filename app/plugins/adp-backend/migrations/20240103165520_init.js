@@ -15,11 +15,11 @@ exports.up = async function up(knex) {
     table
       .string('name')
       .notNullable()
-      .comment('ALB name');
+      .comment('ALB name in lower case and hyphens instead of spaces');
     table
       .string('title')
       .notNullable()
-      .comment('ALB name in lower case and hyphens instead of spaces');
+      .comment('ALB name');
     table
       .string('short_name')
       .nullable()

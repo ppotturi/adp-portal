@@ -7,7 +7,7 @@ import { PluginTaskScheduler, TaskRunner } from '@backstage/backend-tasks';
 import { Entity, GroupEntity } from '@backstage/catalog-model';
 import { Logger } from 'winston';
 import * as uuid from 'uuid';
-import { defaultGroupTransformer } from './transformers';
+import { defaultGroupTransformer } from './AlbTransformers';
 import { ArmsLengthBodyStore } from '../armsLengthBody/armsLengthBodyStore';
 import { AdpDatabase } from '../database/adpDatabase';
 import { PluginDatabaseManager } from '@backstage/backend-common';

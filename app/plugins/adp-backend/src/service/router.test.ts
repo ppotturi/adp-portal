@@ -69,7 +69,7 @@ describe('createRouter', () => {
       const expectedALB = {
         creator: author,
         owner: author,
-        name: 'Test ALB example',
+        title: 'Test ALB example',
         short_name: 'ALB',
         description: 'This is an example ALB',
       };
@@ -83,7 +83,7 @@ describe('createRouter', () => {
   describe('POST /armsLengthBody', () => {
     it('returns 406 when ALB Name already exists', async () => {
       const expectedALB = {
-        name: 'Marine & Maritime',
+        title: 'Marine & Maritime',
         short_name: 'ALB',
         description: 'This is an example ALB',
       };
@@ -105,20 +105,32 @@ describe('createRouter', () => {
       const expectedALB = {
         creator: author,
         owner: author,
-        name: 'Test ALB',
+        title: 'Test ALB',
         short_name: 'ALB',
         description: 'This is an example ALB',
       };
-      const postRequest = await request(app).post('/armsLengthBody').send(expectedALB);
+      const postRequest = await request(app)
+        .post('/armsLengthBody')
+        .send(expectedALB);
       expect(postRequest.status).toEqual(200);
       const getCurrentData = await request(app).get('/armsLengthBody');
-      const currentDataId = getCurrentData.body.find((e: {name: string}) => e.name === 'Test ALB').id
+      const currentData = getCurrentData.body.find(
+        (e: { title: string }) => e.title === 'Test ALB',
+      );
+      expect(currentData.name).toBe('test-alb');
       const updatedALB = {
-        name: 'Test ALB updated',
-        id: currentDataId
-      }
-      const patchRequest = await request(app).patch('/armsLengthBody').send(updatedALB);
-      expect (patchRequest.status).toEqual(200);
+        title: 'Test ALB updated',
+        id: currentData.id,
+      };
+      const patchRequest = await request(app)
+        .patch('/armsLengthBody')
+        .send(updatedALB);
+      expect(patchRequest.status).toEqual(200);
+      const getUpdatedtData = await request(app).get('/armsLengthBody');
+      const updatedData = getUpdatedtData.body.find(
+        (e: { title: string }) => e.title === 'Test ALB updated',
+      );
+      expect(updatedData.name).toBe('test-alb');
     });
   });
 

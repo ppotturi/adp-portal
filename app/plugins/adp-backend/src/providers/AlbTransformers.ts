@@ -1,5 +1,6 @@
 import { GroupEntity } from '@backstage/catalog-model';
 import { ArmsLengthBody } from '../types/datamodel';
+import { createTitle } from '../utils';
 
 export type GroupTransformer = (
   armsl: ArmsLengthBody,
@@ -12,9 +13,9 @@ export const defaultGroupTransformer: GroupTransformer = async (
     apiVersion: 'backstage.io/v1beta1',
     kind: 'Group',
     metadata: {
-      name: armsLengthBody.title,
-      title: armsLengthBody?.short_name,
-      description: armsLengthBody.description,
+      name: armsLengthBody.name,
+      title: createTitle(armsLengthBody.title, armsLengthBody.short_name), 
+      description: armsLengthBody?.description,
       tags: [],
       annotations: {
         'backstage.io/managed-by-location': `adp:arms-length-body\\${armsLengthBody.name}`,
@@ -24,7 +25,7 @@ export const defaultGroupTransformer: GroupTransformer = async (
     },
     spec: {
       type: 'arms-length-body',
-      children: [], // TODO: write query to get children from database
+      children: []
     },
   };
 };

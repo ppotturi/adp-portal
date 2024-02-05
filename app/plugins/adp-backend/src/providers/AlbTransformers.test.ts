@@ -1,14 +1,15 @@
-import { defaultGroupTransformer } from './transformers';
+import { defaultGroupTransformer } from './AlbTransformers';
 
 describe('defaultGroupTransformer', () => {
   it('should transform valid ArmsLengthBody to GroupEntity', async () => {
     const armsLengthBody = {
       creator: 'ADP',
       owner: 'ADP',
-      name: 'testname',
-      short_name: 'testShortName',
+      title: 'Environment Agency',
+      name: 'environment-agency',
+      short_name: 'EA',
       description: 'testDescription',
-      title: 'testname',
+      url: 'https://www.example.uk/',
       id: '1234',
       timestamp: new Date(),
     };
@@ -17,15 +18,15 @@ describe('defaultGroupTransformer', () => {
       apiVersion: 'backstage.io/v1beta1',
       kind: 'Group',
       metadata: {
-        name: 'testname',
-        title: 'testShortName',
+        name: 'environment-agency',
+        title: 'Environment Agency (EA)',
         description: 'testDescription',
         tags: [],
-        annotations: {
-          'backstage.io/managed-by-location': 'adp:arms-length-body\\testname',
-          'backstage.io/managed-by-origin-location':
-            '`adp:arms-length-body\\${armsLengthBody.name}`',
-        },
+            annotations: {
+              'backstage.io/managed-by-location': 'adp:arms-length-body\\environment-agency',
+              'backstage.io/managed-by-origin-location':
+                '`adp:arms-length-body\\${armsLengthBody.name}`',
+            },
       },
       spec: {
         type: 'arms-length-body',
@@ -36,5 +37,4 @@ describe('defaultGroupTransformer', () => {
     const result = await defaultGroupTransformer(armsLengthBody);
     expect(result).toEqual(expectedGroupEntity);
   });
-
 });
