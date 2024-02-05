@@ -2,7 +2,7 @@ import { TestDatabaseId, TestDatabases } from '@backstage/backend-test-utils';
 import { AdpDatabase } from '../database/adpDatabase';
 import {
   ArmsLengthBodyStore,
-  PartialArmsLenghBody,
+  PartialArmsLengthBody,
 } from './armsLengthBodyStore';
 import { NotFoundError } from '@backstage/errors';
 import { ArmsLengthBody } from '../types';
@@ -200,7 +200,7 @@ describe('armsLengthBodyStore', () => {
 
       // Get the 'Test 2' ALB
       const test2Id = insertedIds[1].id;
-      const expectedUpdate: PartialArmsLenghBody = {
+      const expectedUpdate: PartialArmsLengthBody = {
         id: test2Id,
         title: 'ALB Example',
         short_name: 'ALB',

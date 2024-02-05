@@ -7,7 +7,7 @@ import { IdentityApi } from '@backstage/plugin-auth-node';
 import { AdpDatabase } from '../database/adpDatabase';
 import {
   ArmsLengthBodyStore,
-  PartialArmsLenghBody,
+  PartialArmsLengthBody,
 } from '../armsLengthBody/armsLengthBodyStore';
 import { ArmsLengthBody } from '../types';
 
@@ -169,7 +169,7 @@ function isArmsLengthBodyCreateRequest(
 }
 
 function isArmsLengthBodyUpdateRequest(
-  request: Omit<PartialArmsLenghBody, 'timestamp'>,
+  request: Omit<PartialArmsLengthBody, 'timestamp'>,
 ) {
   return typeof request?.id === 'string';
 }

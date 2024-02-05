@@ -18,7 +18,7 @@ type Row = {
   updated_at?: Date;
 };
 
-export type PartialArmsLenghBody = Partial<ArmsLengthBody>;
+export type PartialArmsLengthBody = Partial<ArmsLengthBody>;
 
 export class ArmsLengthBodyStore {
   constructor(private readonly client: Knex) {}
@@ -114,7 +114,7 @@ export class ArmsLengthBodyStore {
   }
 
   async update(
-    armsLengthBody: Omit<PartialArmsLenghBody, 'timestamp'>,
+    armsLengthBody: Omit<PartialArmsLengthBody, 'timestamp'>,
     updatedBy: string,
   ): Promise<ArmsLengthBody> {
     if (armsLengthBody.id === undefined) {
