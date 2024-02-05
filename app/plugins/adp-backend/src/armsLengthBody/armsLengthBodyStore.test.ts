@@ -219,7 +219,7 @@ describe('armsLengthBodyStore', () => {
   );
 
   it.each(databases.eachSupportedId())(
-    'should no update a non-existent ALB',
+    'should not update a non-existent ALB',
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
