@@ -20,11 +20,13 @@ interface ArmsLengthBody {
   readonly title?: string;
 }
 
+
 interface EditModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (armsLengthBody: ArmsLengthBody) => Promise<void>;
   initialValues: Record<string, any>;
+  
   fields: {
     label: string;
     name: string;
@@ -63,6 +65,8 @@ export const EditModal: FC<EditModalProps> = ({
     reset();
     onClose();
   };
+
+  
 
   return (
     <Dialog open={open} onClose={onClose}>

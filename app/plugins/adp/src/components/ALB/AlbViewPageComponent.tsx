@@ -17,6 +17,8 @@ import {
   alertApiRef,
 } from '@backstage/core-plugin-api';
 import { ArmsLengthBody } from '@internal/plugin-adp-backend';
+import { armsLengthBodyClient } from '../../api/AlbClient';
+import { armsLengthBodyApi } from '../../api/AlbApi';
 
 export const AlbViewPageComponent = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -26,22 +28,24 @@ export const AlbViewPageComponent = () => {
   const alertApi = useApi(alertApiRef);
 
   const discoveryApi = useApi(discoveryApiRef);
-  const { fetch } = useApi(fetchApiRef);
+  const fetchApi = useApi(fetchApiRef);
 
-  const fetchTableData = async () => {
+  const albClient: armsLengthBodyApi = new armsLengthBodyClient(
+    discoveryApi,
+    fetchApi,
+  );
+
+  const getAllArmsLengthBodies = async () => {
     try {
-      const response = await fetch(
-        `${await discoveryApi.getBaseUrl('adp')}/armsLengthBody`,
-      );
-      const data = await response.json();
+      const data = await albClient.getArmsLengthBodies();
       setTableData(data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Errors fetching data', error);
     }
   };
 
   useEffect(() => {
-    fetchTableData();
+    getAllArmsLengthBodies();
   }, [key]);
 
   const handleEdit = (ArmsLengthBody: React.SetStateAction<{}>) => {
@@ -56,37 +60,15 @@ export const AlbViewPageComponent = () => {
 
   const handleUpdate = async (armsLengthBody: ArmsLengthBody) => {
     try {
-      const response = await fetch(
-        `${await discoveryApi.getBaseUrl('adp')}/armsLengthBody`,
-        {
-          method: 'PATCH',
-          body: JSON.stringify({ ...armsLengthBody }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      if (!response.ok) {
-        const responseBody = await response.json();
-        const errorMessage =
-          responseBody?.error ||
-          'An error occurred while updating the arms length body';
-        alertApi.post({
-          message: errorMessage,
-          severity: 'error',
-        });
-        setFormData({});
-        return;
-      }
+      await albClient.updateArmsLengthBody(armsLengthBody);
 
       refetchArmsLengthBody();
+      handleCloseModal();
     } catch (e: any) {
-      console.error('Error updating arms length body:', e.message);
-      alertApi.post({ message: e.message, severity: 'error' });
+      console.error('Error updating arms length body', e.message);
 
-      setFormData({});
+      alertApi.post({ message: e.message, severity: 'error' });
     }
-    handleCloseModal();
   };
 
   const columns: TableColumn[] = [
@@ -118,11 +100,11 @@ export const AlbViewPageComponent = () => {
     {
       title: 'Action',
       highlight: true,
-      render: ArmsLengthBody => (
+      render: rowData => (
         <Button
           variant="contained"
           color="primary"
-          onClick={() => handleEdit(ArmsLengthBody)}
+          onClick={() => handleEdit(rowData)}
         >
           Edit
         </Button>
@@ -140,9 +122,9 @@ export const AlbViewPageComponent = () => {
         required: true,
         pattern: {
           value: /^([a-zA-Z0-9]+[-_.]?)*[a-zA-Z0-9]+$/,
-          message: 'Invalid ALB name format. Use letters, numbers, or "-", "_", "." as separators.',
+          message:
+            'Invalid ALB name format. Use letters, numbers, or "-", "_", "." as separators.',
         },
-        
       },
     },
     {
@@ -161,7 +143,7 @@ export const AlbViewPageComponent = () => {
       multiline: true,
       maxRows: 4,
     },
-  ]
+  ];
 
   return (
     <Page themeId="tool">
