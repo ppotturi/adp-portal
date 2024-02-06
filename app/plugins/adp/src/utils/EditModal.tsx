@@ -76,6 +76,7 @@ export const EditModal: FC<EditModalProps> = ({
           {fields.map(field => (
             <TextField
               key={field.name}
+              id={field.name}
               label={field.label}
               variant="outlined"
               fullWidth
@@ -103,7 +104,7 @@ export const EditModal: FC<EditModalProps> = ({
           ))}
         </DialogContent>
         <DialogActions>
-          <Button
+          <Button type="submit"
             onClick={() => {
               reset(initialValues);
               onClose();
