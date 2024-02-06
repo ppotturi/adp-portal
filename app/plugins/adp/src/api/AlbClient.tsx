@@ -1,5 +1,5 @@
 import { armsLengthBodyApi } from './AlbApi';
-import { ArmsLengthBody } from '../api/types';
+import { ArmsLengthBody } from './types';
 
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { ResponseError } from '@backstage/errors';

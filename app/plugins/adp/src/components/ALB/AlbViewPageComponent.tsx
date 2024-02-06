@@ -91,7 +91,7 @@ export const AlbViewPageComponent = () => {
       type: 'string',
     },
     {
-      title: 'Created at',
+      title: 'Updated at',
       field: 'timestamp',
       highlight: false,
       type: 'date',
