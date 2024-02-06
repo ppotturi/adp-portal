@@ -1,4 +1,4 @@
-import { ArmsLengthBody } from '../api/types'
+import { ArmsLengthBody } from './types'
 
 export interface armsLengthBodyApi {
 
