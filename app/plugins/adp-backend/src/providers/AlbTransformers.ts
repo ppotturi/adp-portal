@@ -14,7 +14,7 @@ export const defaultGroupTransformer: GroupTransformer = async (
     kind: 'Group',
     metadata: {
       name: armsLengthBody.name,
-      title: createTitle(armsLengthBody.title, armsLengthBody.short_name), 
+      title: createTitle(armsLengthBody.title, armsLengthBody.short_name),
       description: armsLengthBody?.description,
       tags: [],
       annotations: {
@@ -22,10 +22,11 @@ export const defaultGroupTransformer: GroupTransformer = async (
         'backstage.io/managed-by-origin-location':
           '`adp:arms-length-body\\${armsLengthBody.name}`',
       },
+      links: [{ url: armsLengthBody.url ? armsLengthBody.url : '' }],
     },
     spec: {
       type: 'arms-length-body',
-      children: []
+      children: [],
     },
   };
 };

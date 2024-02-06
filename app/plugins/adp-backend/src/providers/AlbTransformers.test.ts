@@ -22,11 +22,15 @@ describe('defaultGroupTransformer', () => {
         title: 'Environment Agency (EA)',
         description: 'testDescription',
         tags: [],
-            annotations: {
-              'backstage.io/managed-by-location': 'adp:arms-length-body\\environment-agency',
-              'backstage.io/managed-by-origin-location':
-                '`adp:arms-length-body\\${armsLengthBody.name}`',
-            },
+        annotations: {
+          'backstage.io/managed-by-location':
+            'adp:arms-length-body\\environment-agency',
+          'backstage.io/managed-by-origin-location':
+            '`adp:arms-length-body\\${armsLengthBody.name}`',
+        },
+        links: [
+          {url: 'https://www.example.uk/'}
+        ]
       },
       spec: {
         type: 'arms-length-body',
