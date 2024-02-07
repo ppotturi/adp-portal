@@ -10,17 +10,28 @@ import {
   PartialArmsLengthBody,
 } from '../armsLengthBody/armsLengthBodyStore';
 import { ArmsLengthBody } from '../types';
+import { Config } from '@backstage/config';
 
 export interface RouterOptions {
   logger: Logger;
   identity: IdentityApi;
   database: PluginDatabaseManager;
+  config: Config;
+}
+
+export function getOwner(options: RouterOptions): string {
+  const { config } = options;
+  const ownerAdGroup = config.getConfig('adGroup');
+  const owner = ownerAdGroup.getString('adminsGroup');
+  return owner;
 }
 
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
   const { logger, identity, database } = options;
+
+  const owner = getOwner(options);
 
   const adpDatabase = AdpDatabase.create(database);
   const armsLengthBodiesStore = new ArmsLengthBodyStore(
@@ -40,6 +51,7 @@ export async function createRouter(
         description: '',
       },
       'Seed',
+      'Seed',
     );
     armsLengthBodiesStore.add(
       {
@@ -50,6 +62,7 @@ export async function createRouter(
         name: 'animal-and-plant-health',
         description: '',
       },
+      'Seed',
       'Seed',
     );
     armsLengthBodiesStore.add(
@@ -62,6 +75,7 @@ export async function createRouter(
         description: '',
       },
       'Seed',
+      'Seed',
     );
     armsLengthBodiesStore.add(
       {
@@ -73,6 +87,7 @@ export async function createRouter(
         description: '',
       },
       'Seed',
+      'Seed',
     );
     armsLengthBodiesStore.add(
       {
@@ -83,6 +98,7 @@ export async function createRouter(
         name: 'marine-and-maritime',
         description: '',
       },
+      'Seed',
       'Seed',
     );
   }
@@ -115,10 +131,11 @@ export async function createRouter(
       if (isDuplicate) {
         res.status(406).json({ error: 'ALB Name already exists' });
       } else {
-        const author = await getCurrentUsername(identity, req);
+        const creator = await getCurrentUsername(identity, req);
         const armsLengthBody = await armsLengthBodiesStore.add(
           req.body,
-          author,
+          creator,
+          owner,
         );
         res.json(armsLengthBody);
       }
@@ -148,10 +165,10 @@ export async function createRouter(
           return;
         }
       }
-      const author = await getCurrentUsername(identity, req);
+      const creator = await getCurrentUsername(identity, req);
       const armsLengthBody = await armsLengthBodiesStore.update(
         req.body,
-        author,
+        creator,
       );
       res.json(armsLengthBody);
     } catch (error) {

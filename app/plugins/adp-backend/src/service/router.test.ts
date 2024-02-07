@@ -5,7 +5,7 @@ import {
 } from '@backstage/backend-common';
 import express from 'express';
 import request from 'supertest';
-import { checkForDuplicateName, createRouter } from './router';
+import { checkForDuplicateName, createRouter, getOwner } from './router';
 import { ConfigReader } from '@backstage/config';
 import { getCurrentUsername } from '../service/router';
 
@@ -17,7 +17,18 @@ describe('createRouter', () => {
       identity: { userEntityRef: 'user:default/johndoe' },
     }),
   };
-
+  const mockConfig = new ConfigReader({
+    adGroup: {
+      adminsGroup: 'test',
+    },
+  });
+  const mockOptions = {
+    logger: getVoidLogger(),
+    identity: mockIdentityApi,
+    database: createTestDatabase(),
+    config: mockConfig,
+  };
+  const owner = getOwner(mockOptions);
   function createTestDatabase(): PluginDatabaseManager {
     return DatabaseManager.fromConfig(
       new ConfigReader({
@@ -32,11 +43,7 @@ describe('createRouter', () => {
   }
 
   beforeAll(async () => {
-    const router = await createRouter({
-      logger: getVoidLogger(),
-      identity: mockIdentityApi,
-      database: createTestDatabase(),
-    });
+    const router = await createRouter(mockOptions);
     app = express().use(router);
   });
 
@@ -65,10 +72,14 @@ describe('createRouter', () => {
       mockIdentityApi.getIdentity.mockResolvedValue({
         identity: { userEntityRef: 'user:default/johndoe' },
       });
-      const author = await getCurrentUsername(mockIdentityApi, express.request);
+      const creator = await getCurrentUsername(
+        mockIdentityApi,
+        express.request,
+      );
+
       const expectedALB = {
-        creator: author,
-        owner: author,
+        creator: creator,
+        owner: owner,
         title: 'Test ALB example',
         short_name: 'ALB',
         description: 'This is an example ALB',
@@ -117,11 +128,14 @@ describe('createRouter', () => {
       mockIdentityApi.getIdentity.mockResolvedValue({
         identity: { userEntityRef: 'user:default/johndoe' },
       });
-      const author = await getCurrentUsername(mockIdentityApi, express.request);
+      const creator = await getCurrentUsername(
+        mockIdentityApi,
+        express.request,
+      );
 
       const expectedALB = {
-        creator: author,
-        owner: author,
+        creator: creator,
+        owner: owner,
         title: 'Test ALB',
         short_name: 'ALB',
         description: 'This is an example ALB',

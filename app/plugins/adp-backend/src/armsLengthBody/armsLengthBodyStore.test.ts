@@ -32,7 +32,7 @@ describe('armsLengthBodyStore', () => {
         name: 'alb-example',
       };
 
-      const addResult = await store.add(expectedALB, 'test');
+      const addResult = await store.add(expectedALB, 'test', 'test group');
 
       expect(addResult.name).toEqual(createName(expectedALB.title));
       expect(addResult.id).toBeDefined();

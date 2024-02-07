@@ -22,7 +22,6 @@ export type PartialArmsLengthBody = Partial<ArmsLengthBody>;
 
 export class ArmsLengthBodyStore {
   constructor(private readonly client: Knex) {}
-
   async getAll(): Promise<ArmsLengthBody[]> {
     const ArmsLengthBodies = await this.client<Row>(TABLE_NAME)
       .select(
@@ -85,11 +84,12 @@ export class ArmsLengthBodyStore {
   async add(
     armsLengthBody: Omit<ArmsLengthBody, 'id' | 'timestamp'>,
     creator: string,
+    owner: string,
   ): Promise<ArmsLengthBody> {
     const insertResult = await this.client<Row>(TABLE_NAME).insert(
       {
         creator: creator,
-        owner: creator,
+        owner: owner,
         title: armsLengthBody.title,
         short_name: armsLengthBody?.short_name,
         description: armsLengthBody.description,
