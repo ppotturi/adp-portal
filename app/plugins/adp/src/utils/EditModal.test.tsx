@@ -1,8 +1,14 @@
 import EditModal from './EditModal';
-
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
+import { useApi} from '@backstage/core-plugin-api';
+
+jest.mock('@backstage/core-plugin-api', () => ({
+  useApi: jest.fn(),
+}));
+
 
 describe('EditModal', () => {
   const initialValues = {
@@ -23,6 +29,12 @@ describe('EditModal', () => {
   const onCloseMock = jest.fn();
 
   beforeEach(() => {
+    (useApi as jest.Mock).mockReturnValue({
+      alertApi: {
+        post: jest.fn(),
+      },
+    });
+
     render(
       <EditModal
         open={true}
@@ -76,4 +88,6 @@ describe('EditModal', () => {
     ).toBeInTheDocument();
     expect(onSubmitMock).not.toHaveBeenCalled();
   });
+
+ 
 });
