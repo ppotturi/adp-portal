@@ -15,6 +15,7 @@ import {
   discoveryApiRef,
   fetchApiRef,
   alertApiRef,
+  errorApiRef,
 } from '@backstage/core-plugin-api';
 import { ArmsLengthBody } from '@internal/plugin-adp-backend';
 import { armsLengthBodyClient } from '../../api/AlbClient';
@@ -26,6 +27,7 @@ export const AlbViewPageComponent = () => {
   const [tableData, setTableData] = useState<ArmsLengthBody[]>([]);
   const [key, refetchArmsLengthBody] = useReducer(i => i + 1, 0);
   const alertApi = useApi(alertApiRef);
+  const errorApi = useApi(errorApiRef);
 
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
@@ -39,8 +41,8 @@ export const AlbViewPageComponent = () => {
     try {
       const data = await albClient.getArmsLengthBodies();
       setTableData(data);
-    } catch (error) {
-      console.error('Errors fetching data', error);
+    } catch (e: any) {
+      errorApi.post(e);
     }
   };
 
@@ -54,20 +56,46 @@ export const AlbViewPageComponent = () => {
   };
 
   const handleCloseModal = () => {
+    console.log('closing modal');
     setFormData({});
     setModalOpen(false);
   };
 
+  const isNameUnique = (name: string, id: string) => {
+    return !tableData.some(
+      item => item.name.toLowerCase() === name.toLowerCase() && item.id !== id,
+    );
+  };
+
   const handleUpdate = async (armsLengthBody: ArmsLengthBody) => {
+    if (!isNameUnique(armsLengthBody.name, armsLengthBody.id)) {
+      setModalOpen(true);
+
+      alertApi.post({
+        message: `The name '${armsLengthBody.name}' is already in use. Please choose a different name.`,
+        severity: 'error',
+        display: 'permanent',
+      });
+
+      return;
+    }
+
     try {
       await albClient.updateArmsLengthBody(armsLengthBody);
-
+      alertApi.post({
+        message: `Updated`,
+        severity: 'success',
+        display: 'transient',
+      });
       refetchArmsLengthBody();
-      handleCloseModal();
     } catch (e: any) {
-      console.error('Error updating arms length body', e.message);
-
-      alertApi.post({ message: e.message, severity: 'error' });
+      errorApi.post(e);
+      alertApi.post({
+        message: e.message,
+        severity: 'error',
+        display: 'permanent',
+      });
+      throw e;
     }
   };
 
@@ -121,7 +149,7 @@ export const AlbViewPageComponent = () => {
       validations: {
         required: true,
         pattern: {
-          value: /^([a-zA-Z0-9]+[-_.]?)*[a-zA-Z0-9]+$/,
+          value: /^([a-zA-Z0-9 ]+[-_. ]?)*[a-zA-Z0-9]+$/,
           message:
             'Invalid ALB name format. Use letters, numbers, or "-", "_", "." as separators.',
         },

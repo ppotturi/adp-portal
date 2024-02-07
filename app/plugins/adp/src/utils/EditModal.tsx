@@ -8,25 +8,15 @@ import {
   TextField,
 } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
-
-interface ArmsLengthBody {
-  id: string;
-  timestamp: Date;
-  creator: string;
-  owner: string;
-  name: string;
-  short_name?: string;
-  description: string;
-  readonly title?: string;
-}
-
+import { ArmsLengthBody } from '../../../adp-common/src/types';
+import { alertApiRef, useApi } from '@backstage/core-plugin-api';
 
 interface EditModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (armsLengthBody: ArmsLengthBody) => Promise<void>;
   initialValues: Record<string, any>;
-  
+
   fields: {
     label: string;
     name: string;
@@ -34,7 +24,7 @@ interface EditModalProps {
     validations?: {
       required?: boolean;
       maxLength?: number;
-      pattern?: { 
+      pattern?: {
         value: RegExp;
         message: string;
       };
@@ -59,14 +49,21 @@ export const EditModal: FC<EditModalProps> = ({
   } = useForm({
     defaultValues: initialValues,
   });
+  const alertApi = useApi(alertApiRef);
 
-  const onFormSubmit = (data: any) => {
-    onSubmit(data);
-    reset();
-    onClose();
+  const onFormSubmit = async (data: any) => {
+    try {
+      await onSubmit(data);
+      reset();
+      onClose();
+    } catch (e: any) {
+      alertApi.post({
+        message: e.message,
+        severity: 'error',
+        display: 'permanent',
+      });
+    }
   };
-
-  
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -91,10 +88,12 @@ export const EditModal: FC<EditModalProps> = ({
                       message: `Maximum length is ${field.validations.maxLength} characters`,
                     }
                   : undefined,
-                  pattern: field.validations?.pattern ? {
-                    value: field.validations.pattern.value,
-                    message: field.validations.pattern.message,
-                  } : undefined,
+                pattern: field.validations?.pattern
+                  ? {
+                      value: field.validations.pattern.value,
+                      message: field.validations.pattern.message,
+                    }
+                  : undefined,
               })}
               error={!!errors[field.name]}
               helperText={errors[field.name]?.message || field.helperText}
@@ -104,7 +103,7 @@ export const EditModal: FC<EditModalProps> = ({
           ))}
         </DialogContent>
         <DialogActions>
-          <Button type="submit"
+          <Button
             onClick={() => {
               reset(initialValues);
               onClose();
