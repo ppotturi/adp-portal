@@ -16,6 +16,7 @@ interface EditModalProps {
   onClose: () => void;
   onSubmit: (armsLengthBody: ArmsLengthBody) => Promise<void>;
   initialValues: Record<string, any>;
+  mode: 'create' | 'edit';
 
   fields: {
     label: string;
@@ -39,6 +40,7 @@ export const EditModal: FC<EditModalProps> = ({
   onClose,
   onSubmit,
   initialValues,
+  mode,
   fields,
 }) => {
   const {
@@ -67,7 +69,7 @@ export const EditModal: FC<EditModalProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{`Edit: ${initialValues.name || 'Record'}`}</DialogTitle>
+      <DialogTitle>{`${mode === 'edit' ? 'Edit' : 'Create'}: ${initialValues.name || ''}`}</DialogTitle>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <DialogContent>
           {fields.map(field => (

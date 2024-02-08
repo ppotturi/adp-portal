@@ -20,6 +20,9 @@ import {
 import { ArmsLengthBody } from '@internal/plugin-adp-backend';
 import { armsLengthBodyClient } from '../../api/AlbClient';
 import { armsLengthBodyApi } from '../../api/AlbApi';
+import CreateAlb from './CreateAlb';
+import { albFormFields } from './AlbFormFields';
+import EditIcon from '@mui/icons-material/Edit';
 
 export const AlbViewPageComponent = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -28,9 +31,9 @@ export const AlbViewPageComponent = () => {
   const [key, refetchArmsLengthBody] = useReducer(i => i + 1, 0);
   const alertApi = useApi(alertApiRef);
   const errorApi = useApi(errorApiRef);
-
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
+  const fields = albFormFields;
 
   const albClient: armsLengthBodyApi = new armsLengthBodyClient(
     discoveryApi,
@@ -121,6 +124,10 @@ export const AlbViewPageComponent = () => {
     {
       title: 'Updated at',
       field: 'timestamp',
+      render: (data: {}) => {
+        const e = data as ArmsLengthBody;
+        return new Date(e.timestamp).toLocaleString();
+      },
       highlight: false,
       type: 'date',
     },
@@ -131,45 +138,13 @@ export const AlbViewPageComponent = () => {
       render: rowData => (
         <Button
           variant="contained"
-          color="primary"
+          color="default"
+          startIcon={<EditIcon />}
           onClick={() => handleEdit(rowData)}
         >
           Edit
         </Button>
       ),
-    },
-  ];
-
-  const fields = [
-    {
-      label: 'Name',
-      name: 'name',
-      helperText:
-        'This must be unique - use letters, numbers, or separators such as "_", "-"',
-      validations: {
-        required: true,
-        pattern: {
-          value: /^([a-zA-Z0-9 ]+[-_. ]?)*[a-zA-Z0-9]+$/,
-          message:
-            'Invalid ALB name format. Use letters, numbers, or "-", "_", "." as separators.',
-        },
-      },
-    },
-    {
-      label: 'Short Name',
-      name: 'short_name',
-      helperText: 'Optional - a short form name to identify the body',
-    },
-    {
-      label: 'ALB Description',
-      name: 'description',
-      helperText: 'Max 200 Chars',
-      validations: {
-        required: true,
-        maxLength: 200,
-      },
-      multiline: true,
-      maxRows: 4,
     },
   ];
 
@@ -181,6 +156,7 @@ export const AlbViewPageComponent = () => {
       />
       <Content>
         <ContentHeader title="Arms Length Bodies">
+          <CreateAlb refetchArmsLengthBody={refetchArmsLengthBody} />
           <SupportButton>
             View or manage units within the DEFRA delivery organization on the
             Azure Developer Platform.
@@ -196,6 +172,7 @@ export const AlbViewPageComponent = () => {
             onClose={handleCloseModal}
             onSubmit={handleUpdate}
             initialValues={formData}
+            mode="edit"
             fields={fields}
           />
         )}

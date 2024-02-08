@@ -1,1 +1,1 @@
-export { LandingPageComponent } from './LandingPageComponent';
+export { LandingPageComponent } from '../ADP Data/LandingPageComponent';
