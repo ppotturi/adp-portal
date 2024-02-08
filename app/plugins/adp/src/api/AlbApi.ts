@@ -1,4 +1,4 @@
-import { ArmsLengthBody } from '../../../adp-common/src/types'
+import { ArmsLengthBody } from '@internal/plugin-adp-common'
 
 export interface armsLengthBodyApi {
 

@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
-import { ArmsLengthBody } from '../../../adp-common/src/types';
+import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import { alertApiRef, useApi } from '@backstage/core-plugin-api';
 
 interface EditModalProps {
