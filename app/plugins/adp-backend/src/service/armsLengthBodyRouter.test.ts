@@ -5,9 +5,9 @@ import {
 } from '@backstage/backend-common';
 import express from 'express';
 import request from 'supertest';
-import { checkForDuplicateName, createRouter, getOwner } from './router';
+import { checkForDuplicateTitle, createRouter, getOwner } from './armsLengthBodyRouter';
 import { ConfigReader } from '@backstage/config';
-import { getCurrentUsername } from '../service/router';
+import { getCurrentUsername } from './armsLengthBodyRouter';
 
 describe('createRouter', () => {
   let app: express.Express;
@@ -85,7 +85,7 @@ describe('createRouter', () => {
         description: 'This is an example ALB',
       };
       const getExistingData = await request(app).get('/armsLengthBody');
-      const checkDuplicate = await checkForDuplicateName(
+      const checkDuplicate = await checkForDuplicateTitle(
         getExistingData.body,
         expectedALB.title,
       );

@@ -11,7 +11,7 @@ exports.up = async function up(knex) {
     table
       .string('owner')
       .notNullable()
-      .comment('Username of the ALB owner');
+      .comment('AD group of the ALB owner');
     table
       .string('name')
       .notNullable()

@@ -6,7 +6,7 @@ import {
 } from '@backstage/backend-common';
 import { Server } from 'http';
 import { Logger } from 'winston';
-import { createRouter } from './router';
+import { createRouter } from './armsLengthBodyRouter';
 import { ConfigReader } from '@backstage/config';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
 

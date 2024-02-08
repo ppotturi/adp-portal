@@ -6,10 +6,10 @@ import { InputError } from '@backstage/errors';
 import { IdentityApi } from '@backstage/plugin-auth-node';
 import { AdpDatabase } from '../database/adpDatabase';
 import {
-  ArmsLengthBodyStore,
-  PartialArmsLengthBody,
-} from '../armsLengthBody/armsLengthBodyStore';
-import { ArmsLengthBody } from '../types';
+    DeliveryProgrammeStore,
+  PartialDeliveryProgramme,
+} from '../deliveryProgramme/deliveryProgrammeStore';
+import { DeliveryProgramme } from '../types';
 import { Config } from '@backstage/config';
 
 export interface RouterOptions {
@@ -34,74 +34,9 @@ export async function createRouter(
   const owner = getOwner(options);
 
   const adpDatabase = AdpDatabase.create(database);
-  const armsLengthBodiesStore = new ArmsLengthBodyStore(
+  const deliveryProgrammesStore = new DeliveryProgrammeStore(
     await adpDatabase.get(),
   );
-
-  const getAllArmsLengthBodies = await armsLengthBodiesStore.getAll();
-
-  if (getAllArmsLengthBodies.length == 0) {
-    armsLengthBodiesStore.add(
-      {
-        creator: 'ADP',
-        owner: 'ADP',
-        title: 'Environment Agency',
-        short_name: 'EA',
-        name: 'environment-agency',
-        description: '',
-      },
-      'Seed',
-      'Seed',
-    );
-    armsLengthBodiesStore.add(
-      {
-        creator: 'ADP',
-        owner: 'ADP',
-        title: 'Animal & Plant Health',
-        short_name: 'APHA',
-        name: 'animal-and-plant-health',
-        description: '',
-      },
-      'Seed',
-      'Seed',
-    );
-    armsLengthBodiesStore.add(
-      {
-        creator: 'ADP',
-        owner: 'ADP',
-        title: 'Rural Payments Agency',
-        short_name: 'RPA',
-        name: 'rural-payments-agency',
-        description: '',
-      },
-      'Seed',
-      'Seed',
-    );
-    armsLengthBodiesStore.add(
-      {
-        creator: 'ADP',
-        owner: 'ADP',
-        title: 'Natural England',
-        short_name: 'NE',
-        name: 'natural-england',
-        description: '',
-      },
-      'Seed',
-      'Seed',
-    );
-    armsLengthBodiesStore.add(
-      {
-        creator: 'ADP',
-        owner: 'ADP',
-        title: 'Marine & Maritime',
-        short_name: 'MMO',
-        name: 'marine-and-maritime',
-        description: '',
-      },
-      'Seed',
-      'Seed',
-    );
-  }
 
   const router = Router();
   router.use(express.json());
@@ -112,65 +47,65 @@ export async function createRouter(
     response.json({ status: 'ok' });
   });
 
-  router.get('/armsLengthBody', async (_req, res) => {
-    const data = await armsLengthBodiesStore.getAll();
+  router.get('/deliveryProgramme', async (_req, res) => {
+    const data = await deliveryProgrammesStore.getAll();
     res.json(data);
   });
 
-  router.post('/armsLengthBody', async (req, res) => {
+  router.post('/deliveryProgramme', async (req, res) => {
     try {
-      if (!isArmsLengthBodyCreateRequest(req.body)) {
+      if (!isDeliveryProgrammeCreateRequest(req.body)) {
         throw new InputError('Invalid payload');
       }
 
-      const data: ArmsLengthBody[] = await armsLengthBodiesStore.getAll();
-      const isDuplicate: boolean = await checkForDuplicateName(
+      const data: DeliveryProgramme[] = await deliveryProgrammesStore.getAll();
+      const isDuplicate: boolean = await checkForDuplicateTitle(
         data,
         req.body.title,
       );
       if (isDuplicate) {
-        res.status(406).json({ error: 'ALB Name already exists' });
+        res.status(406).json({ error: 'Delivery Programme Name already exists' });
       } else {
         const creator = await getCurrentUsername(identity, req);
-        const armsLengthBody = await armsLengthBodiesStore.add(
+        const deliveryProgramme = await deliveryProgrammesStore.add(
           req.body,
           creator,
           owner,
         );
-        res.json(armsLengthBody);
+        res.json(deliveryProgramme);
       }
     } catch (error) {
       throw new InputError('Error');
     }
   });
 
-  router.patch('/armsLengthBody', async (req, res) => {
+  router.patch('/deliveryProgramme', async (req, res) => {
     try {
-      if (!isArmsLengthBodyUpdateRequest(req.body)) {
+      if (!isDeliveryProgrammeUpdateRequest(req.body)) {
         throw new InputError('Invalid payload');
       }
-      const data: ArmsLengthBody[] = await armsLengthBodiesStore.getAll();
+      const data: DeliveryProgramme[] = await deliveryProgrammesStore.getAll();
       const currentData = data.find(object => object.id === req.body.id);
       const updatedTitle = req.body?.title;
       const currentTitle = currentData?.title;
       const isTitleChanged = updatedTitle && currentTitle !== updatedTitle;
 
       if (isTitleChanged) {
-        const isDuplicate: boolean = await checkForDuplicateName(
+        const isDuplicate: boolean = await checkForDuplicateTitle(
           data,
           updatedTitle,
         );
         if (isDuplicate) {
-          res.status(406).json({ error: 'ALB Name already exists' });
+          res.status(406).json({ error: 'Delivery Programme Name already exists' });
           return;
         }
       }
       const creator = await getCurrentUsername(identity, req);
-      const armsLengthBody = await armsLengthBodiesStore.update(
+      const deliveryProgramme = await deliveryProgrammesStore.update(
         req.body,
         creator,
       );
-      res.json(armsLengthBody);
+      res.json(deliveryProgramme);
     } catch (error) {
       throw new InputError('Error');
     }
@@ -179,14 +114,14 @@ export async function createRouter(
   return router;
 }
 
-function isArmsLengthBodyCreateRequest(
-  request: Omit<ArmsLengthBody, 'id' | 'timestamp'>,
+function isDeliveryProgrammeCreateRequest(
+  request: Omit<DeliveryProgramme, 'id' | 'timestamp'>,
 ) {
   return typeof request?.title === 'string';
 }
 
-function isArmsLengthBodyUpdateRequest(
-  request: Omit<PartialArmsLengthBody, 'timestamp'>,
+function isDeliveryProgrammeUpdateRequest(
+  request: Omit<PartialDeliveryProgramme, 'timestamp'>,
 ) {
   return typeof request?.id === 'string';
 }
@@ -199,8 +134,8 @@ export async function getCurrentUsername(
   return user?.identity.userEntityRef ?? 'unknown';
 }
 
-export async function checkForDuplicateName(
-  store: ArmsLengthBody[],
+export async function checkForDuplicateTitle(
+  store: DeliveryProgramme[],
   title: string,
 ): Promise<boolean> {
   title = title.trim().toLowerCase();
