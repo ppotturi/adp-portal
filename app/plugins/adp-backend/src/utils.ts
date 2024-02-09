@@ -3,7 +3,7 @@ export function createName (name: string) {
     return nameValue;
 }
 
-export function createTitle(title:string, short_name?: string) {
-    const titleValue =  short_name ? (title + " " + `(${short_name})`) : title
+export function createTitle(title:string, alias?: string) {
+    const titleValue =  alias ? (title + " " + `(${alias})`) : title
     return titleValue;
 }

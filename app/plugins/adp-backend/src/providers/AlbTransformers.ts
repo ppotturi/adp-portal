@@ -14,7 +14,7 @@ export const defaultGroupTransformer: GroupTransformer = async (
     kind: 'Group',
     metadata: {
       name: armsLengthBody.name,
-      title: createTitle(armsLengthBody.title, armsLengthBody.short_name),
+      title: createTitle(armsLengthBody.title, armsLengthBody.alias),
       description: armsLengthBody?.description,
       tags: [],
       annotations: {

@@ -21,12 +21,12 @@ describe('createName', () => {
 });
 
 describe('createTitle', () => {
-  it('returns the title as is if no short_name is provided', () => {
+  it('returns the title as is if no alias is provided', () => {
     const title = 'Example Title';
     expect(createTitle(title)).toBe(title);
   });
 
-  it('puts the short_name in brackets if provided', () => {
+  it('puts the alias in brackets if provided', () => {
     const title = 'Example Title';
     const shortName = 'ET';
     const expected = 'Example Title (ET)';

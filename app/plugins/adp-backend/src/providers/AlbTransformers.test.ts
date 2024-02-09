@@ -7,7 +7,7 @@ describe('defaultGroupTransformer', () => {
       owner: 'ADP',
       title: 'Environment Agency',
       name: 'environment-agency',
-      short_name: 'EA',
+      alias: 'EA',
       description: 'testDescription',
       url: 'https://www.example.uk/',
       id: '1234',

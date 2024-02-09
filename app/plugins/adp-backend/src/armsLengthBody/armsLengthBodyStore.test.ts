@@ -26,7 +26,7 @@ describe('armsLengthBodyStore', () => {
         creator: 'john',
         owner: 'john',
         title: 'ALB Example',
-        short_name: 'ALB',
+        alias: 'ALB',
         description: 'This is an example ALB',
         url: 'http://www.example.com/index.html',
         name: 'alb-example',
@@ -50,7 +50,7 @@ describe('armsLengthBodyStore', () => {
           creator: 'john',
           owner: 'john',
           title: 'ALB Example 1',
-          short_name: 'ALB 1',
+          alias: 'ALB 1',
           description: 'This is an example ALB 1',
           url: 'http://www.example.com/index.html',
           name: 'alb-example-1',
@@ -60,7 +60,7 @@ describe('armsLengthBodyStore', () => {
           creator: 'john',
           owner: 'johnD',
           title: 'ALB Example 2',
-          short_name: 'ALB 2',
+          alias: 'ALB 2',
           description: 'This is an example ALB 2',
           name: 'alb-example-2',
           updated_by: 'john',
@@ -69,7 +69,7 @@ describe('armsLengthBodyStore', () => {
           creator: 'john',
           owner: 'john',
           title: 'ALB Example 3',
-          short_name: 'ALB 3',
+          alias: 'ALB 3',
           description: 'This is an example ALB 3',
           url: 'http://www.example.com/index.html',
           name: 'alb-example-4',
@@ -93,7 +93,7 @@ describe('armsLengthBodyStore', () => {
             creator: 'john',
             owner: 'john',
             title: 'ALB Example 1',
-            short_name: 'ALB 1',
+            alias: 'ALB 1',
             description: 'This is an example ALB 1',
             url: 'http://www.example.com/index.html',
             updated_by: 'john',
@@ -103,7 +103,7 @@ describe('armsLengthBodyStore', () => {
             creator: 'john',
             owner: 'johnD',
             title: 'ALB Example 2',
-            short_name: 'ALB 2',
+            alias: 'ALB 2',
             description: 'This is an example ALB 2',
             url: 'http://www.example.com/index.html',
             updated_by: 'john',
@@ -113,7 +113,7 @@ describe('armsLengthBodyStore', () => {
             creator: 'john',
             owner: 'john',
             title: 'ALB Example 3',
-            short_name: 'ALB 3',
+            alias: 'ALB 3',
             description: 'This is an example ALB 3',
             url: 'http://www.example.com/index.html',
             updated_by: 'john',
@@ -129,7 +129,7 @@ describe('armsLengthBodyStore', () => {
 
       expect(getResult).toBeDefined();
       expect(getResult?.title).toBe('ALB Example 2');
-      expect(getResult?.short_name).toBe('ALB 2');
+      expect(getResult?.alias).toBe('ALB 2');
       expect(getResult?.description).toBe('This is an example ALB 2');
       expect(getResult?.creator).toBe('john');
       expect(getResult?.owner).toBe('johnD');
@@ -147,7 +147,7 @@ describe('armsLengthBodyStore', () => {
           creator: 'john',
           owner: 'john',
           title: 'ALB Example 1',
-          short_name: 'ALB 1',
+          alias: 'ALB 1',
           description: 'This is an example ALB 1',
           updated_by: 'john',
           name: 'alb-example-1',
@@ -156,7 +156,7 @@ describe('armsLengthBodyStore', () => {
           creator: 'john',
           owner: 'johnD',
           title: 'ALB Example 2',
-          short_name: 'ALB 2',
+          alias: 'ALB 2',
           description: 'This is an example ALB 2',
           updated_by: 'john',
           name: 'alb-example-2',
@@ -180,7 +180,7 @@ describe('armsLengthBodyStore', () => {
             creator: 'john',
             owner: 'john',
             title: 'ALB Example 1',
-            short_name: 'ALB 1',
+            alias: 'ALB 1',
             description: 'This is an example ALB 1',
             updated_by: 'john',
             name: 'alb-example-1',
@@ -189,7 +189,7 @@ describe('armsLengthBodyStore', () => {
             creator: 'john',
             owner: 'johnD',
             title: 'ALB Example 2',
-            short_name: 'ALB 2',
+            alias: 'ALB 2',
             description: 'This is an example ALB 2',
             updated_by: 'john',
             name: 'alb-example-2',
@@ -203,7 +203,7 @@ describe('armsLengthBodyStore', () => {
       const expectedUpdate: PartialArmsLengthBody = {
         id: test2Id,
         title: 'ALB Example',
-        short_name: 'ALB',
+        alias: 'ALB',
         description: 'This is an example ALB 2',
         url: 'http://www.example.com/index.html',
         timestamp: new Date(2023, 12, 31, 15, 0, 0),
@@ -213,7 +213,7 @@ describe('armsLengthBodyStore', () => {
 
       expect(updateResult).toBeDefined();
       expect(updateResult.title).toBe(expectedUpdate.title);
-      expect(updateResult.short_name).toBe(expectedUpdate.short_name);
+      expect(updateResult.alias).toBe(expectedUpdate.alias);
       expect(updateResult.url).toBe(expectedUpdate.url);
     },
   );
@@ -228,7 +228,7 @@ describe('armsLengthBodyStore', () => {
           creator: 'john',
           owner: 'john',
           title: 'ALB Example 1',
-          short_name: 'ALB 1',
+          alias: 'ALB 1',
           description: 'This is an example ALB 1',
           updated_by: 'john',
           name: 'alb-example-1',
@@ -237,7 +237,7 @@ describe('armsLengthBodyStore', () => {
           creator: 'john',
           owner: 'johnD',
           title: 'ALB Example 2',
-          short_name: 'ALB 2',
+          alias: 'ALB 2',
           description: 'This is an example ALB 2',
           updated_by: 'john',
           name: 'alb-example-2',
@@ -246,7 +246,7 @@ describe('armsLengthBodyStore', () => {
           creator: 'john',
           owner: 'john',
           title: 'ALB Example 3',
-          short_name: 'ALB 3',
+          alias: 'ALB 3',
           description: 'This is an example ALB 3',
           updated_by: 'john',
           name: 'alb-example-3',
@@ -261,7 +261,7 @@ describe('armsLengthBodyStore', () => {
               creator: 'n/a',
               owner: 'n/a',
               title: 'Non-existent ALB',
-              short_name: 'Non-existent ALB',
+              alias: 'Non-existent ALB',
               name: 'non-existent-alb',
               description: 'n/a',
             },

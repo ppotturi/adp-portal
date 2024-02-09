@@ -9,7 +9,7 @@ type Row = {
   creator: string;
   owner: string;
   title: string;
-  short_name?: string;
+  alias?: string;
   description: string;
   url?: string;
   readonly name: string;
@@ -28,7 +28,7 @@ export class ArmsLengthBodyStore {
         'creator',
         'owner',
         'title',
-        'short_name',
+        'alias',
         'description',
         'url',
         'name',
@@ -41,7 +41,7 @@ export class ArmsLengthBodyStore {
       creator: row.creator,
       owner: row.owner,
       title: row.title,
-      short_name: row?.short_name,
+      alias: row?.alias,
       description: row.description,
       url: row?.url,
       name: row.name,
@@ -57,7 +57,7 @@ export class ArmsLengthBodyStore {
         'creator',
         'owner',
         'title',
-        'short_name',
+        'alias',
         'description',
         'url',
         'name',
@@ -71,7 +71,7 @@ export class ArmsLengthBodyStore {
           creator: row.creator,
           owner: row.owner,
           title: row.title,
-          short_name: row?.short_name,
+          alias: row?.alias,
           description: row.description,
           url: row?.url,
           name: row.name,
@@ -91,7 +91,7 @@ export class ArmsLengthBodyStore {
         creator: creator,
         owner: owner,
         title: armsLengthBody.title,
-        short_name: armsLengthBody?.short_name,
+        alias: armsLengthBody?.alias,
         description: armsLengthBody.description,
         url: armsLengthBody?.url,
         name: createName(armsLengthBody.title),
@@ -137,8 +137,8 @@ export class ArmsLengthBodyStore {
     if (armsLengthBody.title !== undefined) {
       updatedData.title = armsLengthBody.title;
     }
-    if (armsLengthBody.short_name !== undefined) {
-      updatedData.short_name = armsLengthBody.short_name;
+    if (armsLengthBody.alias !== undefined) {
+      updatedData.alias = armsLengthBody.alias;
     }
     if (armsLengthBody.description !== undefined) {
       updatedData.description = armsLengthBody.description;

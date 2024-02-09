@@ -81,7 +81,7 @@ describe('createRouter', () => {
         creator: creator,
         owner: owner,
         title: 'Test ALB example',
-        short_name: 'ALB',
+        alias: 'ALB',
         description: 'This is an example ALB',
       };
       const getExistingData = await request(app).get('/armsLengthBody');
@@ -98,7 +98,7 @@ describe('createRouter', () => {
 
     it('returns Error', async () => {
       const invalidALB = {
-        short_name: 'ALB',
+        alias: 'ALB',
         description: 'This is an example ALB',
       };
       const response = await request(app)
@@ -112,7 +112,7 @@ describe('createRouter', () => {
     it('returns 406 when ALB Name already exists', async () => {
       const expectedALB = {
         title: 'Marine & Maritime',
-        short_name: 'ALB',
+        alias: 'ALB',
         description: 'This is an example ALB',
       };
       const response = await request(app)
@@ -137,7 +137,7 @@ describe('createRouter', () => {
         creator: creator,
         owner: owner,
         title: 'Test ALB',
-        short_name: 'ALB',
+        alias: 'ALB',
         description: 'This is an example ALB',
       };
       const postRequest = await request(app)
