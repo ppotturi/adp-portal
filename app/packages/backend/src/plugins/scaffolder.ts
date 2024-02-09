@@ -7,12 +7,13 @@ import { Router } from 'express';
 import type { PluginEnvironment } from '../types';
 import { ScmIntegrations } from '@backstage/integration';
 import {
-  permitAzurePipelineAction,
-  runAzurePipelineAction,
-} from '@antoniobergas/scaffolder-backend-module-azure-pipelines';
-import {
   createPipelineAction,
   getServiceConnectionAction,
+  permitPipelineAction,
+  runPipelineAction,
+  createGithubTeamAction,
+  addGithubTeamToRepoAction,
+
 } from '@internal/backstage-plugin-scaffolder-backend-module-adp-scaffolder-actions';
 
 export default async function createPlugin(
@@ -33,8 +34,6 @@ export default async function createPlugin(
 
   const actions = [
     ...builtInActions,
-    permitAzurePipelineAction({ integrations }),
-    runAzurePipelineAction({ integrations }),
     createPipelineAction({
       integrations: integrations,
       config: env.config,
@@ -43,6 +42,23 @@ export default async function createPlugin(
       integrations: integrations,
       config: env.config,
     }),
+    permitPipelineAction({
+      integrations: integrations,
+      config: env.config,
+    }),
+    runPipelineAction({
+      integrations: integrations,
+      config: env.config,
+    }),
+    createGithubTeamAction({
+      integrations: integrations,
+      config: env.config,
+    }),
+    addGithubTeamToRepoAction({
+      integrations: integrations,
+      config: env.config,
+    }),
+
   ];
 
   return await createRouter({

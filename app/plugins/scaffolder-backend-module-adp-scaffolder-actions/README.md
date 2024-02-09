@@ -7,6 +7,13 @@ Details about actions (inputs, outputs, and how to use them) are available in [t
 
 - Azure DevOps
   - Get Service Connection
+  - Run pipeline
   - Create Pipeline
+  - Permit pipeline
 
+
+- GitHub
+  - Create GitHub Team
+  - Add GitHub Team to Repository
+  
 _This plugin was created through the Backstage CLI_
