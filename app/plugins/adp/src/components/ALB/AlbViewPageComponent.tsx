@@ -22,7 +22,7 @@ import { armsLengthBodyClient } from '../../api/AlbClient';
 import { armsLengthBodyApi } from '../../api/AlbApi';
 import CreateAlb from './CreateAlb';
 import { albFormFields } from './AlbFormFields';
-import EditIcon from '@mui/icons-material/Edit';
+
 
 export const AlbViewPageComponent = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -43,6 +43,7 @@ export const AlbViewPageComponent = () => {
   const getAllArmsLengthBodies = async () => {
     try {
       const data = await albClient.getArmsLengthBodies();
+      console.log(data)
       setTableData(data);
     } catch (e: any) {
       errorApi.post(e);
@@ -59,7 +60,6 @@ export const AlbViewPageComponent = () => {
   };
 
   const handleCloseModal = () => {
-    console.log('closing modal');
     setFormData({});
     setModalOpen(false);
   };
@@ -139,7 +139,6 @@ export const AlbViewPageComponent = () => {
         <Button
           variant="contained"
           color="default"
-          startIcon={<EditIcon />}
           onClick={() => handleEdit(rowData)}
         >
           Edit
