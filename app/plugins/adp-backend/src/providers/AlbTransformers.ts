@@ -3,7 +3,7 @@ import { ArmsLengthBody } from '../types/datamodel';
 import { createTitle } from '../utils';
 
 export type GroupTransformer = (
-  armsl: ArmsLengthBody,
+  armslenghBody: ArmsLengthBody,
 ) => Promise<GroupEntity | undefined>;
 
 export const defaultGroupTransformer: GroupTransformer = async (

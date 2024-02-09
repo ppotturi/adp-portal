@@ -7,8 +7,7 @@ const TABLE_NAME = 'delivery_programme';
 type Row = {
   id: string;
   timestamp: Date;
-  creator: string;
-  owner: string;
+  programme_manager: string;
   title: string;
   readonly name: string;
   alias?: string;
@@ -30,8 +29,7 @@ export class DeliveryProgrammeStore {
     const ArmsLengthBodies = await this.client<Row>(TABLE_NAME)
       .select(
         'id',
-        'creator',
-        'owner',
+        'programme_manager',
         'title',
         'name',
         'alias',
@@ -46,8 +44,7 @@ export class DeliveryProgrammeStore {
 
     return ArmsLengthBodies.map(row => ({
       id: row.id,
-      creator: row.creator,
-      owner: row.owner,
+      programme_manager: row.programme_manager,
       title: row.title,
       name: row.name,
       alias: row?.alias,
@@ -65,8 +62,7 @@ export class DeliveryProgrammeStore {
       .where('id', id)
       .select(
         'id',
-        'creator',
-        'owner',
+        'programme_manager',
         'title',
         'name',
         'alias',
@@ -82,8 +78,7 @@ export class DeliveryProgrammeStore {
     return row
       ? {
         id: row.id,
-        creator: row.creator,
-        owner: row.owner,
+        programme_manager: row.programme_manager,
         title: row.title,
         name: row.name,
         alias: row?.alias,
@@ -99,13 +94,11 @@ export class DeliveryProgrammeStore {
 
   async add(
     deliveryProgramme: Omit<DeliveryProgramme, 'id' | 'timestamp'>,
-    creator: string,
-    owner: string,
+    programme_manager: string,
   ): Promise<DeliveryProgramme> {
     const insertResult = await this.client<Row>(TABLE_NAME).insert(
       {
-        creator: creator,
-        owner: owner,
+        programme_manager: programme_manager,
         title: deliveryProgramme.title,
         name: createName(deliveryProgramme.title),
         alias: deliveryProgramme?.alias,
@@ -114,7 +107,7 @@ export class DeliveryProgrammeStore {
         arms_length_body: deliveryProgramme.arms_length_body,
         delivery_programme_code: deliveryProgramme.delivery_programme_code,
         url: deliveryProgramme?.url,
-        updated_by: creator,
+        updated_by: programme_manager,
       },
       ['id', 'created_at'],
     );

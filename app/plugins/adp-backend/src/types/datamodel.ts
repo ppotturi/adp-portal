@@ -13,8 +13,7 @@ export type ArmsLengthBody = {
 export type DeliveryProgramme = {
     id: string;
     timestamp: Date;
-    creator: string;
-    owner: string;
+    programme_manager: string;
     title: string
     readonly name: string;
     alias?: string;

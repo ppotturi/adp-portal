@@ -19,19 +19,10 @@ export interface RouterOptions {
   config: Config;
 }
 
-export function getOwner(options: RouterOptions): string {
-  const { config } = options;
-  const ownerAdGroup = config.getConfig('adGroup');
-  const owner = ownerAdGroup.getString('adminsGroup');
-  return owner;
-}
-
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
   const { logger, identity, database } = options;
-
-  const owner = getOwner(options);
 
   const adpDatabase = AdpDatabase.create(database);
   const deliveryProgrammesStore = new DeliveryProgrammeStore(
@@ -69,8 +60,7 @@ export async function createRouter(
         const creator = await getCurrentUsername(identity, req);
         const deliveryProgramme = await deliveryProgrammesStore.add(
           req.body,
-          creator,
-          owner,
+          creator
         );
         res.json(deliveryProgramme);
       }
