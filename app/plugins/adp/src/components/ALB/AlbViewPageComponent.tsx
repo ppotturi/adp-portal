@@ -64,18 +64,18 @@ export const AlbViewPageComponent = () => {
     setModalOpen(false);
   };
 
-  const isNameUnique = (name: string, id: string) => {
+  const isNameUnique = (title: string, id: string) => {
     return !tableData.some(
-      item => item.name.toLowerCase() === name.toLowerCase() && item.id !== id,
+      item => item.title.toLowerCase() === title.toLowerCase() && item.id !== id,
     );
   };
 
   const handleUpdate = async (armsLengthBody: ArmsLengthBody) => {
-    if (!isNameUnique(armsLengthBody.name, armsLengthBody.id)) {
+    if (!isNameUnique(armsLengthBody.title, armsLengthBody.id)) {
       setModalOpen(true);
 
       alertApi.post({
-        message: `The name '${armsLengthBody.name}' is already in use. Please choose a different name.`,
+        message: `The name '${armsLengthBody.title}' is already in use. Please choose a different name.`,
         severity: 'error',
         display: 'permanent',
       });
@@ -104,8 +104,8 @@ export const AlbViewPageComponent = () => {
 
   const columns: TableColumn[] = [
     {
-      title: 'Name',
-      field: 'name',
+      title: 'Title',
+      field: 'title',
       highlight: true,
       type: 'string',
     },
@@ -118,6 +118,12 @@ export const AlbViewPageComponent = () => {
     {
       title: 'Description',
       field: 'description',
+      highlight: false,
+      type: 'string',
+    },
+    {
+      title: 'Website',
+      field: 'url',
       highlight: false,
       type: 'string',
     },

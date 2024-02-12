@@ -69,7 +69,7 @@ export const EditModal: FC<EditModalProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{`${mode === 'edit' ? 'Edit' : 'Create'}: ${initialValues.name || ''}`}</DialogTitle>
+      <DialogTitle>{`${mode === 'edit' ? 'Edit' : 'Create'}: ${initialValues.title|| ''}`}</DialogTitle>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <DialogContent>
           {fields.map(field => (

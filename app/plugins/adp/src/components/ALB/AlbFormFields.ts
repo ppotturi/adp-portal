@@ -1,7 +1,7 @@
 export const albFormFields = [
     {
-      label: 'Name',
-      name: 'name',
+      label: 'Title',
+      name: 'title',
       helperText:
         'This must be unique - use letters, numbers, or separators such as "_", "-"',
       validations: {
@@ -17,6 +17,11 @@ export const albFormFields = [
       label: 'Short Name',
       name: 'short_name',
       helperText: 'Optional - a short form name to identify the body',
+    },
+    {
+      label: 'Website',
+      name: 'url',
+      helperText: 'Optional - a link to website',
     },
     {
       label: 'ALB Description',

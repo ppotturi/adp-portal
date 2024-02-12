@@ -73,3 +73,5 @@ export class armsLengthBodyClient implements armsLengthBodyApi {
     return updatedData;
   }
 }
+
+export type { armsLengthBodyApi };

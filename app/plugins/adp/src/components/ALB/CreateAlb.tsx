@@ -48,7 +48,7 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
     } catch (e: any) {
       errorApi.post(e);
       alertApi.post({
-        message: `The name '${armsLengthBody.name}' is already in use. Please choose a different name.`,
+        message: `The name '${armsLengthBody.title}' is already in use. Please choose a different name.`,
         severity: 'error',
         display: 'permanent',
       });

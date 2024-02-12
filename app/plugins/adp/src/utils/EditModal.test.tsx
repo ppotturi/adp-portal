@@ -3,16 +3,23 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { useApi} from '@backstage/core-plugin-api';
+import { useApi , alertApiRef} from '@backstage/core-plugin-api';
 
 jest.mock('@backstage/core-plugin-api', () => ({
-  useApi: jest.fn(),
+  useApi: jest.fn().mockImplementation((apiRef) => {
+    if (apiRef === alertApiRef) {
+      return {
+        post: jest.fn(),
+      };
+    }
+    return undefined;
+  }),
 }));
 
 
 describe('EditModal', () => {
   const initialValues = {
-    name: 'Test Record',
+    title: 'Test Record',
     description: 'Test Description',
   };
 
@@ -41,6 +48,7 @@ describe('EditModal', () => {
         onClose={onCloseMock}
         onSubmit={onSubmitMock}
         initialValues={initialValues}
+        mode="edit"
         fields={fields}
       />,
     );
@@ -88,6 +96,5 @@ describe('EditModal', () => {
     ).toBeInTheDocument();
     expect(onSubmitMock).not.toHaveBeenCalled();
   });
-
  
 });

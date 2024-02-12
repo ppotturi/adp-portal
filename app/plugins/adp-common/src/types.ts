@@ -3,8 +3,9 @@ export type ArmsLengthBody = {
     timestamp: Date;
     creator: string;
     owner: string;
-    name: string;
+    readonly name: string;
     short_name?: string;
     description: string;
-    readonly title?: string;
+    url?: string;
+    title: string
 }
