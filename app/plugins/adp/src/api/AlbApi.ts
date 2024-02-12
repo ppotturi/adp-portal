@@ -1,11 +1,11 @@
 import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import { createApiRef } from '@backstage/core-plugin-api';
 
-export const armsLengthBodyApiRef = createApiRef<armsLengthBodyApi>({
+export const armsLengthBodyApiRef = createApiRef<ArmsLengthBody>({
   id: 'plugin.adp.armslengthbodyapi',
 });
 
-export interface armsLengthBodyApi {
+export interface ArmsLengthBodyApi {
   getArmsLengthBodies(): Promise<ArmsLengthBody[]>;
   updateArmsLengthBody(data: any): Promise<ArmsLengthBody[]>;
   createArmsLengthBody(data: any): Promise<ArmsLengthBody[]>;

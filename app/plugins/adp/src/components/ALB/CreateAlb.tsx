@@ -9,7 +9,7 @@ import {
   fetchApiRef,
   useApi,
 } from '@backstage/core-plugin-api';
-import { armsLengthBodyClient } from '../../api/AlbClient';
+import { ArmsLengthBodyClient } from '../../api/AlbClient';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { albFormFields } from './AlbFormFields';
 
@@ -18,21 +18,21 @@ interface CreateAlbProps {
 }
 
 const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const alertApi = useApi(alertApiRef);
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
   const errorApi = useApi(errorApiRef);
   const fields = albFormFields;
 
-  const albClient = new armsLengthBodyClient(discoveryApi, fetchApi);
+  const albClient = new ArmsLengthBodyClient(discoveryApi, fetchApi);
 
   const handleOpenModal = () => {
-    setModalOpen(true);
+    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setModalOpen(false);
+    setIsModalOpen(false);
   };
 
   const handleSubmit = async (armsLengthBody: ArmsLengthBody) => {

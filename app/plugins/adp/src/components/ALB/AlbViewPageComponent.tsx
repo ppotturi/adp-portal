@@ -18,14 +18,14 @@ import {
   errorApiRef,
 } from '@backstage/core-plugin-api';
 import { ArmsLengthBody } from '@internal/plugin-adp-backend';
-import { armsLengthBodyClient } from '../../api/AlbClient';
-import { armsLengthBodyApi } from '../../api/AlbApi';
+import { ArmsLengthBodyClient } from '../../api/AlbClient';
+import { ArmsLengthBodyApi } from '../../api/AlbApi';
 import CreateAlb from './CreateAlb';
 import { albFormFields } from './AlbFormFields';
 
 
 export const AlbViewPageComponent = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({});
   const [tableData, setTableData] = useState<ArmsLengthBody[]>([]);
   const [key, refetchArmsLengthBody] = useReducer(i => i + 1, 0);
@@ -35,7 +35,7 @@ export const AlbViewPageComponent = () => {
   const fetchApi = useApi(fetchApiRef);
   const fields = albFormFields;
 
-  const albClient: armsLengthBodyApi = new armsLengthBodyClient(
+  const albClient: ArmsLengthBodyApi = new ArmsLengthBodyClient(
     discoveryApi,
     fetchApi,
   );
@@ -56,12 +56,12 @@ export const AlbViewPageComponent = () => {
 
   const handleEdit = (ArmsLengthBody: React.SetStateAction<{}>) => {
     setFormData(ArmsLengthBody);
-    setModalOpen(true);
+    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setFormData({});
-    setModalOpen(false);
+    setIsModalOpen(false);
   };
 
   const isNameUnique = (title: string, id: string) => {
@@ -72,7 +72,7 @@ export const AlbViewPageComponent = () => {
 
   const handleUpdate = async (armsLengthBody: ArmsLengthBody) => {
     if (!isNameUnique(armsLengthBody.title, armsLengthBody.id)) {
-      setModalOpen(true);
+      setIsModalOpen(true);
 
       alertApi.post({
         message: `The name '${armsLengthBody.title}' is already in use. Please choose a different name.`,

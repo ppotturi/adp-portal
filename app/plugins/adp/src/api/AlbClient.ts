@@ -1,10 +1,10 @@
-import { armsLengthBodyApi } from './AlbApi';
+import { ArmsLengthBodyApi } from './AlbApi';
 import { ArmsLengthBody } from '../../../adp-common/src/types';
 
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { ResponseError } from '@backstage/errors';
 
-export class armsLengthBodyClient implements armsLengthBodyApi {
+export class ArmsLengthBodyClient implements ArmsLengthBodyApi {
   private discoveryApi: DiscoveryApi;
   private fetchApi: FetchApi;
 
@@ -32,7 +32,7 @@ export class armsLengthBodyClient implements armsLengthBodyApi {
 
   async createArmsLengthBody(data: any): Promise<ArmsLengthBody[]> {
     const url = await this.getApiUrl();
-    
+
     const response = await this.fetchApi.fetch(url, {
       method: 'POST',
       headers: {
@@ -42,10 +42,7 @@ export class armsLengthBodyClient implements armsLengthBodyApi {
     });
 
     if (!response.ok) {
-      const responseBody = await response.json();
-      const errorMessage =
-        responseBody?.error || 'Failed to update Arms Length Body';
-      throw new Error(errorMessage);
+      throw await ResponseError.fromResponse(response);
     }
 
     return response.json();
@@ -63,10 +60,7 @@ export class armsLengthBodyClient implements armsLengthBodyApi {
     });
 
     if (!response.ok) {
-      const responseBody = await response.json();
-      const errorMessage =
-        responseBody?.error || 'Failed to update Arms Length Body';
-      throw new Error(errorMessage);
+      throw await ResponseError.fromResponse(response);
     }
 
     const updatedData: ArmsLengthBody[] = await response.json();
@@ -74,4 +68,4 @@ export class armsLengthBodyClient implements armsLengthBodyApi {
   }
 }
 
-export type { armsLengthBodyApi };
+export type { ArmsLengthBodyApi };

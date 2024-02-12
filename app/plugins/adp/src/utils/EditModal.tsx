@@ -51,7 +51,7 @@ export const EditModal: FC<EditModalProps> = ({
   } = useForm({
     defaultValues: initialValues,
   });
-  const alertApi = useApi(alertApiRef);
+  const errorApi = useApi(alertApiRef);
 
   const onFormSubmit = async (data: any) => {
     try {
@@ -59,11 +59,7 @@ export const EditModal: FC<EditModalProps> = ({
       reset();
       onClose();
     } catch (e: any) {
-      alertApi.post({
-        message: e.message,
-        severity: 'error',
-        display: 'permanent',
-      });
+      errorApi.post(e)
     }
   };
 
@@ -98,7 +94,7 @@ export const EditModal: FC<EditModalProps> = ({
                   : undefined,
               })}
               error={!!errors[field.name]}
-              helperText={errors[field.name]?.message || field.helperText}
+              helperText={errors[field.name]?.message ?? field.helperText}
               multiline={field.multiline}
               maxRows={field.maxRows}
             />

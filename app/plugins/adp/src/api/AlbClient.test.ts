@@ -1,5 +1,4 @@
-import { armsLengthBodyClient } from './AlbClient';
-
+import { ArmsLengthBodyClient } from './AlbClient';
 
 jest.mock('@backstage/core-plugin-api', () => ({
   DiscoveryApi: jest.fn(),
@@ -9,18 +8,17 @@ jest.mock('@backstage/core-plugin-api', () => ({
 }));
 
 describe('armsLengthBodyClient', () => {
-  let client: armsLengthBodyClient;
+  let client: ArmsLengthBodyClient;
   let discoveryApi: { getBaseUrl: any };
   let fetchApi: { fetch: any };
 
   beforeEach(() => {
- 
     discoveryApi = { getBaseUrl: jest.fn() };
     fetchApi = { fetch: jest.fn() };
 
     discoveryApi.getBaseUrl.mockResolvedValue('http://localhost');
 
-    client = new armsLengthBodyClient(discoveryApi, fetchApi);
+    client = new ArmsLengthBodyClient(discoveryApi, fetchApi);
   });
 
   describe('getArmsLengthBodies', () => {
@@ -42,6 +40,8 @@ describe('armsLengthBodyClient', () => {
     it('throws an error when the fetch fails', async () => {
       fetchApi.fetch.mockResolvedValue({
         ok: false,
+        status: 400,
+        statusText: 'BadRequest',
         json: jest.fn().mockResolvedValue({ error: 'Not found' }),
       });
 
@@ -66,12 +66,52 @@ describe('armsLengthBodyClient', () => {
       const errorMessage = 'Failed to update';
       fetchApi.fetch.mockResolvedValue({
         ok: false,
+        status: 400,
+        statusText: 'Bad Request',
         json: jest.fn().mockResolvedValue({ error: errorMessage }),
       });
 
       const updateData = { name: 'New Name' };
       await expect(client.updateArmsLengthBody(updateData)).rejects.toThrow(
-        new RegExp(errorMessage),
+        'Request failed with 400 Error',
+      );
+    });
+  });
+
+  describe('createArmsLengthBody', () => {
+    it('creates an arms length body successfully', async () => {
+      const newData = { name: 'New Body' };
+      const mockResponseData = [{ id: 1, name: 'New Body' }];
+
+      fetchApi.fetch.mockResolvedValue({
+        ok: true,
+        json: jest.fn().mockResolvedValue(mockResponseData),
+      });
+
+      const result = await client.createArmsLengthBody(newData);
+      expect(result).toEqual(mockResponseData);
+
+      expect(fetchApi.fetch).toHaveBeenCalledWith(expect.any(String), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newData),
+      });
+    });
+
+    it('throws an error when the creation fails', async () => {
+      const newData = { name: 'New Body' };
+      const errorMessage = 'Failed to create Arms Length Body';
+      fetchApi.fetch.mockResolvedValue({
+        ok: false,
+        status: 400,
+        statusText: 'Bad Request',
+        json: jest.fn().mockResolvedValue({ error: errorMessage }),
+      });
+
+      await expect(client.createArmsLengthBody(newData)).rejects.toThrow(
+        'Request failed with 400 Error',
       );
     });
   });
