@@ -70,6 +70,13 @@ import { EntityGithubPullRequestsContent } from '@roadiehq/backstage-plugin-gith
 
 import { EntityTeamPullRequestsCard } from '@backstage/plugin-github-pull-requests-board';
 import { EntityTeamPullRequestsContent } from '@backstage/plugin-github-pull-requests-board';
+import { EntityKubernetesContent, isKubernetesAvailable  } from '@backstage/plugin-kubernetes';
+import {
+  EntityFluxHelmReleasesCard,
+  EntityFluxHelmRepositoriesCard,
+  EntityFluxKustomizationsCard,
+  EntityFluxImagePoliciesCard,
+} from '@weaveworksoss/backstage-plugin-flux';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -80,8 +87,6 @@ const techdocsContent = (
 );
 
 const cicdContent = (
-  // This is an example of how you can implement your company's logic in entity page.
-  // You can for example enforce that all components of type 'service' should use GitHubActions
   <EntitySwitch>
     <EntitySwitch.Case if={isAzurePipelinesAvailable}>
       <EntityAzurePipelinesContent defaultLimit={25} />
@@ -147,7 +152,6 @@ const overviewContent = (
     <Grid item md={6} xs={12}>
       <EntityCatalogGraphCard variant="gridItem" height={400} />
     </Grid>
-
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
     </Grid>
@@ -155,6 +159,7 @@ const overviewContent = (
       <EntityHasSubcomponentsCard variant="gridItem" />
     </Grid>
   </Grid>
+  
 );
 
 const grafanaContent = (
@@ -219,6 +224,22 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
+
+    <EntityLayout.Route path="/releases" title="Deployments" if={isKubernetesAvailable}>
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item md={12}>
+          <EntityFluxHelmReleasesCard />
+        </Grid>
+        <Grid item md={12}>
+          <EntityFluxKustomizationsCard />
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/kubernetes" title="Kubernetes" if={isKubernetesAvailable}>
+      <EntityKubernetesContent refreshIntervalMs={30000} />
+    </EntityLayout.Route>
+
   </EntityLayout>
 );
 
@@ -366,6 +387,25 @@ const groupPage = (
     </EntityLayout.Route>
     <EntityLayout.Route path="/pull-requests" title="Pull Requests">
       <EntityTeamPullRequestsContent />
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/releases" title="Deployments" if={isKubernetesAvailable}>
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item md={12}>
+          <EntityFluxHelmReleasesCard  />
+        </Grid>
+        <Grid item md={12} >
+          <EntityFluxHelmRepositoriesCard />
+        </Grid>
+        <Grid item md={12} >
+          <EntityFluxImagePoliciesCard />
+        </Grid> 
+        <Grid item md={12}>
+          <EntityFluxKustomizationsCard />
+        </Grid>       
+      </Grid>
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/kubernetes" title="Kubernetes" if={isKubernetesAvailable}>
+      <EntityKubernetesContent refreshIntervalMs={30000} />
     </EntityLayout.Route>
   </EntityLayout>
 );
