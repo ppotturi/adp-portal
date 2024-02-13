@@ -1,4 +1,4 @@
-import { createName, createTitle } from './utils';
+import { createName, createTransformerTitle } from './utils';
 
 describe('createName', () => {
   it('replaces spaces with dashes and converts to lowercase', () => {
@@ -20,16 +20,16 @@ describe('createName', () => {
   });
 });
 
-describe('createTitle', () => {
+describe('createTransformerTitle', () => {
   it('returns the title as is if no alias is provided', () => {
     const title = 'Example Title';
-    expect(createTitle(title)).toBe(title);
+    expect(createTransformerTitle(title)).toBe(title);
   });
 
   it('puts the alias in brackets if provided', () => {
     const title = 'Example Title';
     const shortName = 'ET';
     const expected = 'Example Title (ET)';
-    expect(createTitle(title, shortName)).toBe(expected);
+    expect(createTransformerTitle(title, shortName)).toBe(expected);
   });
 });

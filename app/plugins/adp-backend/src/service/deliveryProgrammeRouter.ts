@@ -10,17 +10,16 @@ import {
   PartialDeliveryProgramme,
 } from '../deliveryProgramme/deliveryProgrammeStore';
 import { DeliveryProgramme } from '../types';
-import { Config } from '@backstage/config';
+import { checkForDuplicateTitle, getCurrentUsername} from '../utils';
 
-export interface RouterOptions {
+export interface ProgrammeRouterOptions {
   logger: Logger;
   identity: IdentityApi;
   database: PluginDatabaseManager;
-  config: Config;
-}
+};
 
-export async function createRouter(
-  options: RouterOptions,
+export async function createProgrammeRouter(
+  options: ProgrammeRouterOptions,
 ): Promise<express.Router> {
   const { logger, identity, database } = options;
 
@@ -55,12 +54,12 @@ export async function createRouter(
         req.body.title,
       );
       if (isDuplicate) {
-        res.status(406).json({ error: 'Delivery Programme Name already exists' });
+        res.status(406).json({ error: 'Delivery Programme name already exists' });
       } else {
-        const creator = await getCurrentUsername(identity, req);
+        const author = await getCurrentUsername(identity, req);
         const deliveryProgramme = await deliveryProgrammesStore.add(
           req.body,
-          creator
+          author
         );
         res.json(deliveryProgramme);
       }
@@ -86,14 +85,14 @@ export async function createRouter(
           updatedTitle,
         );
         if (isDuplicate) {
-          res.status(406).json({ error: 'Delivery Programme Name already exists' });
+          res.status(406).json({ error: 'Delivery Programme name already exists' });
           return;
         }
       }
-      const creator = await getCurrentUsername(identity, req);
+      const author = await getCurrentUsername(identity, req);
       const deliveryProgramme = await deliveryProgrammesStore.update(
         req.body,
-        creator,
+        author,
       );
       res.json(deliveryProgramme);
     } catch (error) {
@@ -114,25 +113,4 @@ function isDeliveryProgrammeUpdateRequest(
   request: Omit<PartialDeliveryProgramme, 'timestamp'>,
 ) {
   return typeof request?.id === 'string';
-}
-
-export async function getCurrentUsername(
-  identity: IdentityApi,
-  req: express.Request,
-): Promise<string> {
-  const user = await identity.getIdentity({ request: req });
-  return user?.identity.userEntityRef ?? 'unknown';
-}
-
-export async function checkForDuplicateTitle(
-  store: DeliveryProgramme[],
-  title: string,
-): Promise<boolean> {
-  title = title.trim().toLowerCase();
-
-  const duplicate = store.find(
-    object => object.title.trim().toLowerCase() === title,
-  );
-
-  return duplicate !== undefined;
 }

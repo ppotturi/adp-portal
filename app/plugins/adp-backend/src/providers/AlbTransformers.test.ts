@@ -1,6 +1,6 @@
-import { defaultGroupTransformer } from './AlbTransformers';
+import { defaultAlbGroupTransformer } from './AlbTransformers';
 
-describe('defaultGroupTransformer', () => {
+describe('defaultAlbGroupTransformer', () => {
   it('should transform valid ArmsLengthBody to GroupEntity', async () => {
     const armsLengthBody = {
       creator: 'ADP',
@@ -38,7 +38,7 @@ describe('defaultGroupTransformer', () => {
       },
     };
 
-    const result = await defaultGroupTransformer(armsLengthBody);
+    const result = await defaultAlbGroupTransformer(armsLengthBody);
     expect(result).toEqual(expectedGroupEntity);
   });
 });

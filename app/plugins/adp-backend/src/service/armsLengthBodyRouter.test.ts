@@ -5,9 +5,9 @@ import {
 } from '@backstage/backend-common';
 import express from 'express';
 import request from 'supertest';
-import { checkForDuplicateTitle, createRouter, getOwner } from './armsLengthBodyRouter';
+import { createAlbRouter, getOwner } from './armsLengthBodyRouter';
 import { ConfigReader } from '@backstage/config';
-import { getCurrentUsername } from './armsLengthBodyRouter';
+import { getCurrentUsername , checkForDuplicateTitle} from '../utils';
 
 describe('createRouter', () => {
   let app: express.Express;
@@ -18,8 +18,8 @@ describe('createRouter', () => {
     }),
   };
   const mockConfig = new ConfigReader({
-    adGroup: {
-      adminsGroup: 'test',
+    rbac: {
+      programmeAdminGroup: 'test',
     },
   });
   const mockOptions = {
@@ -43,7 +43,7 @@ describe('createRouter', () => {
   }
 
   beforeAll(async () => {
-    const router = await createRouter(mockOptions);
+    const router = await createAlbRouter(mockOptions);
     app = express().use(router);
   });
 
@@ -109,7 +109,7 @@ describe('createRouter', () => {
   });
 
   describe('POST /armsLengthBody', () => {
-    it('returns 406 when ALB Name already exists', async () => {
+    it('returns 406 when ALB name already exists', async () => {
       const expectedALB = {
         title: 'Marine & Maritime',
         alias: 'ALB',
@@ -119,7 +119,7 @@ describe('createRouter', () => {
         .post('/armsLengthBody')
         .send(expectedALB);
       expect(response.status).toEqual(406);
-      expect(response.text).toEqual('{"error":"ALB Name already exists"}');
+      expect(response.text).toEqual('{"error":"ALB name already exists"}');
     });
   });
 
@@ -172,7 +172,7 @@ describe('createRouter', () => {
         .post('/armsLengthBody')
         .send(expectedALB);
       expect(response.status).toEqual(406);
-      expect(response.text).toEqual('{"error":"ALB Name already exists"}');
+      expect(response.text).toEqual('{"error":"ALB name already exists"}');
     });
   });
 

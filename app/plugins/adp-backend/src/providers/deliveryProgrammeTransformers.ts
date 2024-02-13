@@ -1,12 +1,12 @@
 import { GroupEntity } from '@backstage/catalog-model';
-import { DeliveryProgramme } from '../types/datamodel';
-import { createTitle } from '../utils';
+import { DeliveryProgramme } from '../../../adp-common/src/types/datamodel';
+import { createTransformerTitle } from '../utils';
 
 export type GroupTransformer = (
   deliveryProgramme: DeliveryProgramme,
 ) => Promise<GroupEntity | undefined>;
 
-export const defaultGroupTransformer: GroupTransformer = async (
+export const defaultProgrammeGroupTransformer: GroupTransformer = async (
   deliveryProgramme,
 ): Promise<GroupEntity | undefined> => {
   return {
@@ -14,7 +14,7 @@ export const defaultGroupTransformer: GroupTransformer = async (
     kind: 'Group',
     metadata: {
       name: deliveryProgramme.name,
-      title: createTitle(deliveryProgramme.title, deliveryProgramme.alias),
+      title: createTransformerTitle(deliveryProgramme.title, deliveryProgramme.alias),
       description: deliveryProgramme?.description,
       tags: [],
       annotations: {

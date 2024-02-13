@@ -133,19 +133,8 @@ export class ArmsLengthBodyStore {
 
     const updated = new Date();
 
-    const updatedData: Partial<ArmsLengthBody> = {};
-    if (armsLengthBody.title !== undefined) {
-      updatedData.title = armsLengthBody.title;
-    }
-    if (armsLengthBody.alias !== undefined) {
-      updatedData.alias = armsLengthBody.alias;
-    }
-    if (armsLengthBody.description !== undefined) {
-      updatedData.description = armsLengthBody.description;
-    }
-    if (armsLengthBody.url !== undefined) {
-      updatedData.url = armsLengthBody.url;
-    }
+    const updatedData: Partial<ArmsLengthBody> = {...armsLengthBody};
+
     if (Object.keys(updatedData).length === 0) {
       return existingALB;
     }

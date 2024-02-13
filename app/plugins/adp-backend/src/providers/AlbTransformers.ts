@@ -1,12 +1,12 @@
 import { GroupEntity } from '@backstage/catalog-model';
-import { ArmsLengthBody } from '../types/datamodel';
-import { createTitle } from '../utils';
+import { ArmsLengthBody } from '../../../adp-common/src/types/datamodel';
+import { createTransformerTitle } from '../utils';
 
 export type GroupTransformer = (
   armslenghBody: ArmsLengthBody,
 ) => Promise<GroupEntity | undefined>;
 
-export const defaultGroupTransformer: GroupTransformer = async (
+export const defaultAlbGroupTransformer: GroupTransformer = async (
   armsLengthBody,
 ): Promise<GroupEntity | undefined> => {
   return {
@@ -14,7 +14,7 @@ export const defaultGroupTransformer: GroupTransformer = async (
     kind: 'Group',
     metadata: {
       name: armsLengthBody.name,
-      title: createTitle(armsLengthBody.title, armsLengthBody.alias),
+      title: createTransformerTitle(armsLengthBody.title, armsLengthBody.alias),
       description: armsLengthBody?.description,
       tags: [],
       annotations: {

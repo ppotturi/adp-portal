@@ -7,14 +7,14 @@ const TABLE_NAME = 'delivery_programme';
 type Row = {
   id: string;
   timestamp: Date;
-  programme_manager: string;
+  programme_manager: string[];
   title: string;
   readonly name: string;
   alias?: string;
   description: string;
   finance_code?: string;
   arms_length_body: string;
-  delivery_programme_code: number;
+  delivery_programme_code: string;
   url?: string;
   created_at: Date;
   updated_by?: string;
@@ -26,7 +26,7 @@ export type PartialDeliveryProgramme = Partial<DeliveryProgramme>;
 export class DeliveryProgrammeStore {
   constructor(private readonly client: Knex) {}
   async getAll(): Promise<DeliveryProgramme[]> {
-    const ArmsLengthBodies = await this.client<Row>(TABLE_NAME)
+    const DeliveryProgrammes = await this.client<Row>(TABLE_NAME)
       .select(
         'id',
         'programme_manager',
@@ -42,14 +42,14 @@ export class DeliveryProgrammeStore {
       )
       .orderBy('created_at');
 
-    return ArmsLengthBodies.map(row => ({
+    return DeliveryProgrammes.map(row => ({
       id: row.id,
       programme_manager: row.programme_manager,
       title: row.title,
       name: row.name,
       alias: row?.alias,
       description: row.description,
-      finance_code: row.finance_code,
+      finance_code: row?.finance_code,
       arms_length_body: row.arms_length_body,
       delivery_programme_code: row.delivery_programme_code,
       url: row?.url,
@@ -83,7 +83,7 @@ export class DeliveryProgrammeStore {
         name: row.name,
         alias: row?.alias,
         description: row.description,
-        finance_code: row.finance_code,
+        finance_code: row?.finance_code,
         arms_length_body: row.arms_length_body,
         delivery_programme_code: row.delivery_programme_code,
         url: row?.url,
@@ -94,20 +94,20 @@ export class DeliveryProgrammeStore {
 
   async add(
     deliveryProgramme: Omit<DeliveryProgramme, 'id' | 'timestamp'>,
-    programme_manager: string,
+    updatedBy: string,
   ): Promise<DeliveryProgramme> {
     const insertResult = await this.client<Row>(TABLE_NAME).insert(
       {
-        programme_manager: programme_manager,
+        programme_manager: deliveryProgramme.programme_manager,
         title: deliveryProgramme.title,
         name: createName(deliveryProgramme.title),
         alias: deliveryProgramme?.alias,
         description: deliveryProgramme.description,
-        finance_code: deliveryProgramme.finance_code,
+        finance_code: deliveryProgramme?.finance_code,
         arms_length_body: deliveryProgramme.arms_length_body,
         delivery_programme_code: deliveryProgramme.delivery_programme_code,
         url: deliveryProgramme?.url,
-        updated_by: programme_manager,
+        updated_by: updatedBy,
       },
       ['id', 'created_at'],
     );
@@ -145,19 +145,8 @@ export class DeliveryProgrammeStore {
 
     const updated = new Date();
 
-    const updatedData: Partial<DeliveryProgramme> = {};
-    if (deliveryProgramme.title !== undefined) {
-      updatedData.title = deliveryProgramme.title;
-    }
-    if (deliveryProgramme.alias !== undefined) {
-      updatedData.alias = deliveryProgramme.alias;
-    }
-    if (deliveryProgramme.description !== undefined) {
-      updatedData.description = deliveryProgramme.description;
-    }
-    if (deliveryProgramme.url !== undefined) {
-      updatedData.url = deliveryProgramme.url;
-    }
+    const updatedData: Partial<DeliveryProgramme> = {...deliveryProgramme};
+
     if (Object.keys(updatedData).length === 0) {
       return existingProgramme;
     }

@@ -11,15 +11,15 @@ export type ArmsLengthBody = {
 }
 
 export type DeliveryProgramme = {
-    id: string;
+    id: string; 
     timestamp: Date;
-    programme_manager: string;
-    title: string
+    programme_manager: string[];
+    title: string;
     readonly name: string;
     alias?: string;
     description: string;
     finance_code?: string;
     arms_length_body: string;
-    delivery_programme_code: number;
+    delivery_programme_code: string;
     url?: string;
 }

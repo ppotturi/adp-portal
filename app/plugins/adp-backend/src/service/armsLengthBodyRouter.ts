@@ -11,23 +11,24 @@ import {
 } from '../armsLengthBody/armsLengthBodyStore';
 import { ArmsLengthBody } from '../types';
 import { Config } from '@backstage/config';
+import { checkForDuplicateTitle, getCurrentUsername } from '../utils';
 
-export interface RouterOptions {
+export interface AlbRouterOptions {
   logger: Logger;
   identity: IdentityApi;
   database: PluginDatabaseManager;
   config: Config;
 }
 
-export function getOwner(options: RouterOptions): string {
+export function getOwner(options: AlbRouterOptions): string {
   const { config } = options;
-  const ownerAdGroup = config.getConfig('adGroup');
-  const owner = ownerAdGroup.getString('adminsGroup');
+  const ownerGroup = config.getConfig('rbac');
+  const owner = ownerGroup.getString('programmeAdminGroup');
   return owner;
 }
 
-export async function createRouter(
-  options: RouterOptions,
+export async function createAlbRouter(
+  options: AlbRouterOptions,
 ): Promise<express.Router> {
   const { logger, identity, database } = options;
 
@@ -129,7 +130,7 @@ export async function createRouter(
         req.body.title,
       );
       if (isDuplicate) {
-        res.status(406).json({ error: 'ALB Name already exists' });
+        res.status(406).json({ error: 'ALB name already exists' });
       } else {
         const creator = await getCurrentUsername(identity, req);
         const armsLengthBody = await armsLengthBodiesStore.add(
@@ -161,7 +162,7 @@ export async function createRouter(
           updatedTitle,
         );
         if (isDuplicate) {
-          res.status(406).json({ error: 'ALB Name already exists' });
+          res.status(406).json({ error: 'ALB name already exists' });
           return;
         }
       }
@@ -189,25 +190,4 @@ function isArmsLengthBodyUpdateRequest(
   request: Omit<PartialArmsLengthBody, 'timestamp'>,
 ) {
   return typeof request?.id === 'string';
-}
-
-export async function getCurrentUsername(
-  identity: IdentityApi,
-  req: express.Request,
-): Promise<string> {
-  const user = await identity.getIdentity({ request: req });
-  return user?.identity.userEntityRef ?? 'unknown';
-}
-
-export async function checkForDuplicateTitle(
-  store: ArmsLengthBody[],
-  title: string,
-): Promise<boolean> {
-  title = title.trim().toLowerCase();
-
-  const duplicate = store.find(
-    object => object.title.trim().toLowerCase() === title,
-  );
-
-  return duplicate !== undefined;
 }

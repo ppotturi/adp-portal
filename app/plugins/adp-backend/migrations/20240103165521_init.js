@@ -5,13 +5,9 @@ exports.up = async function up(knex) {
   return knex.schema.createTable('delivery_programme', table => {
     table.comment('Stores Delivery Programme data');
     table
-      .string('creator')
+      .string('programme_manager')
       .notNullable()
-      .comment('Username of the Delivery Programme creator');
-    table
-      .string('owner')
-      .notNullable()
-      .comment('AD group of the Delivery Programme owner');
+      .comment('Name of the Delivery Programme Manager');
     table
       .string('name')
       .notNullable()
@@ -33,9 +29,11 @@ exports.up = async function up(knex) {
       .nullable()
       .comment('Finance code of Delivery Programme');
     table
-      .string('arms_length_body')
+      .uuid('arms_length_body')
       .notNullable()
-      .comment('Name of the ALB owning the delivery programme');
+      .comment('ID of the ALB owning the delivery programme');
+    table
+      .foreign('arms_length_body').references('id').inTable('arms_length_body')
     table
       .string('delivery_programme_code')
       .notNullable()
