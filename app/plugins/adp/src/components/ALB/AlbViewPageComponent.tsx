@@ -43,7 +43,6 @@ export const AlbViewPageComponent = () => {
   const getAllArmsLengthBodies = async () => {
     try {
       const data = await albClient.getArmsLengthBodies();
-      console.log(data)
       setTableData(data);
     } catch (e: any) {
       errorApi.post(e);
@@ -146,6 +145,7 @@ export const AlbViewPageComponent = () => {
           variant="contained"
           color="default"
           onClick={() => handleEdit(rowData)}
+          data-testid={`alb-edit-button-${rowData.id}`}
         >
           Edit
         </Button>

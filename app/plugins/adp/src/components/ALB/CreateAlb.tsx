@@ -64,6 +64,7 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
         color="primary"
         startIcon={<AddBoxIcon />}
         onClick={handleOpenModal}
+        data-testid="create-alb-button"
       >
         Add ALB
       </Button>

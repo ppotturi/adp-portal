@@ -65,7 +65,7 @@ export const EditModal: FC<EditModalProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{`${mode === 'edit' ? 'Edit' : 'Create'}: ${initialValues.title|| ''}`}</DialogTitle>
+      <DialogTitle>{`${mode === 'edit' ? 'Edit' : 'Create'}: ${initialValues.title || ''}`}</DialogTitle>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <DialogContent>
           {fields.map(field => (
@@ -82,15 +82,15 @@ export const EditModal: FC<EditModalProps> = ({
                   : undefined,
                 maxLength: field.validations?.maxLength
                   ? {
-                      value: field.validations.maxLength,
-                      message: `Maximum length is ${field.validations.maxLength} characters`,
-                    }
+                    value: field.validations.maxLength,
+                    message: `Maximum length is ${field.validations.maxLength} characters`,
+                  }
                   : undefined,
                 pattern: field.validations?.pattern
                   ? {
-                      value: field.validations.pattern.value,
-                      message: field.validations.pattern.message,
-                    }
+                    value: field.validations.pattern.value,
+                    message: field.validations.pattern.message,
+                  }
                   : undefined,
               })}
               error={!!errors[field.name]}
@@ -107,10 +107,14 @@ export const EditModal: FC<EditModalProps> = ({
               onClose();
             }}
             color="primary"
+            data-testid="edit-modal-cancel-button"
           >
             Cancel
           </Button>
-          <Button type="submit" color="primary">
+          <Button type="submit"
+            color="primary"
+            data-testid="edit-modal-update-button"
+          >
             Update
           </Button>
         </DialogActions>

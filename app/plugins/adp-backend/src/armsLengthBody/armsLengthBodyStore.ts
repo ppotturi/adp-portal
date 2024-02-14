@@ -15,7 +15,7 @@ type Row = {
   readonly name: string;
   created_at: Date;
   updated_by?: string;
-  updated_at?: Date;
+  updated_at: Date;
 };
 
 
@@ -35,6 +35,7 @@ export class ArmsLengthBodyStore {
         'name',
         'id',
         'created_at',
+        'updated_at',
       )
       .orderBy('created_at');
  
@@ -47,7 +48,8 @@ export class ArmsLengthBodyStore {
       url: row?.url,
       name: row.name,
       id: row.id,
-      timestamp: new Date(row.created_at),
+      created_timestamp: new Date(row.created_at),
+      updated_timestamp: new Date(row.updated_at),
 
     }));
   }
@@ -112,7 +114,7 @@ export class ArmsLengthBodyStore {
     return {
       ...armsLengthBody,
       id: insertResult[0].id,
-      timestamp: new Date(insertResult[0].created_at),
+       : new Date(insertResult[0].created_at),
     };
   }
  
