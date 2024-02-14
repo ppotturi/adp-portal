@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
-import { EditModal } from '../../utils/EditModal';
+import { ActionsModal } from '../../utils/ActionsModal';
 import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import {
   alertApiRef,
@@ -9,7 +9,7 @@ import {
   fetchApiRef,
   useApi,
 } from '@backstage/core-plugin-api';
-import { ArmsLengthBodyClient } from '../../api/AlbClient';
+import { ArmsLengthBodyClient } from './api/AlbClient';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { albFormFields } from './AlbFormFields';
 
@@ -46,13 +46,12 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
       refetchArmsLengthBody();
       handleCloseModal();
     } catch (e: any) {
-      errorApi.post(e);
       alertApi.post({
         message: `The name '${armsLengthBody.title}' is already in use. Please choose a different name.`,
         severity: 'error',
         display: 'permanent',
       });
-      throw e;
+      errorApi.post(e);
     }
   };
 
@@ -69,7 +68,7 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
         Add ALB
       </Button>
       {isModalOpen && (
-        <EditModal
+        <ActionsModal
           open={isModalOpen}
           onClose={handleCloseModal}
           onSubmit={handleSubmit}

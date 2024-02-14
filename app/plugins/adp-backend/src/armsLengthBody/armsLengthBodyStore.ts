@@ -35,7 +35,6 @@ export class ArmsLengthBodyStore {
         'name',
         'id',
         'created_at',
-        'updated_at',
       )
       .orderBy('created_at');
  
@@ -48,8 +47,8 @@ export class ArmsLengthBodyStore {
       url: row?.url,
       name: row.name,
       id: row.id,
-      created_timestamp: new Date(row.created_at),
-      updated_timestamp: new Date(row.updated_at),
+      timestamp: new Date(row.created_at),
+   
 
     }));
   }
@@ -114,7 +113,7 @@ export class ArmsLengthBodyStore {
     return {
       ...armsLengthBody,
       id: insertResult[0].id,
-       : new Date(insertResult[0].created_at),
+      timestamp : new Date(insertResult[0].created_at),
     };
   }
  

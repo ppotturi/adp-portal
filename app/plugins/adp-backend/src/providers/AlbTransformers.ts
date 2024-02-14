@@ -1,5 +1,5 @@
 import { GroupEntity } from '@backstage/catalog-model';
-import { ArmsLengthBody } from '../types/datamodel';
+import { ArmsLengthBody } from '../types/types/ArmsLengthBody/datamodel';
 import { createTitle } from '../utils';
 
 export type GroupTransformer = (

@@ -9,7 +9,7 @@ import {
   TableColumn,
 } from '@backstage/core-components';
 import { DefaultTable } from '../../utils/Table';
-import { EditModal } from '../../utils/EditModal';
+import { ActionsModal } from '../../utils/ActionsModal';
 import {
   useApi,
   discoveryApiRef,
@@ -18,11 +18,10 @@ import {
   errorApiRef,
 } from '@backstage/core-plugin-api';
 import { ArmsLengthBody } from '@internal/plugin-adp-backend';
-import { ArmsLengthBodyClient } from '../../api/AlbClient';
-import { ArmsLengthBodyApi } from '../../api/AlbApi';
+import { ArmsLengthBodyClient } from './api/AlbClient';
+import { ArmsLengthBodyApi } from './api/AlbApi';
 import CreateAlb from './CreateAlb';
 import { albFormFields } from './AlbFormFields';
-
 
 export const AlbViewPageComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,7 +64,8 @@ export const AlbViewPageComponent = () => {
 
   const isNameUnique = (title: string, id: string) => {
     return !tableData.some(
-      item => item.title.toLowerCase() === title.toLowerCase() && item.id !== id,
+      item =>
+        item.title.toLowerCase() === title.toLowerCase() && item.id !== id,
     );
   };
 
@@ -92,12 +92,6 @@ export const AlbViewPageComponent = () => {
       refetchArmsLengthBody();
     } catch (e: any) {
       errorApi.post(e);
-      alertApi.post({
-        message: e.message,
-        severity: 'error',
-        display: 'permanent',
-      });
-      throw e;
     }
   };
 
@@ -127,7 +121,7 @@ export const AlbViewPageComponent = () => {
       type: 'string',
     },
     {
-      title: 'Updated at',
+      title: 'Created',
       field: 'timestamp',
       render: (data: {}) => {
         const e = data as ArmsLengthBody;
@@ -172,7 +166,7 @@ export const AlbViewPageComponent = () => {
         </Typography>
         <DefaultTable data={tableData} columns={columns} title="View all" />
         {isModalOpen && (
-          <EditModal
+          <ActionsModal
             open={isModalOpen}
             onClose={handleCloseModal}
             onSubmit={handleUpdate}

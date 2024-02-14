@@ -31,7 +31,7 @@ export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
   const { logger, identity, database } = options;
-
+  const owner = getOwner(options);
   const adpDatabase = AdpDatabase.create(database);
   const armsLengthBodiesStore = new ArmsLengthBodyStore(
     await adpDatabase.get(),

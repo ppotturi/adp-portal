@@ -1,1 +1,1 @@
-export type { ArmsLengthBody } from './datamodel';
+export type { ArmsLengthBody } from './types/ArmsLengthBody/datamodel';

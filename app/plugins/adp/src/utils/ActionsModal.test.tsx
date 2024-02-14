@@ -1,4 +1,4 @@
-import EditModal from './EditModal';
+import EditModal from './ActionsModal';
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -17,7 +17,7 @@ jest.mock('@backstage/core-plugin-api', () => ({
 }));
 
 
-describe('EditModal', () => {
+describe('ActionsModal', () => {
   const initialValues = {
     title: 'Test Record',
     description: 'Test Description',

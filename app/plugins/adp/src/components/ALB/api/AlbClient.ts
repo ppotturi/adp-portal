@@ -1,5 +1,5 @@
 import { ArmsLengthBodyApi } from './AlbApi';
-import { ArmsLengthBody } from '../../../adp-common/src/types';
+import { ArmsLengthBody } from '../../../../../adp-common/src/types/ArmsLengthBody';
 
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { ResponseError } from '@backstage/errors';

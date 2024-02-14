@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import { alertApiRef, useApi } from '@backstage/core-plugin-api';
 
-interface EditModalProps {
+interface ActionsModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (armsLengthBody: ArmsLengthBody) => Promise<void>;
@@ -35,7 +35,7 @@ interface EditModalProps {
   }[];
 }
 
-export const EditModal: FC<EditModalProps> = ({
+export const ActionsModal: FC<ActionsModalProps> = ({
   open,
   onClose,
   onSubmit,
@@ -123,4 +123,4 @@ export const EditModal: FC<EditModalProps> = ({
   );
 };
 
-export default EditModal;
+export default ActionsModal;
