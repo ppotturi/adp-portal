@@ -8,6 +8,7 @@ import { NotFoundError } from '@backstage/errors';
 import { createName } from '../utils';
 import { expectedAlbsWithName } from '../armsLengthBody/albTestData';
 import { DeliveryProgramme } from '../types';
+import { expectedProgrammeDataStore } from './programmeTestData';
 
 describe('DeliveryProgrammeStore', () => {
   const databases = TestDatabases.create();
@@ -23,23 +24,17 @@ describe('DeliveryProgrammeStore', () => {
     'should create a new Delivery Programme',
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
-      const insertedIds = await knex('arms_length_body').insert(
+      const insertAlbId = await knex('arms_length_body').insert(
         expectedAlbsWithName,
         ['id'],
       );
 
-      const test2Id = insertedIds[1].id;
+      const albId = insertAlbId[1].id;
 
       const expectedProgrammeId: Omit<DeliveryProgramme, 'id' | 'timestamp'> = {
+        ...expectedProgrammeDataStore,
         programme_manager: ['string1', 'string 2'],
-        title: 'Test title 1',
-        alias: 'Test Alias',
-        description: 'Test description',
-        finance_code: 'Test finance_code',
-        arms_length_body: test2Id,
-        delivery_programme_code: 'Test delivery_programme_code',
-        url: 'Test url',
-        name: 'test-title-1',
+        arms_length_body: albId,
       };
       const addResult = await store.add(expectedProgrammeId, 'test');
 
@@ -53,27 +48,19 @@ describe('DeliveryProgrammeStore', () => {
     'should get all Delivery Programmes from the database',
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
-      const insertedIds = await knex('arms_length_body').insert(
+      const insertAlbId = await knex('arms_length_body').insert(
         expectedAlbsWithName,
         ['id'],
       );
 
-      const test2Id = insertedIds[1].id;
-      const expectedProgrammesWithName = [
+      const albId = insertAlbId[1].id;
+      const expectedProgramme = [
         {
-          programme_manager: JSON.stringify(['string 1', 'string 2']),
-          title: 'Test title 1',
-          alias: 'Test Alias',
-          description: 'Test description',
-          finance_code: 'Test finance_code',
-          arms_length_body: test2Id,
-          delivery_programme_code: 'Test delivery_programme_code',
-          url: 'Test url',
-          updated_by: 'john',
-          name: 'test-title-1',
+          ...expectedProgrammeDataStore,
+        arms_length_body: albId,
         },
       ];
-      await knex('delivery_programme').insert(expectedProgrammesWithName);
+      await knex('delivery_programme').insert(expectedProgramme);
 
       const getAllResult = await store.getAll();
       expect(getAllResult).toHaveLength(1);
@@ -84,33 +71,25 @@ describe('DeliveryProgrammeStore', () => {
     'should get a Delivery Programmes from the database',
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
-      const getAlbID = await knex('arms_length_body').insert(
+      const insertAlbId = await knex('arms_length_body').insert(
         expectedAlbsWithName,
         ['id'],
       );
 
-      const albId = getAlbID[1].id;
-      const expectedProgrammesWithName = [
+      const albId = insertAlbId[1].id;
+      const expectedProgramme = [
         {
-          programme_manager: JSON.stringify(['string 1', 'string 2']),
-          title: 'Test title 1',
-          alias: 'Test Alias',
-          description: 'Test description',
-          finance_code: 'Test finance_code',
-          arms_length_body: albId,
-          delivery_programme_code: 'Test delivery_programme_code',
-          url: 'Test url',
-          updated_by: 'john',
-          name: 'test-title-1',
+          ...expectedProgrammeDataStore,
+        arms_length_body: albId,
         },
       ];
-      const insertedIds = await knex('delivery_programme').insert(
-        expectedProgrammesWithName,
+      const insertProgrammeId = await knex('delivery_programme').insert(
+        expectedProgramme,
         ['id'],
       );
 
-      const test1Id = insertedIds[0].id;
-      const getResult = await store.get(test1Id);
+      const programmeId = insertProgrammeId[0].id;
+      const getResult = await store.get(programmeId);
 
       expect(getResult).toBeDefined();
       expect(getResult?.title).toBe('Test title 1');
@@ -125,26 +104,18 @@ describe('DeliveryProgrammeStore', () => {
     'should return null if a Delivery Programme cannot be found in the database',
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
-      const getAlbID = await knex('arms_length_body').insert(
+      const insertAlbId = await knex('arms_length_body').insert(
         expectedAlbsWithName,
         ['id'],
       );
-      const albId = getAlbID[1].id;
-      const expectedProgrammesWithName = [
+      const albId = insertAlbId[1].id;
+      const expectedProgramme = [
         {
-          programme_manager: JSON.stringify(['string 1', 'string 2']),
-          title: 'Test title 1',
-          alias: 'Test Alias',
-          description: 'Test description',
-          finance_code: 'Test finance_code',
-          arms_length_body: albId,
-          delivery_programme_code: 'Test delivery_programme_code',
-          url: 'Test url',
-          updated_by: 'john',
-          name: 'test-title-1',
+          ...expectedProgrammeDataStore,
+        arms_length_body: albId,
         },
       ];
-      await knex('delivery_programme').insert(expectedProgrammesWithName);
+      await knex('delivery_programme').insert(expectedProgramme);
 
       const getResult = await store.get('12345');
 
@@ -156,39 +127,30 @@ describe('DeliveryProgrammeStore', () => {
     'should update an existing Delivery Programme in the database',
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
-      const getAlbID = await knex('arms_length_body').insert(
+      const insertAlbId = await knex('arms_length_body').insert(
         expectedAlbsWithName,
         ['id'],
       );
-      const albId = getAlbID[1].id;
-      const expectedProgrammesWithName = [
+      const albId = insertAlbId[1].id;
+      const expectedProgramme = [
         {
-          programme_manager: JSON.stringify(['string 1', 'string 2']),
-          title: 'Test title 1',
-          alias: 'Test Alias',
-          description: 'Test description',
-          finance_code: 'Test finance_code',
+          ...expectedProgrammeDataStore,
           arms_length_body: albId,
-          delivery_programme_code: 'Test delivery_programme_code',
-          url: 'Test url',
-          updated_by: 'john',
-          name: 'test-title-1',
         },
       ];
-      const insertedIds = await knex('delivery_programme').insert(
-        expectedProgrammesWithName,
+      const InsertinsertProgrammeId = await knex('delivery_programme').insert(
+        expectedProgramme,
         ['id'],
       );
 
-      const test2Id = insertedIds[0].id;
+      const insertProgrammeId = InsertinsertProgrammeId[0].id;
       const expectedUpdate: PartialDeliveryProgramme = {
-        id: test2Id,
+        id: insertProgrammeId,
         title: 'Programme Example',
         alias: 'programme',
         programme_manager: ['manager1, manager2'],
         description: 'This is an example Delivery Programme 2',
         url: 'http://www.example.com/index.html',
-
       };
 
       const updateResult = await store.update(expectedUpdate, 'test@test.com');
@@ -204,26 +166,18 @@ describe('DeliveryProgrammeStore', () => {
     'should not update a non-existent Delivery Programme',
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
-      const getAlbID = await knex('arms_length_body').insert(
+      const insertAlbId = await knex('arms_length_body').insert(
         expectedAlbsWithName,
         ['id'],
       );
-      const albId = getAlbID[1].id;
-      const expectedProgrammesWithName = [
+      const albId = insertAlbId[1].id;
+      const expectedProgramme = [
         {
-          programme_manager: JSON.stringify(['string 1', 'string 2']),
-          title: 'Test title 1',
-          alias: 'Test Alias',
-          description: 'Test description',
-          finance_code: 'Test finance_code',
+          ...expectedProgrammeDataStore,
           arms_length_body: albId,
-          delivery_programme_code: 'Test delivery_programme_code',
-          url: 'Test url',
-          updated_by: 'john',
-          name: 'test-title-1',
         },
       ];
-      await knex('delivery_programme').insert(expectedProgrammesWithName);
+      await knex('delivery_programme').insert(expectedProgramme);
 
       await expect(
         async () =>
@@ -247,22 +201,14 @@ describe('DeliveryProgrammeStore', () => {
       await knex('arms_length_body').insert(expectedAlbsWithName);
       await store.getAll();
 
-      const getAlbID = await knex('arms_length_body').insert(
+      const insertAlbId = await knex('arms_length_body').insert(
         expectedAlbsWithName,
         ['id'],
       );
-      const albId = getAlbID[1].id;
+      const albId = insertAlbId[1].id;
       const updateWithoutId = {
-        programme_manager: JSON.stringify(['string 1', 'string 2']),
-          title: 'Test title 1',
-          alias: 'Test Alias',
-          description: 'Test description',
-          finance_code: 'Test finance_code',
-          arms_length_body: albId,
-          delivery_programme_code: 'Test delivery_programme_code',
-          url: 'Test url',
-          updated_by: 'john',
-          name: 'test-title-1',
+        ...expectedProgrammeDataStore,
+        arms_length_body: albId,
       };
       await expect(
         async () => await store.update(updateWithoutId, 'test@test.com'),
