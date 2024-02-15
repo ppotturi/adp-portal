@@ -7,7 +7,7 @@ const TABLE_NAME = 'delivery_programme';
 type Row = {
   id: string;
   timestamp: Date;
-  programme_manager: string[];
+  programme_manager: string;
   title: string;
   readonly name: string;
   alias?: string;
@@ -44,7 +44,7 @@ export class DeliveryProgrammeStore {
 
     return DeliveryProgrammes.map(row => ({
       id: row.id,
-      programme_manager: row.programme_manager,
+      programme_manager: JSON.parse(row.programme_manager),
       title: row.title,
       name: row.name,
       alias: row?.alias,
@@ -77,17 +77,17 @@ export class DeliveryProgrammeStore {
 
     return row
       ? {
-        id: row.id,
-        programme_manager: row.programme_manager,
-        title: row.title,
-        name: row.name,
-        alias: row?.alias,
-        description: row.description,
-        finance_code: row?.finance_code,
-        arms_length_body: row.arms_length_body,
-        delivery_programme_code: row.delivery_programme_code,
-        url: row?.url,
-        timestamp: new Date(row.created_at),
+          id: row.id,
+          programme_manager: JSON.parse(row.programme_manager),
+          title: row.title,
+          name: row.name,
+          alias: row?.alias,
+          description: row.description,
+          finance_code: row?.finance_code,
+          arms_length_body: row.arms_length_body,
+          delivery_programme_code: row.delivery_programme_code,
+          url: row?.url,
+          timestamp: new Date(row.created_at),
         }
       : null;
   }
@@ -98,7 +98,7 @@ export class DeliveryProgrammeStore {
   ): Promise<DeliveryProgramme> {
     const insertResult = await this.client<Row>(TABLE_NAME).insert(
       {
-        programme_manager: deliveryProgramme.programme_manager,
+        programme_manager: JSON.stringify(deliveryProgramme.programme_manager),
         title: deliveryProgramme.title,
         name: createName(deliveryProgramme.title),
         alias: deliveryProgramme?.alias,
@@ -112,12 +112,6 @@ export class DeliveryProgrammeStore {
       ['id', 'created_at'],
     );
 
-    if (insertResult.length < 1) {
-      throw new Error(
-        `Could not insert Delivery Programme ${deliveryProgramme.title}`,
-      );
-    }
-
     return {
       ...deliveryProgramme,
       id: insertResult[0].id,
@@ -126,7 +120,10 @@ export class DeliveryProgrammeStore {
   }
 
   async update(
-    deliveryProgramme: Omit<PartialDeliveryProgramme, 'timestamp'>,
+    deliveryProgramme: Omit<
+      PartialDeliveryProgramme,
+      'timestamp' | 'programme_manager'
+    >,
     updatedBy: string,
   ): Promise<DeliveryProgramme> {
     if (deliveryProgramme.id === undefined) {
@@ -142,10 +139,10 @@ export class DeliveryProgrammeStore {
         `Could not find Delivery Programme with ID ${deliveryProgramme.id}`,
       );
     }
-
     const updated = new Date();
-
-    const updatedData: Partial<DeliveryProgramme> = {...deliveryProgramme};
+    const updatedData: Partial<DeliveryProgramme> = {
+      ...deliveryProgramme,
+    };
 
     if (Object.keys(updatedData).length === 0) {
       return existingProgramme;
@@ -155,6 +152,7 @@ export class DeliveryProgrammeStore {
       .where('id', deliveryProgramme.id)
       .update({
         ...updatedData,
+        programme_manager: JSON.stringify(updatedData.programme_manager),
         updated_at: updated,
         updated_by: updatedBy,
       });

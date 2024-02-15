@@ -100,12 +100,6 @@ export class ArmsLengthBodyStore {
       ['id', 'created_at'],
     );
 
-    if (insertResult.length < 1) {
-      throw new Error(
-        `Could not insert Arms Length Body ${armsLengthBody.title}`,
-      );
-    }
-
     return {
       ...armsLengthBody,
       id: insertResult[0].id,
@@ -134,7 +128,7 @@ export class ArmsLengthBodyStore {
     const updated = new Date();
 
     const updatedData: Partial<ArmsLengthBody> = {...armsLengthBody};
-
+    
     if (Object.keys(updatedData).length === 0) {
       return existingALB;
     }

@@ -10,7 +10,7 @@ import {
   expectedAlb,
   expectedAlbs,
   expectedAlbsWithName,
-} from './mockTestData';
+} from './albTestData';
 
 describe('armsLengthBodyStore', () => {
   const databases = TestDatabases.create();
@@ -112,7 +112,7 @@ describe('armsLengthBodyStore', () => {
       expect(updateResult.url).toBe(expectedUpdate.url);
     },
   );
-
+  
   it.each(databases.eachSupportedId())(
     'should not update a non-existent ALB',
     async databaseId => {
@@ -134,6 +134,27 @@ describe('armsLengthBodyStore', () => {
             },
             'test@test.com',
           ),
+      ).rejects.toThrow(NotFoundError);
+    },
+  );
+
+  it.each(databases.eachSupportedId())(
+    'should throw an error if existing ALB id is undefined',
+    async databaseId => {
+      const { knex, store } = await createDatabase(databaseId);
+
+      await knex('arms_length_body').insert(expectedAlbsWithName);
+      await store.getAll();
+      const updateWithoutId = {
+        creator: 'n/a',
+        owner: 'n/a',
+        title: 'Non-existent ALB',
+        alias: 'Non-existent ALB',
+        name: 'non-existent-alb',
+        description: 'n/a',
+      };
+      await expect(
+        async () => await store.update(updateWithoutId, 'test@test.com'),
       ).rejects.toThrow(NotFoundError);
     },
   );

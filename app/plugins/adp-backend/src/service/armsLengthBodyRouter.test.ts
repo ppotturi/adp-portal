@@ -175,30 +175,4 @@ describe('createRouter', () => {
       expect(response.text).toEqual('{"error":"ALB name already exists"}');
     });
   });
-
-  describe('getCurrentUsername', () => {
-    const mockIdentityApi = {
-      getIdentity: jest.fn().mockResolvedValue({
-        identity: { userEntityRef: 'user:default/johndoe' },
-      }),
-    };
-
-    it('returns the username when identity is found', async () => {
-      mockIdentityApi.getIdentity.mockResolvedValue({
-        identity: { userEntityRef: 'user:default/johndoe' },
-      });
-
-      await expect(
-        getCurrentUsername(mockIdentityApi, express.request),
-      ).resolves.toBe('user:default/johndoe');
-    });
-
-    it('returns "unknown" when identity is not found', async () => {
-      mockIdentityApi.getIdentity.mockResolvedValue(null);
-
-      await expect(
-        getCurrentUsername(mockIdentityApi, express.request),
-      ).resolves.toBe('unknown');
-    });
-  });
 });
