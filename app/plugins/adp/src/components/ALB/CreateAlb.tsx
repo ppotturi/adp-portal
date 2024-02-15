@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
 import { ActionsModal } from '../../utils/ActionsModal';
-import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import {
   alertApiRef,
   discoveryApiRef,
@@ -12,6 +11,9 @@ import {
 import { ArmsLengthBodyClient } from './api/AlbClient';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { albFormFields } from './AlbFormFields';
+import { usePermission } from '@backstage/plugin-permission-react';
+import { adpProgrammmeCreatePermission, ArmsLengthBody } from '@internal/plugin-adp-common';
+
 
 interface CreateAlbProps {
   refetchArmsLengthBody: () => void;
@@ -26,6 +28,16 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
   const fields = albFormFields;
 
   const albClient = new ArmsLengthBodyClient(discoveryApi, fetchApi);
+
+
+  const { allowed } = usePermission({
+    permission: adpProgrammmeCreatePermission,
+
+    
+  });
+
+  console.log('allowed is:', allowed)
+
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -56,7 +68,9 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
   };
 
   return (
+
     <>
+    {allowed && (
       <Button
         variant="contained"
         size="large"
@@ -67,6 +81,19 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
       >
         Add ALB
       </Button>
+    )}
+
+{allowed && (
+      <Button
+        variant="contained"
+        size="large"
+        color="secondary"
+        
+      >
+        TESTING BUTTON
+      </Button>
+    )}
+
       {isModalOpen && (
         <ActionsModal
           open={isModalOpen}

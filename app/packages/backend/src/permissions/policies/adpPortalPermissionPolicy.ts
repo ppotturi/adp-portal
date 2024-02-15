@@ -17,6 +17,7 @@ import {
   catalogEntityCreatePermission,
   catalogLocationCreatePermission,
 } from '@backstage/plugin-catalog-common/alpha';
+import { adpProgrammmeCreatePermission } from '@internal/plugin-adp-common';
 
 import { RbacUtilities } from '../rbacUtilites'
 import { Logger } from 'winston';
@@ -37,6 +38,19 @@ export class AdpPortalPermissionPolicy implements PermissionPolicy {
     this.logger.debug(
       `User: identity.type - ${user?.identity.type} User: identity.userEntityRef - ${user?.identity.userEntityRef} User: identity.ownershipEntityRefs.length - ${user?.identity.ownershipEntityRefs.length} Request: type - ${request.permission.type}; name - ${request.permission.name}; action - ${request.permission.attributes.action}`,
     );
+
+
+// testing create permission
+    if ( isPermission(request.permission, adpProgrammmeCreatePermission)) {
+      if (user != null && this.rbacUtilites.isInProgrammeAdminGroup(user)) {
+        this.logger.info("This is a programme admin user with the ad group: programme admin group");
+        return { result: AuthorizeResult.ALLOW };
+      } else {
+        this.logger.info("deny condition has been executed");
+        return { result: AuthorizeResult.DENY };
+      }
+    }
+
 
     // exempting admins from permission checks
     if (user != null && this.rbacUtilites.isInPlatformAdminGroup(user)) {
