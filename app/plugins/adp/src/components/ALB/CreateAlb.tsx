@@ -30,14 +30,9 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
   const albClient = new ArmsLengthBodyClient(discoveryApi, fetchApi);
 
 
-  const { allowed } = usePermission({
-    permission: adpProgrammmeCreatePermission,
-
-    
+  const { isUserAllowed } = usePermission({
+    permission: adpProgrammmeCreatePermission,  
   });
-
-  console.log('allowed is:', allowed)
-
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -70,7 +65,7 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
   return (
 
     <>
-    {allowed && (
+    {isUserAllowed && (
       <Button
         variant="contained"
         size="large"
@@ -82,18 +77,6 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
         Add ALB
       </Button>
     )}
-
-{allowed && (
-      <Button
-        variant="contained"
-        size="large"
-        color="secondary"
-        
-      >
-        TESTING BUTTON
-      </Button>
-    )}
-
       {isModalOpen && (
         <ActionsModal
           open={isModalOpen}

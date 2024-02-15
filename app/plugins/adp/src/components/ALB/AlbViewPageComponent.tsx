@@ -22,6 +22,8 @@ import { ArmsLengthBodyClient } from './api/AlbClient';
 import { ArmsLengthBodyApi } from './api/AlbApi';
 import CreateAlb from './CreateAlb';
 import { albFormFields } from './AlbFormFields';
+import { adpProgrammmeCreatePermission } from '@internal/plugin-adp-common';
+import { usePermission } from '@backstage/plugin-permission-react';
 
 export const AlbViewPageComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,6 +40,10 @@ export const AlbViewPageComponent = () => {
     discoveryApi,
     fetchApi,
   );
+
+  const { isUserAllowed } = usePermission({
+    permission: adpProgrammmeCreatePermission,
+  });
 
   const getAllArmsLengthBodies = async () => {
     try {
@@ -105,7 +111,7 @@ export const AlbViewPageComponent = () => {
     {
       title: 'Short Name',
       field: 'short_name',
-      highlight: true,
+      highlight: false,
       type: 'string',
     },
     {
@@ -132,18 +138,22 @@ export const AlbViewPageComponent = () => {
     },
 
     {
-      title: 'Action',
+      title: '',
       highlight: true,
-      render: rowData => (
-        <Button
-          variant="contained"
-          color="default"
-          onClick={() => handleEdit(rowData)}
-          data-testid={`alb-edit-button-${rowData.id}`}
-        >
-          Edit
-        </Button>
-      ),
+      render: rowData => {
+        return (
+          isUserAllowed && (
+            <Button
+              variant="contained"
+              color="default"
+              onClick={() => handleEdit(rowData)}
+              data-testid={`alb-edit-button-${rowData.id}`}
+            >
+              Edit
+            </Button>
+          )
+        );
+      },
     },
   ];
 
@@ -165,7 +175,8 @@ export const AlbViewPageComponent = () => {
           View or add Arms Length Bodies to the Azure Developer Platform.
         </Typography>
         <DefaultTable data={tableData} columns={columns} title="View all" />
-        {isModalOpen && (
+
+        {isModalOpen && isUserAllowed && (
           <ActionsModal
             open={isModalOpen}
             onClose={handleCloseModal}

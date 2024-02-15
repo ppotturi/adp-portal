@@ -8,11 +8,26 @@ import {
   fetchApiRef,
 } from '@backstage/core-plugin-api';
 import { TestApiProvider, renderInTestApp } from '@backstage/test-utils';
+import {
+  PermissionApi,
+  permissionApiRef,
+} from '@backstage/plugin-permission-react';
+import { AuthorizeResult } from '@backstage/plugin-permission-common';
 
 const mockAlertApi = { post: jest.fn() };
 const mockErrorApi = { post: jest.fn() };
 const mockDiscoveryApi = { getBaseUrl: jest.fn() };
 const mockFetchApi = { fetch: jest.fn() };
+
+const mockAuthorize = jest
+  .fn()
+  .mockImplementation(async () => ({ result: AuthorizeResult.ALLOW }));
+const permissionApi: Partial<PermissionApi> = { authorize: mockAuthorize };
+
+jest.mock('@backstage/plugin-permission-react', () => ({
+  ...jest.requireActual('@backstage/plugin-permission-react'),
+  usePermission: jest.fn().mockReturnValue({ isUserAllowed: true }),
+}));
 
 const mockGetArmsLengthBodies = jest.fn();
 const mockCreateArmsLengthBody = jest.fn().mockResolvedValue({});
@@ -26,6 +41,7 @@ jest.mock('./api/AlbClient', () => ({
 
 beforeEach(() => {
   jest.clearAllMocks();
+  mockAuthorize.mockClear();
 });
 
 describe('CreateAlb', () => {
@@ -36,6 +52,7 @@ describe('CreateAlb', () => {
         [errorApiRef, mockErrorApi],
         [discoveryApiRef, mockDiscoveryApi],
         [fetchApiRef, mockFetchApi],
+        [permissionApiRef, permissionApi],
       ]}
     >
       <CreateAlb refetchArmsLengthBody={mockRefetchArmsLengthBody} />
