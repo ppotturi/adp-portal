@@ -51,6 +51,8 @@ import {
   genPageTheme,
 } from '@backstage/theme';
 
+import { FluxRuntimePage } from '@weaveworksoss/backstage-plugin-flux';
+
 import styles from 'style-loader!css-loader?{"modules": {"auto": true}}!sass-loader?{"sassOptions": {"quietDeps": true}}!./style.module.scss';
 import { AdpPage } from '@internal/plugin-adp';
 import { AlbViewPageComponent } from '@internal/plugin-adp/src/components/ALB/AlbViewPageComponent';
@@ -266,6 +268,7 @@ const routes = (
         <ReportIssue />
       </TechDocsAddons>
     </Route>
+    <Route path="/flux-runtime" element={<FluxRuntimePage />} />
     <Route path="/adp" element={<AdpPage />} />
   </FlatRoutes>
 );
