@@ -115,6 +115,12 @@ export class DeliveryProgrammeStore {
       ['id', 'created_at'],
     );
 
+    if (insertResult.length < 1) {
+      throw new Error(
+        `Could not insert Delivery Programme ${deliveryProgramme.title}`,
+      );
+    }
+    
     return {
       ...deliveryProgramme,
       id: insertResult[0].id,

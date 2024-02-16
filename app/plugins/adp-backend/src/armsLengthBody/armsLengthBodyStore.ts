@@ -108,6 +108,12 @@ export class ArmsLengthBodyStore {
       ['id', 'created_at'],
     );
 
+    if (insertResult.length < 1) {
+      throw new Error(
+        `Could not insert Arms Length Body ${armsLengthBody.title}`,
+      );
+    }
+    
     return {
       ...armsLengthBody,
       id: insertResult[0].id,

@@ -1,7 +1,7 @@
 export type ArmsLengthBody = {
     id: string;
     created_at: Date;
-  updated_at?: Date;
+    updated_at?: Date;
     creator: string;
     owner: string;
     readonly name: string;
