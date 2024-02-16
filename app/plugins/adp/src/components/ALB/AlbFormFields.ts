@@ -7,7 +7,7 @@ export const albFormFields = [
       validations: {
         required: true,
         pattern: {
-          value: /^([a-zA-Z0-9 ]+[-_. ]?)*[a-zA-Z0-9]+$/,
+          value: /^[a-zA-Z0-9]+(?:[-_. ][a-zA-Z0-9]+)*$/,
           message:
             'Invalid ALB name format. Use letters, numbers, or "-", "_", "." as separators.',
         },
