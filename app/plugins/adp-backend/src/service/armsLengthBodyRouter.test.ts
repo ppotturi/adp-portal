@@ -5,9 +5,9 @@ import {
 } from '@backstage/backend-common';
 import express from 'express';
 import request from 'supertest';
-import { checkForDuplicateName, createRouter, getOwner } from './router';
+import { createAlbRouter, getOwner } from './armsLengthBodyRouter';
 import { ConfigReader } from '@backstage/config';
-import { getCurrentUsername } from '../service/router';
+import { getCurrentUsername , checkForDuplicateTitle} from '../utils';
 
 describe('createRouter', () => {
   let app: express.Express;
@@ -18,8 +18,8 @@ describe('createRouter', () => {
     }),
   };
   const mockConfig = new ConfigReader({
-    adGroup: {
-      adminsGroup: 'test',
+    rbac: {
+      programmeAdminGroup: 'test',
     },
   });
   const mockOptions = {
@@ -43,7 +43,7 @@ describe('createRouter', () => {
   }
 
   beforeAll(async () => {
-    const router = await createRouter(mockOptions);
+    const router = await createAlbRouter(mockOptions);
     app = express().use(router);
   });
 
@@ -81,11 +81,11 @@ describe('createRouter', () => {
         creator: creator,
         owner: owner,
         title: 'Test ALB example',
-        short_name: 'ALB',
+        alias: 'ALB',
         description: 'This is an example ALB',
       };
       const getExistingData = await request(app).get('/armsLengthBody');
-      const checkDuplicate = await checkForDuplicateName(
+      const checkDuplicate = await checkForDuplicateTitle(
         getExistingData.body,
         expectedALB.title,
       );
@@ -98,7 +98,7 @@ describe('createRouter', () => {
 
     it('returns Error', async () => {
       const invalidALB = {
-        short_name: 'ALB',
+        alias: 'ALB',
         description: 'This is an example ALB',
       };
       const response = await request(app)
@@ -109,17 +109,17 @@ describe('createRouter', () => {
   });
 
   describe('POST /armsLengthBody', () => {
-    it('returns 406 when ALB Name already exists', async () => {
+    it('returns 406 when ALB name already exists', async () => {
       const expectedALB = {
         title: 'Marine & Maritime',
-        short_name: 'ALB',
+        alias: 'ALB',
         description: 'This is an example ALB',
       };
       const response = await request(app)
         .post('/armsLengthBody')
         .send(expectedALB);
       expect(response.status).toEqual(406);
-      expect(response.text).toEqual('{"error":"ALB Name already exists"}');
+      expect(response.text).toEqual('{"error":"ALB name already exists"}');
     });
   });
 
@@ -137,7 +137,7 @@ describe('createRouter', () => {
         creator: creator,
         owner: owner,
         title: 'Test ALB',
-        short_name: 'ALB',
+        alias: 'ALB',
         description: 'This is an example ALB',
       };
       const postRequest = await request(app)
@@ -172,33 +172,7 @@ describe('createRouter', () => {
         .post('/armsLengthBody')
         .send(expectedALB);
       expect(response.status).toEqual(406);
-      expect(response.text).toEqual('{"error":"ALB Name already exists"}');
-    });
-  });
-
-  describe('getCurrentUsername', () => {
-    const mockIdentityApi = {
-      getIdentity: jest.fn().mockResolvedValue({
-        identity: { userEntityRef: 'user:default/johndoe' },
-      }),
-    };
-
-    it('returns the username when identity is found', async () => {
-      mockIdentityApi.getIdentity.mockResolvedValue({
-        identity: { userEntityRef: 'user:default/johndoe' },
-      });
-
-      await expect(
-        getCurrentUsername(mockIdentityApi, express.request),
-      ).resolves.toBe('user:default/johndoe');
-    });
-
-    it('returns "unknown" when identity is not found', async () => {
-      mockIdentityApi.getIdentity.mockResolvedValue(null);
-
-      await expect(
-        getCurrentUsername(mockIdentityApi, express.request),
-      ).resolves.toBe('unknown');
+      expect(response.text).toEqual('{"error":"ALB name already exists"}');
     });
   });
 });

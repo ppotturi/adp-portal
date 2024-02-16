@@ -109,8 +109,8 @@ export const AlbViewPageComponent = () => {
       type: 'string',
     },
     {
-      title: 'Short Name',
-      field: 'short_name',
+      title: 'Alias',
+      field: 'alias',
       highlight: false,
       type: 'string',
     },
@@ -127,11 +127,11 @@ export const AlbViewPageComponent = () => {
       type: 'string',
     },
     {
-      title: 'Created',
-      field: 'timestamp',
+      title: 'Updated At',
+      field: 'updated_at',
       render: (data: {}) => {
         const e = data as ArmsLengthBody;
-        return new Date(e.timestamp).toLocaleString();
+        return new Date(e.updated_at).toLocaleString();
       },
       highlight: false,
       type: 'date',

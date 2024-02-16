@@ -1,4 +1,5 @@
-import { createName, createTitle } from './utils';
+import { createName, createTransformerTitle, getCurrentUsername } from './utils';
+import express from 'express';
 
 describe('createName', () => {
   it('replaces spaces with dashes and converts to lowercase', () => {
@@ -20,16 +21,56 @@ describe('createName', () => {
   });
 });
 
-describe('createTitle', () => {
-  it('returns the title as is if no short_name is provided', () => {
+describe('createTransformerTitle', () => {
+  it('returns the title as is if no alias is provided', () => {
     const title = 'Example Title';
-    expect(createTitle(title)).toBe(title);
+    expect(createTransformerTitle(title)).toBe(title);
   });
 
-  it('puts the short_name in brackets if provided', () => {
+  it('puts the alias in brackets if provided', () => {
     const title = 'Example Title';
     const shortName = 'ET';
     const expected = 'Example Title (ET)';
-    expect(createTitle(title, shortName)).toBe(expected);
+    expect(createTransformerTitle(title, shortName)).toBe(expected);
+  });
+});
+
+describe('checkForDuplicateTitle', () => {
+  it('returns the title as is if no alias is provided', () => {
+    const title = 'Example Title';
+    expect(createTransformerTitle(title)).toBe(title);
+  });
+
+  it('puts the alias in brackets if provided', () => {
+    const title = 'Example Title';
+    const shortName = 'ET';
+    const expected = 'Example Title (ET)';
+    expect(createTransformerTitle(title, shortName)).toBe(expected);
+  });
+});
+
+describe('getCurrentUsername', () => {
+  const mockIdentityApi = {
+    getIdentity: jest.fn().mockResolvedValue({
+      identity: { userEntityRef: 'user:default/johndoe' },
+    }),
+  };
+
+  it('returns the username when identity is found', async () => {
+    mockIdentityApi.getIdentity.mockResolvedValue({
+      identity: { userEntityRef: 'user:default/johndoe' },
+    });
+
+    await expect(
+      getCurrentUsername(mockIdentityApi, express.request),
+    ).resolves.toBe('user:default/johndoe');
+  });
+
+  it('returns "unknown" when identity is not found', async () => {
+    mockIdentityApi.getIdentity.mockResolvedValue(null);
+
+    await expect(
+      getCurrentUsername(mockIdentityApi, express.request),
+    ).resolves.toBe('unknown');
   });
 });

@@ -11,32 +11,33 @@ import {
 } from '../armsLengthBody/armsLengthBodyStore';
 import { ArmsLengthBody } from '../types';
 import { Config } from '@backstage/config';
+import { checkForDuplicateTitle, getCurrentUsername } from '../utils';
 
- 
-export interface RouterOptions {
+export interface AlbRouterOptions {
   logger: Logger;
   identity: IdentityApi;
   database: PluginDatabaseManager;
   config: Config;
 }
 
-export function getOwner(options: RouterOptions): string {
+export function getOwner(options: AlbRouterOptions): string {
   const { config } = options;
-  const ownerAdGroup = config.getConfig('adGroup');
-  const owner = ownerAdGroup.getString('adminsGroup');
+  const ownerGroup = config.getConfig('rbac');
+  const owner = ownerGroup.getString('programmeAdminGroup');
   return owner;
 }
- 
-export async function createRouter(
-  options: RouterOptions,
+
+export async function createAlbRouter(
+  options: AlbRouterOptions,
 ): Promise<express.Router> {
   const { logger, identity, database } = options;
+
   const owner = getOwner(options);
+
   const adpDatabase = AdpDatabase.create(database);
   const armsLengthBodiesStore = new ArmsLengthBodyStore(
     await adpDatabase.get(),
   );
-
 
   const getAllArmsLengthBodies = await armsLengthBodiesStore.getAll();
 
@@ -46,7 +47,7 @@ export async function createRouter(
         creator: 'ADP',
         owner: 'ADP',
         title: 'Environment Agency',
-        short_name: 'EA',
+        alias: 'EA',
         name: 'environment-agency',
         description: '',
       },
@@ -57,8 +58,8 @@ export async function createRouter(
       {
         creator: 'ADP',
         owner: 'ADP',
-        title: 'Animal and Plant Health',
-        short_name: 'APHA',
+        title: 'Animal & Plant Health',
+        alias: 'APHA',
         name: 'animal-and-plant-health',
         description: '',
       },
@@ -70,7 +71,7 @@ export async function createRouter(
         creator: 'ADP',
         owner: 'ADP',
         title: 'Rural Payments Agency',
-        short_name: 'RPA',
+        alias: 'RPA',
         name: 'rural-payments-agency',
         description: '',
       },
@@ -82,7 +83,7 @@ export async function createRouter(
         creator: 'ADP',
         owner: 'ADP',
         title: 'Natural England',
-        short_name: 'NE',
+        alias: 'NE',
         name: 'natural-england',
         description: '',
       },
@@ -93,8 +94,8 @@ export async function createRouter(
       {
         creator: 'ADP',
         owner: 'ADP',
-        title: 'Marine and Maritime',
-        short_name: 'MMO',
+        title: 'Marine & Maritime',
+        alias: 'MMO',
         name: 'marine-and-maritime',
         description: '',
       },
@@ -103,35 +104,33 @@ export async function createRouter(
     );
   }
 
-
   const router = Router();
   router.use(express.json());
- 
+
   // Define routes
   router.get('/health', (_, response) => {
     logger.info('PONG!');
     response.json({ status: 'ok' });
   });
- 
+
   router.get('/armsLengthBody', async (_req, res) => {
     const data = await armsLengthBodiesStore.getAll();
     res.json(data);
   });
- 
+
   router.post('/armsLengthBody', async (req, res) => {
     try {
       if (!isArmsLengthBodyCreateRequest(req.body)) {
         throw new InputError('Invalid payload');
       }
 
-
       const data: ArmsLengthBody[] = await armsLengthBodiesStore.getAll();
-      const isDuplicate: boolean = await checkForDuplicateName(
+      const isDuplicate: boolean = await checkForDuplicateTitle(
         data,
         req.body.title,
       );
       if (isDuplicate) {
-        res.status(406).json({ error: 'ALB Name already exists' });
+        res.status(406).json({ error: 'ALB name already exists' });
       } else {
         const creator = await getCurrentUsername(identity, req);
         const armsLengthBody = await armsLengthBodiesStore.add(
@@ -140,7 +139,6 @@ export async function createRouter(
           owner,
         );
         res.json(armsLengthBody);
-
       }
     } catch (error) {
       throw new InputError('Error');
@@ -159,19 +157,16 @@ export async function createRouter(
       const isTitleChanged = updatedTitle && currentTitle !== updatedTitle;
 
       if (isTitleChanged) {
-        const isDuplicate: boolean = await checkForDuplicateName(
+        const isDuplicate: boolean = await checkForDuplicateTitle(
           data,
           updatedTitle,
-
         );
         if (isDuplicate) {
-          res.status(406).json({ error: 'ALB Name already exists' });
+          res.status(406).json({ error: 'ALB name already exists' });
           return;
         }
       }
-
       const creator = await getCurrentUsername(identity, req);
-
       const armsLengthBody = await armsLengthBodiesStore.update(
         req.body,
         creator,
@@ -184,37 +179,15 @@ export async function createRouter(
   router.use(errorHandler());
   return router;
 }
- 
+
 function isArmsLengthBodyCreateRequest(
-  request: Omit<ArmsLengthBody, 'id' | 'timestamp'>,
+  request: Omit<ArmsLengthBody, 'id' | 'created_at'>,
 ) {
   return typeof request?.title === 'string';
 }
- 
+
 function isArmsLengthBodyUpdateRequest(
-  request: Omit<PartialArmsLengthBody, 'timestamp'>,
+  request: Omit<PartialArmsLengthBody, 'updated_at'>,
 ) {
   return typeof request?.id === 'string';
 }
- 
-export async function getCurrentUsername(
-  identity: IdentityApi,
-  req: express.Request,
-): Promise<string> {
-  const user = await identity.getIdentity({ request: req });
-  return user?.identity.userEntityRef ?? 'unknown';
-}
-
-export async function checkForDuplicateName(
-  store: ArmsLengthBody[],
-  title: string,
-): Promise<boolean> {
-  title = title.trim().toLowerCase();
-
-  const duplicate = store.find(
-    object => object.title.trim().toLowerCase() === title,
-  );
-
-  return duplicate !== undefined;
-}
-
