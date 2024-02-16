@@ -1,1 +1,1 @@
-export type { ArmsLengthBody } from './types/ArmsLengthBody/datamodel';
+export type { ArmsLengthBody } from '../../../adp-common/src/types/datamodel';
