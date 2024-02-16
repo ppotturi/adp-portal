@@ -9,7 +9,7 @@ import {
     DeliveryProgrammeStore,
   PartialDeliveryProgramme,
 } from '../deliveryProgramme/deliveryProgrammeStore';
-import { DeliveryProgramme } from '../types';
+import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import { checkForDuplicateTitle, getCurrentUsername} from '../utils';
 
 export interface ProgrammeRouterOptions {

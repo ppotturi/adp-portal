@@ -1,4 +1,4 @@
-import { ArmsLengthBody, DeliveryProgramme } from "./types";
+import { ArmsLengthBody, DeliveryProgramme } from '@internal/plugin-adp-common';
 import { IdentityApi } from '@backstage/plugin-auth-node';
 import express from 'express';
 

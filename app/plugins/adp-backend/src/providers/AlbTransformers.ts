@@ -1,5 +1,5 @@
 import { GroupEntity } from '@backstage/catalog-model';
-import { ArmsLengthBody } from '../../../adp-common/src/types/datamodel';
+import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import { createTransformerTitle } from '../utils';
 
 export type GroupTransformer = (

@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 import { NotFoundError } from '@backstage/errors';
-import { ArmsLengthBody } from '../types';
+import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import { createName } from '../utils';
 
 const TABLE_NAME = 'arms_length_body';
@@ -15,7 +15,7 @@ type Row = {
   readonly name: string;
   created_at: Date;
   updated_by?: string;
-  updated_at?: Date;
+  updated_at: Date;
 };
 
 export type PartialArmsLengthBody = Partial<ArmsLengthBody>;
@@ -48,9 +48,7 @@ export class ArmsLengthBodyStore {
       name: row.name,
       id: row.id,
       created_at: new Date(row.created_at),
-      updated_at: row.updated_at
-        ? new Date(row?.updated_at)
-        : new Date(row.created_at),
+      updated_at: row.updated_at,
     }));
   }
 
@@ -83,14 +81,12 @@ export class ArmsLengthBodyStore {
           id: row.id,
           created_at: new Date(row.created_at),
           updated_at: row.updated_at
-            ? new Date(row?.updated_at)
-            : new Date(row.created_at),
         }
       : null;
   }
 
   async add(
-    armsLengthBody: Omit<ArmsLengthBody, 'id' | 'created_at'>,
+    armsLengthBody: Omit<ArmsLengthBody, 'id' | 'created_at' | 'updated_at'>,
     creator: string,
     owner: string,
   ): Promise<ArmsLengthBody> {
@@ -105,7 +101,7 @@ export class ArmsLengthBodyStore {
         name: createName(armsLengthBody.title),
         updated_by: creator,
       },
-      ['id', 'created_at'],
+      ['id', 'created_at', 'updated_at'],
     );
 
     if (insertResult.length < 1) {
@@ -118,6 +114,7 @@ export class ArmsLengthBodyStore {
       ...armsLengthBody,
       id: insertResult[0].id,
       created_at: new Date(insertResult[0].created_at),
+      updated_at: new Date(insertResult[0].updated_at),
     };
   }
 

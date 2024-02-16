@@ -1,6 +1,6 @@
-import { ArmsLengthBody } from '../types';
+import { ArmsLengthBody } from '@internal/plugin-adp-common';
 
-export const expectedAlb: Omit<ArmsLengthBody, 'id' | 'created_at'> = {
+export const expectedAlb: Omit<ArmsLengthBody, 'id' | 'created_at' | 'updated_at'> = {
   creator: 'john',
   owner: 'john',
   title: 'ALB Example',

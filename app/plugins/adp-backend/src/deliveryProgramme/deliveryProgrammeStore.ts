@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 import { NotFoundError } from '@backstage/errors';
-import { DeliveryProgramme } from '../types';
+import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import { createName } from '../utils';
 
 const TABLE_NAME = 'delivery_programme';
@@ -17,7 +17,7 @@ type Row = {
   url?: string;
   updated_by?: string;
   created_at: Date;
-  updated_at?: Date;
+  updated_at: Date;
 };
 
 export type PartialDeliveryProgramme = Partial<DeliveryProgramme>;
@@ -54,7 +54,7 @@ export class DeliveryProgrammeStore {
       delivery_programme_code: row.delivery_programme_code,
       url: row?.url,
       created_at: new Date(row.created_at),
-      updated_at: row.updated_at ? new Date(row?.updated_at) : new Date(row.created_at)
+      updated_at: row.updated_at
     }));
   }
 
@@ -90,13 +90,13 @@ export class DeliveryProgrammeStore {
           delivery_programme_code: row.delivery_programme_code,
           url: row?.url,
           created_at: new Date(row.created_at),
-          updated_at: row.updated_at ? new Date(row?.updated_at) : new Date(row.created_at)
+          updated_at: row.updated_at
         }
       : null;
   }
 
   async add(
-    deliveryProgramme: Omit<DeliveryProgramme, 'id' | 'created_at'>,
+    deliveryProgramme: Omit<DeliveryProgramme, 'id' | 'created_at' | 'updated_at'>,
     author: string,
   ): Promise<DeliveryProgramme> {
     const insertResult = await this.client<Row>(TABLE_NAME).insert(
@@ -112,7 +112,7 @@ export class DeliveryProgrammeStore {
         url: deliveryProgramme?.url,
         updated_by: author,
       },
-      ['id', 'created_at'],
+      ['id', 'created_at', 'updated_at'],
     );
 
     if (insertResult.length < 1) {
@@ -125,6 +125,7 @@ export class DeliveryProgrammeStore {
       ...deliveryProgramme,
       id: insertResult[0].id,
       created_at: new Date(insertResult[0].created_at),
+      updated_at: new Date(insertResult[0].updated_at),
     };
   }
 

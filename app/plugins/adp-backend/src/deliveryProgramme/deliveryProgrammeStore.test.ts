@@ -7,7 +7,7 @@ import {
 import { NotFoundError } from '@backstage/errors';
 import { createName } from '../utils';
 import { expectedAlbsWithName } from '../armsLengthBody/albTestData';
-import { DeliveryProgramme } from '../types';
+import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import { expectedProgrammeDataStore } from './programmeTestData';
 
 describe('DeliveryProgrammeStore', () => {
@@ -31,7 +31,7 @@ describe('DeliveryProgrammeStore', () => {
 
       const albId = insertAlbId[1].id;
 
-      const expectedProgrammeId: Omit<DeliveryProgramme, 'id' | 'created_at'> = {
+      const expectedProgrammeId: Omit<DeliveryProgramme, 'id' | 'created_at' | 'updated_at'> = {
         ...expectedProgrammeDataStore,
         programme_manager: ['string1', 'string 2'],
         arms_length_body: albId,
@@ -41,6 +41,7 @@ describe('DeliveryProgrammeStore', () => {
       expect(addResult.name).toEqual(createName(expectedProgrammeId.title));
       expect(addResult.id).toBeDefined();
       expect(addResult.created_at).toBeDefined();
+      expect(addResult.updated_at).toBeDefined();
     },
   );
 

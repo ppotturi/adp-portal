@@ -9,7 +9,7 @@ import {
   ArmsLengthBodyStore,
   PartialArmsLengthBody,
 } from '../armsLengthBody/armsLengthBodyStore';
-import { ArmsLengthBody } from '../types';
+import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import { Config } from '@backstage/config';
 import { checkForDuplicateTitle, getCurrentUsername } from '../utils';
 
