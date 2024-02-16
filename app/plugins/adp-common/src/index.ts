@@ -10,4 +10,4 @@ export * from './permissions';
 export type {
     ArmsLengthBody, 
 
-} from './types/ArmsLengthBody'
+} from './types/datamodel'

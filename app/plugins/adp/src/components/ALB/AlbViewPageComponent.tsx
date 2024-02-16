@@ -17,12 +17,11 @@ import {
   alertApiRef,
   errorApiRef,
 } from '@backstage/core-plugin-api';
-import { ArmsLengthBody } from '@internal/plugin-adp-backend';
+import { ArmsLengthBody , adpProgrammmeCreatePermission  } from '@internal/plugin-adp-common';
 import { ArmsLengthBodyClient } from './api/AlbClient';
 import { ArmsLengthBodyApi } from './api/AlbApi';
 import CreateAlb from './CreateAlb';
 import { albFormFields } from './AlbFormFields';
-import { adpProgrammmeCreatePermission } from '@internal/plugin-adp-common';
 import { usePermission } from '@backstage/plugin-permission-react';
 
 export const AlbViewPageComponent = () => {
