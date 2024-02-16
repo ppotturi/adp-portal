@@ -13,7 +13,7 @@ describe('defaultProgrammeGroupTransformer', () => {
       url: 'https://www.example.uk/',
       name: 'test-title-1',
       id: '1234',
-      timestamp: new Date(),
+      created_at: new Date(),
     };
 
     const expectedGroupEntity = {

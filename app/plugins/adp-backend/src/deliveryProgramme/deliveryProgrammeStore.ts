@@ -6,7 +6,6 @@ import { createName } from '../utils';
 const TABLE_NAME = 'delivery_programme';
 type Row = {
   id: string;
-  timestamp: Date;
   programme_manager: string;
   title: string;
   readonly name: string;
@@ -16,8 +15,8 @@ type Row = {
   arms_length_body: string;
   delivery_programme_code: string;
   url?: string;
-  created_at: Date;
   updated_by?: string;
+  created_at: Date;
   updated_at?: Date;
 };
 
@@ -39,6 +38,7 @@ export class DeliveryProgrammeStore {
         'delivery_programme_code',
         'url',
         'created_at',
+        'updated_at'
       )
       .orderBy('created_at');
 
@@ -53,7 +53,8 @@ export class DeliveryProgrammeStore {
       arms_length_body: row.arms_length_body,
       delivery_programme_code: row.delivery_programme_code,
       url: row?.url,
-      timestamp: new Date(row.created_at),
+      created_at: new Date(row.created_at),
+      updated_at: row.updated_at ? new Date(row?.updated_at) : new Date(row.created_at)
     }));
   }
 
@@ -72,6 +73,7 @@ export class DeliveryProgrammeStore {
         'delivery_programme_code',
         'url',
         'created_at',
+        'updated_at'
       )
       .first();
 
@@ -87,14 +89,15 @@ export class DeliveryProgrammeStore {
           arms_length_body: row.arms_length_body,
           delivery_programme_code: row.delivery_programme_code,
           url: row?.url,
-          timestamp: new Date(row.created_at),
+          created_at: new Date(row.created_at),
+          updated_at: row.updated_at ? new Date(row?.updated_at) : new Date(row.created_at)
         }
       : null;
   }
 
   async add(
-    deliveryProgramme: Omit<DeliveryProgramme, 'id' | 'timestamp'>,
-    updatedBy: string,
+    deliveryProgramme: Omit<DeliveryProgramme, 'id' | 'created_at'>,
+    author: string,
   ): Promise<DeliveryProgramme> {
     const insertResult = await this.client<Row>(TABLE_NAME).insert(
       {
@@ -107,7 +110,7 @@ export class DeliveryProgrammeStore {
         arms_length_body: deliveryProgramme.arms_length_body,
         delivery_programme_code: deliveryProgramme.delivery_programme_code,
         url: deliveryProgramme?.url,
-        updated_by: updatedBy,
+        updated_by: author,
       },
       ['id', 'created_at'],
     );
@@ -115,14 +118,14 @@ export class DeliveryProgrammeStore {
     return {
       ...deliveryProgramme,
       id: insertResult[0].id,
-      timestamp: new Date(insertResult[0].created_at),
+      created_at: new Date(insertResult[0].created_at),
     };
   }
 
   async update(
     deliveryProgramme: Omit<
       PartialDeliveryProgramme,
-      'timestamp' | 'programme_manager'
+      'updated_at' | 'programme_manager'
     >,
     updatedBy: string,
   ): Promise<DeliveryProgramme> {
@@ -157,6 +160,6 @@ export class DeliveryProgrammeStore {
         updated_by: updatedBy,
       });
 
-    return { ...existingProgramme, ...updatedData, timestamp: updated };
+    return { ...existingProgramme, ...updatedData, updated_at: updated };
   }
 }

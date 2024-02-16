@@ -34,6 +34,7 @@ export class ArmsLengthBodyStore {
         'name',
         'id',
         'created_at',
+        'updated_at',
       )
       .orderBy('created_at');
 
@@ -46,7 +47,10 @@ export class ArmsLengthBodyStore {
       url: row?.url,
       name: row.name,
       id: row.id,
-      timestamp: new Date(row.created_at),
+      created_at: new Date(row.created_at),
+      updated_at: row.updated_at
+        ? new Date(row?.updated_at)
+        : new Date(row.created_at),
     }));
   }
 
@@ -63,6 +67,7 @@ export class ArmsLengthBodyStore {
         'name',
         'id',
         'created_at',
+        'updated_at',
       )
       .first();
 
@@ -76,13 +81,16 @@ export class ArmsLengthBodyStore {
           url: row?.url,
           name: row.name,
           id: row.id,
-          timestamp: new Date(row.created_at),
+          created_at: new Date(row.created_at),
+          updated_at: row.updated_at
+            ? new Date(row?.updated_at)
+            : new Date(row.created_at),
         }
       : null;
   }
 
   async add(
-    armsLengthBody: Omit<ArmsLengthBody, 'id' | 'timestamp'>,
+    armsLengthBody: Omit<ArmsLengthBody, 'id' | 'created_at'>,
     creator: string,
     owner: string,
   ): Promise<ArmsLengthBody> {
@@ -103,12 +111,12 @@ export class ArmsLengthBodyStore {
     return {
       ...armsLengthBody,
       id: insertResult[0].id,
-      timestamp: new Date(insertResult[0].created_at),
+      created_at: new Date(insertResult[0].created_at),
     };
   }
 
   async update(
-    armsLengthBody: Omit<PartialArmsLengthBody, 'timestamp'>,
+    armsLengthBody: Omit<PartialArmsLengthBody, 'updated_at'>,
     updatedBy: string,
   ): Promise<ArmsLengthBody> {
     if (armsLengthBody.id === undefined) {
@@ -127,8 +135,8 @@ export class ArmsLengthBodyStore {
 
     const updated = new Date();
 
-    const updatedData: Partial<ArmsLengthBody> = {...armsLengthBody};
-    
+    const updatedData: Partial<ArmsLengthBody> = { ...armsLengthBody };
+
     if (Object.keys(updatedData).length === 0) {
       return existingALB;
     }
@@ -141,6 +149,6 @@ export class ArmsLengthBodyStore {
         updated_by: updatedBy,
       });
 
-    return { ...existingALB, ...updatedData, timestamp: updated };
+    return { ...existingALB, ...updatedData, updated_at: updated };
   }
 }

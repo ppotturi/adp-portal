@@ -104,13 +104,13 @@ export async function createProgrammeRouter(
 }
 
 function isDeliveryProgrammeCreateRequest(
-  request: Omit<DeliveryProgramme, 'id' | 'timestamp'>,
+  request: Omit<DeliveryProgramme, 'id' | 'created_at'>,
 ) {
   return typeof request?.title === 'string';
 }
 
 function isDeliveryProgrammeUpdateRequest(
-  request: Omit<PartialDeliveryProgramme, 'timestamp'>,
+  request: Omit<PartialDeliveryProgramme, 'updated_at'>,
 ) {
   return typeof request?.id === 'string';
 }

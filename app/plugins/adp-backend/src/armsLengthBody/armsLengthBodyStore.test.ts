@@ -31,7 +31,7 @@ describe('armsLengthBodyStore', () => {
 
       expect(addResult.name).toEqual(createName(expectedAlb.title));
       expect(addResult.id).toBeDefined();
-      expect(addResult.timestamp).toBeDefined();
+      expect(addResult.created_at).toBeDefined();
     },
   );
 

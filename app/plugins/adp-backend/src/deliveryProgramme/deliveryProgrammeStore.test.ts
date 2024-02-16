@@ -31,7 +31,7 @@ describe('DeliveryProgrammeStore', () => {
 
       const albId = insertAlbId[1].id;
 
-      const expectedProgrammeId: Omit<DeliveryProgramme, 'id' | 'timestamp'> = {
+      const expectedProgrammeId: Omit<DeliveryProgramme, 'id' | 'created_at'> = {
         ...expectedProgrammeDataStore,
         programme_manager: ['string1', 'string 2'],
         arms_length_body: albId,
@@ -40,7 +40,7 @@ describe('DeliveryProgrammeStore', () => {
 
       expect(addResult.name).toEqual(createName(expectedProgrammeId.title));
       expect(addResult.id).toBeDefined();
-      expect(addResult.timestamp).toBeDefined();
+      expect(addResult.created_at).toBeDefined();
     },
   );
 
@@ -159,6 +159,7 @@ describe('DeliveryProgrammeStore', () => {
       expect(updateResult.title).toBe(expectedUpdate.title);
       expect(updateResult.alias).toBe(expectedUpdate.alias);
       expect(updateResult.url).toBe(expectedUpdate.url);
+      expect(updateResult.updated_at).toBeDefined();
     },
   );
 

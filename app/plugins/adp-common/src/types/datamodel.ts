@@ -1,6 +1,7 @@
 export type ArmsLengthBody = {
     id: string;
-    timestamp: Date;
+    created_at: Date;
+  updated_at?: Date;
     creator: string;
     owner: string;
     readonly name: string;
@@ -12,7 +13,8 @@ export type ArmsLengthBody = {
 
 export type DeliveryProgramme = {
     id: string; 
-    timestamp: Date;
+    created_at: Date;
+    updated_at?: Date;
     programme_manager: string[];
     title: string;
     readonly name: string;

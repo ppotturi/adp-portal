@@ -181,13 +181,13 @@ export async function createAlbRouter(
 }
 
 function isArmsLengthBodyCreateRequest(
-  request: Omit<ArmsLengthBody, 'id' | 'timestamp'>,
+  request: Omit<ArmsLengthBody, 'id' | 'created_at'>,
 ) {
   return typeof request?.title === 'string';
 }
 
 function isArmsLengthBodyUpdateRequest(
-  request: Omit<PartialArmsLengthBody, 'timestamp'>,
+  request: Omit<PartialArmsLengthBody, 'updated_at'>,
 ) {
   return typeof request?.id === 'string';
 }

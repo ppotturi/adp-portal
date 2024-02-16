@@ -55,7 +55,7 @@ describe('AdpDbModelEntityProvider', () => {
           url: null,
           name: 'environment-agency',
           id: '4b5c98c3-94fb-444e-8d9b-ebe71ac4d5f3',
-          timestamp: '2024-02-05T11:29:33.059Z',
+          created_at: '2024-02-05T11:29:33.059Z',
         },
       ]),
     })),
@@ -72,7 +72,7 @@ describe('AdpDbModelEntityProvider', () => {
         url: null,
         name: 'environment-agency',
         id: '4b5c98c3-94fb-444e-8d9b-ebe71ac4d5f3',
-        timestamp: '2024-02-05T11:29:33.059Z',
+        created_at: '2024-02-05T11:29:33.059Z',
       }),
     },
   }));

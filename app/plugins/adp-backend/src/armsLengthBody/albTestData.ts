@@ -1,6 +1,6 @@
 import { ArmsLengthBody } from '../types';
 
-export const expectedAlb: Omit<ArmsLengthBody, 'id' | 'timestamp'> = {
+export const expectedAlb: Omit<ArmsLengthBody, 'id' | 'created_at'> = {
   creator: 'john',
   owner: 'john',
   title: 'ALB Example',
