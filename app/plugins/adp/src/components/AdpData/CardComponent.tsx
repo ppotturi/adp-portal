@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';;
 import { LinkButton, ItemCardHeader } from '@backstage/core-components';
 
-export const CardTemplate = ({cardTitle, cardSubTitle, cardText, pathToAdd,pathToView}: {cardTitle: string, cardSubTitle:string, cardText:string, pathToAdd:string, pathToView:string}) => {
+export const CardTemplate = ({cardTitle, cardSubTitle, cardText, pathToView}: {cardTitle: string, cardSubTitle:string, cardText:string, pathToView:string}) => {
   return (
     <Card>
       <CardMedia>
@@ -15,7 +15,6 @@ export const CardTemplate = ({cardTitle, cardSubTitle, cardText, pathToAdd,pathT
         {cardText}
       </CardContent>
       <CardActions>
-        <LinkButton color="primary" to={pathToAdd}> Add </LinkButton>
         <LinkButton color="primary" to={pathToView}> View </LinkButton>
       </CardActions>
     </Card>

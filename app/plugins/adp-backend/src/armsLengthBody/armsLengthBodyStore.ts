@@ -15,8 +15,9 @@ type Row = {
   readonly name: string;
   created_at: Date;
   updated_by?: string;
-  updated_at?: Date;
+  updated_at: Date;
 };
+
 
 export type PartialArmsLengthBody = Partial<ArmsLengthBody>;
 
@@ -36,7 +37,7 @@ export class ArmsLengthBodyStore {
         'created_at',
       )
       .orderBy('created_at');
-
+ 
     return ArmsLengthBodies.map(row => ({
       creator: row.creator,
       owner: row.owner,
@@ -47,9 +48,11 @@ export class ArmsLengthBodyStore {
       name: row.name,
       id: row.id,
       timestamp: new Date(row.created_at),
+   
+
     }));
   }
-
+ 
   async get(id: string): Promise<ArmsLengthBody | null> {
     const row = await this.client<Row>(TABLE_NAME)
       .where('id', id)
@@ -65,7 +68,7 @@ export class ArmsLengthBodyStore {
         'created_at',
       )
       .first();
-
+ 
     return row
       ? {
           creator: row.creator,
@@ -77,10 +80,11 @@ export class ArmsLengthBodyStore {
           name: row.name,
           id: row.id,
           timestamp: new Date(row.created_at),
+
         }
       : null;
   }
-
+ 
   async add(
     armsLengthBody: Omit<ArmsLengthBody, 'id' | 'timestamp'>,
     creator: string,
@@ -99,24 +103,25 @@ export class ArmsLengthBodyStore {
       },
       ['id', 'created_at'],
     );
-
+ 
     if (insertResult.length < 1) {
       throw new Error(
         `Could not insert Arms Length Body ${armsLengthBody.title}`,
       );
     }
-
+ 
     return {
       ...armsLengthBody,
       id: insertResult[0].id,
-      timestamp: new Date(insertResult[0].created_at),
+      timestamp : new Date(insertResult[0].created_at),
     };
   }
-
+ 
   async update(
     armsLengthBody: Omit<PartialArmsLengthBody, 'timestamp'>,
     updatedBy: string,
   ): Promise<ArmsLengthBody> {
+
     if (armsLengthBody.id === undefined) {
       throw new NotFoundError(
         `Could not find Arms Length Body with ID ${armsLengthBody.id}`,
@@ -130,12 +135,14 @@ export class ArmsLengthBodyStore {
         `Could not find Arms Length Body with ID ${armsLengthBody.id}`,
       );
     }
-
+ 
     const updated = new Date();
+
 
     const updatedData: Partial<ArmsLengthBody> = {};
     if (armsLengthBody.title !== undefined) {
       updatedData.title = armsLengthBody.title;
+
     }
     if (armsLengthBody.short_name !== undefined) {
       updatedData.short_name = armsLengthBody.short_name;
@@ -143,6 +150,7 @@ export class ArmsLengthBodyStore {
     if (armsLengthBody.description !== undefined) {
       updatedData.description = armsLengthBody.description;
     }
+ 
     if (armsLengthBody.url !== undefined) {
       updatedData.url = armsLengthBody.url;
     }
@@ -161,3 +169,4 @@ export class ArmsLengthBodyStore {
     return { ...existingALB, ...updatedData, timestamp: updated };
   }
 }
+ 

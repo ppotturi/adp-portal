@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@backstage/backend-common": "^0.19.8",
+    "@internal/plugin-adp-common": "^0.1.0",
     "@backstage/backend-plugin-api": "^0.6.7",
     "@backstage/config": "^1.1.1",
     "@backstage/errors": "^1.2.3",

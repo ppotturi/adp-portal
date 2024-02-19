@@ -1,8 +1,7 @@
 import { AdpDbModelEntityProvider } from './AdpDbModelEntityProvider';
 import { TaskInvocationDefinition, PluginTaskScheduler, TaskRunner } from '@backstage/backend-tasks';
-import { PluginDatabaseManager } from '@backstage/backend-common';
+import { PluginDatabaseManager, getVoidLogger } from '@backstage/backend-common';
 import { ConfigReader } from '@backstage/config';
-import { getVoidLogger } from '@backstage/backend-common';
 import { EntityProviderConnection } from '@backstage/plugin-catalog-node';
 
 describe('AdpDbModelEntityProvider', () => {

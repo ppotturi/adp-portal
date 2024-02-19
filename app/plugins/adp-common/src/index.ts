@@ -6,3 +6,8 @@
  */
 
 export * from './permissions';
+
+export type {
+    ArmsLengthBody, 
+
+} from './types/datamodel'
