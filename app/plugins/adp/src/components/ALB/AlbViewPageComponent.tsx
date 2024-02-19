@@ -59,7 +59,6 @@ export const AlbViewPageComponent = () => {
   }, [key]);
 
   const handleEdit = (ArmsLengthBody: React.SetStateAction<{}>) => {
-    console.log(setFormData(ArmsLengthBody))
     setFormData(ArmsLengthBody);
     setIsModalOpen(true);
   };
@@ -143,7 +142,7 @@ export const AlbViewPageComponent = () => {
       highlight: true,
       render: rowData => {
         return (
-          !isUserAllowed && (
+          isUserAllowed && (
             <Button
               variant="contained"
               color="default"
@@ -177,7 +176,7 @@ export const AlbViewPageComponent = () => {
         </Typography>
         <DefaultTable data={tableData} columns={columns} title="View all" />
 
-        {isModalOpen && !isUserAllowed && (
+        {isModalOpen && isUserAllowed && (
           <ActionsModal
             open={isModalOpen}
             onClose={handleCloseModal}

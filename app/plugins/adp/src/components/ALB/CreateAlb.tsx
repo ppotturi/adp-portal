@@ -65,7 +65,7 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
   return (
 
     <>
-    {!isUserAllowed && (
+    {isUserAllowed && (
       <Button
         variant="contained"
         size="large"

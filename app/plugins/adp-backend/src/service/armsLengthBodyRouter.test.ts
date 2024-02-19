@@ -111,7 +111,7 @@ describe('createRouter', () => {
   describe('POST /armsLengthBody', () => {
     it('returns 406 when ALB name already exists', async () => {
       const expectedALB = {
-        title: 'Marine & Maritime',
+        title: 'Marine and Maritime',
         alias: 'ALB',
         description: 'This is an example ALB',
       };
@@ -157,8 +157,8 @@ describe('createRouter', () => {
         .patch('/armsLengthBody')
         .send(updatedALB);
       expect(patchRequest.status).toEqual(200);
-      const getUpdatedtData = await request(app).get('/armsLengthBody');
-      const updatedData = getUpdatedtData.body.find(
+      const getUpdatedData = await request(app).get('/armsLengthBody');
+      const updatedData = getUpdatedData.body.find(
         (e: { title: string }) => e.title === 'Test ALB updated',
       );
       expect(updatedData.name).toBe('test-alb');
@@ -166,7 +166,7 @@ describe('createRouter', () => {
 
     it('returns 406', async () => {
       const expectedALB = {
-        title: 'Marine & Maritime',
+        title: 'Marine and Maritime',
       };
       const response = await request(app)
         .post('/armsLengthBody')

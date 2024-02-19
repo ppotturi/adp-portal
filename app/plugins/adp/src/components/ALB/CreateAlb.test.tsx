@@ -109,7 +109,7 @@ describe('CreateAlb', () => {
     await waitFor(() => {
       expect(mockCreateArmsLengthBody).toHaveBeenCalledWith({
         description: 'Description for ALB 1',
-        short_name: '',
+        alias: '',
         title: 'ALB 1',
         url: '',
       });
@@ -146,7 +146,7 @@ describe('CreateAlb', () => {
     await waitFor(() => {
       expect(mockCreateArmsLengthBody).toHaveBeenCalledWith({
         description: 'Description for ALB 1',
-        short_name: '',
+        alias: '',
         title: 'ALB 1',
         url: '',
       });
@@ -156,7 +156,7 @@ describe('CreateAlb', () => {
       expect(mockAlertApi.post).toHaveBeenNthCalledWith(1, {
         display: 'permanent',
         message:
-          "The name 'ALB 1' is already in use. Please choose a different name.",
+          "The title 'ALB 1' is already in use. Please choose a different name.",
         severity: 'error',
       });
     });
