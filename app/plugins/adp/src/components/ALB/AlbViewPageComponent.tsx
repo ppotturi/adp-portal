@@ -131,6 +131,7 @@ export const AlbViewPageComponent = () => {
       field: 'updated_at',
       render: (data: {}) => {
         const e = data as ArmsLengthBody;
+        
         return new Date(e.updated_at).toLocaleString();
       },
       highlight: false,

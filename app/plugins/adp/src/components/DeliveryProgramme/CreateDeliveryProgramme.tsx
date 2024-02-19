@@ -28,8 +28,6 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetc
 
   const deliveryprogClient = new DeliveryProgrammeClient(discoveryApi, fetchApi);
 
-
-
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };

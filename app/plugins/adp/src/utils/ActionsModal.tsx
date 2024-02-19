@@ -6,6 +6,7 @@ import {
   DialogActions,
   Button,
   TextField,
+  MenuItem,
 } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
 import { alertApiRef, useApi } from '@backstage/core-plugin-api';
@@ -13,7 +14,7 @@ import { alertApiRef, useApi } from '@backstage/core-plugin-api';
 interface ActionsModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data:any) => Promise<void>;
+  onSubmit: (data: any) => Promise<void>;
   initialValues: Record<string, any>;
   mode: 'create' | 'edit';
 
@@ -31,6 +32,8 @@ interface ActionsModalProps {
     };
     multiline?: boolean;
     maxRows?: number;
+    select?: boolean;
+    options?: { label: string; value: string }[]; 
   }[];
 }
 
@@ -58,7 +61,7 @@ export const ActionsModal: FC<ActionsModalProps> = ({
       reset();
       onClose();
     } catch (e: any) {
-      errorApi.post(e)
+      errorApi.post(e);
     }
   };
 
@@ -67,37 +70,70 @@ export const ActionsModal: FC<ActionsModalProps> = ({
       <DialogTitle>{`${mode === 'edit' ? 'Edit' : 'Create'}: ${initialValues.title || ''}`}</DialogTitle>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <DialogContent>
-          {fields.map(field => (
-            <TextField
-              key={field.name}
-              id={field.name}
-              label={field.label}
-              variant="outlined"
-              fullWidth
-              margin="dense"
-              {...register(field.name, {
-                required: field.validations?.required
-                  ? 'This field is required'
-                  : undefined,
-                maxLength: field.validations?.maxLength
-                  ? {
-                    value: field.validations.maxLength,
-                    message: `Maximum length is ${field.validations.maxLength} characters`,
-                  }
-                  : undefined,
-                pattern: field.validations?.pattern
-                  ? {
-                    value: field.validations.pattern.value,
-                    message: field.validations.pattern.message,
-                  }
-                  : undefined,
-              })}
-              error={!!errors[field.name]}
-              helperText={errors[field.name]?.message ?? field.helperText}
-              multiline={field.multiline}
-              maxRows={field.maxRows}
-            />
-          ))}
+          {fields.map((field) =>
+            field.select ? (
+              <TextField
+                key={field.name}
+                id={field.name}
+                label={field.label}
+                variant="outlined"
+                fullWidth
+                margin="dense"
+                select
+                {...register(field.name, {
+                  required: field.validations?.required ? 'This field is required' : undefined,
+                  maxLength: field.validations?.maxLength
+                    ? {
+                        value: field.validations.maxLength,
+                        message: `Maximum length is ${field.validations.maxLength} characters`,
+                      }
+                    : undefined,
+                  pattern: field.validations?.pattern
+                    ? {
+                        value: field.validations.pattern.value,
+                        message: field.validations.pattern.message,
+                      }
+                    : undefined,
+                })}
+                error={!!errors[field.name]}
+                helperText={errors[field.name]?.message ?? field.helperText}
+              >
+                {field.options?.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            ) : (
+              <TextField
+                key={field.name}
+                id={field.name}
+                label={field.label}
+                variant="outlined"
+                fullWidth
+                margin="dense"
+                {...register(field.name, {
+                  required: field.validations?.required ? 'This field is required' : undefined,
+                  maxLength: field.validations?.maxLength
+                    ? {
+                        value: field.validations.maxLength,
+                        message: `Maximum length is ${field.validations.maxLength} characters`,
+                      }
+                    : undefined,
+                  pattern: field.validations?.pattern
+                    ? {
+                        value: field.validations.pattern.value,
+                        message: field.validations.pattern.message,
+                      }
+                    : undefined,
+                })}
+                error={!!errors[field.name]}
+                helperText={errors[field.name]?.message ?? field.helperText}
+                multiline={field.multiline}
+                maxRows={field.maxRows}
+              />
+            )
+          )}
         </DialogContent>
         <DialogActions>
           <Button
