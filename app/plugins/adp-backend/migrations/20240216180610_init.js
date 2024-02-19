@@ -1,7 +1,15 @@
 exports.up = function(knex) {
-    return knex.schema.table('arms_;ength_body', function(table) {
-      table.renameColumn('short_name', 'alias');
-    
-      // TODO : table.comment();
-    });
-  };
+  return knex.schema.table('arms_length_body', function(table) {
+    table.string('short_name').comment('Alias of ALB').alter();
+    table.renameColumn('short_name', 'alias');
+    table.string('owner').comment('AD group of the ALB owner').alter();
+  });
+};
+
+exports.down = function(knex) {
+  return knex.schema.table('arms_length_body', function(table) {
+    table.string('alias').comment('Short form of ALB name').alter();
+    table.renameColumn('alias', 'short_name');
+    table.string('owner').comment('Username of the ALB owner').alter();
+  });
+};

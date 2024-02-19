@@ -19,7 +19,7 @@ exports.up = async function up(knex) {
     table
       .string('alias')
       .nullable()
-      .comment('Short form of Delivery Programme name');
+      .comment('Alias of Delivery Programme');
     table
       .string('description')
       .notNullable()
