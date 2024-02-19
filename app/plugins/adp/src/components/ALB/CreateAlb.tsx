@@ -54,7 +54,7 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
       handleCloseModal();
     } catch (e: any) {
       alertApi.post({
-        message: `The name '${armsLengthBody.title}' is already in use. Please choose a different name.`,
+        message: `The title '${armsLengthBody.title}' is already in use. Please choose a different name.`,
         severity: 'error',
         display: 'permanent',
       });
@@ -65,7 +65,7 @@ const CreateAlb: React.FC<CreateAlbProps> = ({ refetchArmsLengthBody }) => {
   return (
 
     <>
-    {isUserAllowed && (
+    {!isUserAllowed && (
       <Button
         variant="contained"
         size="large"
