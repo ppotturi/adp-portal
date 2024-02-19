@@ -143,9 +143,14 @@ export class DeliveryProgrammeStore {
       );
     }
     const updated = new Date();
+
     const updatedData: Partial<DeliveryProgramme> = {
-      ...deliveryProgramme,
+      ...deliveryProgramme, updated_at: updated,
     };
+
+    if ('tableData' in updatedData) {
+      delete updatedData['tableData'];
+    }
 
     if (Object.keys(updatedData).length === 0) {
       return existingProgramme;

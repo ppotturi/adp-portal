@@ -1,1 +1,1 @@
-export type { ArmsLengthBody } from '../../../adp-common/src/types/datamodel';
+export type { ArmsLengthBody , DeliveryProgramme } from '@internal/plugin-adp-common';

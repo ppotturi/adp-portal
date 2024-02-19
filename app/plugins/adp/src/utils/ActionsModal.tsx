@@ -8,13 +8,12 @@ import {
   TextField,
 } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
-import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import { alertApiRef, useApi } from '@backstage/core-plugin-api';
 
 interface ActionsModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (armsLengthBody: ArmsLengthBody) => Promise<void>;
+  onSubmit: (data:any) => Promise<void>;
   initialValues: Record<string, any>;
   mode: 'create' | 'edit';
 
@@ -107,13 +106,13 @@ export const ActionsModal: FC<ActionsModalProps> = ({
               onClose();
             }}
             color="primary"
-            data-testid="edit-modal-cancel-button"
+            data-testid="actions-modal-cancel-button"
           >
             Cancel
           </Button>
           <Button type="submit"
             color="primary"
-            data-testid="edit-modal-update-button"
+            data-testid="actions-modal-update-button"
           >
             Update
           </Button>

@@ -72,7 +72,7 @@ describe('CreateAlb', () => {
     });
 
     act(() => {
-      fireEvent.click(rendered.getByTestId('edit-modal-cancel-button'));
+      fireEvent.click(rendered.getByTestId('actions-modal-cancel-button'));
     });
 
     await waitFor(() => {
@@ -101,7 +101,7 @@ describe('CreateAlb', () => {
     });
 
     act(() => {
-      fireEvent.click(rendered.getByTestId('edit-modal-update-button'));
+      fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
     });
 
     mockGetArmsLengthBodies.mockResolvedValue(updatedTableData);
@@ -140,7 +140,7 @@ describe('CreateAlb', () => {
     });
 
     act(() => {
-      fireEvent.click(rendered.getByTestId('edit-modal-update-button'));
+      fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
     });
 
     await waitFor(() => {

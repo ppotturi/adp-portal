@@ -9,5 +9,6 @@ export * from './permissions';
 
 export type {
     ArmsLengthBody, 
+    DeliveryProgramme,
 
 } from './types/datamodel'
