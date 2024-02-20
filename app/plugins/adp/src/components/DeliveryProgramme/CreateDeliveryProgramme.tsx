@@ -12,6 +12,7 @@ import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
+import { useArmsLengthBodyList} from '../../hooks/useArmsLengthBodyList'
 
 interface CreateDeliveryProgrammeProps {
   refetchDeliveryProgramme: () => void;
@@ -24,7 +25,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetc
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
   const errorApi = useApi(errorApiRef);
-  const fields = DeliveryProgrammeFormFields;
+  const getArmsLengthBodyDropDown = useArmsLengthBodyList();
 
   const deliveryprogClient = new DeliveryProgrammeClient(discoveryApi, fetchApi);
 
@@ -56,6 +57,16 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetc
     }
   };
 
+  const getAlbOptionFields = () => {
+    return DeliveryProgrammeFormFields.map(field => {
+      if (field.name === 'arms_length_body') {
+        return { ...field, options: getArmsLengthBodyDropDown };
+      }
+      return field;
+    });
+  };
+
+
   return (
 
     <>
@@ -78,7 +89,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetc
           onSubmit={handleSubmit}
           initialValues={{}}
           mode="create"
-          fields={fields}
+          fields={getAlbOptionFields()}
         />
       )}
     </>

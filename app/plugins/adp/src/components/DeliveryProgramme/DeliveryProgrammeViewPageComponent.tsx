@@ -17,12 +17,12 @@ import {
   alertApiRef,
   errorApiRef,
 } from '@backstage/core-plugin-api';
-import {DeliveryProgramme } from '@internal/plugin-adp-common';
+import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
 import CreateDeliveryProgramme from './CreateDeliveryProgramme';
 import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
 import { DeliveryProgrammeApi } from './api/DeliveryProgrammeApi';
-
+import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
 
 export const DeliveryProgrammeViewPageComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,14 +33,21 @@ export const DeliveryProgrammeViewPageComponent = () => {
   const errorApi = useApi(errorApiRef);
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
-  const fields = DeliveryProgrammeFormFields;
+  const getArmsLengthBodyDropDown = useArmsLengthBodyList();
 
   const deliveryprogClient: DeliveryProgrammeApi = new DeliveryProgrammeClient(
     discoveryApi,
     fetchApi,
   );
 
-
+  const getAlbOptionFields = () => {
+    return DeliveryProgrammeFormFields.map(field => {
+      if (field.name === 'arms_length_body') {
+        return { ...field, options: getArmsLengthBodyDropDown };
+      }
+      return field;
+    });
+  };
 
   const getAllDeliveryProgrammes = async () => {
     try {
@@ -50,7 +57,6 @@ export const DeliveryProgrammeViewPageComponent = () => {
       errorApi.post(e);
     }
   };
-
 
   useEffect(() => {
     getAllDeliveryProgrammes();
@@ -126,23 +132,9 @@ export const DeliveryProgrammeViewPageComponent = () => {
       highlight: false,
       type: 'string',
     },
-   
-    {
-      title: 'Finance code',
-      field: 'finance_code',
-      highlight: false,
-      type: 'string',
-    },
 
     {
-      title: 'Delivery Programme Code',
-      field: 'delivery_programme_code',
-      highlight: false,
-      type: 'string',
-    },
-
-    {
-      title: 'Delivery Programme Description',
+      title: 'Description',
       field: 'delivery_programme_code',
       highlight: false,
       type: 'string',
@@ -153,7 +145,11 @@ export const DeliveryProgrammeViewPageComponent = () => {
       field: 'updated_at',
       render: (data: {}) => {
         const e = data as DeliveryProgramme;
-        return new Date(e.updated_at).toLocaleString();
+        if (e.updated_at === undefined) {
+          return 'No date available'; 
+        }
+        const date = new Date(e.updated_at);
+        return date.toLocaleString();
       },
       highlight: false,
       type: 'date',
@@ -164,16 +160,15 @@ export const DeliveryProgrammeViewPageComponent = () => {
       highlight: true,
       render: rowData => {
         return (
-        
-            <Button
-              variant="contained"
-              color="default"
-              onClick={() => handleEdit(rowData)}
-              data-testid={`delivery-programme-edit-button-${rowData.id}`}
-            >
-              Edit
-            </Button>
-          )
+          <Button
+            variant="contained"
+            color="default"
+            onClick={() => handleEdit(rowData)}
+            data-testid={`delivery-programme-edit-button-${rowData.id}`}
+          >
+            Edit
+          </Button>
+        );
       },
     },
   ];
@@ -186,7 +181,9 @@ export const DeliveryProgrammeViewPageComponent = () => {
       />
       <Content>
         <ContentHeader title="Delivery Programmes">
-          <CreateDeliveryProgramme refetchDeliveryProgramme={refetchDeliveryProgramme} />
+          <CreateDeliveryProgramme
+            refetchDeliveryProgramme={refetchDeliveryProgramme}
+          />
           <SupportButton>
             View or manage units within the DEFRA delivery organization on the
             Azure Developer Platform.
@@ -196,7 +193,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
           View or add Delivery Programmes to the Azure Developer Platform.
         </Typography>
 
-        <DefaultTable data={tableData} columns={columns} title="View all" /> 
+        <DefaultTable data={tableData} columns={columns} title="View all" />
 
         {isModalOpen && (
           <ActionsModal
@@ -205,7 +202,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
             onSubmit={handleUpdate}
             initialValues={formData}
             mode="edit"
-            fields={fields}
+            fields={getAlbOptionFields()}
           />
         )}
       </Content>

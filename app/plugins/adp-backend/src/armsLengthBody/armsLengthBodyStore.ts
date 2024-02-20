@@ -141,7 +141,9 @@ export class ArmsLengthBodyStore {
       updated_at: updated,
     };
 
-    delete updatedData.tableData;
+    if ('tableData' in updatedData) {
+      delete updatedData['tableData'];
+    }
 
     if (Object.keys(updatedData).length === 0) {
       return existingALB;

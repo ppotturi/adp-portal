@@ -132,7 +132,11 @@ export const AlbViewPageComponent = () => {
       render: (data: {}) => {
         const e = data as ArmsLengthBody;
         
-        return new Date(e.updated_at).toLocaleString();
+        if (e.updated_at === undefined) {
+          return 'No date available'; 
+        }
+        const date = new Date(e.updated_at);
+        return date.toLocaleString();
       },
       highlight: false,
       type: 'date',
