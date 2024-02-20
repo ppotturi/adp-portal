@@ -13,7 +13,16 @@ export const AdpPage = adpPlugin.provide(
   createRoutableExtension({
     name: 'AdpPage',
     component: () =>
-      import('./components/ALB').then(m => m.LandingPageComponent),
+      import('./components/ALB/').then(m => m.LandingPageComponent),
+    mountPoint: rootRouteRef,
+  }),
+);
+
+export const AlbViewPage = adpPlugin.provide(
+  createRoutableExtension({
+    name: 'AlbViewPage',
+    component: () =>
+      import('./components/ALB/AlbViewPageComponent').then(m => m.AlbViewPageComponent),
     mountPoint: rootRouteRef,
   }),
 );

@@ -15,6 +15,7 @@ import { AdpPortalPermissionPolicy } from './adpPortalPermissionPolicy';
 import { RbacUtilities } from '../rbacUtilites'
 
 import { RbacTestData } from '../mocks/rbacTestData'
+import { adpProgrammmeCreatePermission } from '@internal/plugin-adp-common';
 
 const { mockLogger,
   mockRbacGroups,
@@ -95,6 +96,7 @@ describe('adpPortalPermissionPolicy: Programme Admin User', () => {
     { permission: catalogEntityDeletePermission, expected: AuthorizeResult.DENY },
     { permission: catalogLocationCreatePermission, expected: AuthorizeResult.ALLOW },
     { permission: catalogLocationDeletePermission, expected: AuthorizeResult.DENY },
+    { permission: adpProgrammmeCreatePermission, expected: AuthorizeResult.ALLOW },
   ])(
     'should allow access for permission $permission.name for the Programme Admin Role',
     async ({ permission, expected }) => {
@@ -131,6 +133,7 @@ describe('adpPortalPermissionPolicy: ADP Platform User', () => {
     { permission: catalogEntityDeletePermission, expected: AuthorizeResult.DENY },
     { permission: catalogLocationCreatePermission, expected: AuthorizeResult.ALLOW },
     { permission: catalogLocationDeletePermission, expected: AuthorizeResult.DENY },
+    { permission: adpProgrammmeCreatePermission, expected: AuthorizeResult.DENY },
   ])(
     'should allow access for permission $permission.name for the ADP Portal User Role',
     async ({ permission, expected }) => {

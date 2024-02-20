@@ -107,3 +107,4 @@ export type ResourceOptions = {
   resourceId: string;
   authorized: boolean;
 };
+
