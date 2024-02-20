@@ -11,20 +11,13 @@ import {
 } from '../armsLengthBody/armsLengthBodyStore';
 import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import { Config } from '@backstage/config';
-import { checkForDuplicateTitle, getCurrentUsername } from '../utils';
+import { checkForDuplicateTitle, getCurrentUsername, getOwner } from '../utils';
 
 export interface AlbRouterOptions {
   logger: Logger;
   identity: IdentityApi;
   database: PluginDatabaseManager;
   config: Config;
-}
-
-export function getOwner(options: AlbRouterOptions): string {
-  const { config } = options;
-  const ownerGroup = config.getConfig('rbac');
-  const owner = ownerGroup.getString('programmeAdminGroup');
-  return owner;
 }
 
 export async function createAlbRouter(
