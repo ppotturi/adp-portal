@@ -25,3 +25,9 @@ export type DeliveryProgramme = {
     delivery_programme_code: string;
     url?: string;
 }
+
+export type ProgrammeManager = {
+    id: string, 
+    delivery_programme: string;
+    programme_manager: string;
+}

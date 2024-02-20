@@ -14,6 +14,7 @@ describe('defaultProgrammeGroupTransformer', () => {
       name: 'test-title-1',
       id: '1234',
       created_at: new Date(),
+      updated_at: new Date(),
     };
 
     const expectedGroupEntity = {

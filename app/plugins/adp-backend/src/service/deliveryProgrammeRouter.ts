@@ -11,6 +11,7 @@ import {
 } from '../deliveryProgramme/deliveryProgrammeStore';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import { checkForDuplicateTitle, getCurrentUsername} from '../utils';
+import { ProgrammeManagerStore } from '../deliveryProgramme/programmeManagerStore';
 
 export interface ProgrammeRouterOptions {
   logger: Logger;
@@ -27,6 +28,7 @@ export async function createProgrammeRouter(
   const deliveryProgrammesStore = new DeliveryProgrammeStore(
     await adpDatabase.get(),
   );
+  const programmeManagersStore = new ProgrammeManagerStore(await adpDatabase.get())
 
   const router = Router();
   router.use(express.json());
@@ -62,6 +64,11 @@ export async function createProgrammeRouter(
           author
         );
         res.json(deliveryProgramme);
+        const programmeManagers = req.body.programme_manager
+        for (const manager of programmeManagers) {
+          const store = {programme_manager: manager, delivery_programme: deliveryProgramme.id}
+          await programmeManagersStore.add(store)
+        }
       }
     } catch (error) {
       logger.error('Unable to create new Delivery Programme')
