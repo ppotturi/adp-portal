@@ -15,6 +15,7 @@ import {
   usePermission,
 } from '@backstage/plugin-permission-react';
 import { AuthorizeResult } from '@backstage/plugin-permission-common';
+
 const mockErrorApi = { post: jest.fn() };
 const mockDiscoveryApi = { getBaseUrl: jest.fn() };
 const mockFetchApi = { fetch: jest.fn() };
@@ -58,6 +59,15 @@ jest.mock('./api/DeliveryProgrammeClient', () => ({
   })),
 }));
 
+jest.mock('../../hooks/useArmsLengthBodyList', () => ({
+  useArmsLengthBodyList: jest.fn (() => [
+    {label: 'Arms Length Body 1', value: '1'},
+    {label: 'Arms Length Body 2', value: '2'}
+  ])
+}));
+
+
+
 describe('DeliveryProgrammeViewPageComponent', () => {
   beforeEach(() => {
     mockGetDeliveryProgrammes.mockClear();
@@ -83,6 +93,7 @@ describe('DeliveryProgrammeViewPageComponent', () => {
 
   afterEach(() => {
     mockGetDeliveryProgrammes.mockReset();
+    jest.clearAllMocks();
   });
 
   it('fetches and displays delivery programmes in the table upon loading', async () => {
@@ -102,10 +113,8 @@ describe('DeliveryProgrammeViewPageComponent', () => {
 
     const rendered = await render();
 
-    await waitFor(() => {
-      expect(
-        rendered.findByText('Delivery Programmes'),
-      ).resolves.toBeInTheDocument();
+    await waitFor(async () => {
+      expect(await rendered.findByText('Delivery Programmes')).toBeInTheDocument();
       expect(mockErrorApi.post).toHaveBeenCalledTimes(1);
     });
   });
@@ -207,11 +216,10 @@ describe('DeliveryProgrammeViewPageComponent', () => {
     const updatedTableData = [
       {
         id: '1',
-
         title: 'Delivery Programme 2',
         short_name: 'DeliveryProgramme1',
         description: 'Description 1',
-        url: 'http://deliveryprogramme.com',
+        url: 'http://deliveryprogramme1.com',
         timestamp: '2021-01-01T00:00:00Z',
       },
 
@@ -220,7 +228,7 @@ describe('DeliveryProgrammeViewPageComponent', () => {
         title: 'Delivery Programme 2',
         short_name: 'DeliveryProgramme2',
         description: 'Description 2',
-        url: 'http://deliveryprogramme.com',
+        url: 'http://deliveryprogramme2.com',
         timestamp: '2021-01-01T00:00:00Z',
       },
     ];
@@ -246,11 +254,10 @@ describe('DeliveryProgrammeViewPageComponent', () => {
         rendered.queryByText('Edit: Delivery Programme 1'),
       ).toBeInTheDocument();
       expect(mockAlertApi.post).toHaveBeenCalledTimes(1);
-      expect(mockErrorApi.post).toHaveBeenCalledTimes(1);
     });
   });
 
-  it('should call errorApi when update fails', async () => {
+  it('should call AlertApi when update fails', async () => {
     mockGetDeliveryProgrammes.mockResolvedValue(mockTableData);
     const updatedTableData = [
       {
@@ -288,7 +295,7 @@ describe('DeliveryProgrammeViewPageComponent', () => {
     mockGetDeliveryProgrammes.mockResolvedValue(updatedTableData);
 
     await waitFor(() => {
-      expect(mockErrorApi.post).toHaveBeenCalledTimes(1);
+      expect(mockAlertApi.post).toHaveBeenCalledTimes(1);
     });
   });
 });

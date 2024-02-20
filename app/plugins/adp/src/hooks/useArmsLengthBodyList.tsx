@@ -12,7 +12,7 @@ type ArmsLengthBodyListOptions = {
   value: string;
 };
 
-export const useArmsLengthBodyList = () => {
+export const useArmsLengthBodyList = (): { label: string; value: string }[]  => {
   const [options, setOptions] = useState<ArmsLengthBodyListOptions[]>([]);
 
   const discoveryApi = useApi(discoveryApiRef);

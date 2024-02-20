@@ -24,11 +24,15 @@ import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
 import { DeliveryProgrammeApi } from './api/DeliveryProgrammeApi';
 import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
 
+
 export const DeliveryProgrammeViewPageComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({});
   const [tableData, setTableData] = useState<DeliveryProgramme[]>([]);
-  const [key, refetchDeliveryProgramme] = useReducer(i => i + 1, 0);
+  const [key, refetchDeliveryProgramme] = useReducer(i => {
+    return i + 1;
+  }, 0);
+  
   const alertApi = useApi(alertApiRef);
   const errorApi = useApi(errorApiRef);
   const discoveryApi = useApi(discoveryApiRef);
@@ -44,6 +48,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
     return DeliveryProgrammeFormFields.map(field => {
       if (field.name === 'arms_length_body') {
         return { ...field, options: getArmsLengthBodyDropDown };
+        
       }
       return field;
     });

@@ -98,8 +98,8 @@ export const ActionsModal: FC<ActionsModalProps> = ({
                 error={!!errors[field.name]}
                 helperText={errors[field.name]?.message ?? field.helperText}
               >
-                {field.options?.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
+                {field.options?.map((option,index) => (
+                   <MenuItem key={`${option.value}-${index}`} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}

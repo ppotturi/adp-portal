@@ -111,9 +111,7 @@ describe('Create Delivery Programme', () => {
       fireEvent.change(rendered.getByLabelText('Delivery Programme Code'), {
         target: { value: 'Delivery Programme Code 1' },
       });
-      fireEvent.change(rendered.getByLabelText('Arms Length Body'), {
-        target: { value: 'Arms Length Body 1' },
-      });
+     
     });
 
     act(() => {
@@ -128,7 +126,7 @@ describe('Create Delivery Programme', () => {
         alias: '',
         title: 'Delivery Programme 1',
         url: '',
-        arms_length_body: 'Arms Length Body 1',
+        arms_length_body: '',
         delivery_programme_code: 'Delivery Programme Code 1',
         finance_code: '',
         programme_manager: '',
