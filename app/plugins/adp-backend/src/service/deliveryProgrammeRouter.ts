@@ -64,7 +64,7 @@ export async function createProgrammeRouter(
         res.json(deliveryProgramme);
       }
     } catch (error) {
-      throw new InputError('Error');
+      logger.error('Unable to create new Delivery Programme')
     }
   });
 
@@ -96,7 +96,7 @@ export async function createProgrammeRouter(
       );
       res.json(deliveryProgramme);
     } catch (error) {
-      throw new InputError('Error');
+      logger.error('Unable to update Delivery Programme')
     }
   });
   router.use(errorHandler());
