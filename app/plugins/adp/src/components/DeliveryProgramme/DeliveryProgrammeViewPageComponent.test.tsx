@@ -60,13 +60,11 @@ jest.mock('./api/DeliveryProgrammeClient', () => ({
 }));
 
 jest.mock('../../hooks/useArmsLengthBodyList', () => ({
-  useArmsLengthBodyList: jest.fn (() => [
-    {label: 'Arms Length Body 1', value: '1'},
-    {label: 'Arms Length Body 2', value: '2'}
-  ])
+  useArmsLengthBodyList: jest.fn(() => [
+    { label: 'Arms Length Body 1', value: '1' },
+    { label: 'Arms Length Body 2', value: '2' },
+  ]),
 }));
-
-
 
 describe('DeliveryProgrammeViewPageComponent', () => {
   beforeEach(() => {
@@ -114,7 +112,9 @@ describe('DeliveryProgrammeViewPageComponent', () => {
     const rendered = await render();
 
     await waitFor(async () => {
-      expect(await rendered.findByText('Delivery Programmes')).toBeInTheDocument();
+      expect(
+        await rendered.findByText('Delivery Programmes'),
+      ).toBeInTheDocument();
       expect(mockErrorApi.post).toHaveBeenCalledTimes(1);
     });
   });
@@ -296,6 +296,35 @@ describe('DeliveryProgrammeViewPageComponent', () => {
 
     await waitFor(() => {
       expect(mockAlertApi.post).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('displays formatted date when updated_at is defined', async () => {
+    const updatedTableData = [
+      {
+        id: '1',
+        title: 'Delivery Programme 1',
+        alias: 'DeliveryProgramme1',
+        description: 'Description 1',
+        url: 'http://deliveryprogramme.com',
+        updated_at: '2023-01-01T00:00:00Z',
+      },
+      {
+        id: '2',
+        title: 'Delivery Programme 2',
+        short_name: 'DeliveryProgramme2',
+        description: 'Description 2',
+        url: 'http://deliveryprogramme2.com',
+        updated_at: undefined,
+      },
+    ];
+    mockGetDeliveryProgrammes.mockResolvedValue(updatedTableData);
+    const rendered = await render();
+
+    await waitFor(() => {
+      const formattedDate = new Date('2023-01-01T00:00:00Z').toLocaleString();
+
+      expect(rendered.queryByText(formattedDate)).toBeInTheDocument();
     });
   });
 });
