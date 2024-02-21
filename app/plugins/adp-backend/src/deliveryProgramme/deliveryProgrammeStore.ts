@@ -6,7 +6,6 @@ import { createName } from '../utils';
 const TABLE_NAME = 'delivery_programme';
 type Row = {
   id: string;
-  programme_manager: string;
   title: string;
   readonly name: string;
   alias?: string;
@@ -28,7 +27,6 @@ export class DeliveryProgrammeStore {
     const DeliveryProgrammes = await this.client<Row>(TABLE_NAME)
       .select(
         'id',
-        'programme_manager',
         'title',
         'name',
         'alias',
@@ -44,7 +42,7 @@ export class DeliveryProgrammeStore {
 
     return DeliveryProgrammes.map(row => ({
       id: row.id,
-      programme_manager: JSON.parse(row.programme_manager),
+      programme_managers: [],
       title: row.title,
       name: row.name,
       alias: row?.alias,
@@ -63,7 +61,6 @@ export class DeliveryProgrammeStore {
       .where('id', id)
       .select(
         'id',
-        'programme_manager',
         'title',
         'name',
         'alias',
@@ -80,7 +77,7 @@ export class DeliveryProgrammeStore {
     return row
       ? {
           id: row.id,
-          programme_manager: JSON.parse(row.programme_manager),
+          programme_managers: [],
           title: row.title,
           name: row.name,
           alias: row?.alias,
@@ -96,12 +93,11 @@ export class DeliveryProgrammeStore {
   }
 
   async add(
-    deliveryProgramme: Omit<DeliveryProgramme, 'id' | 'created_at' | 'updated_at'>,
+    deliveryProgramme: Omit<DeliveryProgramme, 'id' | 'created_at' | 'updated_at' | 'programme_managers'>,
     author: string,
   ): Promise<DeliveryProgramme> {
     const insertResult = await this.client<Row>(TABLE_NAME).insert(
       {
-        programme_manager: JSON.stringify(deliveryProgramme.programme_manager),
         title: deliveryProgramme.title,
         name: createName(deliveryProgramme.title),
         alias: deliveryProgramme?.alias,
@@ -126,13 +122,14 @@ export class DeliveryProgrammeStore {
       id: insertResult[0].id,
       created_at: new Date(insertResult[0].created_at),
       updated_at: new Date(insertResult[0].updated_at),
+      programme_managers: []
     };
   }
 
   async update(
     deliveryProgramme: Omit<
       PartialDeliveryProgramme,
-      'updated_at' | 'programme_manager'
+      'updated_at' 
     >,
     updatedBy: string,
   ): Promise<DeliveryProgramme> {
@@ -162,7 +159,6 @@ export class DeliveryProgrammeStore {
       .where('id', deliveryProgramme.id)
       .update({
         ...updatedData,
-        programme_manager: JSON.stringify(updatedData.programme_manager),
         updated_at: updated,
         updated_by: updatedBy,
       });

@@ -68,9 +68,8 @@ describe('checkForDuplicateTitle', () => {
 
       const expectedProgrammeId: Omit<DeliveryProgramme, 'id' | 'created_at' | 'updated_at'> = {
         ...expectedProgrammeDataStore,
-        programme_manager: ['string1', 'string 2'],
         arms_length_body: albId,
-      };
+      }
       await store.add(expectedProgrammeId, 'test');
       const getResult = await store.getAll();
 
@@ -93,7 +92,6 @@ describe('checkForDuplicateTitle', () => {
 
       const expectedProgrammeId: Omit<DeliveryProgramme, 'id' | 'created_at' | 'updated_at'> = {
         ...expectedProgrammeDataStore,
-        programme_manager: ['string1', 'string 2'],
         arms_length_body: albId,
       };
       await store.add(expectedProgrammeId, 'test');

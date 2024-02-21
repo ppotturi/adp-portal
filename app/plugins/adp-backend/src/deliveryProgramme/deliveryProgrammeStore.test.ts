@@ -33,7 +33,6 @@ describe('DeliveryProgrammeStore', () => {
 
       const expectedProgrammeId: Omit<DeliveryProgramme, 'id' | 'created_at' | 'updated_at'> = {
         ...expectedProgrammeDataStore,
-        programme_manager: ['string1', 'string 2'],
         arms_length_body: albId,
       };
       const addResult = await store.add(expectedProgrammeId, 'test');
@@ -58,7 +57,7 @@ describe('DeliveryProgrammeStore', () => {
       const expectedProgramme = [
         {
           ...expectedProgrammeDataStore,
-        arms_length_body: albId,
+          arms_length_body: albId,
         },
       ];
       await knex('delivery_programme').insert(expectedProgramme);
@@ -81,7 +80,7 @@ describe('DeliveryProgrammeStore', () => {
       const expectedProgramme = [
         {
           ...expectedProgrammeDataStore,
-        arms_length_body: albId,
+          arms_length_body: albId,
         },
       ];
       const insertProgrammeId = await knex('delivery_programme').insert(
@@ -96,7 +95,6 @@ describe('DeliveryProgrammeStore', () => {
       expect(getResult?.title).toBe('Test title 1');
       expect(getResult?.alias).toBe('Test Alias');
       expect(getResult?.description).toBe('Test description');
-      expect(getResult?.programme_manager).toEqual(['string 1', 'string 2']);
       expect(getResult?.url).toBe('Test url');
     },
   );
@@ -113,7 +111,7 @@ describe('DeliveryProgrammeStore', () => {
       const expectedProgramme = [
         {
           ...expectedProgrammeDataStore,
-        arms_length_body: albId,
+          arms_length_body: albId,
         },
       ];
       await knex('delivery_programme').insert(expectedProgramme);
@@ -149,7 +147,6 @@ describe('DeliveryProgrammeStore', () => {
         id: insertProgrammeId,
         title: 'Programme Example',
         alias: 'programme',
-        programme_manager: ['manager1, manager2'],
         description: 'This is an example Delivery Programme 2',
         url: 'http://www.example.com/index.html',
       };

@@ -1,5 +1,5 @@
 export const expectedProgrammeData = {
-  programme_manager: ['string1', 'string 2'],
+  programme_managers: [],
   title: 'Test title 1',
   alias: 'Test Alias',
   description: 'Test description',
@@ -9,7 +9,7 @@ export const expectedProgrammeData = {
 };
 
 export const expectedProgrammeDataWithName = {
-  programme_manager: ['string1', 'string 2'],
+  programme_managers: [],
   title: 'Test title 2',
   alias: 'Test Alias',
   description: 'Test description',
@@ -20,7 +20,7 @@ export const expectedProgrammeDataWithName = {
 };
 
 export const expectedProgrammeDataStore = {
-  programme_manager: JSON.stringify(['string 1', 'string 2']),
+  programme_managers: [],
   title: 'Test title 1',
   alias: 'Test Alias',
   description: 'Test description',
