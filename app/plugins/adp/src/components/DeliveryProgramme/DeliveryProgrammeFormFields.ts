@@ -31,7 +31,7 @@ export const DeliveryProgrammeFormFields = [
   },
 
   {
-    label: 'Programme Manager',
+    label: 'Programme Managers',
     name: 'programme_manager',
   },
 
