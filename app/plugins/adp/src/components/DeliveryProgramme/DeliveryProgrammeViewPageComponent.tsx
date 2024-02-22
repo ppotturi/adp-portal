@@ -129,6 +129,10 @@ export const DeliveryProgrammeViewPageComponent = () => {
       field: 'arms_length_body',
       highlight: false,
       type: 'string',
+      render: rowData => {
+        const label = getArmsLengthBodyDropDown.find(option => option.value === rowData.arms_length_body)?.label;
+        return label 
+      }
     },
 
     {
