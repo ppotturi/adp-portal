@@ -11,6 +11,8 @@ import {
 import { useForm } from 'react-hook-form';
 import { alertApiRef, useApi } from '@backstage/core-plugin-api';
 
+
+
 interface ActionsModalProps {
   open: boolean;
   onClose: () => void;
@@ -55,6 +57,8 @@ export const ActionsModal: FC<ActionsModalProps> = ({
   });
   const errorApi = useApi(alertApiRef);
 
+ 
+
   const onFormSubmit = async (data: any) => {
     try {
       await onSubmit(data);
@@ -95,11 +99,12 @@ export const ActionsModal: FC<ActionsModalProps> = ({
                       }
                     : undefined,
                 })}
+                defaultValue={initialValues[field.name] || ''}
                 error={!!errors[field.name]}
                 helperText={errors[field.name]?.message ?? field.helperText}
               >
-                {field.options?.map((option,index) => (
-                   <MenuItem key={`${option.value}-${index}`} value={option.value}>
+                {field.options?.map((option) => (
+                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}
