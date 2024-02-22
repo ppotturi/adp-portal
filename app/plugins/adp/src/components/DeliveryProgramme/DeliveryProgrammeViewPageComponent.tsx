@@ -47,8 +47,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
   const getAlbOptionFields = () => {
     return DeliveryProgrammeFormFields.map(field => {
       if (field.name === 'arms_length_body') {
-        return { ...field, options: getArmsLengthBodyDropDown };
-        
+        return { ...field, options: getArmsLengthBodyDropDown }; 
       }
       return field;
     });
@@ -165,7 +164,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
     },
 
     {
-      title: '',
+      width: '',
       highlight: true,
       render: rowData => {
         return (
@@ -202,7 +201,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
           View or add Delivery Programmes to the Azure Developer Platform.
         </Typography>
 
-        <DefaultTable data={tableData} columns={columns} title="View all" />
+        <DefaultTable data={tableData} columns={columns} title="View all" isCompact={true}/>
 
         {isModalOpen && (
           <ActionsModal

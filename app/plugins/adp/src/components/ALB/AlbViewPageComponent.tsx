@@ -17,13 +17,15 @@ import {
   alertApiRef,
   errorApiRef,
 } from '@backstage/core-plugin-api';
-import { ArmsLengthBody , adpProgrammmeCreatePermission  } from '@internal/plugin-adp-common';
+import {
+  ArmsLengthBody,
+  adpProgrammmeCreatePermission,
+} from '@internal/plugin-adp-common';
 import { ArmsLengthBodyClient } from './api/AlbClient';
 import { ArmsLengthBodyApi } from './api/AlbApi';
 import CreateAlb from './CreateAlb';
 import { albFormFields } from './AlbFormFields';
 import { usePermission } from '@backstage/plugin-permission-react';
-
 
 export const AlbViewPageComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -131,9 +133,9 @@ export const AlbViewPageComponent = () => {
       field: 'updated_at',
       render: (data: {}) => {
         const e = data as ArmsLengthBody;
-        
+
         if (e.updated_at === undefined) {
-          return 'No date available'; 
+          return 'No date available';
         }
         const date = new Date(e.updated_at);
         return date.toLocaleString();
@@ -143,7 +145,7 @@ export const AlbViewPageComponent = () => {
     },
 
     {
-      title: '',
+      width: '',
       highlight: true,
       render: rowData => {
         return (
