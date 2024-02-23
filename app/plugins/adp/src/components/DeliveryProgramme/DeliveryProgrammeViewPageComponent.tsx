@@ -23,6 +23,7 @@ import CreateDeliveryProgramme from './CreateDeliveryProgramme';
 import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
 import { DeliveryProgrammeApi } from './api/DeliveryProgrammeApi';
 import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
+import { useEntities } from '../../hooks/useEntities';
 
 
 export const DeliveryProgrammeViewPageComponent = () => {
@@ -38,6 +39,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
   const getArmsLengthBodyDropDown = useArmsLengthBodyList();
+  const getEntitiesChip = useEntities()
 
   const deliveryprogClient: DeliveryProgrammeApi = new DeliveryProgrammeClient(
     discoveryApi,
@@ -52,6 +54,9 @@ export const DeliveryProgrammeViewPageComponent = () => {
       return field;
     });
   };
+
+
+  const formatEntities = getEntitiesChip
 
   const getAllDeliveryProgrammes = async () => {
     try {
@@ -213,6 +218,12 @@ export const DeliveryProgrammeViewPageComponent = () => {
             fields={getAlbOptionFields()}
           />
         )}
+
+{/* <ul>
+        {getEntitiesChip.map((entity, index) => (
+          <li key={index}>{entity.metadata.name} - {entity.spec?.profile?.displayName || 'No display name'}</li>
+        ))}
+      </ul> */}
       </Content>
     </Page>
   );
