@@ -118,21 +118,57 @@ export async function createProgrammeRouter(
         req.body,
         author,
       );
+      const programmeManagers = req.body.programme_managers;
+      const existingProgrammeManagers = await programmeManagersStore.getBy(
+        deliveryProgramme.id,
+      );
 
+      console.log('existingProgrammeManagers', existingProgrammeManagers)
+        console.log(programmeManagers)
+      const updatedManagers: ProgrammeManager[] = [];
+      // if db doesn't include the manager from req.body then add it to updatedManagers array
+      for (const updatedManager of programmeManagers) {
+        if (
+          !existingProgrammeManagers.some(
+            manager => 
+            manager.programme_manager_id ===
+            updatedManager.programme_manager_id,
+          )
+        ) {
+          updatedManagers.push(updatedManager);
+        }
+      }
+      console.log(updatedManagers);
+      for (const manager of updatedManagers) {
+        const store = {
+          programme_manager_id: manager.programme_manager_id,
+          delivery_programme_id: deliveryProgramme.id,
+        };
+        const programmeManager = await programmeManagersStore.add(store);
+        deliveryProgramme.programme_managers.push(programmeManager);
+      }
 
-      // const pm: ProgrammeManager[] = await programmeManagersStore.getBy(deliveryProgramme.id);
-      //   console.log('pm', pm)
-      // const programmeManagers = req.body.programme_managers;
-      // for (const manager of programmeManagers) {
-      //   const store = {
-      //     programme_manager_id: manager.programme_manager_id,
-      //     delivery_programme_id: deliveryProgramme.id,
-      //     id: manager?.id ? manager.id : 'unknown',
-      //   };
-      //   console.log(store)
-      //   const programmeManager = await programmeManagersStore.add(store);
-      //   deliveryProgramme.programme_managers.push(programmeManager);
-      // }
+      const removedManagers: ProgrammeManager[] = [];
+      // if the req.body doesn't include a manager from the db then add it into the removedManagers array
+      for (const existingManager of existingProgrammeManagers) {
+        if (
+          !programmeManagers.some(
+            (manager: ProgrammeManager) =>
+            manager.programme_manager_id ===
+              existingManager.programme_manager_id,
+          )
+        ) {
+          removedManagers.push(existingManager);
+        }
+      }
+
+      for (const manager of removedManagers) {
+        const store = {
+          programme_manager_id: manager.programme_manager_id,
+        };
+        await programmeManagersStore.delete(store.programme_manager_id);
+      }
+
       res.json(deliveryProgramme);
     } catch (error) {
       logger.error('Unable to update Delivery Programme');

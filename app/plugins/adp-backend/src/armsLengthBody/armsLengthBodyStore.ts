@@ -16,7 +16,6 @@ type Row = {
   created_at: Date;
   updated_by?: string;
   updated_at: Date;
-  updated_at: Date;
 };
 
 

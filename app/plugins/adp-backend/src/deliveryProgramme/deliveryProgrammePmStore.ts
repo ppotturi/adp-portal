@@ -1,6 +1,5 @@
 import { Knex } from 'knex';
 import { ProgrammeManager } from '@internal/plugin-adp-common';
-import { NotFoundError } from '@backstage/errors';
 
 const TABLE_NAME = 'delivery_programme_pm';
 type Row = {
@@ -66,32 +65,11 @@ export class ProgrammeManagerStore {
     };
   }
 
-  async update(programmeManager: ProgrammeManager): Promise<ProgrammeManager> {
-    console.log('programmeManager', programmeManager);
-    const existingProgrammeManagers = await this.getBy(
-      programmeManager.delivery_programme_id,
-    );
-    console.log('existingProgrammeManagers', existingProgrammeManagers);
+  async delete(id: string) {
+    const deleteResult = await this.client(TABLE_NAME)
+      .where({ programme_manager_id: id })
+      .del();
 
-    
-    if(programmeManager.id === 'unknown') {
-      // add new programme manager
-    };
-
-    //if id exists
-    const updatedData: ProgrammeManager = {
-      ...programmeManager,
-    };
-
-    //if id is removed
-
-    console.log('updatedata', updatedData)
-    await this.client<Row>(TABLE_NAME)
-      .where('id', programmeManager.id)
-      .update({
-        ...updatedData,
-      });
-
-    return { ...updatedData };
+    return deleteResult;
   }
 }
