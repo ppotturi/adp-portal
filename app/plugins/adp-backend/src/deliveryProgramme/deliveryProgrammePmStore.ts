@@ -1,5 +1,6 @@
 import { Knex } from 'knex';
 import { ProgrammeManager } from '@internal/plugin-adp-common';
+import { NotFoundError } from '@backstage/errors';
 
 const TABLE_NAME = 'delivery_programme_pm';
 type Row = {
@@ -21,10 +22,21 @@ export class ProgrammeManagerStore {
       delivery_programme_id: row.delivery_programme_id,
     }));
   }
+  async getBy(delivery_programme_id: string): Promise<ProgrammeManager[]> {
+    const ProgrammeManagers = await this.client<Row>(TABLE_NAME)
+      .where('delivery_programme_id', delivery_programme_id)
+      .select('id', 'programme_manager_id', 'delivery_programme_id');
 
-  async get(id: string): Promise<ProgrammeManager | null> {
+    return ProgrammeManagers.map(row => ({
+      id: row.id,
+      programme_manager_id: row.programme_manager_id,
+      delivery_programme_id: row.delivery_programme_id,
+    }));
+  }
+
+  async get(delivery_programme_id: string): Promise<ProgrammeManager | null> {
     const row = await this.client<Row>(TABLE_NAME)
-      .where('id', id)
+      .where('delivery_programme_id', delivery_programme_id)
       .select('id', 'programme_manager_id', 'delivery_programme_id')
       .first();
 
@@ -54,22 +66,32 @@ export class ProgrammeManagerStore {
     };
   }
 
-  // async update(
-  //   programmeManager:Omit<ProgrammeManager, 'id'>,
-  //   programmeManagers: string[]
-  // ): Promise<ProgrammeManager> {
+  async update(programmeManager: ProgrammeManager): Promise<ProgrammeManager> {
+    console.log('programmeManager', programmeManager);
+    const existingProgrammeManagers = await this.getBy(
+      programmeManager.delivery_programme_id,
+    );
+    console.log('existingProgrammeManagers', existingProgrammeManagers);
 
-  //   await this.client<Row>(TABLE_NAME)
+    
+    if(programmeManager.id === 'unknown') {
+      // add new programme manager
+    };
 
-  //   const existingProgrammeManager = await this.get(programmeManager.id);
+    //if id exists
+    const updatedData: ProgrammeManager = {
+      ...programmeManager,
+    };
 
-  //   await this.client<Row>(TABLE_NAME)
-  //     .where('id', programmeManager.id)
-  //     .update({
-  //       programme_manager_id: programmeManager.programme_manager_id,
-  //       delivery_programme_id: programmeManager.delivery_programme_id
-  //     });
+    //if id is removed
 
-  //   return { ...existingProgrammeManager};
-  // }
+    console.log('updatedata', updatedData)
+    await this.client<Row>(TABLE_NAME)
+      .where('id', programmeManager.id)
+      .update({
+        ...updatedData,
+      });
+
+    return { ...updatedData };
+  }
 }

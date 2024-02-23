@@ -36,7 +36,7 @@ export class DeliveryProgrammeStore {
         'delivery_programme_code',
         'url',
         'created_at',
-        'updated_at'
+        'updated_at',
       )
       .orderBy('created_at');
 
@@ -52,7 +52,7 @@ export class DeliveryProgrammeStore {
       delivery_programme_code: row.delivery_programme_code,
       url: row?.url,
       created_at: new Date(row.created_at),
-      updated_at: row.updated_at
+      updated_at: row.updated_at,
     }));
   }
 
@@ -70,7 +70,7 @@ export class DeliveryProgrammeStore {
         'delivery_programme_code',
         'url',
         'created_at',
-        'updated_at'
+        'updated_at',
       )
       .first();
 
@@ -87,13 +87,16 @@ export class DeliveryProgrammeStore {
           delivery_programme_code: row.delivery_programme_code,
           url: row?.url,
           created_at: new Date(row.created_at),
-          updated_at: row.updated_at
+          updated_at: row.updated_at,
         }
       : null;
   }
 
   async add(
-    deliveryProgramme: Omit<DeliveryProgramme, 'id' | 'created_at' | 'updated_at' | 'programme_managers'>,
+    deliveryProgramme: Omit<
+      DeliveryProgramme,
+      'id' | 'created_at' | 'updated_at' | 'programme_managers'
+    >,
     author: string,
   ): Promise<DeliveryProgramme> {
     const insertResult = await this.client<Row>(TABLE_NAME).insert(
@@ -116,21 +119,18 @@ export class DeliveryProgrammeStore {
         `Could not insert Delivery Programme ${deliveryProgramme.title}`,
       );
     }
-    
+
     return {
       ...deliveryProgramme,
       id: insertResult[0].id,
       created_at: new Date(insertResult[0].created_at),
       updated_at: new Date(insertResult[0].updated_at),
-      programme_managers: []
+      programme_managers: [],
     };
   }
 
   async update(
-    deliveryProgramme: Omit<
-      PartialDeliveryProgramme,
-      'updated_at' 
-    >,
+    deliveryProgramme: Omit<PartialDeliveryProgramme, 'updated_at'>,
     updatedBy: string,
   ): Promise<DeliveryProgramme> {
     if (deliveryProgramme.id === undefined) {
@@ -151,10 +151,13 @@ export class DeliveryProgrammeStore {
       ...deliveryProgramme,
     };
 
+    if (updatedData.programme_managers) {
+      delete updatedData.programme_managers
+    }
+
     if (Object.keys(updatedData).length === 0) {
       return existingProgramme;
     }
-
     await this.client<Row>(TABLE_NAME)
       .where('id', deliveryProgramme.id)
       .update({
@@ -163,6 +166,10 @@ export class DeliveryProgrammeStore {
         updated_by: updatedBy,
       });
 
-    return { ...existingProgramme, ...updatedData, updated_at: updated };
+    return {
+      ...existingProgramme,
+      ...updatedData,
+      updated_at: updated,
+    };
   }
 }

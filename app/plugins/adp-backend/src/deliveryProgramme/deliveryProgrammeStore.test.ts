@@ -7,8 +7,9 @@ import {
 import { NotFoundError } from '@backstage/errors';
 import { createName } from '../utils';
 import { expectedAlbsWithName } from '../armsLengthBody/albTestData';
-import { DeliveryProgramme } from '@internal/plugin-adp-common';
-import { expectedProgrammeDataStore } from './programmeTestData';
+import { DeliveryProgramme, ProgrammeManager } from '@internal/plugin-adp-common';
+import { expectedProgrammeDataStore, expectedProgrammeNoPm} from './programmeTestData';
+import { ProgrammeManagerStore } from './deliveryProgrammePmStore';
 
 describe('DeliveryProgrammeStore', () => {
   const databases = TestDatabases.create();
@@ -17,13 +18,14 @@ describe('DeliveryProgrammeStore', () => {
     const knex = await databases.init(databaseId);
     await AdpDatabase.runMigrations(knex);
     const store = new DeliveryProgrammeStore(knex);
-    return { knex, store };
+    const pmStore = new ProgrammeManagerStore(knex)
+    return { knex, store, pmStore };
   }
 
   it.each(databases.eachSupportedId())(
     'should create a new Delivery Programme',
     async databaseId => {
-      const { knex, store } = await createDatabase(databaseId);
+      const { knex, store, pmStore } = await createDatabase(databaseId);
       const insertAlbId = await knex('arms_length_body').insert(
         expectedAlbsWithName,
         ['id'],
@@ -35,6 +37,7 @@ describe('DeliveryProgrammeStore', () => {
         ...expectedProgrammeDataStore,
         arms_length_body: albId,
       };
+
       const addResult = await store.add(expectedProgrammeId, 'test');
 
       expect(addResult.name).toEqual(createName(expectedProgrammeId.title));
@@ -56,7 +59,7 @@ describe('DeliveryProgrammeStore', () => {
       const albId = insertAlbId[1].id;
       const expectedProgramme = [
         {
-          ...expectedProgrammeDataStore,
+          ...expectedProgrammeNoPm,
           arms_length_body: albId,
         },
       ];
@@ -79,7 +82,7 @@ describe('DeliveryProgrammeStore', () => {
       const albId = insertAlbId[1].id;
       const expectedProgramme = [
         {
-          ...expectedProgrammeDataStore,
+          ...expectedProgrammeNoPm,
           arms_length_body: albId,
         },
       ];
@@ -110,7 +113,7 @@ describe('DeliveryProgrammeStore', () => {
       const albId = insertAlbId[1].id;
       const expectedProgramme = [
         {
-          ...expectedProgrammeDataStore,
+          ...expectedProgrammeNoPm,
           arms_length_body: albId,
         },
       ];
@@ -133,7 +136,7 @@ describe('DeliveryProgrammeStore', () => {
       const albId = insertAlbId[1].id;
       const expectedProgramme = [
         {
-          ...expectedProgrammeDataStore,
+          ...expectedProgrammeNoPm,
           arms_length_body: albId,
         },
       ];
@@ -172,7 +175,7 @@ describe('DeliveryProgrammeStore', () => {
       const albId = insertAlbId[1].id;
       const expectedProgramme = [
         {
-          ...expectedProgrammeDataStore,
+          ...expectedProgrammeNoPm,
           arms_length_body: albId,
         },
       ];
