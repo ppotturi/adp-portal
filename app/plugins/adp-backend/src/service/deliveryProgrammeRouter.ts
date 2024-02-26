@@ -19,7 +19,7 @@ import {
   deleteProgrammeManager,
   getCurrentUsername,
 } from '../utils';
-import { ProgrammeManagerStore } from '../deliveryProgramme/deliveryProgrammePMStore';
+import { ProgrammeManagerStore } from '../deliveryProgramme/deliveryProgrammeManagerStore';
 
 export interface ProgrammeRouterOptions {
   logger: Logger;
@@ -54,6 +54,11 @@ export async function createProgrammeRouter(
     res.json(data);
   });
 
+  router.get('/programmeManager', async (_req, res) => {
+    const data = await programmeManagersStore.getAll();
+    res.json(data);
+  });
+
   router.post('/deliveryProgramme', async (req, res) => {
     try {
       if (!isDeliveryProgrammeCreateRequest(req.body)) {
@@ -78,14 +83,16 @@ export async function createProgrammeRouter(
         );
 
         const programmeManagers = req.body.programme_managers;
-
-        addProgrammeManager(
-          programmeManagers,
-          deliveryProgramme.id,
-          deliveryProgramme,
-          programmeManagersStore,
-        );
-
+        if (programmeManagers !== undefined) {
+          addProgrammeManager(
+            programmeManagers,
+            deliveryProgramme.id,
+            deliveryProgramme,
+            programmeManagersStore,
+          );
+        } else { 
+          req.body.programme_managers = []
+        }
         res.json(deliveryProgramme);
       }
     } catch (error) {
@@ -123,47 +130,48 @@ export async function createProgrammeRouter(
         req.body,
         author,
       );
+
       const programmeManagers = req.body.programme_managers;
-      const existingProgrammeManagers = await programmeManagersStore.getBy(
-        deliveryProgramme.id,
-      );
-
-      const updatedManagers: ProgrammeManager[] = [];
-
-      for (const updatedManager of programmeManagers) {
-        if (
-          !existingProgrammeManagers.some(
-            manager =>
-              manager.programme_manager_id ===
-              updatedManager.programme_manager_id,
-          )
-        ) {
-          updatedManagers.push(updatedManager);
+      if (programmeManagers !== undefined) {
+        const existingProgrammeManagers = await programmeManagersStore.getBy(
+          deliveryProgramme.id,
+        );
+        const updatedManagers: ProgrammeManager[] = [];
+        for (const updatedManager of programmeManagers) {
+          if (
+            !existingProgrammeManagers.some(
+              manager =>
+                manager.programme_manager_id ===
+                updatedManager.programme_manager_id,
+            )
+          ) {
+            updatedManagers.push(updatedManager);
+          }
         }
-      }
 
-      addProgrammeManager(
-        updatedManagers,
-        deliveryProgramme.id,
-        deliveryProgramme,
-        programmeManagersStore,
-      );
+        addProgrammeManager(
+          updatedManagers,
+          deliveryProgramme.id,
+          deliveryProgramme,
+          programmeManagersStore,
+        );
 
-      const removedManagers: ProgrammeManager[] = [];
+        const removedManagers: ProgrammeManager[] = [];
 
-      for (const existingManager of existingProgrammeManagers) {
-        if (
-          !programmeManagers.some(
-            (manager: ProgrammeManager) =>
-              manager.programme_manager_id ===
-              existingManager.programme_manager_id,
-          )
-        ) {
-          removedManagers.push(existingManager);
+        for (const existingManager of existingProgrammeManagers) {
+          if (
+            !programmeManagers.some(
+              (manager: ProgrammeManager) =>
+                manager.programme_manager_id ===
+                existingManager.programme_manager_id,
+            )
+          ) {
+            removedManagers.push(existingManager);
+          }
         }
-      }
 
-      deleteProgrammeManager(removedManagers, programmeManagersStore);
+        deleteProgrammeManager(removedManagers, programmeManagersStore);
+      }
 
       res.json(deliveryProgramme);
     } catch (error) {

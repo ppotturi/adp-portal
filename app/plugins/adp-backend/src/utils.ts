@@ -1,8 +1,12 @@
-import { ArmsLengthBody, DeliveryProgramme, ProgrammeManager } from '@internal/plugin-adp-common';
+import {
+  ArmsLengthBody,
+  DeliveryProgramme,
+  ProgrammeManager,
+} from '@internal/plugin-adp-common';
 import { IdentityApi } from '@backstage/plugin-auth-node';
 import express from 'express';
 import { AlbRouterOptions } from './service/armsLengthBodyRouter';
-import { ProgrammeManagerStore } from './deliveryProgramme/deliveryProgrammePMStore';
+import { ProgrammeManagerStore } from './deliveryProgramme/deliveryProgrammeManagerStore';
 
 export function createName(name: string) {
   const nameValue = name.replace(/\s+/g, '-').toLowerCase().substring(0, 64);
@@ -46,26 +50,28 @@ export async function addProgrammeManager(
   programmeManagers: ProgrammeManager[],
   id: string,
   deliveryProgramme: DeliveryProgramme,
-  pmStore: ProgrammeManagerStore,
+  ProgrammeManagerStore: ProgrammeManagerStore,
 ) {
-  for (const manager of programmeManagers) {
-    const store = {
-      programme_manager_id: manager.programme_manager_id,
-      delivery_programme_id: id,
-    };
-    const programmeManager = await pmStore.add(store);
-    deliveryProgramme.programme_managers.push(programmeManager);
+  if (programmeManagers !== undefined) {
+    for (const manager of programmeManagers) {
+      const store = {
+        programme_manager_id: manager.programme_manager_id,
+        delivery_programme_id: id,
+      };
+      const programmeManager = await ProgrammeManagerStore.add(store);
+      deliveryProgramme.programme_managers.push(programmeManager);
+    }
   }
 }
 
 export async function deleteProgrammeManager(
   programmeManagers: ProgrammeManager[],
-  pmStore: ProgrammeManagerStore,
+  ProgrammeManagerStore: ProgrammeManagerStore,
 ) {
   for (const manager of programmeManagers) {
     const store = {
       programme_manager_id: manager.programme_manager_id,
     };
-    await pmStore.delete(store.programme_manager_id);
+    await ProgrammeManagerStore.delete(store.programme_manager_id);
   }
 }

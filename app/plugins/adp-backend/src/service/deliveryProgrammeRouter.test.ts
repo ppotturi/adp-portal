@@ -77,6 +77,13 @@ describe('createRouter', () => {
     });
   });
 
+  describe('GET /programmeManager', () => {
+    it('returns ok', async () => {
+      const response = await request(programmeApp).get('/programmeManager');
+      expect(response.status).toEqual(200);
+    });
+  });
+
   describe('POST /deliveryProgramme', () => {
     it('returns ok', async () => {
       const creator = await getCurrentUsername(
@@ -92,7 +99,7 @@ describe('createRouter', () => {
       const getExistingAlbData = await request(albApp).get('/armsLengthBody');
       const getAlbId = getExistingAlbData.body[0].id;
       const expectedProgramme = {
-        ...expectedProgrammeData,
+        ...expectedProgrammeDataWithName,
         arms_length_body: getAlbId,
       };
       const getExistingData = await request(programmeApp).get(

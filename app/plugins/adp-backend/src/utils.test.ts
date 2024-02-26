@@ -1,5 +1,10 @@
 import { expectedProgrammeDataStore } from './deliveryProgramme/programmeTestData';
-import { createName, createTransformerTitle, getCurrentUsername, checkForDuplicateTitle } from './utils';
+import {
+  createName,
+  createTransformerTitle,
+  getCurrentUsername,
+  checkForDuplicateTitle,
+} from './utils';
 import { TestDatabaseId, TestDatabases } from '@backstage/backend-test-utils';
 import { AdpDatabase } from './database/adpDatabase';
 import express from 'express';
@@ -7,9 +12,6 @@ import { DeliveryProgrammeStore } from './deliveryProgramme/deliveryProgrammeSto
 import { expectedAlbsWithName } from './armsLengthBody/albTestData';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
 
-const programmeStore = [{
-  ...expectedProgrammeDataStore
-}];
 
 describe('createName', () => {
   it('replaces spaces with dashes and converts to lowercase', () => {
@@ -66,10 +68,13 @@ describe('checkForDuplicateTitle', () => {
 
       const albId = insertAlbId[1].id;
 
-      const expectedProgrammeId: Omit<DeliveryProgramme, 'id' | 'created_at' | 'updated_at'> = {
+      const expectedProgrammeId: Omit<
+        DeliveryProgramme,
+        'id' | 'created_at' | 'updated_at' | 'programme_managers'
+      > = {
         ...expectedProgrammeDataStore,
         arms_length_body: albId,
-      }
+      };
       await store.add(expectedProgrammeId, 'test');
       const getResult = await store.getAll();
 
@@ -90,7 +95,10 @@ describe('checkForDuplicateTitle', () => {
 
       const albId = insertAlbId[1].id;
 
-      const expectedProgrammeId: Omit<DeliveryProgramme, 'id' | 'created_at' | 'updated_at'> = {
+      const expectedProgrammeId: Omit<
+        DeliveryProgramme,
+        'id' | 'created_at' | 'updated_at' | 'programme_managers'
+      > = {
         ...expectedProgrammeDataStore,
         arms_length_body: albId,
       };
@@ -102,7 +110,6 @@ describe('checkForDuplicateTitle', () => {
       expect(result).toBe(true);
     },
   );
-
 });
 
 describe('getCurrentUsername', () => {

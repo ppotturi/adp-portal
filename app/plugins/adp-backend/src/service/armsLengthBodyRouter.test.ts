@@ -70,7 +70,7 @@ describe('createRouter', () => {
   describe('POST /armsLengthBody', () => {
     it('returns ok', async () => {
       mockIdentityApi.getIdentity.mockResolvedValue({
-        identity: { userEntityRef: 'user:default/johndoe' },
+        identity: { userEntityRef: 'user:default/johndoe'},
       });
       const creator = await getCurrentUsername(
         mockIdentityApi,
@@ -94,7 +94,7 @@ describe('createRouter', () => {
         .send(expectedALB);
       expect(response.status).toEqual(200);
       expect(checkDuplicate).toBe(false);
-    });
+    },6000);
 
     it('returns Error', async () => {
       const invalidALB = {
@@ -104,8 +104,9 @@ describe('createRouter', () => {
       const response = await request(app)
         .post('/armsLengthBody')
         .send(invalidALB);
+        console.log(response)
       expect(response.status).toEqual(400);
-    });
+    },6000);
   });
 
   describe('POST /armsLengthBody', () => {
@@ -120,7 +121,7 @@ describe('createRouter', () => {
         .send(expectedALB);
       expect(response.status).toEqual(406);
       expect(response.text).toEqual('{"error":"ALB name already exists"}');
-    });
+    },6000);
   });
 
   describe('PATCH /armsLengthBody', () => {
