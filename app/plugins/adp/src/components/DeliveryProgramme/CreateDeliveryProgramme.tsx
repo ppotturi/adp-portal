@@ -13,6 +13,8 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import { useArmsLengthBodyList} from '../../hooks/useArmsLengthBodyList'
+import { useEntities } from '../../hooks/useEntities';
+
 
 interface CreateDeliveryProgrammeProps {
   refetchDeliveryProgramme: () => void;
@@ -26,6 +28,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetc
   const fetchApi = useApi(fetchApiRef);
   const errorApi = useApi(errorApiRef);
   const getArmsLengthBodyDropDown = useArmsLengthBodyList();
+  const getEntitiesChip = useEntities()
   
 
   const deliveryprogClient = new DeliveryProgrammeClient(discoveryApi, fetchApi);
@@ -38,7 +41,10 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetc
     setIsModalOpen(false);
   };
 
+  
+
   const handleSubmit = async (deliveryProgramme: DeliveryProgramme) => {
+    console.log("original submission" , deliveryProgramme)
     try {
       await deliveryprogClient.createDeliveryProgramme(deliveryProgramme);
       alertApi.post({
@@ -58,14 +64,30 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetc
     }
   };
 
-  const getAlbOptionFields = () => {
+  // const getAlbOptionFields = () => {
+  //   return DeliveryProgrammeFormFields.map(field => {
+  //     if (field.name === 'arms_length_body') {
+  //       return { ...field, options: getArmsLengthBodyDropDown };
+  //     }
+  //     return field;
+  //   });
+  // };
+
+  const prepareFormFields = () => {
+    const albOptions = getArmsLengthBodyDropDown; 
+    const programmeManagerOptions = getEntitiesChip; 
+  
     return DeliveryProgrammeFormFields.map(field => {
       if (field.name === 'arms_length_body') {
-        return { ...field, options: getArmsLengthBodyDropDown };
+        return { ...field, options: albOptions };
+      } else if (field.name === 'programme_manager') {
+ 
+        return { ...field, options: programmeManagerOptions };
       }
       return field;
     });
   };
+  
 
 
   return (
@@ -90,7 +112,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetc
           onSubmit={handleSubmit}
           initialValues={{}}
           mode="create"
-          fields={getAlbOptionFields()}
+          fields={prepareFormFields()}
         />
       )}
     </>

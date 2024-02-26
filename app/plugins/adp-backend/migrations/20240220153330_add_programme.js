@@ -5,10 +5,6 @@ exports.up = async function up(knex) {
   return knex.schema.createTable('delivery_programme', table => {
     table.comment('Stores Delivery Programme data');
     table
-      .string('programme_manager')
-      .notNullable()
-      .comment('Name of the Delivery Programme Manager');
-    table
       .string('name')
       .notNullable()
       .comment('Delivery Programme name in lower case and hyphens instead of spaces');
@@ -19,7 +15,7 @@ exports.up = async function up(knex) {
     table
       .string('alias')
       .nullable()
-      .comment('Short form of Delivery Programme name');
+      .comment('Alias of Delivery Programme');
     table
       .string('description')
       .notNullable()

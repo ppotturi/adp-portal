@@ -3,7 +3,7 @@ import { defaultProgrammeGroupTransformer } from './deliveryProgrammeTransformer
 describe('defaultProgrammeGroupTransformer', () => {
   it('should transform valid ArmsLengthBody to GroupEntity', async () => {
     const deliveryProgramme = {
-      programme_manager: ['string1', 'string 2'],
+      programme_manager_id: ['string1', 'string 2'],
       title: 'Test title 1',
       alias: 'Test Alias',
       description: 'Test description',
@@ -14,6 +14,7 @@ describe('defaultProgrammeGroupTransformer', () => {
       name: 'test-title-1',
       id: '1234',
       created_at: new Date(),
+      updated_at: new Date(),
     };
 
     const expectedGroupEntity = {

@@ -5,9 +5,9 @@ import {
 } from '@backstage/backend-common';
 import express from 'express';
 import request from 'supertest';
-import { createAlbRouter, getOwner } from './armsLengthBodyRouter';
+import { createAlbRouter } from './armsLengthBodyRouter';
 import { ConfigReader } from '@backstage/config';
-import { getCurrentUsername , checkForDuplicateTitle} from '../utils';
+import { getCurrentUsername , checkForDuplicateTitle, getOwner} from '../utils';
 
 describe('createRouter', () => {
   let app: express.Express;

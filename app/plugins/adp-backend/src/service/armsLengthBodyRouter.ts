@@ -9,9 +9,9 @@ import {
   ArmsLengthBodyStore,
   PartialArmsLengthBody,
 } from '../armsLengthBody/armsLengthBodyStore';
-import { ArmsLengthBody } from '../types';
+import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import { Config } from '@backstage/config';
-import { checkForDuplicateTitle, getCurrentUsername } from '../utils';
+import { checkForDuplicateTitle, getCurrentUsername, getOwner } from '../utils';
 
 export interface AlbRouterOptions {
   logger: Logger;
@@ -20,12 +20,6 @@ export interface AlbRouterOptions {
   config: Config;
 }
 
-export function getOwner(options: AlbRouterOptions): string {
-  const { config } = options;
-  const ownerGroup = config.getConfig('rbac');
-  const owner = ownerGroup.getString('programmeAdminGroup');
-  return owner;
-}
 
 export async function createAlbRouter(
   options: AlbRouterOptions,
@@ -50,6 +44,7 @@ export async function createAlbRouter(
         alias: 'EA',
         name: 'environment-agency',
         description: '',
+        updated_at: undefined
       },
       'Seed',
       'Seed',
@@ -62,6 +57,7 @@ export async function createAlbRouter(
         alias: 'APHA',
         name: 'animal-and-plant-health',
         description: '',
+        updated_at: undefined
       },
       'Seed',
       'Seed',
@@ -74,6 +70,7 @@ export async function createAlbRouter(
         alias: 'RPA',
         name: 'rural-payments-agency',
         description: '',
+        updated_at: undefined 
       },
       'Seed',
       'Seed',
@@ -86,6 +83,7 @@ export async function createAlbRouter(
         alias: 'NE',
         name: 'natural-england',
         description: '',
+        updated_at: undefined
       },
       'Seed',
       'Seed',
@@ -98,6 +96,7 @@ export async function createAlbRouter(
         alias: 'MMO',
         name: 'marine-and-maritime',
         description: '',
+        updated_at: undefined
       },
       'Seed',
       'Seed',
@@ -141,7 +140,7 @@ export async function createAlbRouter(
         res.json(armsLengthBody);
       }
     } catch (error) {
-      throw new InputError('Error');
+      logger.error('Unable to create new Arms Length Body')
     }
   });
 
@@ -173,7 +172,7 @@ export async function createAlbRouter(
       );
       res.json(armsLengthBody);
     } catch (error) {
-      throw new InputError('Error');
+      logger.error('Unable to update Arms Length Body')
     }
   });
   router.use(errorHandler());

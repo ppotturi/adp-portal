@@ -12,6 +12,7 @@ describe('defaultAlbGroupTransformer', () => {
       url: 'https://www.example.uk/',
       id: '1234',
       created_at: new Date(),
+      updated_at: new Date(),
     };
 
     const expectedGroupEntity = {

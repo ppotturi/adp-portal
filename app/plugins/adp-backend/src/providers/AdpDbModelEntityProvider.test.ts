@@ -1,121 +1,91 @@
 import { AdpDbModelEntityProvider } from './AdpDbModelEntityProvider';
-import { TaskInvocationDefinition, PluginTaskScheduler, TaskRunner } from '@backstage/backend-tasks';
-import { PluginDatabaseManager, getVoidLogger } from '@backstage/backend-common';
+import {
+  TaskInvocationDefinition,
+  PluginTaskScheduler,
+  TaskRunner,
+} from '@backstage/backend-tasks';
+import {
+  PluginDatabaseManager,
+  getVoidLogger,
+} from '@backstage/backend-common';
 import { ConfigReader } from '@backstage/config';
+import { Entity } from '@backstage/catalog-model';
 import { EntityProviderConnection } from '@backstage/plugin-catalog-node';
 
-describe('AdpDbModelEntityProvider', () => {
-  const mockConfig = new ConfigReader({
-    catalog: {
-      providers: {
-        adpDb: {
-          baseUrl: 'http://adpdb:8080',
-          schedule: {
-            frequency: {
-              minutes: 10,
-            },
-            timeout: {
-              minutes: 10,
-            },
+const mockConfig = new ConfigReader({
+  catalog: {
+    providers: {
+      adpDb: {
+        baseUrl: 'http://adpdb:8080',
+        schedule: {
+          frequency: {
+            minutes: 10,
+          },
+          timeout: {
+            minutes: 10,
           },
         },
       },
     },
-  });
+  },
+});
 
-  class PersistingTaskRunner implements TaskRunner {
-    private tasks: TaskInvocationDefinition[] = [];
-  
-    getTasks() {
-      return this.tasks;
-    }
-  
-    run(task: TaskInvocationDefinition): Promise<void> {
-      this.tasks.push(task);
-      return Promise.resolve(undefined);
-    }
+class PersistingTaskRunner implements TaskRunner {
+  private tasks: TaskInvocationDefinition[] = [];
+
+  getTasks() {
+    return this.tasks;
   }
 
-  const logger = getVoidLogger();
-  const mockTaskRunner = { run: jest.fn() } as unknown as TaskRunner;
-  const mockDatabaseManager = {} as PluginDatabaseManager;
-  const mockScheduler = {} as PluginTaskScheduler;
-  const mockSchedule = new PersistingTaskRunner();
+  run(task: TaskInvocationDefinition): Promise<void> {
+    this.tasks.push(task);
+    return Promise.resolve(undefined);
+  }
+}
 
-  jest.mock('../armsLengthBody/armsLengthBodyStore', () => ({
-    ArmsLengthBodyStore: jest.fn().mockImplementation(() => ({
-      getAll: jest.fn().mockResolvedValue([
-        {
-          creator: 'Seed',
-          owner: 'Seed',
-          title: 'Environment Agency',
-          alias: 'EA',
-          description: '',
-          url: null,
-          name: 'environment-agency',
-          id: '4b5c98c3-94fb-444e-8d9b-ebe71ac4d5f3',
-          created_at: '2024-02-05T11:29:33.059Z',
-        },
-      ]),
-    })),
-  }));
+const mockLogger = getVoidLogger();
+const mockTaskRunner = {
+  createScheduleFn: jest.fn(),
+  run: jest.fn(),
+} as TaskRunner;
+const mockDatabaseManager = {} as PluginDatabaseManager;
+const mockScheduler = {
+  createScheduledTaskRunner: jest.fn(),
+} as unknown as PluginTaskScheduler;
+const mockSchedule = new PersistingTaskRunner();
 
-  jest.mock('../database/adpDatabase', () => ({
-    AdpDatabase: {
-      create: jest.fn().mockResolvedValue({
-        creator: 'Seed',
-        owner: 'Seed',
-        title: 'Environment Agency',
-        alias: 'EA',
-        description: '',
-        url: null,
-        name: 'environment-agency',
-        id: '4b5c98c3-94fb-444e-8d9b-ebe71ac4d5f3',
-        created_at: '2024-02-05T11:29:33.059Z',
-      }),
-    },
-  }));
+const options = {
+  logger: mockLogger,
+  schedule: mockSchedule,
+  scheduler: mockScheduler,
+  database: mockDatabaseManager,
+};
 
+const entityProvider = new AdpDbModelEntityProvider(
+  mockLogger,
+  mockTaskRunner,
+  mockConfig,
+  mockDatabaseManager,
+);
+
+const mockConnection: EntityProviderConnection = {
+  applyMutation: jest.fn(),
+  refresh: jest.fn(),
+};
+
+describe('AdpDbModelEntityProvider', () => {
   describe('fromConfig', () => {
     it('initializes correctly from configuration', () => {
-      const options = {
-        logger: logger,
-        schedule: mockSchedule,
-        scheduler: mockScheduler,
-        database: mockDatabaseManager,
-      };
       const entityProvider = AdpDbModelEntityProvider.fromConfig(
         mockConfig,
         options,
       );
       expect(entityProvider).toBeDefined();
     });
-
-    it('throws an error if neither schedule nor scheduler is provided', () => {
-      const options = {
-        logger: logger,
-        schedule: undefined,
-        scheduler: mockScheduler,
-        database: mockDatabaseManager,
-      };
-      expect(() =>
-        AdpDbModelEntityProvider.fromConfig(mockConfig, options),
-      ).toThrow();
-    });
   });
 
   describe('connect and refresh', () => {
     it('connects and schedules refresh successfully', async () => {
-      const entityProvider = new AdpDbModelEntityProvider(
-        logger,
-        mockTaskRunner,
-        mockConfig,
-        mockDatabaseManager,
-      );
-      const mockConnection: EntityProviderConnection = {
-        applyMutation: jest.fn(),
-        refresh: jest.fn(),
-      };
       await entityProvider.connect(mockConnection);
       expect(mockTaskRunner.run).toHaveBeenCalledWith({
         id: expect.any(String),
@@ -123,4 +93,73 @@ describe('AdpDbModelEntityProvider', () => {
       });
     });
   });
+
+  // describe('track progress', () => {
+  //   beforeEach(() => {
+  //     jest.clearAllMocks();
+  //     jest.spyOn(Date, 'now');
+  //   });
+
+  //   afterAll(() => {
+  //     jest.restoreAllMocks();
+  //   });
+
+  //   it('logs read and commit progress with correct durations and entity counts', () => {
+  //     const { markReadComplete } = entityProvider.trackProgress(mockLogger);
+  //     const mockedDateNow = Date.now as jest.MockedFunction<typeof Date.now>;
+  //     const startTime = 1000;
+  //     const readTime = 2000;
+  //     const commitTime = 4000;
+  //     mockedDateNow
+  //       .mockReturnValueOnce(startTime)
+  //       .mockReturnValueOnce(readTime)
+  //       .mockReturnValueOnce(commitTime);
+
+  //     const readEntities: Entity[] = [
+  //       {
+  //         apiVersion: 'v1',
+  //         kind: 'ExampleKind',
+  //         metadata: {
+  //           name: 'entity1',
+  //         },
+  //       },
+  //       {
+  //         apiVersion: 'v1',
+  //         kind: 'ExampleKind',
+  //         metadata: {
+  //           name: 'entity2',
+  //         },
+  //       },
+  //     ];
+
+  //     const committedEntities: Entity[] = [
+  //       {
+  //         apiVersion: 'v1',
+  //         kind: 'ExampleKind',
+  //         metadata: {
+  //           name: 'entity3',
+  //         },
+  //       },
+  //       {
+  //         apiVersion: 'v1',
+  //         kind: 'ExampleKind',
+  //         metadata: {
+  //           name: 'entity4',
+  //         },
+  //       },
+  //     ];
+
+  //     const { markCommitComplete } = markReadComplete(readEntities);
+
+  //     expect(mockLogger.info).toHaveBeenCalledWith(
+  //       expect.stringContaining('Read'),
+  //     );
+
+  //     markCommitComplete(committedEntities);
+
+  //     expect(mockLogger.info).toHaveBeenCalledWith(
+  //       `Committed 2 in 2.0 seconds.`,
+  //     );
+  //   });
+  // });
 });

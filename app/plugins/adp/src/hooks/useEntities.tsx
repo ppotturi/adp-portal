@@ -20,8 +20,13 @@ export const useEntities = (): Entity[] => {
           fields: ['metadata.name', 'spec.profile.displayName'],
         });
 
+        const transformedOptions = response.items.map((entity) => ({
+          label: entity.spec.profile.displayName,
+          value: entity.metadata.name,
+        }));
 
-        setOptions(response.items);
+        console.log(transformedOptions)
+        setOptions(transformedOptions);
       } catch (e:any) {
         errorApi.post(e);
       }
@@ -31,5 +36,7 @@ export const useEntities = (): Entity[] => {
   }, [catalogApi, errorApi]); 
 
   return options;
+
+  
 };
 

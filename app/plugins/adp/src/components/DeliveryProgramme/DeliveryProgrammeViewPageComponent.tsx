@@ -46,17 +46,42 @@ export const DeliveryProgrammeViewPageComponent = () => {
     fetchApi,
   );
 
-  const getAlbOptionFields = () => {
+  // const getAlbOptionFields = () => {
+  //   return DeliveryProgrammeFormFields.map(field => {
+  //     if (field.name === 'arms_length_body') {
+  //       return { ...field, options: getArmsLengthBodyDropDown }; 
+  //     }
+  //     return field;
+  //   });
+  // };
+
+  // const getDeliveryOptionFields = () => {
+  //   return getEntitiesChip.map(entity => {
+  //     if (entity.name === 'programme_managers') {
+  //       return { ...entity, options: getEntitiesChip }; 
+  //     }
+  //     return entity;
+  //   });
+  // };
+
+  const prepareFormFields = () => {
+    const albOptions = getArmsLengthBodyDropDown; 
+    const programmeManagerOptions = getEntitiesChip; 
+  
     return DeliveryProgrammeFormFields.map(field => {
       if (field.name === 'arms_length_body') {
-        return { ...field, options: getArmsLengthBodyDropDown }; 
+        return { ...field, options: albOptions };
+      } else if (field.name === 'programme_manager') {
+        
+        return { ...field, options: programmeManagerOptions };
       }
       return field;
     });
   };
+  
 
 
-  const formatEntities = getEntitiesChip
+  
 
   const getAllDeliveryProgrammes = async () => {
     try {
@@ -215,15 +240,10 @@ export const DeliveryProgrammeViewPageComponent = () => {
             onSubmit={handleUpdate}
             initialValues={formData}
             mode="edit"
-            fields={getAlbOptionFields()}
+            fields={prepareFormFields()}
           />
         )}
-
-{/* <ul>
-        {getEntitiesChip.map((entity, index) => (
-          <li key={index}>{entity.metadata.name} - {entity.spec?.profile?.displayName || 'No display name'}</li>
-        ))}
-      </ul> */}
+      
       </Content>
     </Page>
   );

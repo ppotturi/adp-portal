@@ -7,8 +7,8 @@ import express from 'express';
 import request from 'supertest';
 import { createProgrammeRouter } from './deliveryProgrammeRouter';
 import { ConfigReader } from '@backstage/config';
-import { getCurrentUsername, checkForDuplicateTitle } from '../utils';
-import { createAlbRouter, getOwner } from './armsLengthBodyRouter';
+import { getCurrentUsername, checkForDuplicateTitle, getOwner } from '../utils';
+import { createAlbRouter } from './armsLengthBodyRouter';
 import {
   expectedProgrammeData,
   expectedProgrammeDataWithName,

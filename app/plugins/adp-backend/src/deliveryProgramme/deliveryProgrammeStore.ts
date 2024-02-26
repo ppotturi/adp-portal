@@ -1,12 +1,11 @@
 import { Knex } from 'knex';
 import { NotFoundError } from '@backstage/errors';
-import { DeliveryProgramme } from '../types';
+import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import { createName } from '../utils';
 
 const TABLE_NAME = 'delivery_programme';
 type Row = {
   id: string;
-  programme_manager: string;
   title: string;
   readonly name: string;
   alias?: string;
@@ -17,7 +16,7 @@ type Row = {
   url?: string;
   updated_by?: string;
   created_at: Date;
-  updated_at?: Date;
+  updated_at: Date;
 };
 
 export type PartialDeliveryProgramme = Partial<DeliveryProgramme>;
@@ -28,7 +27,6 @@ export class DeliveryProgrammeStore {
     const DeliveryProgrammes = await this.client<Row>(TABLE_NAME)
       .select(
         'id',
-        'programme_manager',
         'title',
         'name',
         'alias',
@@ -38,13 +36,13 @@ export class DeliveryProgrammeStore {
         'delivery_programme_code',
         'url',
         'created_at',
-        'updated_at'
+        'updated_at',
       )
       .orderBy('created_at');
 
     return DeliveryProgrammes.map(row => ({
       id: row.id,
-      programme_manager: JSON.parse(row.programme_manager),
+      programme_managers: [],
       title: row.title,
       name: row.name,
       alias: row?.alias,
@@ -54,7 +52,7 @@ export class DeliveryProgrammeStore {
       delivery_programme_code: row.delivery_programme_code,
       url: row?.url,
       created_at: new Date(row.created_at),
-      updated_at: row.updated_at ? new Date(row?.updated_at) : new Date(row.created_at)
+      updated_at: row.updated_at,
     }));
   }
 
@@ -63,7 +61,6 @@ export class DeliveryProgrammeStore {
       .where('id', id)
       .select(
         'id',
-        'programme_manager',
         'title',
         'name',
         'alias',
@@ -73,14 +70,14 @@ export class DeliveryProgrammeStore {
         'delivery_programme_code',
         'url',
         'created_at',
-        'updated_at'
+        'updated_at',
       )
       .first();
 
     return row
       ? {
           id: row.id,
-          programme_manager: JSON.parse(row.programme_manager),
+          programme_managers: [],
           title: row.title,
           name: row.name,
           alias: row?.alias,
@@ -90,18 +87,20 @@ export class DeliveryProgrammeStore {
           delivery_programme_code: row.delivery_programme_code,
           url: row?.url,
           created_at: new Date(row.created_at),
-          updated_at: row.updated_at ? new Date(row?.updated_at) : new Date(row.created_at)
+          updated_at: row.updated_at,
         }
       : null;
   }
 
   async add(
-    deliveryProgramme: Omit<DeliveryProgramme, 'id' | 'created_at'>,
+    deliveryProgramme: Omit<
+      DeliveryProgramme,
+      'id' | 'created_at' | 'updated_at' | 'programme_managers'
+    >,
     author: string,
   ): Promise<DeliveryProgramme> {
     const insertResult = await this.client<Row>(TABLE_NAME).insert(
       {
-        programme_manager: JSON.stringify(deliveryProgramme.programme_manager),
         title: deliveryProgramme.title,
         name: createName(deliveryProgramme.title),
         alias: deliveryProgramme?.alias,
@@ -112,21 +111,26 @@ export class DeliveryProgrammeStore {
         url: deliveryProgramme?.url,
         updated_by: author,
       },
-      ['id', 'created_at'],
+      ['id', 'created_at', 'updated_at'],
     );
+
+    if (insertResult.length < 1) {
+      throw new Error(
+        `Could not insert Delivery Programme ${deliveryProgramme.title}`,
+      );
+    }
 
     return {
       ...deliveryProgramme,
       id: insertResult[0].id,
       created_at: new Date(insertResult[0].created_at),
+      updated_at: new Date(insertResult[0].updated_at),
+      programme_managers: [],
     };
   }
 
   async update(
-    deliveryProgramme: Omit<
-      PartialDeliveryProgramme,
-      'updated_at' | 'programme_manager'
-    >,
+    deliveryProgramme: Omit<PartialDeliveryProgramme, 'updated_at'>,
     updatedBy: string,
   ): Promise<DeliveryProgramme> {
     if (deliveryProgramme.id === undefined) {
@@ -143,28 +147,29 @@ export class DeliveryProgrammeStore {
       );
     }
     const updated = new Date();
-
     const updatedData: Partial<DeliveryProgramme> = {
-      ...deliveryProgramme, updated_at: updated,
+      ...deliveryProgramme,
     };
 
-    if ('tableData' in updatedData) {
-      delete updatedData['tableData'];
+    if (updatedData.programme_managers) {
+      delete updatedData.programme_managers
     }
 
     if (Object.keys(updatedData).length === 0) {
       return existingProgramme;
     }
-
     await this.client<Row>(TABLE_NAME)
       .where('id', deliveryProgramme.id)
       .update({
         ...updatedData,
-        programme_manager: JSON.stringify(updatedData.programme_manager),
         updated_at: updated,
         updated_by: updatedBy,
       });
 
-    return { ...existingProgramme, ...updatedData, updated_at: updated };
+    return {
+      ...existingProgramme,
+      ...updatedData,
+      updated_at: updated,
+    };
   }
 }

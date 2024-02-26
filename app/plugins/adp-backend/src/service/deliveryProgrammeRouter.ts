@@ -6,17 +6,21 @@ import { InputError } from '@backstage/errors';
 import { IdentityApi } from '@backstage/plugin-auth-node';
 import { AdpDatabase } from '../database/adpDatabase';
 import {
-    DeliveryProgrammeStore,
+  DeliveryProgrammeStore,
   PartialDeliveryProgramme,
 } from '../deliveryProgramme/deliveryProgrammeStore';
-import { DeliveryProgramme } from '../types';
-import { checkForDuplicateTitle, getCurrentUsername} from '../utils';
+import {
+  DeliveryProgramme,
+  ProgrammeManager,
+} from '@internal/plugin-adp-common';
+import { checkForDuplicateTitle, getCurrentUsername } from '../utils';
+import { ProgrammeManagerStore } from '../deliveryProgramme/deliveryProgramPmStore';
 
 export interface ProgrammeRouterOptions {
   logger: Logger;
   identity: IdentityApi;
   database: PluginDatabaseManager;
-};
+}
 
 export async function createProgrammeRouter(
   options: ProgrammeRouterOptions,
@@ -25,6 +29,9 @@ export async function createProgrammeRouter(
 
   const adpDatabase = AdpDatabase.create(database);
   const deliveryProgrammesStore = new DeliveryProgrammeStore(
+    await adpDatabase.get(),
+  );
+  const programmeManagersStore = new ProgrammeManagerStore(
     await adpDatabase.get(),
   );
 
@@ -49,22 +56,35 @@ export async function createProgrammeRouter(
       }
 
       const data: DeliveryProgramme[] = await deliveryProgrammesStore.getAll();
+
       const isDuplicate: boolean = await checkForDuplicateTitle(
         data,
         req.body.title,
       );
       if (isDuplicate) {
-        res.status(406).json({ error: 'Delivery Programme name already exists' });
+        res
+          .status(406)
+          .json({ error: 'Delivery Programme name already exists' });
       } else {
         const author = await getCurrentUsername(identity, req);
         const deliveryProgramme = await deliveryProgrammesStore.add(
           req.body,
-          author
+          author,
         );
+
+        const programmeManagers = req.body.programme_managers;
+        for (const manager of programmeManagers) {
+          const store = {
+            programme_manager_id: manager.programme_manager_id,
+            delivery_programme_id: deliveryProgramme.id,
+          };
+          const programmeManager = await programmeManagersStore.add(store);
+          deliveryProgramme.programme_managers.push(programmeManager);
+        }
         res.json(deliveryProgramme);
       }
     } catch (error) {
-      throw new InputError('Error');
+      logger.error('Unable to create new Delivery Programme');
     }
   });
 
@@ -85,7 +105,9 @@ export async function createProgrammeRouter(
           updatedTitle,
         );
         if (isDuplicate) {
-          res.status(406).json({ error: 'Delivery Programme name already exists' });
+          res
+            .status(406)
+            .json({ error: 'Delivery Programme name already exists' });
           return;
         }
       }
@@ -95,8 +117,16 @@ export async function createProgrammeRouter(
         author,
       );
       res.json(deliveryProgramme);
+      // const programmeManagers = req.body.programme_manager_id
+      //   for (const manager of programmeManagers) {
+      //     const data: ProgrammeManager[] = await programmeManagersStore.getAll(); -> getBy ProgrammeId
+      //     const currentProgrammeManagers = data.filter(object => object.delivery_programme === req.body.id); -> won't be needed
+      //     const updatedProgrammeManagers = currentProgrammeManagers.map(managers => managers.programme_manager_id) ->
+      //     const store = {programme_manager_id: manager, delivery_programme: deliveryProgramme.id }
+      //     await programmeManagersStore.update(store, programmeManagers)
+      //   }
     } catch (error) {
-      throw new InputError('Error');
+      logger.error('Unable to update Delivery Programme');
     }
   });
   router.use(errorHandler());
