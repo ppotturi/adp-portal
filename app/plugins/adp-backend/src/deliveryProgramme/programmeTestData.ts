@@ -30,3 +30,14 @@ export const expectedProgrammeDataStore = {
   updated_by: 'john',
   name: 'test-title-1',
 };
+
+export const expectedProgrammeNoPm = {
+  title: 'Test title 1',
+  alias: 'Test Alias',
+  description: 'Test description',
+  finance_code: 'Test finance_code',
+  delivery_programme_code: 'Test delivery_programme_code',
+  url: 'Test url',
+  updated_by: 'john',
+  name: 'test-title-1',
+};

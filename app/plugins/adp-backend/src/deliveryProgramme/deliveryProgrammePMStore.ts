@@ -21,10 +21,21 @@ export class ProgrammeManagerStore {
       delivery_programme_id: row.delivery_programme_id,
     }));
   }
+  async getBy(delivery_programme_id: string): Promise<ProgrammeManager[]> {
+    const ProgrammeManagers = await this.client<Row>(TABLE_NAME)
+      .where('delivery_programme_id', delivery_programme_id)
+      .select('id', 'programme_manager_id', 'delivery_programme_id');
 
-  async get(id: string): Promise<ProgrammeManager | null> {
+    return ProgrammeManagers.map(row => ({
+      id: row.id,
+      programme_manager_id: row.programme_manager_id,
+      delivery_programme_id: row.delivery_programme_id,
+    }));
+  }
+
+  async get(delivery_programme_id: string): Promise<ProgrammeManager | null> {
     const row = await this.client<Row>(TABLE_NAME)
-      .where('id', id)
+      .where('delivery_programme_id', delivery_programme_id)
       .select('id', 'programme_manager_id', 'delivery_programme_id')
       .first();
 
@@ -54,22 +65,11 @@ export class ProgrammeManagerStore {
     };
   }
 
-  // async update(
-  //   programmeManager:Omit<ProgrammeManager, 'id'>,
-  //   programmeManagers: string[]
-  // ): Promise<ProgrammeManager> {
+  async delete(id: string) {
+    const deleteResult = await this.client(TABLE_NAME)
+      .where({ programme_manager_id: id })
+      .del();
 
-  //   await this.client<Row>(TABLE_NAME)
-
-  //   const existingProgrammeManager = await this.get(programmeManager.id);
-
-  //   await this.client<Row>(TABLE_NAME)
-  //     .where('id', programmeManager.id)
-  //     .update({
-  //       programme_manager_id: programmeManager.programme_manager_id,
-  //       delivery_programme_id: programmeManager.delivery_programme_id
-  //     });
-
-  //   return { ...existingProgrammeManager};
-  // }
+    return deleteResult;
+  }
 }
