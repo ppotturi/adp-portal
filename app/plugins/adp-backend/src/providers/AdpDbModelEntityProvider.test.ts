@@ -9,7 +9,6 @@ import {
   getVoidLogger,
 } from '@backstage/backend-common';
 import { ConfigReader } from '@backstage/config';
-import { Entity } from '@backstage/catalog-model';
 import { EntityProviderConnection } from '@backstage/plugin-catalog-node';
 
 const mockConfig = new ConfigReader({

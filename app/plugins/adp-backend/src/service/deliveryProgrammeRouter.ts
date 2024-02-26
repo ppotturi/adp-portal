@@ -13,8 +13,13 @@ import {
   DeliveryProgramme,
   ProgrammeManager,
 } from '@internal/plugin-adp-common';
-import { checkForDuplicateTitle, getCurrentUsername } from '../utils';
-import { ProgrammeManagerStore } from '../deliveryProgramme/deliveryProgrammePmStore';
+import {
+  addProgrammeManager,
+  checkForDuplicateTitle,
+  deleteProgrammeManager,
+  getCurrentUsername,
+} from '../utils';
+import { ProgrammeManagerStore } from '../deliveryProgramme/deliveryProgrammePMStore';
 
 export interface ProgrammeRouterOptions {
   logger: Logger;
@@ -73,14 +78,14 @@ export async function createProgrammeRouter(
         );
 
         const programmeManagers = req.body.programme_managers;
-        for (const manager of programmeManagers) {
-          const store = {
-            programme_manager_id: manager.programme_manager_id,
-            delivery_programme_id: deliveryProgramme.id,
-          };
-          const programmeManager = await programmeManagersStore.add(store);
-          deliveryProgramme.programme_managers.push(programmeManager);
-        }
+
+        addProgrammeManager(
+          programmeManagers,
+          deliveryProgramme.id,
+          deliveryProgramme,
+          programmeManagersStore,
+        );
+
         res.json(deliveryProgramme);
       }
     } catch (error) {
@@ -123,38 +128,34 @@ export async function createProgrammeRouter(
         deliveryProgramme.id,
       );
 
-      console.log('existingProgrammeManagers', existingProgrammeManagers)
-        console.log(programmeManagers)
       const updatedManagers: ProgrammeManager[] = [];
-      // if db doesn't include the manager from req.body then add it to updatedManagers array
+
       for (const updatedManager of programmeManagers) {
         if (
           !existingProgrammeManagers.some(
-            manager => 
-            manager.programme_manager_id ===
-            updatedManager.programme_manager_id,
+            manager =>
+              manager.programme_manager_id ===
+              updatedManager.programme_manager_id,
           )
         ) {
           updatedManagers.push(updatedManager);
         }
       }
-      console.log(updatedManagers);
-      for (const manager of updatedManagers) {
-        const store = {
-          programme_manager_id: manager.programme_manager_id,
-          delivery_programme_id: deliveryProgramme.id,
-        };
-        const programmeManager = await programmeManagersStore.add(store);
-        deliveryProgramme.programme_managers.push(programmeManager);
-      }
+
+      addProgrammeManager(
+        updatedManagers,
+        deliveryProgramme.id,
+        deliveryProgramme,
+        programmeManagersStore,
+      );
 
       const removedManagers: ProgrammeManager[] = [];
-      // if the req.body doesn't include a manager from the db then add it into the removedManagers array
+
       for (const existingManager of existingProgrammeManagers) {
         if (
           !programmeManagers.some(
             (manager: ProgrammeManager) =>
-            manager.programme_manager_id ===
+              manager.programme_manager_id ===
               existingManager.programme_manager_id,
           )
         ) {
@@ -162,12 +163,7 @@ export async function createProgrammeRouter(
         }
       }
 
-      for (const manager of removedManagers) {
-        const store = {
-          programme_manager_id: manager.programme_manager_id,
-        };
-        await programmeManagersStore.delete(store.programme_manager_id);
-      }
+      deleteProgrammeManager(removedManagers, programmeManagersStore);
 
       res.json(deliveryProgramme);
     } catch (error) {

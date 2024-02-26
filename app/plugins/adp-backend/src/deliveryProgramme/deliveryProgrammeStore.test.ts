@@ -9,7 +9,7 @@ import { createName } from '../utils';
 import { expectedAlbsWithName } from '../armsLengthBody/albTestData';
 import { DeliveryProgramme, ProgrammeManager } from '@internal/plugin-adp-common';
 import { expectedProgrammeDataStore, expectedProgrammeNoPm} from './programmeTestData';
-import { ProgrammeManagerStore } from './deliveryProgrammePmStore';
+import { ProgrammeManagerStore } from './deliveryProgrammePMStore';
 
 describe('DeliveryProgrammeStore', () => {
   const databases = TestDatabases.create();
