@@ -253,6 +253,10 @@ const websiteEntityPage = (
       {cicdContent}
     </EntityLayout.Route>
 
+    <EntityLayout.Route path="/pull-requests" title="Pull Requests">
+      {pullRequest}
+    </EntityLayout.Route>
+
     <EntityLayout.Route path="/grafana" title="Grafana">
       {grafanaContent}
     </EntityLayout.Route>
@@ -271,6 +275,22 @@ const websiteEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
+
+    <EntityLayout.Route path="/releases" title="Deployments" if={isKubernetesAvailable}>
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item md={12}>
+          <EntityFluxHelmReleasesCard />
+        </Grid>
+        <Grid item md={12}>
+          <EntityFluxKustomizationsCard />
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/kubernetes" title="Kubernetes" if={isKubernetesAvailable}>
+      <EntityKubernetesContent refreshIntervalMs={30000} />
+    </EntityLayout.Route>
+    
   </EntityLayout>
 );
 

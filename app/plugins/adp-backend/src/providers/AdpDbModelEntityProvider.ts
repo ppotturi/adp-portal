@@ -2,7 +2,6 @@ import {
   EntityProvider,
   EntityProviderConnection,
 } from '@backstage/plugin-catalog-node';
-import { Config } from '@backstage/config';
 import { PluginTaskScheduler, TaskRunner } from '@backstage/backend-tasks';
 import { Entity, GroupEntity } from '@backstage/catalog-model';
 import { Logger } from 'winston';
@@ -29,18 +28,14 @@ import { defaultProgrammeGroupTransformer } from './deliveryProgrammeTransformer
 export class AdpDbModelEntityProvider implements EntityProvider {
   private readonly logger: Logger;
   private connection?: EntityProviderConnection;
-  private readonly config: Config;
   private readonly scheduleFn: () => Promise<void>;
 
-  static fromConfig(
-    config: Config,
-    options: {
-      logger: Logger;
-      schedule?: TaskRunner;
-      scheduler: PluginTaskScheduler;
-      database: PluginDatabaseManager;
-    },
-  ) {
+  static fromOptions(options: {
+    logger: Logger;
+    schedule?: TaskRunner;
+    scheduler: PluginTaskScheduler;
+    database: PluginDatabaseManager;
+  }) {
     if (!options.schedule && !options.scheduler) {
       throw new Error('Either schedule or scheduler must be provided.');
     }
@@ -53,13 +48,20 @@ export class AdpDbModelEntityProvider implements EntityProvider {
 
     const taskRunner =
       options.schedule ??
-      options.scheduler!.createScheduledTaskRunner(providerConfig);
+      options.scheduler.createScheduledTaskRunner(providerConfig);
 
-    return new AdpDbModelEntityProvider(options.logger, taskRunner, config, options.database);
+    return new AdpDbModelEntityProvider(
+      options.logger,
+      taskRunner,
+      options.database,
+    );
   }
 
-  constructor(logger: Logger, taskRunner: TaskRunner, config: Config, database: PluginDatabaseManager) {
-    this.config = config;
+  constructor(
+    logger: Logger,
+    taskRunner: TaskRunner,
+    database: PluginDatabaseManager,
+  ) {
     this.logger = logger.child({
       target: this.getProviderName(),
     });
@@ -79,7 +81,10 @@ export class AdpDbModelEntityProvider implements EntityProvider {
     await this.scheduleFn();
   }
 
-  private createScheduleFn(taskRunner: TaskRunner, database: PluginDatabaseManager): () => Promise<void> {
+  private createScheduleFn(
+    taskRunner: TaskRunner,
+    database: PluginDatabaseManager,
+  ): () => Promise<void> {
     return async () => {
       const taskId = `${this.getProviderName()}:refresh`;
       return taskRunner.run({
@@ -104,7 +109,10 @@ export class AdpDbModelEntityProvider implements EntityProvider {
     };
   }
 
-  private async refresh(logger: Logger, database: PluginDatabaseManager): Promise<void> {
+  private async refresh(
+    logger: Logger,
+    database: PluginDatabaseManager,
+  ): Promise<void> {
     if (!this.connection) {
       throw new Error(
         `ADP Data Model discovery connection not initialized for ${this.getProviderName()}`,
@@ -129,7 +137,10 @@ export class AdpDbModelEntityProvider implements EntityProvider {
     markCommitComplete(entities);
   }
 
-  private async readArmsLengthBodies(logger: Logger, database: PluginDatabaseManager): Promise<GroupEntity[]> {
+  private async readArmsLengthBodies(
+    logger: Logger,
+    database: PluginDatabaseManager,
+  ): Promise<GroupEntity[]> {
     logger.info('Discovering All Arms Length Body');
     const adpDatabase = AdpDatabase.create(database);
     const armsLengthBodiesStore = new ArmsLengthBodyStore(

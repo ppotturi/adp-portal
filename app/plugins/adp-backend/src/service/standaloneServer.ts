@@ -54,6 +54,7 @@ export async function startStandaloneServer(
       issuer: await discovery.getExternalBaseUrl('auth'),
     }),
     database,
+    config,
   });
   
   const router = Router();
