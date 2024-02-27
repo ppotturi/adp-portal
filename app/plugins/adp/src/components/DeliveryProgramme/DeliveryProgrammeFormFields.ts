@@ -25,18 +25,15 @@ export const DeliveryProgrammeFormFields = [
     label: 'Arms Length Body',
     name: 'arms_length_body',
     select: true,
-    options: [ { label: 'Option 1 Label', value: 'option1value' },
-    { label: 'Option 2 Label', value: 'option2value' }
-  ]
+    options: [{}, {}],
   },
 
   {
     label: 'Programme Managers',
     name: 'programme_manager',
     select: true,
-    options: [ { label: 'Option 1 Label', value: 'option1value' },
-    { label: 'Option 2 Label', value: 'option2value' }]
-    
+    multiple: true,
+    options: [{}, {}],
   },
 
   {

@@ -7,11 +7,11 @@ import {
   Button,
   TextField,
   MenuItem,
+  
 } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
 import { alertApiRef, useApi } from '@backstage/core-plugin-api';
-
-
+import SelectedChipsRenderer from './SelectedChipsRenderer';
 
 interface ActionsModalProps {
   open: boolean;
@@ -19,7 +19,6 @@ interface ActionsModalProps {
   onSubmit: (data: any) => Promise<void>;
   initialValues: Record<string, any>;
   mode: 'create' | 'edit';
-
   fields: {
     label: string;
     name: string;
@@ -35,6 +34,7 @@ interface ActionsModalProps {
     multiline?: boolean;
     maxRows?: number;
     select?: boolean;
+    multiple?: boolean; 
     options?: { label: string; value: string }[]; 
   }[];
 }
@@ -57,8 +57,6 @@ export const ActionsModal: FC<ActionsModalProps> = ({
   });
   const errorApi = useApi(alertApiRef);
 
- 
-
   const onFormSubmit = async (data: any) => {
     try {
       await onSubmit(data);
@@ -69,76 +67,90 @@ export const ActionsModal: FC<ActionsModalProps> = ({
     }
   };
 
+
+  const renderTextField = (field: any) => (
+    <TextField
+      key={field.name}
+      id={field.name}
+      label={field.label}
+      variant="outlined"
+      fullWidth
+      margin="dense"
+      {...register(field.name, {
+        required: field.validations?.required ? 'This field is required' : undefined,
+        maxLength: field.validations?.maxLength
+          ? {
+              value: field.validations.maxLength,
+              message: `Maximum length is ${field.validations.maxLength} characters`,
+            }
+          : undefined,
+        pattern: field.validations?.pattern
+          ? {
+              value: field.validations.pattern.value,
+              message: field.validations.pattern.message,
+            }
+          : undefined,
+      })}
+      defaultValue={initialValues[field.name] || ''}
+      error={!!errors[field.name]}
+      helperText={errors[field.name]?.message ?? field.helperText}
+      multiline={field.multiline}
+      maxRows={field.maxRows}
+    />
+  );
+
+  const renderSelectField = (field: any) => (
+    <TextField
+      key={field.name}
+      id={field.name}
+      label={field.label}
+      variant="outlined"
+      fullWidth
+      margin="dense"
+      select
+      SelectProps={{
+        multiple: field.multiple,
+        renderValue: field.multiple ? (selected) => <SelectedChipsRenderer selected={selected || []} /> : undefined,
+      }}
+      {...register(field.name, {
+        required: field.validations?.required ? 'This field is required' : undefined,
+        maxLength: field.validations?.maxLength
+          ? {
+              value: field.validations.maxLength,
+              message: `Maximum length is ${field.validations.maxLength} characters`,
+            }
+          : undefined,
+        pattern: field.validations?.pattern
+          ? {
+              value: field.validations.pattern.value,
+              message: field.validations.pattern.message,
+            }
+          : undefined,
+      })}
+      defaultValue={field.multiple ? initialValues[field.name] || [] : initialValues[field.name] || ''}
+      error={!!errors[field.name]}
+      helperText={errors[field.name]?.message ?? field.helperText}
+    >
+      {field.options?.map((option:any) => (
+        <MenuItem key={option.value} value={option.value}>
+          {option.label}
+        </MenuItem>
+      ))}
+    </TextField>
+  );
+
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} >
       <DialogTitle>{`${mode === 'edit' ? 'Edit' : 'Create'}: ${initialValues.title || ''}`}</DialogTitle>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <DialogContent>
-          {fields.map((field) =>
+          {fields.map((field) => (
             field.select ? (
-              <TextField
-                key={field.name}
-                id={field.name}
-                label={field.label}
-                variant="outlined"
-                fullWidth
-                margin="dense"
-                select
-                {...register(field.name, {
-                  required: field.validations?.required ? 'This field is required' : undefined,
-                  maxLength: field.validations?.maxLength
-                    ? {
-                        value: field.validations.maxLength,
-                        message: `Maximum length is ${field.validations.maxLength} characters`,
-                      }
-                    : undefined,
-                  pattern: field.validations?.pattern
-                    ? {
-                        value: field.validations.pattern.value,
-                        message: field.validations.pattern.message,
-                      }
-                    : undefined,
-                })}
-                defaultValue={initialValues[field.name] || ''}
-                error={!!errors[field.name]}
-                helperText={errors[field.name]?.message ?? field.helperText}
-              >
-                {field.options?.map((option) => (
-                   <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+              renderSelectField(field)
             ) : (
-              <TextField
-                key={field.name}
-                id={field.name}
-                label={field.label}
-                variant="outlined"
-                fullWidth
-                margin="dense"
-                {...register(field.name, {
-                  required: field.validations?.required ? 'This field is required' : undefined,
-                  maxLength: field.validations?.maxLength
-                    ? {
-                        value: field.validations.maxLength,
-                        message: `Maximum length is ${field.validations.maxLength} characters`,
-                      }
-                    : undefined,
-                  pattern: field.validations?.pattern
-                    ? {
-                        value: field.validations.pattern.value,
-                        message: field.validations.pattern.message,
-                      }
-                    : undefined,
-                })}
-                error={!!errors[field.name]}
-                helperText={errors[field.name]?.message ?? field.helperText}
-                multiline={field.multiline}
-                maxRows={field.maxRows}
-              />
+              renderTextField(field)
             )
-          )}
+          ))}
         </DialogContent>
         <DialogActions>
           <Button
@@ -151,10 +163,7 @@ export const ActionsModal: FC<ActionsModalProps> = ({
           >
             Cancel
           </Button>
-          <Button type="submit"
-            color="primary"
-            data-testid="actions-modal-update-button"
-          >
+          <Button type="submit" color="primary" data-testid="actions-modal-update-button">
             Update
           </Button>
         </DialogActions>
@@ -162,5 +171,3 @@ export const ActionsModal: FC<ActionsModalProps> = ({
     </Dialog>
   );
 };
-
-export default ActionsModal;

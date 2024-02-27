@@ -10,28 +10,31 @@ import {
 } from '@backstage/core-plugin-api';
 import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
-import { useArmsLengthBodyList} from '../../hooks/useArmsLengthBodyList'
+import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
 import { useEntities } from '../../hooks/useEntities';
-
+import { transformDeliveryProgrammeManagers } from '../../utils/transformDeliveryProgrammeManagers';
+import { prepareDeliveryProgrammeFormFields } from '../../utils/prepareDeliveryProgrammeFormFields';
 
 interface CreateDeliveryProgrammeProps {
   refetchDeliveryProgramme: () => void;
 }
 
-
-const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetchDeliveryProgramme}) => {
+const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
+  refetchDeliveryProgramme,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const alertApi = useApi(alertApiRef);
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
   const errorApi = useApi(errorApiRef);
   const getArmsLengthBodyDropDown = useArmsLengthBodyList();
-  const getEntitiesChip = useEntities()
-  
+  const getUserEntities = useEntities();
 
-  const deliveryprogClient = new DeliveryProgrammeClient(discoveryApi, fetchApi);
+  const deliveryprogClient = new DeliveryProgrammeClient(
+    discoveryApi,
+    fetchApi,
+  );
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -41,12 +44,17 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetc
     setIsModalOpen(false);
   };
 
-  
+  const formFields = prepareDeliveryProgrammeFormFields(
+    getArmsLengthBodyDropDown,
+    getUserEntities,
+  );
 
   const handleSubmit = async (deliveryProgramme: DeliveryProgramme) => {
-    console.log("original submission" , deliveryProgramme)
+    const dataToSend = transformDeliveryProgrammeManagers(deliveryProgramme);
+
     try {
-      await deliveryprogClient.createDeliveryProgramme(deliveryProgramme);
+      console.log('trying', dataToSend);
+      await deliveryprogClient.createDeliveryProgramme(dataToSend);
       alertApi.post({
         message: 'Delivery Programme created successfully.',
         severity: 'success',
@@ -64,36 +72,8 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetc
     }
   };
 
-  // const getAlbOptionFields = () => {
-  //   return DeliveryProgrammeFormFields.map(field => {
-  //     if (field.name === 'arms_length_body') {
-  //       return { ...field, options: getArmsLengthBodyDropDown };
-  //     }
-  //     return field;
-  //   });
-  // };
-
-  const prepareFormFields = () => {
-    const albOptions = getArmsLengthBodyDropDown; 
-    const programmeManagerOptions = getEntitiesChip; 
-  
-    return DeliveryProgrammeFormFields.map(field => {
-      if (field.name === 'arms_length_body') {
-        return { ...field, options: albOptions };
-      } else if (field.name === 'programme_manager') {
- 
-        return { ...field, options: programmeManagerOptions };
-      }
-      return field;
-    });
-  };
-  
-
-
   return (
-
     <>
-    
       <Button
         variant="contained"
         size="large"
@@ -104,7 +84,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetc
       >
         Add Delivery Programme
       </Button>
-    
+
       {isModalOpen && (
         <ActionsModal
           open={isModalOpen}
@@ -112,12 +92,11 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({refetc
           onSubmit={handleSubmit}
           initialValues={{}}
           mode="create"
-          fields={prepareFormFields()}
+          fields={formFields}
         />
       )}
     </>
   );
 };
-
 
 export default CreateDeliveryProgramme;

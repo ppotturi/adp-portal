@@ -95,16 +95,19 @@ export async function createProgrammeRouter(
 
   router.patch('/deliveryProgramme', async (req, res) => {
     try {
-      if (!isDeliveryProgrammeUpdateRequest(req.body)) {
+      const requestBody = { ...req.body };
+      delete requestBody.tableData;
+
+      if (!isDeliveryProgrammeUpdateRequest(requestBody)) {
         throw new InputError('Invalid payload');
       }
-      const data: DeliveryProgramme[] = await deliveryProgrammesStore.getAll();
 
-      const currentData = data.find(object => object.id === req.body.id);
-      const updatedTitle = req.body?.title;
+      const data: DeliveryProgramme[] = await deliveryProgrammesStore.getAll();
+      const currentData = data.find(object => object.id === requestBody.id);
+
+      const updatedTitle = requestBody.title;
       const currentTitle = currentData?.title;
       const isTitleChanged = updatedTitle && currentTitle !== updatedTitle;
-
       if (isTitleChanged) {
         const isDuplicate: boolean = await checkForDuplicateTitle(
           data,
@@ -120,28 +123,22 @@ export async function createProgrammeRouter(
 
       const author = await getCurrentUsername(identity, req);
       const deliveryProgramme = await deliveryProgrammesStore.update(
-        req.body,
+        requestBody,
         author,
       );
-      const programmeManagers = req.body.programme_managers;
+
+      const programmeManagers = requestBody.programme_managers;
       const existingProgrammeManagers = await programmeManagersStore.getBy(
         deliveryProgramme.id,
       );
 
-      const updatedManagers: ProgrammeManager[] = [];
-
-      for (const updatedManager of programmeManagers) {
-        if (
+      const updatedManagers = programmeManagers.filter(
+        manager =>
           !existingProgrammeManagers.some(
-            manager =>
-              manager.programme_manager_id ===
-              updatedManager.programme_manager_id,
-          )
-        ) {
-          updatedManagers.push(updatedManager);
-        }
-      }
-
+            existing =>
+              existing.programme_manager_id === manager.programme_manager_id,
+          ),
+      );
       addProgrammeManager(
         updatedManagers,
         deliveryProgramme.id,
@@ -149,30 +146,25 @@ export async function createProgrammeRouter(
         programmeManagersStore,
       );
 
-      const removedManagers: ProgrammeManager[] = [];
-
-      for (const existingManager of existingProgrammeManagers) {
-        if (
+      const removedManagers = existingProgrammeManagers.filter(
+        existing =>
           !programmeManagers.some(
-            (manager: ProgrammeManager) =>
-              manager.programme_manager_id ===
-              existingManager.programme_manager_id,
-          )
-        ) {
-          removedManagers.push(existingManager);
-        }
-      }
-
+            manager =>
+              manager.programme_manager_id === existing.programme_manager_id,
+          ),
+      );
       deleteProgrammeManager(removedManagers, programmeManagersStore);
 
       res.json(deliveryProgramme);
     } catch (error) {
-      logger.error('Unable to update Delivery Programme');
+      logger.error('Unable to update Delivery Programme', error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   });
+
   router.use(errorHandler());
   return router;
-}
+  
 
 function isDeliveryProgrammeCreateRequest(
   request: Omit<DeliveryProgramme, 'id' | 'created_at'>,
@@ -184,4 +176,5 @@ function isDeliveryProgrammeUpdateRequest(
   request: Omit<PartialDeliveryProgramme, 'updated_at'>,
 ) {
   return typeof request?.id === 'string';
+}
 }

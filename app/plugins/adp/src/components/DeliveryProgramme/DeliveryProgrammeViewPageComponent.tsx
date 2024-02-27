@@ -18,13 +18,13 @@ import {
   errorApiRef,
 } from '@backstage/core-plugin-api';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
-import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
 import CreateDeliveryProgramme from './CreateDeliveryProgramme';
 import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
 import { DeliveryProgrammeApi } from './api/DeliveryProgrammeApi';
 import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
 import { useEntities } from '../../hooks/useEntities';
-
+import { transformDeliveryProgrammeManagers } from '../../utils/transformDeliveryProgrammeManagers';
+import { prepareDeliveryProgrammeFormFields } from '../../utils/prepareDeliveryProgrammeFormFields';
 
 export const DeliveryProgrammeViewPageComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,55 +33,23 @@ export const DeliveryProgrammeViewPageComponent = () => {
   const [key, refetchDeliveryProgramme] = useReducer(i => {
     return i + 1;
   }, 0);
-  
+
   const alertApi = useApi(alertApiRef);
   const errorApi = useApi(errorApiRef);
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
   const getArmsLengthBodyDropDown = useArmsLengthBodyList();
-  const getEntitiesChip = useEntities()
+  const getUserEntities = useEntities();
 
   const deliveryprogClient: DeliveryProgrammeApi = new DeliveryProgrammeClient(
     discoveryApi,
     fetchApi,
   );
 
-  // const getAlbOptionFields = () => {
-  //   return DeliveryProgrammeFormFields.map(field => {
-  //     if (field.name === 'arms_length_body') {
-  //       return { ...field, options: getArmsLengthBodyDropDown }; 
-  //     }
-  //     return field;
-  //   });
-  // };
-
-  // const getDeliveryOptionFields = () => {
-  //   return getEntitiesChip.map(entity => {
-  //     if (entity.name === 'programme_managers') {
-  //       return { ...entity, options: getEntitiesChip }; 
-  //     }
-  //     return entity;
-  //   });
-  // };
-
-  const prepareFormFields = () => {
-    const albOptions = getArmsLengthBodyDropDown; 
-    const programmeManagerOptions = getEntitiesChip; 
-  
-    return DeliveryProgrammeFormFields.map(field => {
-      if (field.name === 'arms_length_body') {
-        return { ...field, options: albOptions };
-      } else if (field.name === 'programme_manager') {
-        
-        return { ...field, options: programmeManagerOptions };
-      }
-      return field;
-    });
-  };
-  
-
-
-  
+  const formFields = prepareDeliveryProgrammeFormFields(
+    getArmsLengthBodyDropDown,
+    getUserEntities,
+  );
 
   const getAllDeliveryProgrammes = async () => {
     try {
@@ -126,8 +94,10 @@ export const DeliveryProgrammeViewPageComponent = () => {
       return;
     }
 
+    const dataToSend = transformDeliveryProgrammeManagers(deliveryProgramme);
+
     try {
-      await deliveryprogClient.updateDeliveryProgramme(deliveryProgramme);
+      await deliveryprogClient.updateDeliveryProgramme(dataToSend);
       alertApi.post({
         message: `Updated`,
         severity: 'success',
@@ -159,9 +129,11 @@ export const DeliveryProgrammeViewPageComponent = () => {
       highlight: false,
       type: 'string',
       render: rowData => {
-        const label = getArmsLengthBodyDropDown.find(option => option.value === rowData.arms_length_body)?.label;
-        return label 
-      }
+        const label = getArmsLengthBodyDropDown.find(
+          option => option.value === rowData.arms_length_body,
+        )?.label;
+        return label;
+      },
     },
 
     {
@@ -184,7 +156,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
       render: (data: {}) => {
         const e = data as DeliveryProgramme;
         if (e.updated_at === undefined) {
-          return 'No date available'; 
+          return 'No date available';
         }
         const date = new Date(e.updated_at);
         return date.toLocaleString();
@@ -231,7 +203,12 @@ export const DeliveryProgrammeViewPageComponent = () => {
           View or add Delivery Programmes to the Azure Developer Platform.
         </Typography>
 
-        <DefaultTable data={tableData} columns={columns} title="View all" isCompact={true}/>
+        <DefaultTable
+          data={tableData}
+          columns={columns}
+          title="View all"
+          isCompact={true}
+        />
 
         {isModalOpen && (
           <ActionsModal
@@ -240,10 +217,9 @@ export const DeliveryProgrammeViewPageComponent = () => {
             onSubmit={handleUpdate}
             initialValues={formData}
             mode="edit"
-            fields={prepareFormFields()}
+            fields={formFields}
           />
         )}
-      
       </Content>
     </Page>
   );
