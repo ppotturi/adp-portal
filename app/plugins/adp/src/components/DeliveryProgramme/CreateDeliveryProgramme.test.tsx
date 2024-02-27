@@ -13,11 +13,52 @@ import {
   permissionApiRef,
 } from '@backstage/plugin-permission-react';
 import { AuthorizeResult } from '@backstage/plugin-permission-common';
+import { catalogApiRef } from '@backstage/plugin-catalog-react';
+
 
 const mockAlertApi = { post: jest.fn() };
 const mockErrorApi = { post: jest.fn() };
 const mockDiscoveryApi = { getBaseUrl: jest.fn() };
 const mockFetchApi = { fetch: jest.fn() };
+
+const mockCatalogApi = {
+  getEntities: jest
+    .fn()
+    .mockImplementation(async () => ({ items: entities })),
+};
+
+
+
+const entities = [
+  {
+    "metadata": {
+      "namespace": "default",
+      "name": "userone.onmicrosoft.com"
+    },
+    "spec": {
+      "profile": {
+        "displayName": "user one"
+      }
+    }
+  },
+  {
+    "metadata": {
+      "namespace": "default",
+      "name": "usertwo.onmicrosoft.com"
+    },
+    "spec": {
+      "profile": {
+        "displayName": "user two"
+      }
+    }
+  }
+];
+
+
+jest.mock('../../utils/transformDeliveryProgrammeManagers', () => ({
+  transformDeliveryProgrammeManagers: jest.fn()
+  
+}));
 
 const mockAuthorize = jest
   .fn()
@@ -42,6 +83,7 @@ jest.mock('./api/DeliveryProgrammeClient', () => ({
 beforeEach(() => {
   jest.clearAllMocks();
   mockAuthorize.mockClear();
+
 });
 
 describe('Create Delivery Programme', () => {
@@ -53,6 +95,7 @@ describe('Create Delivery Programme', () => {
         [discoveryApiRef, mockDiscoveryApi],
         [fetchApiRef, mockFetchApi],
         [permissionApiRef, permissionApi],
+        [catalogApiRef, mockCatalogApi],
       ]}
     >
       <CreateDeliveryProgramme
@@ -87,6 +130,14 @@ describe('Create Delivery Programme', () => {
       {
         title: 'Delivery Programme 1',
         description: 'Description for Delivery Programme 1',
+        programme_managers: [
+          {
+              "programme_manager_id": "user:default/test123"
+          },
+          {
+              "programme_manager_id": "user:default/test345"
+          },
+      ],
         arms_length_body: 'Arms Length Body 1',
         delivery_programme_code: 'Delivery Program Code',
       },
@@ -118,7 +169,9 @@ describe('Create Delivery Programme', () => {
       fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
     });
 
+
     mockGetDeliveryProgrammes.mockResolvedValue(updatedTableData);
+  
 
     await waitFor(() => {
       expect(mockCreateDeliveryProgramme).toHaveBeenCalledWith({
@@ -129,13 +182,21 @@ describe('Create Delivery Programme', () => {
         arms_length_body: '',
         delivery_programme_code: 'Delivery Programme Code 1',
         finance_code: '',
-        programme_manager: '',
+        programme_managers: [
+            {
+                "programme_manager_id": "user:default/test123"
+            },
+            {
+                "programme_manager_id": "user:default/test345"
+            },
+        ],
       });
       expect(mockAlertApi.post).toHaveBeenNthCalledWith(1, {
         display: 'transient',
         message: 'Delivery Programme created successfully.',
         severity: 'success',
       });
+      
     });
   });
 
@@ -164,6 +225,7 @@ describe('Create Delivery Programme', () => {
       fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
     });
 
+
     await waitFor(() => {
       expect(mockCreateDeliveryProgramme).toHaveBeenCalledWith({
         description: 'Description for Delivery Programme 1',
@@ -173,7 +235,14 @@ describe('Create Delivery Programme', () => {
         arms_length_body: '',
         delivery_programme_code: '',
         finance_code: '',
-        programme_manager: '',
+        programme_managers: [
+          {
+              "programme_manager_id": "user:default/test123"
+          },
+          {
+              "programme_manager_id": "user:default/test345"
+          },
+      ],
       });
 
       expect(mockErrorApi.post).toHaveBeenCalledWith(expect.any(Error));

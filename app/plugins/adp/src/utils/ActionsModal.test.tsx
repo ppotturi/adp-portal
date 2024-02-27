@@ -1,4 +1,4 @@
-import EditModal from './ActionsModal';
+import {ActionsModal} from './ActionsModal';
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -43,7 +43,7 @@ describe('ActionsModal', () => {
     });
 
     render(
-      <EditModal
+      <ActionsModal
         open={true}
         onClose={onCloseMock}
         onSubmit={onSubmitMock}

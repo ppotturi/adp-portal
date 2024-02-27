@@ -15,11 +15,46 @@ import {
   usePermission,
 } from '@backstage/plugin-permission-react';
 import { AuthorizeResult } from '@backstage/plugin-permission-common';
+import { catalogApiRef } from '@backstage/plugin-catalog-react';
+
+
 
 const mockErrorApi = { post: jest.fn() };
 const mockDiscoveryApi = { getBaseUrl: jest.fn() };
 const mockFetchApi = { fetch: jest.fn() };
 const mockAlertApi = { post: jest.fn() };
+
+const mockCatalogApi = {
+  getEntities: jest
+    .fn()
+    .mockImplementation(async () => ({ items: entities })),
+};
+
+const entities = [
+  {
+    "metadata": {
+      "namespace": "default",
+      "name": "userone.onmicrosoft.com"
+    },
+    "spec": {
+      "profile": {
+        "displayName": "user one"
+      }
+    }
+  },
+  {
+    "metadata": {
+      "namespace": "default",
+      "name": "usertwo.onmicrosoft.com"
+    },
+    "spec": {
+      "profile": {
+        "displayName": "user two"
+      }
+    }
+  }
+];
+
 
 const mockAuthorize = jest
   .fn()
@@ -66,6 +101,14 @@ jest.mock('../../hooks/useArmsLengthBodyList', () => ({
   ]),
 }));
 
+jest.mock('../../utils/transformDeliveryProgrammeManagers', () => ({
+  transformDeliveryProgrammeManagers: jest.fn()
+  
+}));
+
+
+
+
 describe('DeliveryProgrammeViewPageComponent', () => {
   beforeEach(() => {
     mockGetDeliveryProgrammes.mockClear();
@@ -82,6 +125,7 @@ describe('DeliveryProgrammeViewPageComponent', () => {
         [discoveryApiRef, mockDiscoveryApi],
         [fetchApiRef, mockFetchApi],
         [permissionApiRef, permissionApi],
+        [catalogApiRef, mockCatalogApi],
       ]}
     >
       <DeliveryProgrammeViewPageComponent />
@@ -171,6 +215,7 @@ describe('DeliveryProgrammeViewPageComponent', () => {
         id: '1',
         title: 'Delivery Programme 1 edited',
         alias: 'DeliveryProgramme1',
+       
         description: 'Description 1',
         url: 'http://delivery1.com',
         timestamp: '2021-01-01T00:00:00Z',
@@ -179,6 +224,14 @@ describe('DeliveryProgrammeViewPageComponent', () => {
         id: '2',
         title: 'Delivery Programme 2',
         alias: 'DeliveryProgramme2',
+        programme_managers: [
+          {
+              "programme_manager_id": "user:default/test123"
+          },
+          {
+              "programme_manager_id": "user:default/test345"
+          },
+      ],
         description: 'Description 2',
         url: 'http://delivery2.com',
         timestamp: '2021-01-02T00:00:00Z',
@@ -264,6 +317,14 @@ describe('DeliveryProgrammeViewPageComponent', () => {
         id: '1',
         title: 'Delivery Programme 1',
         alias: 'DeliveryProgramme1',
+        programme_managers: [
+          {
+              "programme_manager_id": "user:default/test123"
+          },
+          {
+              "programme_manager_id": "user:default/test345"
+          },
+      ],
         description: 'Description 1',
         url: 'http://deliveryprogramme.com',
         timestamp: '2021-01-01T00:00:00Z',
@@ -272,6 +333,14 @@ describe('DeliveryProgrammeViewPageComponent', () => {
         id: '2',
         title: 'Delivery Programme 2',
         alias: 'DeliveryProgramme2',
+        programme_managers: [
+          {
+              "programme_manager_id": "user:default/test123"
+          },
+          {
+              "programme_manager_id": "user:default/test345"
+          },
+      ],
         description: 'Description 2',
         url: 'http://deliveryprogramme.com',
         timestamp: '2021-01-01T00:00:00Z',
