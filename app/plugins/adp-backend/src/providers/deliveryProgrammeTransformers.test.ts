@@ -3,7 +3,7 @@ import { defaultProgrammeGroupTransformer } from './deliveryProgrammeTransformer
 describe('defaultProgrammeGroupTransformer', () => {
   it('should transform valid ArmsLengthBody to GroupEntity', async () => {
     const deliveryProgramme = {
-      programme_manager_id: ['string1', 'string 2'],
+      programme_managers: [],
       title: 'Test title 1',
       alias: 'Test Alias',
       description: 'Test description',
@@ -31,9 +31,7 @@ describe('defaultProgrammeGroupTransformer', () => {
           'backstage.io/managed-by-origin-location':
             '`adp:delivery-programme\\${deliveryProgramme.name}`',
         },
-        links: [
-          {url: 'https://www.example.uk/'}
-        ]
+        links: [{ url: 'https://www.example.uk/' }],
       },
       spec: {
         type: 'delivery-programme',

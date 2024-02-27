@@ -21,7 +21,8 @@ export class ProgrammeManagerStore {
       delivery_programme_id: row.delivery_programme_id,
     }));
   }
-  async getBy(delivery_programme_id: string): Promise<ProgrammeManager[]> {
+
+  async get(delivery_programme_id: string): Promise<ProgrammeManager[]> {
     const ProgrammeManagers = await this.client<Row>(TABLE_NAME)
       .where('delivery_programme_id', delivery_programme_id)
       .select('id', 'programme_manager_id', 'delivery_programme_id');
@@ -31,21 +32,6 @@ export class ProgrammeManagerStore {
       programme_manager_id: row.programme_manager_id,
       delivery_programme_id: row.delivery_programme_id,
     }));
-  }
-
-  async get(delivery_programme_id: string): Promise<ProgrammeManager | null> {
-    const row = await this.client<Row>(TABLE_NAME)
-      .where('delivery_programme_id', delivery_programme_id)
-      .select('id', 'programme_manager_id', 'delivery_programme_id')
-      .first();
-
-    return row
-      ? {
-          id: row.id,
-          programme_manager_id: row.programme_manager_id,
-          delivery_programme_id: row.delivery_programme_id,
-        }
-      : null;
   }
 
   async add(

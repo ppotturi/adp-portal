@@ -134,7 +134,7 @@ export async function createAlbRouter(
         res.json(armsLengthBody);
       }
     } catch (error) {
-      logger.error('Unable to create new Arms Length Body')
+      throw new InputError('Error');
     }
   });
 
@@ -166,7 +166,7 @@ export async function createAlbRouter(
       );
       res.json(armsLengthBody);
     } catch (error) {
-      logger.error('Unable to update Arms Length Body')
+      throw new InputError('Error');
     }
   });
   router.use(errorHandler());

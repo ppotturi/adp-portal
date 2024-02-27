@@ -1,6 +1,6 @@
 export const expectedProgrammeData = {
   programme_managers: [],
-  title: 'Test title 1',
+  title: 'Test title expectedProgrammeData',
   alias: 'Test Alias',
   description: 'Test description',
   finance_code: 'Test finance_code',
@@ -8,7 +8,7 @@ export const expectedProgrammeData = {
   url: 'Test url',
 };
 
-export const expectedProgrammeDataWithPm = {
+export const expectedProgrammeDataWithManager = {
   programme_managers: [
     {
       programme_manager_id: 'string 1'
@@ -20,54 +20,34 @@ export const expectedProgrammeDataWithPm = {
       programme_manager_id: 'string 3'
     }
   ],
-  title: 'Test title 1',
+  title: 'Test title expectedProgrammeDataWithManager',
   alias: 'Test Alias',
   description: 'Test description',
   finance_code: 'Test finance_code',
   delivery_programme_code: 'Test delivery_programme_code',
   url: 'Test url',
+  name: 'test-title-expectedprogrammedatawithmanager',
 };
 
 export const expectedProgrammeDataWithName = {
   programme_managers: [],
-  title: 'Test title 2',
+  title: 'Test title expectedProgrammeDataWithName',
   alias: 'Test Alias',
   description: 'Test description',
   finance_code: 'Test finance_code',
   delivery_programme_code: 'Test delivery_programme_code',
   url: 'Test url',
-  name: 'test-title-2',
+  name: 'test-title-expectedprogrammedatawithname',
 };
 
-export const expectedProgrammeDataStore = {
-  programme_managers: [
-    {
-      programme_manager_id: 'string 1'
-    },
-    {
-      programme_manager_id: 'string 2'
-    },
-    {
-      programme_manager_id: 'string 3'
-    }
-  ],
-  title: 'Test title 1',
+
+export const expectedProgrammeDataWithoutManager = {
+  title: 'Test title expectedProgrammeDataWithoutManager',
   alias: 'Test Alias',
   description: 'Test description',
   finance_code: 'Test finance_code',
   delivery_programme_code: 'Test delivery_programme_code',
   url: 'Test url',
   updated_by: 'john',
-  name: 'test-title-1',
-};
-
-export const expectedProgrammeNoPm = {
-  title: 'Test title 1',
-  alias: 'Test Alias',
-  description: 'Test description',
-  finance_code: 'Test finance_code',
-  delivery_programme_code: 'Test delivery_programme_code',
-  url: 'Test url',
-  updated_by: 'john',
-  name: 'test-title-1',
+  name: 'test-title-expectedprogrammewithoutmanager',
 };

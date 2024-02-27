@@ -1,4 +1,4 @@
-import { expectedProgrammeDataStore } from './deliveryProgramme/programmeTestData';
+import { expectedProgrammeDataWithName } from './deliveryProgramme/programmeTestData';
 import {
   createName,
   createTransformerTitle,
@@ -72,7 +72,7 @@ describe('checkForDuplicateTitle', () => {
         DeliveryProgramme,
         'id' | 'created_at' | 'updated_at' | 'programme_managers'
       > = {
-        ...expectedProgrammeDataStore,
+        ...expectedProgrammeDataWithName,
         arms_length_body: albId,
       };
       await store.add(expectedProgrammeId, 'test');
@@ -99,13 +99,13 @@ describe('checkForDuplicateTitle', () => {
         DeliveryProgramme,
         'id' | 'created_at' | 'updated_at' | 'programme_managers'
       > = {
-        ...expectedProgrammeDataStore,
+        ...expectedProgrammeDataWithName,
         arms_length_body: albId,
       };
       await store.add(expectedProgrammeId, 'test');
       const getResult = await store.getAll();
 
-      const title = 'Test title 1';
+      const title = 'Test title expectedProgrammeDataWithName';
       const result = await checkForDuplicateTitle(getResult, title);
       expect(result).toBe(true);
     },

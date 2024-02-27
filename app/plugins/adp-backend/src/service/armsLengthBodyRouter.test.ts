@@ -104,7 +104,6 @@ describe('createRouter', () => {
       const response = await request(app)
         .post('/armsLengthBody')
         .send(invalidALB);
-        console.log(response)
       expect(response.status).toEqual(400);
     },6000);
   });

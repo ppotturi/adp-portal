@@ -11,7 +11,7 @@ import { getCurrentUsername, checkForDuplicateTitle, getOwner } from '../utils';
 import { createAlbRouter } from './armsLengthBodyRouter';
 import {
   expectedProgrammeData,
-  expectedProgrammeDataWithName,
+  expectedProgrammeDataWithManager,
 } from '../deliveryProgramme/programmeTestData';
 import { albRequiredFields } from '../armsLengthBody/albTestData';
 
@@ -99,7 +99,7 @@ describe('createRouter', () => {
       const getExistingAlbData = await request(albApp).get('/armsLengthBody');
       const getAlbId = getExistingAlbData.body[0].id;
       const expectedProgramme = {
-        ...expectedProgrammeDataWithName,
+        ...expectedProgrammeDataWithManager,
         arms_length_body: getAlbId,
       };
       const getExistingData = await request(programmeApp).get(
@@ -178,9 +178,11 @@ describe('createRouter', () => {
       const getExistingAlbData = await request(albApp).get('/armsLengthBody');
       const getAlbId = getExistingAlbData.body[0].id;
       const expectedProgramme = {
-        ...expectedProgrammeDataWithName,
+        ...expectedProgrammeDataWithManager,
+        title: 'title',
         arms_length_body: getAlbId,
       };
+
       const postRequest = await request(programmeApp)
         .post('/deliveryProgramme')
         .send(expectedProgramme);
@@ -190,12 +192,24 @@ describe('createRouter', () => {
       );
 
       const currentData = getCurrentData.body.find(
-        (e: { title: string }) => e.title === 'Test title 2',
+        (e: { title: string }) =>
+          e.title === 'Test title expectedProgrammeDataWithManager',
       );
-      expect(currentData.name).toBe('test-title-2');
+      expect(currentData.name).toBe('test-title-expectedprogrammedatawithmanager');
       const updatedALB = {
-        title: 'Test title 1 updated',
+        title: 'Test title 1 patch',
         id: currentData.id,
+        programme_managers: [
+          {
+            programme_manager_id: 'string 1',
+          },
+          {
+            programme_manager_id: 'string 2',
+          },
+          {
+            programme_manager_id: 'string 123',
+          },
+        ],
       };
       const patchRequest = await request(programmeApp)
         .patch('/deliveryProgramme')
@@ -205,9 +219,9 @@ describe('createRouter', () => {
         '/deliveryProgramme',
       );
       const updatedData = getUpdatedtData.body.find(
-        (e: { title: string }) => e.title === 'Test title 1 updated',
+        (e: { title: string }) => e.title === 'Test title 1 patch',
       );
-      expect(updatedData.name).toBe('test-title-2');
+      expect(updatedData.name).toBe('test-title-expectedprogrammedatawithmanager');
     });
 
     it('returns 406', async () => {

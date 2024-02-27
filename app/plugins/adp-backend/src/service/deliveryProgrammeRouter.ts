@@ -96,7 +96,7 @@ export async function createProgrammeRouter(
         res.json(deliveryProgramme);
       }
     } catch (error) {
-      logger.error('Unable to create new Delivery Programme');
+      throw new InputError('Error');
     }
   });
 
@@ -133,7 +133,7 @@ export async function createProgrammeRouter(
 
       const programmeManagers = req.body.programme_managers;
       if (programmeManagers !== undefined) {
-        const existingProgrammeManagers = await programmeManagersStore.getBy(
+        const existingProgrammeManagers = await programmeManagersStore.get(
           deliveryProgramme.id,
         );
         const updatedManagers: ProgrammeManager[] = [];
@@ -175,7 +175,7 @@ export async function createProgrammeRouter(
 
       res.json(deliveryProgramme);
     } catch (error) {
-      logger.error('Unable to update Delivery Programme');
+      throw new InputError('Error');
     }
   });
   router.use(errorHandler());
