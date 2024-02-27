@@ -9,7 +9,6 @@ import { createName } from '../utils';
 import { expectedAlbsWithName } from '../armsLengthBody/albTestData';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import { expectedProgrammeDataWithName, expectedProgrammeDataWithoutManager} from './programmeTestData';
-import { ProgrammeManagerStore } from './deliveryProgrammeManagerStore';
 
 describe('DeliveryProgrammeStore', () => {
   const databases = TestDatabases.create();
@@ -18,14 +17,13 @@ describe('DeliveryProgrammeStore', () => {
     const knex = await databases.init(databaseId);
     await AdpDatabase.runMigrations(knex);
     const programmeStore = new DeliveryProgrammeStore(knex);
-    const managerStore = new ProgrammeManagerStore(knex)
-    return { knex, programmeStore, managerStore };
+    return { knex, programmeStore };
   }
 
   it.each(databases.eachSupportedId())(
     'should create a new Delivery Programme',
     async databaseId => {
-      const { knex, programmeStore, managerStore } = await createDatabase(databaseId);
+      const { knex, programmeStore } = await createDatabase(databaseId);
       const insertAlbId = await knex('arms_length_body').insert(
         expectedAlbsWithName,
         ['id'],
@@ -44,7 +42,6 @@ describe('DeliveryProgrammeStore', () => {
       expect(addResult.id).toBeDefined();
       expect(addResult.created_at).toBeDefined();
       expect(addResult.updated_at).toBeDefined();
-      //const add = addProgrammeManager(expectedProgrammeDataWithName.programme_managers, addResult.id, programmeStore, managerStore)
     },
   );
 
