@@ -51,7 +51,7 @@ export async function createAlbRouter(
       {
         creator: 'ADP',
         owner: 'ADP',
-        title: 'Animal & Plant Health',
+        title: 'Animal and Plant Health',
         alias: 'APHA',
         name: 'animal-and-plant-health',
         description: '',
@@ -87,7 +87,7 @@ export async function createAlbRouter(
       {
         creator: 'ADP',
         owner: 'ADP',
-        title: 'Marine & Maritime',
+        title: 'Marine and Maritime',
         alias: 'MMO',
         name: 'marine-and-maritime',
         description: '',
