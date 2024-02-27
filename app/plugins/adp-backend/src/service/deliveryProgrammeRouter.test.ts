@@ -14,6 +14,7 @@ import {
   expectedProgrammeDataWithManager,
 } from '../deliveryProgramme/programmeTestData';
 import { albRequiredFields } from '../armsLengthBody/albTestData';
+import { ProgrammeManager } from '@internal/plugin-adp-common';
 
 describe('createRouter', () => {
   let programmeApp: express.Express;
@@ -112,6 +113,10 @@ describe('createRouter', () => {
       const response = await request(programmeApp)
         .post('/deliveryProgramme')
         .send(expectedProgramme);
+      const getProgrammeManagers = await request(programmeApp).get(
+        '/programmeManager',
+      );
+      expect(getProgrammeManagers.body.length).toBe(3);
       expect(response.status).toEqual(200);
       expect(checkDuplicate).toBe(false);
     });
@@ -195,16 +200,15 @@ describe('createRouter', () => {
         (e: { title: string }) =>
           e.title === 'Test title expectedProgrammeDataWithManager',
       );
-      expect(currentData.name).toBe('test-title-expectedprogrammedatawithmanager');
-      const updatedALB = {
+      expect(currentData.name).toBe(
+        'test-title-expectedprogrammedatawithmanager',
+      );
+      const updatedProgramme = {
         title: 'Test title 1 patch',
         id: currentData.id,
         programme_managers: [
           {
             programme_manager_id: 'string 1',
-          },
-          {
-            programme_manager_id: 'string 2',
           },
           {
             programme_manager_id: 'string 123',
@@ -213,15 +217,49 @@ describe('createRouter', () => {
       };
       const patchRequest = await request(programmeApp)
         .patch('/deliveryProgramme')
-        .send(updatedALB);
+        .send(updatedProgramme);
       expect(patchRequest.status).toEqual(200);
-      const getUpdatedtData = await request(programmeApp).get(
+      const getUpdatedData = await request(programmeApp).get(
         '/deliveryProgramme',
       );
-      const updatedData = getUpdatedtData.body.find(
+      const updatedData = getUpdatedData.body.find(
         (e: { title: string }) => e.title === 'Test title 1 patch',
       );
-      expect(updatedData.name).toBe('test-title-expectedprogrammedatawithmanager');
+      expect(updatedData.name).toBe(
+        'test-title-expectedprogrammedatawithmanager',
+      );
+      const getProgrammeManagers = await request(programmeApp).get(
+        '/programmeManager',
+      );
+      const getCurrentProgrammeManagers = getProgrammeManagers.body.filter(
+        (id: { delivery_programme_id: string }) =>
+          id.delivery_programme_id === updatedData.id,
+      );
+      expect(getCurrentProgrammeManagers.length).toBe(2);
+      expect(
+        getCurrentProgrammeManagers.some(
+          (manager: { programme_manager_id: string }) =>
+            manager.programme_manager_id === 'string 1',
+        ),
+      ).toBeTruthy();
+      expect(
+        getCurrentProgrammeManagers.some(
+          (manager: { programme_manager_id: string }) =>
+            manager.programme_manager_id === 'string 123',
+        ),
+      ).toBeTruthy();
+      expect(
+        getCurrentProgrammeManagers.some(
+          (manager: { programme_manager_id: string }) =>
+            manager.programme_manager_id === 'string 2',
+        ),
+      ).toBeFalsy();
+      expect(
+        getCurrentProgrammeManagers.some(
+          (manager: { programme_manager_id: string }) =>
+            manager.programme_manager_id === 'string 3',
+        ),
+      ).toBeFalsy();
     });
 
     it('returns 406', async () => {
