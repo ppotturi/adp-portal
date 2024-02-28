@@ -137,14 +137,14 @@ describe('DeliveryProgrammeStore', () => {
           arms_length_body: albId,
         },
       ];
-      const InsertinsertProgrammeId = await knex('delivery_programme').insert(
+      const insertProgrammeId = await knex('delivery_programme').insert(
         expectedProgramme,
         ['id'],
       );
 
-      const insertProgrammeId = InsertinsertProgrammeId[0].id;
+      const currentId = insertProgrammeId[0].id;
       const expectedUpdate: PartialDeliveryProgramme = {
-        id: insertProgrammeId,
+        id: currentId,
         title: 'Programme Example',
         alias: 'programme',
         description: 'This is an example Delivery Programme 2',
