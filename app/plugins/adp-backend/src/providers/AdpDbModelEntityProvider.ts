@@ -123,8 +123,9 @@ export class AdpDbModelEntityProvider implements EntityProvider {
 
     const { markReadComplete } = this.trackProgress(logger);
 
-    const entities = await this.readArmsLengthBodies(logger, database);
-
+    const albEntities = await this.readArmsLengthBodies(logger, database);
+    const programmeEntities = await this.readDeliveryProgrammes(logger,database)
+    const entities = {...albEntities, ...programmeEntities}
     const { markCommitComplete } = markReadComplete(entities);
 
     await this.connection.applyMutation({
