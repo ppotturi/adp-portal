@@ -14,7 +14,6 @@ import {
   expectedProgrammeDataWithManager,
 } from '../deliveryProgramme/programmeTestData';
 import { albRequiredFields } from '../armsLengthBody/albTestData';
-import { ProgrammeManager } from '@internal/plugin-adp-common';
 
 describe('createRouter', () => {
   let programmeApp: express.Express;
