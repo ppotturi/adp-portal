@@ -109,7 +109,7 @@ describe('createRouter', () => {
   });
 
   describe('POST /armsLengthBody', () => {
-    it('returns 406 when ALB name already exists', async () => {
+    it('returns 406 when ALB title already exists', async () => {
       const expectedALB = {
         title: 'Marine and Maritime',
         alias: 'ALB',
@@ -119,7 +119,7 @@ describe('createRouter', () => {
         .post('/armsLengthBody')
         .send(expectedALB);
       expect(response.status).toEqual(406);
-      expect(response.text).toEqual('{"error":"ALB name already exists"}');
+      expect(response.text).toEqual('{"error":"ALB title already exists"}');
     },6000);
   });
 
@@ -172,7 +172,7 @@ describe('createRouter', () => {
         .post('/armsLengthBody')
         .send(expectedALB);
       expect(response.status).toEqual(406);
-      expect(response.text).toEqual('{"error":"ALB name already exists"}');
+      expect(response.text).toEqual('{"error":"ALB title already exists"}');
     });
   });
 });

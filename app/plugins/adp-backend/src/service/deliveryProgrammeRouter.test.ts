@@ -133,7 +133,7 @@ describe('createRouter', () => {
   });
 
   describe('POST /deliveryProgramme', () => {
-    it('returns 406 when Delivery Programme name already exists', async () => {
+    it('returns 406 when Delivery Programme title already exists', async () => {
       const creator = await getCurrentUsername(
         mockIdentityApi,
         express.request,
@@ -162,7 +162,7 @@ describe('createRouter', () => {
         .send(newProgramme);
       expect(response.status).toEqual(406);
       expect(response.text).toEqual(
-        '{"error":"Delivery Programme name already exists"}',
+        '{"error":"Delivery Programme title already exists"}',
       );
     });
   });
@@ -283,7 +283,7 @@ describe('createRouter', () => {
         .send(programmeData);
       expect(response.status).toEqual(406);
       expect(response.text).toEqual(
-        '{"error":"Delivery Programme name already exists"}',
+        '{"error":"Delivery Programme title already exists"}',
       );
     });
   });

@@ -123,7 +123,7 @@ export async function createAlbRouter(
         req.body.title,
       );
       if (isDuplicate) {
-        res.status(406).json({ error: 'ALB name already exists' });
+        res.status(406).json({ error: 'ALB title already exists' });
       } else {
         const creator = await getCurrentUsername(identity, req);
         const armsLengthBody = await armsLengthBodiesStore.add(
@@ -155,7 +155,7 @@ export async function createAlbRouter(
           updatedTitle,
         );
         if (isDuplicate) {
-          res.status(406).json({ error: 'ALB name already exists' });
+          res.status(406).json({ error: 'ALB title already exists' });
           return;
         }
       }

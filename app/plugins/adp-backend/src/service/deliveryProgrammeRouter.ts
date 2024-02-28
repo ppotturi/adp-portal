@@ -74,7 +74,7 @@ export async function createProgrammeRouter(
       if (isDuplicate) {
         res
           .status(406)
-          .json({ error: 'Delivery Programme name already exists' });
+          .json({ error: 'Delivery Programme title already exists' });
       } else {
         const author = await getCurrentUsername(identity, req);
         const deliveryProgramme = await deliveryProgrammesStore.add(
@@ -120,7 +120,7 @@ export async function createProgrammeRouter(
         if (isDuplicate) {
           res
             .status(406)
-            .json({ error: 'Delivery Programme name already exists' });
+            .json({ error: 'Delivery Programme title already exists' });
           return;
         }
       }
