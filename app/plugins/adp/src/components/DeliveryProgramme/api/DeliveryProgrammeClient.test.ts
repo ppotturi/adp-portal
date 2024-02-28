@@ -115,4 +115,31 @@ describe('armsLengthBodyClient', () => {
       );
     });
   });
+
+  describe('get delivery programme managers', () => {
+    it('fetches delivery programmes managers successfully', async () => {
+      const mockData = [{ name: 'Test Manager' }];
+      fetchApi.fetch.mockResolvedValue({
+        ok: true,
+        json: jest.fn().mockResolvedValue(mockData),
+      });
+
+      const result = await client.getDeliveryPManagers();
+      expect(result).toEqual(mockData);
+      expect(discoveryApi.getBaseUrl).toHaveBeenCalledWith('adp');
+      expect(fetchApi.fetch).toHaveBeenCalledWith(
+        'http://localhost/programmeManager',
+      );
+    });
+    it('throws an error when the fetch fails', async () => {
+      fetchApi.fetch.mockResolvedValue({
+        ok: false,
+        status: 400,
+        statusText: 'BadRequest',
+        json: jest.fn().mockResolvedValue({ error: 'Not found' }),
+      });
+
+      await expect(client.getDeliveryPManagers()).rejects.toThrow();
+    });
+  });
 });

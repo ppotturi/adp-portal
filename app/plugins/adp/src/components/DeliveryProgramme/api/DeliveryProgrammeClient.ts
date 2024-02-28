@@ -1,5 +1,5 @@
 import { DeliveryProgrammeApi } from './DeliveryProgrammeApi';
-import { DeliveryProgramme } from '@internal/plugin-adp-common';
+import { DeliveryProgramme , ProgrammeManager } from '@internal/plugin-adp-common';
 
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { ResponseError } from '@backstage/errors';
@@ -68,6 +68,21 @@ export class DeliveryProgrammeClient implements DeliveryProgrammeApi {
     const updatedData: DeliveryProgramme[] = await response.json();
     return updatedData;
   }
+
+
+  async getDeliveryPManagers(): Promise<ProgrammeManager[]> {
+    try {
+      
+      const response = await this.fetchApi.fetch(`${await this.discoveryApi.getBaseUrl('adp')}/programmeManager`);
+      if (!response.ok) {
+        throw await ResponseError.fromResponse(response);
+      }
+      return response.json();
+    } catch (error) {
+      throw new Error('Failed to fetch Delivery Programmes: ${error.message');
+    }
+  }
+
 }
 
 export type { DeliveryProgrammeApi };

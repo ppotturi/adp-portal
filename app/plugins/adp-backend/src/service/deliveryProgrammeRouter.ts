@@ -54,6 +54,11 @@ export async function createProgrammeRouter(
     res.json(data);
   });
 
+  router.get('/programmeManager', async (_req, res) => {
+    const data = await programmeManagersStore.getAll();
+    res.json(data);
+  });
+
   router.post('/deliveryProgramme', async (req, res) => {
     try {
       if (!isDeliveryProgrammeCreateRequest(req.body)) {

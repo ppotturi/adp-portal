@@ -82,7 +82,7 @@ export const AlbViewPageComponent = () => {
       setIsModalOpen(true);
 
       alertApi.post({
-        message: `The name '${armsLengthBody.title}' is already in use. Please choose a different name.`,
+        message: `The title '${armsLengthBody.title}' is already in use. Please choose a different title.`,
         severity: 'error',
         display: 'permanent',
       });

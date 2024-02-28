@@ -25,6 +25,7 @@ import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
 import { useEntities } from '../../hooks/useEntities';
 import { transformDeliveryProgrammeManagers } from '../../utils/transformDeliveryProgrammeManagers';
 import { prepareDeliveryProgrammeFormFields } from '../../utils/prepareDeliveryProgrammeFormFields';
+import { useProgrammeManagersList } from '../../hooks/displayProgrammeManagersList';
 
 export const DeliveryProgrammeViewPageComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,6 +41,8 @@ export const DeliveryProgrammeViewPageComponent = () => {
   const fetchApi = useApi(fetchApiRef);
   const getArmsLengthBodyDropDown = useArmsLengthBodyList();
   const getUserEntities = useEntities();
+  const programmeManagersMap = useProgrammeManagersList();
+
 
   const deliveryprogClient: DeliveryProgrammeApi = new DeliveryProgrammeClient(
     discoveryApi,
@@ -141,6 +144,18 @@ export const DeliveryProgrammeViewPageComponent = () => {
       field: 'programme_manager',
       highlight: false,
       type: 'string',
+      render: rowData => {
+        const programmeManagers = programmeManagersMap[rowData.id];
+        if (!programmeManagers) return "Unknown";
+        return (
+          <> 
+           {programmeManagers.split(", ").map((manager, index) => (
+    
+          <div key={index}>{manager}</div> 
+           ))}
+          </>
+        )
+      }
     },
 
     {
@@ -220,6 +235,8 @@ export const DeliveryProgrammeViewPageComponent = () => {
             fields={formFields}
           />
         )}
+
+
       </Content>
     </Page>
   );

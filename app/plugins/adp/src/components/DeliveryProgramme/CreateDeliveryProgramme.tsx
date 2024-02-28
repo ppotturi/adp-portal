@@ -53,7 +53,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
     const dataToSend = transformDeliveryProgrammeManagers(deliveryProgramme);
 
     try {
-      console.log('trying', dataToSend);
+    
       await deliveryprogClient.createDeliveryProgramme(dataToSend);
       alertApi.post({
         message: 'Delivery Programme created successfully.',
