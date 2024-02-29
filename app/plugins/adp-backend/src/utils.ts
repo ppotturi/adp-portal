@@ -47,7 +47,7 @@ export function getOwner(options: AlbRouterOptions): string {
 
 export async function addProgrammeManager(
   programmeManagers: ProgrammeManager[],
-  id: string,
+  deliveryProgrammeId: string,
   deliveryProgramme: DeliveryProgramme,
   ProgrammeManagerStore: ProgrammeManagerStore,
 ) {
@@ -55,7 +55,7 @@ export async function addProgrammeManager(
     for (const manager of programmeManagers) {
       const store = {
         programme_manager_id: manager.programme_manager_id,
-        delivery_programme_id: id,
+        delivery_programme_id: deliveryProgrammeId,
       };
       const programmeManager = await ProgrammeManagerStore.add(store);
       deliveryProgramme.programme_managers.push(programmeManager);

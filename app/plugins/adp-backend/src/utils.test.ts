@@ -55,8 +55,8 @@ describe('checkForDuplicateTitle', () => {
       updated_at: new Date(),
     },
   ];
-  
-  it('returns false when there is no duplicate title', async() => {
+
+  it('returns false when there is no duplicate title', async () => {
     const title = 'Example Title';
     expect(await checkForDuplicateTitle(data, title)).toBeFalsy();
   });

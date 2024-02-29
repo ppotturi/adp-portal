@@ -5,13 +5,14 @@ import {
   PartialDeliveryProgramme,
 } from './deliveryProgrammeStore';
 import { NotFoundError } from '@backstage/errors';
-import { createName } from '../utils';
+import { addProgrammeManager, deleteProgrammeManager, createName } from '../utils';
 import { expectedAlbsWithName } from '../armsLengthBody/albTestData';
-import { DeliveryProgramme } from '@internal/plugin-adp-common';
+import { DeliveryProgramme, ProgrammeManager } from '@internal/plugin-adp-common';
 import {
   expectedProgrammeDataWithName,
   expectedProgrammeDataWithoutManager,
 } from './programmeTestData';
+import { ProgrammeManagerStore } from './deliveryProgrammeManagerStore';
 
 describe('DeliveryProgrammeStore', () => {
   const databases = TestDatabases.create();
@@ -20,13 +21,14 @@ describe('DeliveryProgrammeStore', () => {
     const knex = await databases.init(databaseId);
     await AdpDatabase.runMigrations(knex);
     const programmeStore = new DeliveryProgrammeStore(knex);
-    return { knex, programmeStore };
+    const managerStore = new ProgrammeManagerStore(knex);
+    return { knex, programmeStore, managerStore };
   }
 
   it.each(databases.eachSupportedId())(
     'should create a new Delivery Programme',
     async databaseId => {
-      const { knex, programmeStore } = await createDatabase(databaseId);
+      const { knex, programmeStore, managerStore } = await createDatabase(databaseId);
       const insertAlbId = await knex('arms_length_body').insert(
         expectedAlbsWithName,
         ['id'],
@@ -41,13 +43,60 @@ describe('DeliveryProgrammeStore', () => {
         ...expectedProgrammeDataWithName,
         arms_length_body: albId,
       };
-
+      const newManagers: Omit<ProgrammeManager, 'id'| 'delivery_programme_id'>[]= [
+        {
+          programme_manager_id: 'test id 1',
+        },
+        {
+          programme_manager_id: 'test id 2',
+        }
+      ];
       const addResult = await programmeStore.add(expectedProgrammeId, 'test');
 
       expect(addResult.name).toEqual(createName(expectedProgrammeId.title));
       expect(addResult.id).toBeDefined();
       expect(addResult.created_at).toBeDefined();
       expect(addResult.updated_at).toBeDefined();
+      await addProgrammeManager(
+        newManagers as ProgrammeManager[],
+        addResult.id,
+        addResult,
+        managerStore,
+      );
+      const allManagers = await managerStore.getAll()
+      expect(allManagers.length).toBe(2)
+      expect(
+        allManagers.some(
+          (manager: { programme_manager_id: string }) =>
+            manager.programme_manager_id === 'test id 1',
+        ),
+      ).toBeTruthy();
+      expect(
+        allManagers.some(
+          (manager: { programme_manager_id: string }) =>
+            manager.programme_manager_id === 'test id 2',
+        ),
+      ).toBeTruthy();
+      const updatedManagers: Omit<ProgrammeManager, 'id'| 'delivery_programme_id'>[]= [
+        {
+          programme_manager_id: 'test id 1',
+        }
+      ];
+      await deleteProgrammeManager(updatedManagers as ProgrammeManager[], managerStore)
+      const allManagersAfterDelete = await managerStore.getAll()
+      expect(
+        allManagersAfterDelete.some(
+          (manager: { programme_manager_id: string }) =>
+            manager.programme_manager_id === 'test id 1',
+        ),
+      ).toBeFalsy();
+      expect(
+        allManagersAfterDelete.some(
+          (manager: { programme_manager_id: string }) =>
+            manager.programme_manager_id === 'test id 2',
+        ),
+      ).toBeTruthy();
+      
     },
   );
 
