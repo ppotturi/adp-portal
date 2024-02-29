@@ -23,7 +23,6 @@ export async function checkForDuplicateTitle(
   title: string,
 ): Promise<boolean> {
   title = title.trim().toLowerCase();
-
   const duplicate = store.find(
     object => object.title.trim().toLowerCase() === title,
   );

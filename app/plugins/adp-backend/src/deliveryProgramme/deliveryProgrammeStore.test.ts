@@ -8,7 +8,10 @@ import { NotFoundError } from '@backstage/errors';
 import { createName } from '../utils';
 import { expectedAlbsWithName } from '../armsLengthBody/albTestData';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
-import { expectedProgrammeDataWithName, expectedProgrammeDataWithoutManager} from './programmeTestData';
+import {
+  expectedProgrammeDataWithName,
+  expectedProgrammeDataWithoutManager,
+} from './programmeTestData';
 
 describe('DeliveryProgrammeStore', () => {
   const databases = TestDatabases.create();
@@ -31,13 +34,16 @@ describe('DeliveryProgrammeStore', () => {
 
       const albId = insertAlbId[1].id;
 
-      const expectedProgrammeId: Omit<DeliveryProgramme, 'id' | 'created_at' | 'updated_at' | 'programme_managers'> = {
+      const expectedProgrammeId: Omit<
+        DeliveryProgramme,
+        'id' | 'created_at' | 'updated_at' | 'programme_managers'
+      > = {
         ...expectedProgrammeDataWithName,
         arms_length_body: albId,
       };
 
       const addResult = await programmeStore.add(expectedProgrammeId, 'test');
-    
+
       expect(addResult.name).toEqual(createName(expectedProgrammeId.title));
       expect(addResult.id).toBeDefined();
       expect(addResult.created_at).toBeDefined();
@@ -92,7 +98,9 @@ describe('DeliveryProgrammeStore', () => {
       const getResult = await programmeStore.get(programmeId);
 
       expect(getResult).toBeDefined();
-      expect(getResult?.title).toBe('Test title expectedProgrammeDataWithoutManager');
+      expect(getResult?.title).toBe(
+        'Test title expectedProgrammeDataWithoutManager',
+      );
       expect(getResult?.alias).toBe('Test Alias');
       expect(getResult?.description).toBe('Test description');
       expect(getResult?.url).toBe('Test url');
@@ -151,7 +159,10 @@ describe('DeliveryProgrammeStore', () => {
         url: 'http://www.example.com/index.html',
       };
 
-      const updateResult = await programmeStore.update(expectedUpdate, 'test@test.com');
+      const updateResult = await programmeStore.update(
+        expectedUpdate,
+        'test@test.com',
+      );
 
       expect(updateResult).toBeDefined();
       expect(updateResult.title).toBe(expectedUpdate.title);
@@ -210,7 +221,8 @@ describe('DeliveryProgrammeStore', () => {
         arms_length_body: albId,
       };
       await expect(
-        async () => await programmeStore.update(updateWithoutId, 'test@test.com'),
+        async () =>
+          await programmeStore.update(updateWithoutId, 'test@test.com'),
       ).rejects.toThrow(NotFoundError);
     },
   );

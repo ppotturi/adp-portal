@@ -7,7 +7,7 @@ import express from 'express';
 import request from 'supertest';
 import { createProgrammeRouter } from './deliveryProgrammeRouter';
 import { ConfigReader } from '@backstage/config';
-import { getCurrentUsername, checkForDuplicateTitle, getOwner } from '../utils';
+import { getCurrentUsername, getOwner } from '../utils';
 import { createAlbRouter } from './armsLengthBodyRouter';
 import {
   expectedProgrammeData,
@@ -102,22 +102,15 @@ describe('createRouter', () => {
         ...expectedProgrammeDataWithManager,
         arms_length_body: getAlbId,
       };
-      const getExistingData = await request(programmeApp).get(
-        '/deliveryProgramme',
-      );
-      const checkDuplicate = await checkForDuplicateTitle(
-        getExistingData.body,
-        expectedProgramme.title,
-      );
       const response = await request(programmeApp)
         .post('/deliveryProgramme')
         .send(expectedProgramme);
       const getProgrammeManagers = await request(programmeApp).get(
         '/programmeManager',
       );
+
       expect(getProgrammeManagers.body.length).toBe(3);
       expect(response.status).toEqual(200);
-      expect(checkDuplicate).toBe(false);
     });
 
     it('returns Error', async () => {
