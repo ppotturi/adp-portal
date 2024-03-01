@@ -64,7 +64,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
       handleCloseModal();
     } catch (e: any) {
       alertApi.post({
-        message: `The title '${deliveryProgramme.title}' is already in use. Please choose a different name.`,
+        message: `The title '${deliveryProgramme.title}' is already in use. Please choose a different title.`,
         severity: 'error',
         display: 'permanent',
       });

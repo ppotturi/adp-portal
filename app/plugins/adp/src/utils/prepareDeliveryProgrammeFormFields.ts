@@ -7,6 +7,7 @@ export const prepareDeliveryProgrammeFormFields = (albOptions: any[], programmeM
       return { ...field, options: albOptions };
     } else if (field.name === 'programme_manager') {
       return { ...field, options: programmeManagerOptions };
+      
     }
     return field;
   });

@@ -28,7 +28,7 @@ export class DeliveryProgrammeClient implements DeliveryProgrammeApi {
       }
       return response.json();
     } catch (error) {
-      throw new Error('Failed to fetch Delivery Programmes: ${error.message');
+      throw new Error('Failed to fetch Delivery Programmes: ${error.message}');
     }
   }
 
@@ -79,7 +79,7 @@ export class DeliveryProgrammeClient implements DeliveryProgrammeApi {
       }
       return response.json();
     } catch (error) {
-      throw new Error('Failed to fetch Delivery Programmes: ${error.message');
+      throw new Error('Failed to fetch Delivery Programmes: ${error.message}');
     }
   }
 

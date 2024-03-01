@@ -49,27 +49,4 @@ describe('useEntities', () => {
     expect(mockErrorApi.post).not.toHaveBeenCalled();
   });
 
-  // it('handles errors gracefully', async () => {
- 
-  //   mockCatalogApi.getEntities.mockRejectedValue(new Error('Failed to fetch entities'));
-
-  //   const wrapper: React.FC = ({ children }) => (
-  //     <TestApiProvider
-  //       apis={[
-  //         [errorApiRef, mockErrorApi],
-  //         [catalogApiRef, mockCatalogApi],
-  //       ]}
-  //     >
-  //       {children}
-  //     </TestApiProvider>
-  //   );
-  //   await act(async () => {
-  //   const { waitForNextUpdate } = renderHook(() => useEntities(), { wrapper });
-
-  //   await waitForNextUpdate();
-
-  //   expect(mockCatalogApi.getEntities).toHaveBeenCalledTimes(2); // Includes the call from the previous test
-  //   expect(mockErrorApi.post).toHaveBeenCalledWith(expect.any(Error));
-  // });
-});
-// })
+})

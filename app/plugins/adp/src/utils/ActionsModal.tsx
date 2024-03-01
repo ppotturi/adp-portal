@@ -7,6 +7,8 @@ import {
   Button,
   TextField,
   MenuItem,
+  Box,
+  Chip,
   
 } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
@@ -127,7 +129,7 @@ export const ActionsModal: FC<ActionsModalProps> = ({
             }
           : undefined,
       })}
-      defaultValue={field.multiple ? initialValues[field.name] || [] : initialValues[field.name] || ''}
+      defaultValue={field.multiple ? initialValues = ["test", "one"] || [] : initialValues[field.name] || ''}
       error={!!errors[field.name]}
       helperText={errors[field.name]?.message ?? field.helperText}
     >

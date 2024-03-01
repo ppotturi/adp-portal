@@ -56,15 +56,6 @@ const entities = [
 ];
 
 
-const mockAuthorize = jest
-  .fn()
-  .mockImplementation(async () => ({ result: AuthorizeResult.ALLOW }));
-const permissionApi: Partial<PermissionApi> = { authorize: mockAuthorize };
-
-jest.mock('@backstage/plugin-permission-react', () => ({
-  ...jest.requireActual('@backstage/plugin-permission-react'),
-  usePermission: jest.fn().mockReturnValue({ isUserAllowed: true }),
-}));
 
 const mockTableData = [
   {
@@ -113,8 +104,7 @@ describe('DeliveryProgrammeViewPageComponent', () => {
   beforeEach(() => {
     mockGetDeliveryProgrammes.mockClear();
     mockUpdateDeliveryProgramme.mockClear();
-    mockAuthorize.mockClear();
-    (usePermission as jest.Mock).mockReturnValue({ isUserAllowed: true });
+    
   });
 
   const element = (
@@ -124,7 +114,6 @@ describe('DeliveryProgrammeViewPageComponent', () => {
         [errorApiRef, mockErrorApi],
         [discoveryApiRef, mockDiscoveryApi],
         [fetchApiRef, mockFetchApi],
-        [permissionApiRef, permissionApi],
         [catalogApiRef, mockCatalogApi],
       ]}
     >
@@ -159,9 +148,12 @@ describe('DeliveryProgrammeViewPageComponent', () => {
       expect(
         await rendered.findByText('Delivery Programmes'),
       ).toBeInTheDocument();
-      expect(mockErrorApi.post).toHaveBeenCalledTimes(1);
+      expect(mockErrorApi.post).toHaveBeenCalledWith(expect.objectContaining({
+        message: 'Cannot fetch Delivery Programme'
+      }));
     });
   });
+  
 
   it('should open edit modal when edit button is clicked', async () => {
     mockGetDeliveryProgrammes.mockResolvedValue(mockTableData);
@@ -264,6 +256,7 @@ describe('DeliveryProgrammeViewPageComponent', () => {
     });
   });
 
+
   it('should not update the item when update button is clicked and has a non-unique title', async () => {
     mockGetDeliveryProgrammes.mockResolvedValue(mockTableData);
     const updatedTableData = [
@@ -273,7 +266,7 @@ describe('DeliveryProgrammeViewPageComponent', () => {
         short_name: 'DeliveryProgramme1',
         description: 'Description 1',
         url: 'http://deliveryprogramme1.com',
-        timestamp: '2021-01-01T00:00:00Z',
+        updated_at: '2021-01-01T00:00:00Z',
       },
 
       {
@@ -282,7 +275,7 @@ describe('DeliveryProgrammeViewPageComponent', () => {
         short_name: 'DeliveryProgramme2',
         description: 'Description 2',
         url: 'http://deliveryprogramme2.com',
-        timestamp: '2021-01-01T00:00:00Z',
+        updated_at: '2021-01-01T00:00:00Z',
       },
     ];
     mockUpdateDeliveryProgramme.mockResolvedValue(updatedTableData);
@@ -368,32 +361,5 @@ describe('DeliveryProgrammeViewPageComponent', () => {
     });
   });
 
-  it('displays formatted date when updated_at is defined', async () => {
-    const updatedTableData = [
-      {
-        id: '1',
-        title: 'Delivery Programme 1',
-        alias: 'DeliveryProgramme1',
-        description: 'Description 1',
-        url: 'http://deliveryprogramme.com',
-        updated_at: '2023-01-01T00:00:00Z',
-      },
-      {
-        id: '2',
-        title: 'Delivery Programme 2',
-        short_name: 'DeliveryProgramme2',
-        description: 'Description 2',
-        url: 'http://deliveryprogramme2.com',
-        updated_at: undefined,
-      },
-    ];
-    mockGetDeliveryProgrammes.mockResolvedValue(updatedTableData);
-    const rendered = await render();
-
-    await waitFor(() => {
-      const formattedDate = new Date('2023-01-01T00:00:00Z').toLocaleString();
-
-      expect(rendered.queryByText(formattedDate)).toBeInTheDocument();
-    });
-  });
+  
 });

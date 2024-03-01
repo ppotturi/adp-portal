@@ -26,7 +26,7 @@ export class ArmsLengthBodyClient implements ArmsLengthBodyApi {
       }
       return response.json();
     } catch (error) {
-      throw new Error('Failed to fetch arms length bodies: ${error.message');
+      throw new Error('Failed to fetch arms length bodies: ${error.message}');
     }
   }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { Button, Typography } from '@material-ui/core';
+import { Button ,Typography } from '@material-ui/core';
 import {
   Header,
   Page,
@@ -54,9 +54,50 @@ export const DeliveryProgrammeViewPageComponent = () => {
     getUserEntities,
   );
 
+
+
+
+    // const fetchinginitalPM = async () => {
+    //   try {
+    //     const [programmes, managers] = await Promise.all([
+    //       deliveryprogClient.getDeliveryProgrammes(),
+    //       deliveryprogClient.getDeliveryPManagers(),
+    //     ]);
+    
+    //     // Step 1: Create a mapping from delivery_programme_id to an array of programme_manager_ids
+    //     const programmeManagersMapping = managers.reduce((acc, manager) => {
+    //       const { delivery_programme_id, programme_manager_id } = manager;
+    //       if (!acc[delivery_programme_id]) {
+    //         acc[delivery_programme_id] = [];
+    //       }
+    //       acc[delivery_programme_id].push(programme_manager_id);
+    //       return acc;
+    //     }, {});
+    
+    //     // Step 2: Prepare initial values for each delivery programme
+    //     const preparedProgrammes = programmes.map(programme => ({
+    //       ...programme,
+    //       // Assuming you want to store an array of manager IDs for the programme_managers field
+    //       programme_managers: programmeManagersMapping[programme.id] || [],
+    //     }));
+    
+    //     setPreparedProgrammes(preparedProgrammes);
+    //     console.log("prepare" ,preparedProgrammes)
+    
+    //     // Now, preparedProgrammes contains all the necessary data, including mapped programme managers
+    //     // This array is ready to be used to set initial values in your forms or state
+    
+    //   } catch (e: any) {
+    //     errorApi.post(e);
+    //   }
+    // };
+    
+
+
   const getAllDeliveryProgrammes = async () => {
     try {
       const data = await deliveryprogClient.getDeliveryProgrammes();
+   
       setTableData(data);
     } catch (e: any) {
       errorApi.post(e);
@@ -64,13 +105,32 @@ export const DeliveryProgrammeViewPageComponent = () => {
   };
 
   useEffect(() => {
-    getAllDeliveryProgrammes();
+    getAllDeliveryProgrammes()
+    
   }, [key]);
 
   const handleEdit = (DeliveryProgramme: React.SetStateAction<{}>) => {
     setFormData(DeliveryProgramme);
     setIsModalOpen(true);
   };
+
+
+  // const handleEdit = (programmeId) => {
+  //   // Find the programme data by ID
+  //   const programmeToEdit = preparedProgrammes.find(programme => programme.id === programmeId);
+
+  //   console.log("p to edit", programmeToEdit)
+    
+  //   if (!programmeToEdit) {
+  //     console.error('Programme not found');
+  //     return;
+  //   }
+  
+  //   // Set the found programme data as formData, which will be used as initialValues
+  //   setFormData(programmeToEdit);
+  //   setIsModalOpen(true); // Open the modal for editing
+  // };
+    
 
   const handleCloseModal = () => {
     setFormData({});
@@ -89,7 +149,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
       setIsModalOpen(true);
 
       alertApi.post({
-        message: `The name '${deliveryProgramme.title}' is already in use. Please choose a different name.`,
+        message: `The title '${deliveryProgramme.title}' is already in use. Please choose a different title.`,
         severity: 'error',
         display: 'permanent',
       });
@@ -100,6 +160,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
     const dataToSend = transformDeliveryProgrammeManagers(deliveryProgramme);
 
     try {
+  
       await deliveryprogClient.updateDeliveryProgramme(dataToSend);
       alertApi.post({
         message: `Updated`,
@@ -149,9 +210,9 @@ export const DeliveryProgrammeViewPageComponent = () => {
         if (!programmeManagers) return "Unknown";
         return (
           <> 
-           {programmeManagers.split(", ").map((manager, index) => (
+           {programmeManagers.split(", ").map((manager) => (
     
-          <div key={index}>{manager}</div> 
+          <div key={manager}>{manager}</div> 
            ))}
           </>
         )
@@ -168,16 +229,8 @@ export const DeliveryProgrammeViewPageComponent = () => {
     {
       title: 'Updated At',
       field: 'updated_at',
-      render: (data: {}) => {
-        const e = data as DeliveryProgramme;
-        if (e.updated_at === undefined) {
-          return 'No date available';
-        }
-        const date = new Date(e.updated_at);
-        return date.toLocaleString();
-      },
       highlight: false,
-      type: 'date',
+      type: 'datetime',
     },
 
     {

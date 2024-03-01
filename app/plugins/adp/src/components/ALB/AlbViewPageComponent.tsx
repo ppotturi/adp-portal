@@ -131,17 +131,8 @@ export const AlbViewPageComponent = () => {
     {
       title: 'Updated At',
       field: 'updated_at',
-      render: (data: {}) => {
-        const e = data as ArmsLengthBody;
-
-        if (e.updated_at === undefined) {
-          return 'No date available';
-        }
-        const date = new Date(e.updated_at);
-        return date.toLocaleString();
-      },
       highlight: false,
-      type: 'date',
+      type: 'datetime',
     },
 
     {

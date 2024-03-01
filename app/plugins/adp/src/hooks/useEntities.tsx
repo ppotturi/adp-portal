@@ -44,6 +44,7 @@ export const useEntities = (): Option[] => {
           value: entity.metadata.name,
         }));
 
+
         setOptions(transformedOptions);
       } catch (e: any) {
         errorApi.post(e);
@@ -54,4 +55,7 @@ export const useEntities = (): Option[] => {
   }, [catalogApi, errorApi]);
 
   return options;
+
+  
 };
+

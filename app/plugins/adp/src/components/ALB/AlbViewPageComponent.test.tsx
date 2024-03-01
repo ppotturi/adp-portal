@@ -107,7 +107,7 @@ describe('AlbViewPageComponent', () => {
       expect(
         rendered.findByText('Arms Length Bodies'),
       ).resolves.toBeInTheDocument();
-      expect(mockErrorApi.post).toHaveBeenCalledTimes(1);
+      expect(mockErrorApi.post).toHaveBeenCalledWith(expect.objectContaining({message: 'Cannot fetch ALB'}))
     });
   });
 
@@ -281,34 +281,5 @@ describe('AlbViewPageComponent', () => {
     });
   });
 
-  it('displays formatted date when updated_at is defined', async () => {
-    
-    const updatedTableData = [
-      {
-        id: '1',
-        title: 'ALB 1',
-        short_name: 'ALB1',
-        description: 'Description 1',
-        url: 'http://alb1.com',
-        updated_at: '2023-01-01T00:00:00Z',
-      },
-      {
-        id: '2',
-        title: 'ALB 2',
-        short_name: 'ALB2',
-        description: 'Description 2',
-        url: 'http://alb2.com',
-        updated_at: undefined,
-      },
-    ];
-    mockGetArmsLengthBodies.mockResolvedValue(updatedTableData);
-    const rendered = await render();
   
-    await waitFor(() => {
-      const formattedDate = new Date('2023-01-01T00:00:00Z').toLocaleString();
-      
-      expect(rendered.queryByText(formattedDate)).toBeInTheDocument();
-    });
-  });
-
 });

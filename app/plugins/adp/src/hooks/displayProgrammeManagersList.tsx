@@ -20,7 +20,7 @@ export const useProgrammeManagersList = () => {
     [key: string]: string;
   }>({});
 
-  function capitalizeWords(str: string) {
+ const capitalizeWords = (str: string) => {
     return str.replace(/\b\w/g, (char: string) => char.toUpperCase());
   }
 
