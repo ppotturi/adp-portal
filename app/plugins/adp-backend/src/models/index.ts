@@ -1,19 +1,10 @@
-export const bookshelf = require('../bookshelf');
+import { DeliveryProgrammeM } from './deliveryProgramme';
 
-import { DeliveryProgramme } from './deliveryProgramme';
-
-let deliveryProgramme = new DeliveryProgramme();
-
-deliveryProgramme
-  .set({
-    Name: 'deliveryProgramme',
-    Title: 'deliveryProgramme',
-    Alias: 'deliveryProgramme',
-    Description: 'deliveryProgramme',
-    FinanceCode: 'deliveryProgramme',
-    ArmsLengthBody: 'deliveryProgramme',
-    DeliveryProgrammeCode: 'deliveryProgramme',
-    Url: 'deliveryProgramme',
-    DeliveryProgrammeId: '1',
+ new DeliveryProgrammeM({ id: '560f0841-9be3-479e-9943-72a031540b17' })
+  .fetch({ withRelated: ['managers'] })
+  .then(manager => {
+    console.log(manager.related('managers').toJSON());
   })
-  .save();
+  .catch(error => {
+    console.error(error);
+  });

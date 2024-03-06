@@ -2,6 +2,7 @@ import { Knex } from 'knex';
 import { NotFoundError } from '@backstage/errors';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import { createName } from '../utils';
+import { DeliveryProgrammeM } from '../models/deliveryProgramme';
 
 const TABLE_NAME = 'delivery_programme';
 type Row = {
@@ -24,6 +25,16 @@ export type PartialDeliveryProgramme = Partial<DeliveryProgramme>;
 export class DeliveryProgrammeStore {
   constructor(private readonly client: Knex) {}
   async getAll(): Promise<DeliveryProgramme[]> {
+
+    new DeliveryProgrammeM({ id: '560f0841-9be3-479e-9943-72a031540b17' })
+    .fetch({ withRelated: ['managers'] })
+    .then(manager => {
+      console.log(manager.related('managers').toJSON());
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
     const DeliveryProgrammes = await this.client<Row>(TABLE_NAME)
       .select(
         'id',

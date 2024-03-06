@@ -54,8 +54,8 @@ export async function addProgrammeManager(
   if (programmeManagers !== undefined) {
     for (const manager of programmeManagers) {
       const store = {
-        programme_manager_id: manager.programme_manager_id,
-        delivery_programme_id: deliveryProgrammeId,
+        entity_identifier: manager.entity_identifier,
+        name: manager.name,
       };
       const programmeManager = await ProgrammeManagerStore.add(store);
       deliveryProgramme.programme_managers.push(programmeManager);
@@ -69,8 +69,8 @@ export async function deleteProgrammeManager(
 ) {
   for (const manager of programmeManagers) {
     const store = {
-      programme_manager_id: manager.programme_manager_id,
+      entity_identifier: manager.entity_identifier,
     };
-    await ProgrammeManagerStore.delete(store.programme_manager_id);
+    await ProgrammeManagerStore.delete(store.entity_identifier);
   }
 }

@@ -141,8 +141,8 @@ export async function createProgrammeRouter(
           if (
             !existingProgrammeManagers.some(
               manager =>
-                manager.programme_manager_id ===
-                updatedManager.programme_manager_id,
+                manager.entity_identifier ===
+                updatedManager.entity_identifier,
             )
           ) {
             updatedManagers.push(updatedManager);
@@ -162,8 +162,8 @@ export async function createProgrammeRouter(
           if (
             !programmeManagers.some(
               (manager: ProgrammeManager) =>
-                manager.programme_manager_id ===
-                existingManager.programme_manager_id,
+                manager.entity_identifier ===
+                existingManager.entity_identifier,
             )
           ) {
             removedManagers.push(existingManager);

@@ -28,6 +28,6 @@ export type DeliveryProgramme = {
 
 export type ProgrammeManager = {
     id: string, 
-    delivery_programme_id: string;
-    programme_manager_id: string;
+    entity_identifier: string,
+    name: string,
 }
