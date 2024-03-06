@@ -3,6 +3,7 @@ import {
   resolvePackagePath,
 } from '@backstage/backend-common';
 import { Knex } from 'knex';
+
 const migrationsDir = resolvePackagePath(
   '@internal/plugin-adp-backend',
   'migrations',
