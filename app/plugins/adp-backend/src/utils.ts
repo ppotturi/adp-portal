@@ -77,6 +77,9 @@ export async function deleteProgrammeManager(
       email: manager.email,
       name: manager.name,
     };
-    await ProgrammeManagerStore.delete(store.aad_entity_ref_id, store.delivery_programme_id);
+    await ProgrammeManagerStore.delete(
+      store.aad_entity_ref_id,
+      store.delivery_programme_id,
+    );
   }
 }

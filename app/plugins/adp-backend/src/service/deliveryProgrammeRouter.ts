@@ -4,6 +4,10 @@ import Router from 'express-promise-router';
 import { Logger } from 'winston';
 import { InputError } from '@backstage/errors';
 import { IdentityApi } from '@backstage/plugin-auth-node';
+import { useApi } from '@backstage/core-plugin-api';
+import { DiscoveryApi } from '@backstage/core-plugin-api';
+import { catalogApiRef } from '@backstage/plugin-catalog-react'
+import { CatalogClient } from '@backstage/catalog-client';
 import { AdpDatabase } from '../database/adpDatabase';
 import {
   DeliveryProgrammeStore,
@@ -25,13 +29,14 @@ export interface ProgrammeRouterOptions {
   logger: Logger;
   identity: IdentityApi;
   database: PluginDatabaseManager;
+  discovery: DiscoveryApi;
 }
 
 export async function createProgrammeRouter(
   options: ProgrammeRouterOptions,
 ): Promise<express.Router> {
-  const { logger, identity, database } = options;
-
+  const { logger, identity, database, discovery } = options;
+  const catalog = new CatalogClient({discoveryApi: discovery})
   const adpDatabase = AdpDatabase.create(database);
   const deliveryProgrammesStore = new DeliveryProgrammeStore(
     await adpDatabase.get(),
@@ -43,7 +48,6 @@ export async function createProgrammeRouter(
   const router = Router();
   router.use(express.json());
 
-  // Define routes
   router.get('/health', (_, response) => {
     logger.info('PONG!');
     response.json({ status: 'ok' });
@@ -57,6 +61,18 @@ export async function createProgrammeRouter(
   router.get('/programmeManager', async (_req, res) => {
     const data = await programmeManagersStore.getAll();
     res.json(data);
+  });
+
+  router.get('/catalogEntities', async (_req, res) => {
+    const response = await catalog.getEntities({
+      filter: {
+        kind: 'User',
+        'relations.memberOf':
+          'group:default/ag-azure-cdo-adp-platformengineers',
+      },
+      fields: ['metadata'],
+    });
+    res.json(response)
   });
 
   router.post('/deliveryProgramme', async (req, res) => {
@@ -90,8 +106,8 @@ export async function createProgrammeRouter(
             deliveryProgramme,
             programmeManagersStore,
           );
-        } else { 
-          req.body.programme_managers = []
+        } else {
+          req.body.programme_managers = [];
         }
         res.json(deliveryProgramme);
       }
@@ -141,8 +157,7 @@ export async function createProgrammeRouter(
           if (
             !existingProgrammeManagers.some(
               manager =>
-                manager.aad_entity_ref_id ===
-                updatedManager.aad_entity_ref_id,
+                manager.aad_entity_ref_id === updatedManager.aad_entity_ref_id,
             )
           ) {
             updatedManagers.push(updatedManager);
@@ -162,15 +177,18 @@ export async function createProgrammeRouter(
           if (
             !programmeManagers.some(
               (manager: ProgrammeManager) =>
-                manager.aad_entity_ref_id ===
-                existingManager.aad_entity_ref_id,
+                manager.aad_entity_ref_id === existingManager.aad_entity_ref_id,
             )
           ) {
             removedManagers.push(existingManager);
           }
         }
 
-        deleteProgrammeManager(removedManagers, deliveryProgramme.id, programmeManagersStore);
+        deleteProgrammeManager(
+          removedManagers,
+          deliveryProgramme.id,
+          programmeManagersStore,
+        );
       }
 
       res.json(deliveryProgramme);

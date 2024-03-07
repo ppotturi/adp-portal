@@ -13,18 +13,18 @@ export const expectedProgrammeDataWithManager = {
     {
       aad_entity_ref_id: 'test id 1',
       email: 'test1@email.com',
-      name: 'test 1'
+      name: 'test 1',
     },
     {
       aad_entity_ref_id: 'test id 2',
       email: 'test2@email.com',
-      name: 'test 2'
+      name: 'test 2',
     },
     {
       aad_entity_ref_id: 'test id 3',
       email: 'test3@email.com',
-      name: 'test 3'
-    }
+      name: 'test 3',
+    },
   ],
   title: 'Test title expectedProgrammeDataWithManager',
   alias: 'Test Alias',
@@ -45,7 +45,6 @@ export const expectedProgrammeDataWithName = {
   url: 'Test url',
   name: 'test-title-expectedprogrammedatawithname',
 };
-
 
 export const expectedProgrammeDataWithoutManager = {
   title: 'Test title expectedProgrammeDataWithoutManager',

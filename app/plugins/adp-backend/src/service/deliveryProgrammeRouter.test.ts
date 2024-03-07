@@ -29,11 +29,14 @@ describe('createRouter', () => {
       programmeAdminGroup: 'test',
     },
   });
+
+  const mockDiscoveryApi = { getBaseUrl: jest.fn() };
   const mockOptions = {
     logger: getVoidLogger(),
     identity: mockIdentityApi,
     database: createTestDatabase(),
     config: mockConfig,
+    discovery: mockDiscoveryApi,
   };
   const owner = getOwner(mockOptions);
 
@@ -202,12 +205,12 @@ describe('createRouter', () => {
           {
             aad_entity_ref_id: 'string 1',
             email: 'test1@email.com',
-            name: 'string1'
+            name: 'string1',
           },
           {
             aad_entity_ref_id: 'string 123',
             email: 'test2@email.com',
-            name: 'string2'
+            name: 'string2',
           },
         ],
       };

@@ -71,9 +71,12 @@ export class ProgrammeManagerStore {
     };
   }
 
-  async delete(entityRefId: string, deliveryProgrammeId:string) {
+  async delete(entityRefId: string, deliveryProgrammeId: string) {
     const deleteResult = await this.client(TABLE_NAME)
-      .where({ aad_entity_ref_id: entityRefId, delivery_programme_id: deliveryProgrammeId})
+      .where({
+        aad_entity_ref_id: entityRefId,
+        delivery_programme_id: deliveryProgrammeId,
+      })
       .del();
 
     return deleteResult;

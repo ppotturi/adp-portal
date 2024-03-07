@@ -5,9 +5,16 @@ import {
   PartialDeliveryProgramme,
 } from './deliveryProgrammeStore';
 import { NotFoundError } from '@backstage/errors';
-import { addProgrammeManager, deleteProgrammeManager, createName } from '../utils';
+import {
+  addProgrammeManager,
+  deleteProgrammeManager,
+  createName,
+} from '../utils';
 import { expectedAlbsWithName } from '../armsLengthBody/albTestData';
-import { DeliveryProgramme, ProgrammeManager } from '@internal/plugin-adp-common';
+import {
+  DeliveryProgramme,
+  ProgrammeManager,
+} from '@internal/plugin-adp-common';
 import {
   expectedProgrammeDataWithName,
   expectedProgrammeDataWithoutManager,
@@ -28,7 +35,9 @@ describe('DeliveryProgrammeStore', () => {
   it.each(databases.eachSupportedId())(
     'should create a new Delivery Programme',
     async databaseId => {
-      const { knex, programmeStore, managerStore } = await createDatabase(databaseId);
+      const { knex, programmeStore, managerStore } = await createDatabase(
+        databaseId,
+      );
       const insertAlbId = await knex('arms_length_body').insert(
         expectedAlbsWithName,
         ['id'],
@@ -43,17 +52,20 @@ describe('DeliveryProgrammeStore', () => {
         ...expectedProgrammeDataWithName,
         arms_length_body: albId,
       };
-      const newManagers: Omit<ProgrammeManager, 'id'| 'delivery_programme_id'>[]= [
+      const newManagers: Omit<
+        ProgrammeManager,
+        'id' | 'delivery_programme_id'
+      >[] = [
         {
           aad_entity_ref_id: 'test id 1',
           email: 'test1@email.com',
-          name: 'test 1'
+          name: 'test 1',
         },
         {
           aad_entity_ref_id: 'test id 2',
           email: 'test2@email.com',
-          name: 'test 2'
-        }
+          name: 'test 2',
+        },
       ];
       const addResult = await programmeStore.add(expectedProgrammeId, 'test');
 
@@ -67,8 +79,8 @@ describe('DeliveryProgrammeStore', () => {
         addResult,
         managerStore,
       );
-      const allManagers = await managerStore.getAll()
-      expect(allManagers.length).toBe(2)
+      const allManagers = await managerStore.getAll();
+      expect(allManagers.length).toBe(2);
       expect(
         allManagers.some(
           (manager: { aad_entity_ref_id: string }) =>
@@ -81,15 +93,22 @@ describe('DeliveryProgrammeStore', () => {
             manager.aad_entity_ref_id === 'test id 2',
         ),
       ).toBeTruthy();
-      const updatedManagers: Omit<ProgrammeManager, 'id'| 'delivery_programme_id'>[]= [
+      const updatedManagers: Omit<
+        ProgrammeManager,
+        'id' | 'delivery_programme_id'
+      >[] = [
         {
           aad_entity_ref_id: 'test id 1',
           email: 'test1@email.com',
-          name: 'test 1'
-        }
+          name: 'test 1',
+        },
       ];
-      await deleteProgrammeManager(updatedManagers as ProgrammeManager[], addResult.id, managerStore)
-      const allManagersAfterDelete = await managerStore.getAll()
+      await deleteProgrammeManager(
+        updatedManagers as ProgrammeManager[],
+        addResult.id,
+        managerStore,
+      );
+      const allManagersAfterDelete = await managerStore.getAll();
       expect(
         allManagersAfterDelete.some(
           (manager: { aad_entity_ref_id: string }) =>
@@ -102,7 +121,6 @@ describe('DeliveryProgrammeStore', () => {
             manager.aad_entity_ref_id === 'test id 2',
         ),
       ).toBeTruthy();
-      
     },
   );
 
