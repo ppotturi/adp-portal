@@ -4,9 +4,7 @@ import Router from 'express-promise-router';
 import { Logger } from 'winston';
 import { InputError } from '@backstage/errors';
 import { IdentityApi } from '@backstage/plugin-auth-node';
-import { useApi } from '@backstage/core-plugin-api';
 import { DiscoveryApi } from '@backstage/core-plugin-api';
-import { catalogApiRef } from '@backstage/plugin-catalog-react';
 import { CatalogClient } from '@backstage/catalog-client';
 import { AdpDatabase } from '../database/adpDatabase';
 import {
@@ -67,9 +65,9 @@ export async function createProgrammeRouter(
     const deliveryProgramme = await deliveryProgrammesStore.get(_req.params.id);
     const programmeManager = await programmeManagersStore.get(_req.params.id);
     if (programmeManager && deliveryProgramme !== null) {
-      deliveryProgramme.programme_managers = programmeManager
-    }
-    res.json(deliveryProgramme);
+      deliveryProgramme.programme_managers = programmeManager;
+      res.json(deliveryProgramme);
+    } 
   });
 
   router.get('/catalogEntities', async (_req, res) => {
