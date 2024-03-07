@@ -6,7 +6,7 @@ import { InputError } from '@backstage/errors';
 import { IdentityApi } from '@backstage/plugin-auth-node';
 import { useApi } from '@backstage/core-plugin-api';
 import { DiscoveryApi } from '@backstage/core-plugin-api';
-import { catalogApiRef } from '@backstage/plugin-catalog-react'
+import { catalogApiRef } from '@backstage/plugin-catalog-react';
 import { CatalogClient } from '@backstage/catalog-client';
 import { AdpDatabase } from '../database/adpDatabase';
 import {
@@ -36,7 +36,7 @@ export async function createProgrammeRouter(
   options: ProgrammeRouterOptions,
 ): Promise<express.Router> {
   const { logger, identity, database, discovery } = options;
-  const catalog = new CatalogClient({discoveryApi: discovery})
+  const catalog = new CatalogClient({ discoveryApi: discovery });
   const adpDatabase = AdpDatabase.create(database);
   const deliveryProgrammesStore = new DeliveryProgrammeStore(
     await adpDatabase.get(),
@@ -63,6 +63,15 @@ export async function createProgrammeRouter(
     res.json(data);
   });
 
+  router.get('/deliveryProgramme/:id', async (_req, res) => {
+    const deliveryProgramme = await deliveryProgrammesStore.get(_req.params.id);
+    const programmeManager = await programmeManagersStore.get(_req.params.id);
+    if (programmeManager && deliveryProgramme !== null) {
+      deliveryProgramme.programme_managers = programmeManager
+    }
+    res.json(deliveryProgramme);
+  });
+
   router.get('/catalogEntities', async (_req, res) => {
     const response = await catalog.getEntities({
       filter: {
@@ -72,7 +81,7 @@ export async function createProgrammeRouter(
       },
       fields: ['metadata'],
     });
-    res.json(response)
+    res.json(response);
   });
 
   router.post('/deliveryProgramme', async (req, res) => {
