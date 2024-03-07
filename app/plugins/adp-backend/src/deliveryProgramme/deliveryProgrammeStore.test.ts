@@ -88,7 +88,7 @@ describe('DeliveryProgrammeStore', () => {
           name: 'test 1'
         }
       ];
-      await deleteProgrammeManager(updatedManagers as ProgrammeManager[], managerStore)
+      await deleteProgrammeManager(updatedManagers as ProgrammeManager[], addResult.id, managerStore)
       const allManagersAfterDelete = await managerStore.getAll()
       expect(
         allManagersAfterDelete.some(

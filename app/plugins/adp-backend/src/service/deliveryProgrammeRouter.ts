@@ -170,7 +170,7 @@ export async function createProgrammeRouter(
           }
         }
 
-        deleteProgrammeManager(removedManagers, programmeManagersStore);
+        deleteProgrammeManager(removedManagers, deliveryProgramme.id, programmeManagersStore);
       }
 
       res.json(deliveryProgramme);

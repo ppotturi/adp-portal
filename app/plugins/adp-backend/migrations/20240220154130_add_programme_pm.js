@@ -16,15 +16,15 @@ exports.up = async function up(knex) {
     table
       .foreign('delivery_programme_id').references('id').inTable('delivery_programme')
     table
-      .uuid('aad_entity_ref_id')
+      .string('aad_entity_ref_id')
       .notNullable()
       .comment('ID AAD entity ref');
     table
-      .uuid('email')
+      .string('email')
       .notNullable()
       .comment('Email of programme manager');
     table
-      .uuid('name')
+      .string('name')
       .notNullable()
       .comment('Name of programme manager');
   })}
