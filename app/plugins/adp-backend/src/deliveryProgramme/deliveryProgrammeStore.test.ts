@@ -45,10 +45,14 @@ describe('DeliveryProgrammeStore', () => {
       };
       const newManagers: Omit<ProgrammeManager, 'id'| 'delivery_programme_id'>[]= [
         {
-          programme_manager_id: 'test id 1',
+          aad_entity_ref_id: 'test id 1',
+          email: 'test1@email.com',
+          name: 'test 1'
         },
         {
-          programme_manager_id: 'test id 2',
+          aad_entity_ref_id: 'test id 2',
+          email: 'test2@email.com',
+          name: 'test 2'
         }
       ];
       const addResult = await programmeStore.add(expectedProgrammeId, 'test');
@@ -67,33 +71,35 @@ describe('DeliveryProgrammeStore', () => {
       expect(allManagers.length).toBe(2)
       expect(
         allManagers.some(
-          (manager: { programme_manager_id: string }) =>
-            manager.programme_manager_id === 'test id 1',
+          (manager: { aad_entity_ref_id: string }) =>
+            manager.aad_entity_ref_id === 'test id 1',
         ),
       ).toBeTruthy();
       expect(
         allManagers.some(
-          (manager: { programme_manager_id: string }) =>
-            manager.programme_manager_id === 'test id 2',
+          (manager: { aad_entity_ref_id: string }) =>
+            manager.aad_entity_ref_id === 'test id 2',
         ),
       ).toBeTruthy();
       const updatedManagers: Omit<ProgrammeManager, 'id'| 'delivery_programme_id'>[]= [
         {
-          programme_manager_id: 'test id 1',
+          aad_entity_ref_id: 'test id 1',
+          email: 'test1@email.com',
+          name: 'test 1'
         }
       ];
       await deleteProgrammeManager(updatedManagers as ProgrammeManager[], managerStore)
       const allManagersAfterDelete = await managerStore.getAll()
       expect(
         allManagersAfterDelete.some(
-          (manager: { programme_manager_id: string }) =>
-            manager.programme_manager_id === 'test id 1',
+          (manager: { aad_entity_ref_id: string }) =>
+            manager.aad_entity_ref_id === 'test id 1',
         ),
       ).toBeFalsy();
       expect(
         allManagersAfterDelete.some(
-          (manager: { programme_manager_id: string }) =>
-            manager.programme_manager_id === 'test id 2',
+          (manager: { aad_entity_ref_id: string }) =>
+            manager.aad_entity_ref_id === 'test id 2',
         ),
       ).toBeTruthy();
       
@@ -210,7 +216,7 @@ describe('DeliveryProgrammeStore', () => {
 
       const updateResult = await programmeStore.update(
         expectedUpdate,
-        'test@test.com',
+        'test1@test.com',
       );
 
       expect(updateResult).toBeDefined();

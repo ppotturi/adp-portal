@@ -11,13 +11,19 @@ export const expectedProgrammeData = {
 export const expectedProgrammeDataWithManager = {
   programme_managers: [
     {
-      programme_manager_id: 'string 1'
+      aad_entity_ref_id: 'test id 1',
+      email: 'test1@email.com',
+      name: 'test 1'
     },
     {
-      programme_manager_id: 'string 2'
+      aad_entity_ref_id: 'test id 2',
+      email: 'test2@email.com',
+      name: 'test 2'
     },
     {
-      programme_manager_id: 'string 3'
+      aad_entity_ref_id: 'test id 3',
+      email: 'test3@email.com',
+      name: 'test 3'
     }
   ],
   title: 'Test title expectedProgrammeDataWithManager',

@@ -10,15 +10,23 @@ exports.up = async function up(knex) {
       .defaultTo(knex.fn.uuid())
       .comment('Auto-generated ID');
     table
-      .string("programme_manager_id")
-      .notNullable()
-      .comment("ID of Programme Manager")
-    table
       .uuid('delivery_programme_id')
       .notNullable()
       .comment('ID of the Delivery Programme the Programme Manager is assigned to');
     table
       .foreign('delivery_programme_id').references('id').inTable('delivery_programme')
+    table
+      .uuid('aad_entity_ref_id')
+      .notNullable()
+      .comment('ID AAD entity ref');
+    table
+      .uuid('email')
+      .notNullable()
+      .comment('Email of programme manager');
+    table
+      .uuid('name')
+      .notNullable()
+      .comment('Name of programme manager');
   })}
 
 /**

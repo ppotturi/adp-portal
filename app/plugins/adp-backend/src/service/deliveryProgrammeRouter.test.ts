@@ -200,10 +200,14 @@ describe('createRouter', () => {
         id: currentData.id,
         programme_managers: [
           {
-            programme_manager_id: 'string 1',
+            aad_entity_ref_id: 'string 1',
+            email: 'test1@email.com',
+            name: 'string1'
           },
           {
-            programme_manager_id: 'string 123',
+            aad_entity_ref_id: 'string 123',
+            email: 'test2@email.com',
+            name: 'string2'
           },
         ],
       };
@@ -230,26 +234,26 @@ describe('createRouter', () => {
       expect(getCurrentProgrammeManagers.length).toBe(2);
       expect(
         getCurrentProgrammeManagers.some(
-          (manager: { programme_manager_id: string }) =>
-            manager.programme_manager_id === 'string 1',
+          (manager: { aad_entity_ref_id: string }) =>
+            manager.aad_entity_ref_id === 'string 1',
         ),
       ).toBeTruthy();
       expect(
         getCurrentProgrammeManagers.some(
-          (manager: { programme_manager_id: string }) =>
-            manager.programme_manager_id === 'string 123',
+          (manager: { aad_entity_ref_id: string }) =>
+            manager.aad_entity_ref_id === 'string 123',
         ),
       ).toBeTruthy();
       expect(
         getCurrentProgrammeManagers.some(
-          (manager: { programme_manager_id: string }) =>
-            manager.programme_manager_id === 'string 2',
+          (manager: { aad_entity_ref_id: string }) =>
+            manager.aad_entity_ref_id === 'string 2',
         ),
       ).toBeFalsy();
       expect(
         getCurrentProgrammeManagers.some(
-          (manager: { programme_manager_id: string }) =>
-            manager.programme_manager_id === 'string 3',
+          (manager: { aad_entity_ref_id: string }) =>
+            manager.aad_entity_ref_id === 'string 3',
         ),
       ).toBeFalsy();
     });
