@@ -129,7 +129,7 @@ export async function createAlbRouter(
         req.body.title,
       );
       if (isDuplicate) {
-        res.status(406).json({ error: 'ALB name already exists' });
+        res.status(406).json({ error: 'ALB title already exists' });
       } else {
         const creator = await getCurrentUsername(identity, req);
         const armsLengthBody = await armsLengthBodiesStore.add(
@@ -140,7 +140,7 @@ export async function createAlbRouter(
         res.json(armsLengthBody);
       }
     } catch (error) {
-      logger.error('Unable to create new Arms Length Body')
+      throw new InputError('Error');
     }
   });
 
@@ -161,7 +161,7 @@ export async function createAlbRouter(
           updatedTitle,
         );
         if (isDuplicate) {
-          res.status(406).json({ error: 'ALB name already exists' });
+          res.status(406).json({ error: 'ALB title already exists' });
           return;
         }
       }
@@ -172,7 +172,7 @@ export async function createAlbRouter(
       );
       res.json(armsLengthBody);
     } catch (error) {
-      logger.error('Unable to update Arms Length Body')
+      throw new InputError('Error');
     }
   });
   router.use(errorHandler());

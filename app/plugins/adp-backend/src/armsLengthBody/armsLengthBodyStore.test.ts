@@ -25,7 +25,7 @@ describe('armsLengthBodyStore', () => {
   it.each(databases.eachSupportedId())(
     'should create a new ALB',
     async databaseId => {
-      const { knex, store } = await createDatabase(databaseId);
+      const { store } = await createDatabase(databaseId);
 
       const addResult = await store.add(expectedAlb, 'test', 'test group');
 

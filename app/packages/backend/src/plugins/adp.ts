@@ -27,7 +27,8 @@ export default async function createPlugin({
       discovery,
       issuer: await discovery.getExternalBaseUrl('auth'),
     }),
-    database
+    database,
+    discovery
   });
 
   const combinedRouter = Router();

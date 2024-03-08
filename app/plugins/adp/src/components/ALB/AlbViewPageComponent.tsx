@@ -43,7 +43,7 @@ export const AlbViewPageComponent = () => {
     fetchApi,
   );
 
-  const { isUserAllowed } = usePermission({
+  const { allowed } = usePermission({
     permission: adpProgrammmeCreatePermission,
   });
 
@@ -134,18 +134,18 @@ export const AlbViewPageComponent = () => {
       highlight: false,
       type: 'datetime',
     },
-
     {
       width: '',
       highlight: true,
-      render: rowData => {
+      render: (rowData: {}) => {
+        const alb = rowData as ArmsLengthBody;
         return (
-          isUserAllowed && (
+          allowed && (
             <Button
               variant="contained"
               color="default"
               onClick={() => handleEdit(rowData)}
-              data-testid={`alb-edit-button-${rowData.id}`}
+              data-testid={`alb-edit-button-${alb.id}`}
             >
               Edit
             </Button>
@@ -174,7 +174,7 @@ export const AlbViewPageComponent = () => {
         </Typography>
         <DefaultTable data={tableData} columns={columns} title="View all" />
 
-        {isModalOpen && isUserAllowed && (
+        {isModalOpen && allowed && (
           <ActionsModal
             open={isModalOpen}
             onClose={handleCloseModal}

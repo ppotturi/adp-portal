@@ -4,6 +4,8 @@ import Router from 'express-promise-router';
 import { Logger } from 'winston';
 import { InputError } from '@backstage/errors';
 import { IdentityApi } from '@backstage/plugin-auth-node';
+import { DiscoveryApi } from '@backstage/core-plugin-api';
+import { CatalogClient } from '@backstage/catalog-client';
 import { AdpDatabase } from '../database/adpDatabase';
 import {
   DeliveryProgrammeStore,
@@ -19,19 +21,20 @@ import {
   deleteProgrammeManager,
   getCurrentUsername,
 } from '../utils';
-import { ProgrammeManagerStore } from '../deliveryProgramme/deliveryProgrammePMStore';
+import { ProgrammeManagerStore } from '../deliveryProgramme/deliveryProgrammeManagerStore';
 
 export interface ProgrammeRouterOptions {
   logger: Logger;
   identity: IdentityApi;
   database: PluginDatabaseManager;
+  discovery: DiscoveryApi;
 }
 
 export async function createProgrammeRouter(
   options: ProgrammeRouterOptions,
 ): Promise<express.Router> {
-  const { logger, identity, database } = options;
-
+  const { logger, identity, database, discovery } = options;
+  const catalog = new CatalogClient({ discoveryApi: discovery });
   const adpDatabase = AdpDatabase.create(database);
   const deliveryProgrammesStore = new DeliveryProgrammeStore(
     await adpDatabase.get(),
@@ -43,7 +46,6 @@ export async function createProgrammeRouter(
   const router = Router();
   router.use(express.json());
 
-  // Define routes
   router.get('/health', (_, response) => {
     logger.info('PONG!');
     response.json({ status: 'ok' });
@@ -57,6 +59,27 @@ export async function createProgrammeRouter(
   router.get('/programmeManager', async (_req, res) => {
     const data = await programmeManagersStore.getAll();
     res.json(data);
+  });
+
+  router.get('/deliveryProgramme/:id', async (_req, res) => {
+    const deliveryProgramme = await deliveryProgrammesStore.get(_req.params.id);
+    const programmeManager = await programmeManagersStore.get(_req.params.id);
+    if (programmeManager && deliveryProgramme !== null) {
+      deliveryProgramme.programme_managers = programmeManager;
+      res.json(deliveryProgramme);
+    } 
+  });
+
+  router.get('/catalogEntities', async (_req, res) => {
+    const response = await catalog.getEntities({
+      filter: {
+        kind: 'User',
+        'relations.memberOf':
+          'group:default/ag-azure-cdo-adp-platformengineers',
+      },
+      fields: ['metadata'],
+    });
+    res.json(response);
   });
 
   router.post('/deliveryProgramme', async (req, res) => {
@@ -74,7 +97,7 @@ export async function createProgrammeRouter(
       if (isDuplicate) {
         res
           .status(406)
-          .json({ error: 'Delivery Programme name already exists' });
+          .json({ error: 'Delivery Programme title already exists' });
       } else {
         const author = await getCurrentUsername(identity, req);
         const deliveryProgramme = await deliveryProgrammesStore.add(
@@ -83,18 +106,20 @@ export async function createProgrammeRouter(
         );
 
         const programmeManagers = req.body.programme_managers;
-
-        addProgrammeManager(
-          programmeManagers,
-          deliveryProgramme.id,
-          deliveryProgramme,
-          programmeManagersStore,
-        );
-
+        if (programmeManagers !== undefined) {
+          addProgrammeManager(
+            programmeManagers,
+            deliveryProgramme.id,
+            deliveryProgramme,
+            programmeManagersStore,
+          );
+        } else {
+          req.body.programme_managers = [];
+        }
         res.json(deliveryProgramme);
       }
     } catch (error) {
-      logger.error('Unable to create new Delivery Programme');
+      throw new InputError('Error');
     }
   });
 
@@ -121,7 +146,7 @@ export async function createProgrammeRouter(
         if (isDuplicate) {
           res
             .status(406)
-            .json({ error: 'Delivery Programme name already exists' });
+            .json({ error: 'Delivery Programme title already exists' });
           return;
         }
       }
@@ -132,38 +157,53 @@ export async function createProgrammeRouter(
         author,
       );
 
-      const programmeManagers = requestBody.programme_managers;
-      const existingProgrammeManagers = await programmeManagersStore.getBy(
-        deliveryProgramme.id,
-      );
+      const programmeManagers = req.body.programme_managers;
+      if (programmeManagers !== undefined) {
+        const existingProgrammeManagers = await programmeManagersStore.get(
+          deliveryProgramme.id,
+        );
+        const updatedManagers: ProgrammeManager[] = [];
+        for (const updatedManager of programmeManagers) {
+          if (
+            !existingProgrammeManagers.some(
+              manager =>
+                manager.aad_entity_ref_id === updatedManager.aad_entity_ref_id,
+            )
+          ) {
+            updatedManagers.push(updatedManager);
+          }
+        }
 
-      const updatedManagers = programmeManagers.filter(
-        manager =>
-          !existingProgrammeManagers.some(
-            existing =>
-              existing.programme_manager_id === manager.programme_manager_id,
-          ),
-      );
-      addProgrammeManager(
-        updatedManagers,
-        deliveryProgramme.id,
-        deliveryProgramme,
-        programmeManagersStore,
-      );
+        addProgrammeManager(
+          updatedManagers,
+          deliveryProgramme.id,
+          deliveryProgramme,
+          programmeManagersStore,
+        );
 
-      const removedManagers = existingProgrammeManagers.filter(
-        existing =>
-          !programmeManagers.some(
-            manager =>
-              manager.programme_manager_id === existing.programme_manager_id,
-          ),
-      );
-      deleteProgrammeManager(removedManagers, programmeManagersStore);
+        const removedManagers: ProgrammeManager[] = [];
+
+        for (const existingManager of existingProgrammeManagers) {
+          if (
+            !programmeManagers.some(
+              (manager: ProgrammeManager) =>
+                manager.aad_entity_ref_id === existingManager.aad_entity_ref_id,
+            )
+          ) {
+            removedManagers.push(existingManager);
+          }
+        }
+
+        deleteProgrammeManager(
+          removedManagers,
+          deliveryProgramme.id,
+          programmeManagersStore,
+        );
+      }
 
       res.json(deliveryProgramme);
     } catch (error) {
-      logger.error('Unable to update Delivery Programme', error);
-      res.status(500).json({ error: 'Internal server error' });
+      throw new InputError('Error');
     }
   });
 

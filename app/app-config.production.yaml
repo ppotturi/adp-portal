@@ -116,16 +116,19 @@ catalog:
         organization: 'defra'
         catalogPath: '/catalog-info.yaml'
         filters:
-          repository: '^(ffc-.+|adp-.+|fcp-.+|mcu-.+|est-.+)'
+          repository: '^(ffc-.+|adp-.+|fcp-.+|mcu-.+|est-.+|rpa-.+)'
         schedule:
           frequency: { minutes: 60 }
           timeout: { minutes: 5 }
           
 proxy:
-  '/grafana/api':
-    target: ${GRAFANA_ENDPOINT}
-    headers:
-      Authorization: Bearer ${GRAFANA_TOKEN}
+  endpoints:
+    '/grafana/api':
+      target: ${GRAFANA_ENDPOINT}
+      headers:
+        Authorization: Bearer ${GRAFANA_TOKEN}
+
+    '/adp-portal-api': '${ADP_PORTAL_API_ENDPOINT}'
 
 grafana:
   domain: ${GRAFANA_ENDPOINT}

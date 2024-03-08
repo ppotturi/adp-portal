@@ -7,11 +7,11 @@ import express from 'express';
 import request from 'supertest';
 import { createProgrammeRouter } from './deliveryProgrammeRouter';
 import { ConfigReader } from '@backstage/config';
-import { getCurrentUsername, checkForDuplicateTitle, getOwner } from '../utils';
+import { getCurrentUsername, getOwner } from '../utils';
 import { createAlbRouter } from './armsLengthBodyRouter';
 import {
   expectedProgrammeData,
-  expectedProgrammeDataWithName,
+  expectedProgrammeDataWithManager,
 } from '../deliveryProgramme/programmeTestData';
 import { albRequiredFields } from '../armsLengthBody/albTestData';
 
@@ -29,11 +29,14 @@ describe('createRouter', () => {
       programmeAdminGroup: 'test',
     },
   });
+
+  const mockDiscoveryApi = { getBaseUrl: jest.fn() };
   const mockOptions = {
     logger: getVoidLogger(),
     identity: mockIdentityApi,
     database: createTestDatabase(),
     config: mockConfig,
+    discovery: mockDiscoveryApi,
   };
   const owner = getOwner(mockOptions);
 
@@ -77,6 +80,13 @@ describe('createRouter', () => {
     });
   });
 
+  describe('GET /programmeManager', () => {
+    it('returns ok', async () => {
+      const response = await request(programmeApp).get('/programmeManager');
+      expect(response.status).toEqual(200);
+    });
+  });
+
   describe('POST /deliveryProgramme', () => {
     it('returns ok', async () => {
       const creator = await getCurrentUsername(
@@ -92,21 +102,18 @@ describe('createRouter', () => {
       const getExistingAlbData = await request(albApp).get('/armsLengthBody');
       const getAlbId = getExistingAlbData.body[0].id;
       const expectedProgramme = {
-        ...expectedProgrammeData,
+        ...expectedProgrammeDataWithManager,
         arms_length_body: getAlbId,
       };
-      const getExistingData = await request(programmeApp).get(
-        '/deliveryProgramme',
-      );
-      const checkDuplicate = await checkForDuplicateTitle(
-        getExistingData.body,
-        expectedProgramme.title,
-      );
       const response = await request(programmeApp)
         .post('/deliveryProgramme')
         .send(expectedProgramme);
+      const getProgrammeManagers = await request(programmeApp).get(
+        '/programmeManager',
+      );
+
+      expect(getProgrammeManagers.body.length).toBe(3);
       expect(response.status).toEqual(200);
-      expect(checkDuplicate).toBe(false);
     });
 
     it('returns Error', async () => {
@@ -122,7 +129,7 @@ describe('createRouter', () => {
   });
 
   describe('POST /deliveryProgramme', () => {
-    it('returns 406 when Delivery Programme name already exists', async () => {
+    it('returns 406 when Delivery Programme title already exists', async () => {
       const creator = await getCurrentUsername(
         mockIdentityApi,
         express.request,
@@ -151,7 +158,7 @@ describe('createRouter', () => {
         .send(newProgramme);
       expect(response.status).toEqual(406);
       expect(response.text).toEqual(
-        '{"error":"Delivery Programme name already exists"}',
+        '{"error":"Delivery Programme title already exists"}',
       );
     });
   });
@@ -171,9 +178,11 @@ describe('createRouter', () => {
       const getExistingAlbData = await request(albApp).get('/armsLengthBody');
       const getAlbId = getExistingAlbData.body[0].id;
       const expectedProgramme = {
-        ...expectedProgrammeDataWithName,
+        ...expectedProgrammeDataWithManager,
+        title: 'title',
         arms_length_body: getAlbId,
       };
+
       const postRequest = await request(programmeApp)
         .post('/deliveryProgramme')
         .send(expectedProgramme);
@@ -183,24 +192,73 @@ describe('createRouter', () => {
       );
 
       const currentData = getCurrentData.body.find(
-        (e: { title: string }) => e.title === 'Test title 2',
+        (e: { title: string }) =>
+          e.title === 'Test title expectedProgrammeDataWithManager',
       );
-      expect(currentData.name).toBe('test-title-2');
-      const updatedALB = {
-        title: 'Test title 1 updated',
+      expect(currentData.name).toBe(
+        'test-title-expectedprogrammedatawithmanager',
+      );
+      const updatedProgramme = {
+        title: 'Test title 1 patch',
         id: currentData.id,
+        programme_managers: [
+          {
+            aad_entity_ref_id: 'string 1',
+            email: 'test1@email.com',
+            name: 'string1',
+          },
+          {
+            aad_entity_ref_id: 'string 123',
+            email: 'test2@email.com',
+            name: 'string2',
+          },
+        ],
       };
       const patchRequest = await request(programmeApp)
         .patch('/deliveryProgramme')
-        .send(updatedALB);
+        .send(updatedProgramme);
       expect(patchRequest.status).toEqual(200);
-      const getUpdatedtData = await request(programmeApp).get(
+      const getUpdatedData = await request(programmeApp).get(
         '/deliveryProgramme',
       );
-      const updatedData = getUpdatedtData.body.find(
-        (e: { title: string }) => e.title === 'Test title 1 updated',
+      const updatedData = getUpdatedData.body.find(
+        (e: { title: string }) => e.title === 'Test title 1 patch',
       );
-      expect(updatedData.name).toBe('test-title-2');
+      expect(updatedData.name).toBe(
+        'test-title-expectedprogrammedatawithmanager',
+      );
+      const getProgrammeManagers = await request(programmeApp).get(
+        '/programmeManager',
+      );
+      const getCurrentProgrammeManagers = getProgrammeManagers.body.filter(
+        (id: { delivery_programme_id: string }) =>
+          id.delivery_programme_id === updatedData.id,
+      );
+      expect(getCurrentProgrammeManagers.length).toBe(2);
+      expect(
+        getCurrentProgrammeManagers.some(
+          (manager: { aad_entity_ref_id: string }) =>
+            manager.aad_entity_ref_id === 'string 1',
+        ),
+      ).toBeTruthy();
+      expect(
+        getCurrentProgrammeManagers.some(
+          (manager: { aad_entity_ref_id: string }) =>
+            manager.aad_entity_ref_id === 'string 123',
+        ),
+      ).toBeTruthy();
+      expect(
+        getCurrentProgrammeManagers.some(
+          (manager: { aad_entity_ref_id: string }) =>
+            manager.aad_entity_ref_id === 'string 2',
+        ),
+      ).toBeFalsy();
+      expect(
+        getCurrentProgrammeManagers.some(
+          (manager: { aad_entity_ref_id: string }) =>
+            manager.aad_entity_ref_id === 'string 3',
+        ),
+      ).toBeFalsy();
     });
 
     it('returns 406', async () => {
@@ -225,7 +283,7 @@ describe('createRouter', () => {
         .send(programmeData);
       expect(response.status).toEqual(406);
       expect(response.text).toEqual(
-        '{"error":"Delivery Programme name already exists"}',
+        '{"error":"Delivery Programme title already exists"}',
       );
     });
   });

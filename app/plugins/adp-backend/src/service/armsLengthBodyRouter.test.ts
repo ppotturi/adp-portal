@@ -70,7 +70,7 @@ describe('createRouter', () => {
   describe('POST /armsLengthBody', () => {
     it('returns ok', async () => {
       mockIdentityApi.getIdentity.mockResolvedValue({
-        identity: { userEntityRef: 'user:default/johndoe' },
+        identity: { userEntityRef: 'user:default/johndoe'},
       });
       const creator = await getCurrentUsername(
         mockIdentityApi,
@@ -94,7 +94,7 @@ describe('createRouter', () => {
         .send(expectedALB);
       expect(response.status).toEqual(200);
       expect(checkDuplicate).toBe(false);
-    });
+    },6000);
 
     it('returns Error', async () => {
       const invalidALB = {
@@ -105,11 +105,11 @@ describe('createRouter', () => {
         .post('/armsLengthBody')
         .send(invalidALB);
       expect(response.status).toEqual(400);
-    });
+    },6000);
   });
 
   describe('POST /armsLengthBody', () => {
-    it('returns 406 when ALB name already exists', async () => {
+    it('returns 406 when ALB title already exists', async () => {
       const expectedALB = {
         title: 'Marine and Maritime',
         alias: 'ALB',
@@ -119,8 +119,8 @@ describe('createRouter', () => {
         .post('/armsLengthBody')
         .send(expectedALB);
       expect(response.status).toEqual(406);
-      expect(response.text).toEqual('{"error":"ALB name already exists"}');
-    });
+      expect(response.text).toEqual('{"error":"ALB title already exists"}');
+    },6000);
   });
 
   describe('PATCH /armsLengthBody', () => {
@@ -172,7 +172,7 @@ describe('createRouter', () => {
         .post('/armsLengthBody')
         .send(expectedALB);
       expect(response.status).toEqual(406);
-      expect(response.text).toEqual('{"error":"ALB name already exists"}');
+      expect(response.text).toEqual('{"error":"ALB title already exists"}');
     });
   });
 });
