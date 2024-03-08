@@ -9,12 +9,6 @@ import {
   discoveryApiRef,
   fetchApiRef,
 } from '@backstage/core-plugin-api';
-import {
-  PermissionApi,
-  permissionApiRef,
-  usePermission,
-} from '@backstage/plugin-permission-react';
-import { AuthorizeResult } from '@backstage/plugin-permission-common';
 import { catalogApiRef } from '@backstage/plugin-catalog-react';
 
 

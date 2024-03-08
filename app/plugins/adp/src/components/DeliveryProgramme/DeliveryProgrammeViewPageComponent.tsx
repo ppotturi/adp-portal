@@ -21,11 +21,7 @@ import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import CreateDeliveryProgramme from './CreateDeliveryProgramme';
 import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
 import { DeliveryProgrammeApi } from './api/DeliveryProgrammeApi';
-import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
-import { useEntities } from '../../hooks/useEntities';
-import { transformDeliveryProgrammeManagers } from '../../utils/transformDeliveryProgrammeManagers';
-import { prepareDeliveryProgrammeFormFields } from '../../utils/prepareDeliveryProgrammeFormFields';
-import { useProgrammeManagersList } from '../../hooks/displayProgrammeManagersList';
+import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
 
 export const DeliveryProgrammeViewPageComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,9 +35,8 @@ export const DeliveryProgrammeViewPageComponent = () => {
   const errorApi = useApi(errorApiRef);
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
-  const getArmsLengthBodyDropDown = useArmsLengthBodyList();
-  const getUserEntities = useEntities();
-  const programmeManagersMap = useProgrammeManagersList();
+  const fields = DeliveryProgrammeFormFields;
+  
 
 
   const deliveryprogClient: DeliveryProgrammeApi = new DeliveryProgrammeClient(
@@ -49,49 +44,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
     fetchApi,
   );
 
-  const formFields = prepareDeliveryProgrammeFormFields(
-    getArmsLengthBodyDropDown,
-    getUserEntities,
-  );
 
-
-
-
-    // const fetchinginitalPM = async () => {
-    //   try {
-    //     const [programmes, managers] = await Promise.all([
-    //       deliveryprogClient.getDeliveryProgrammes(),
-    //       deliveryprogClient.getDeliveryPManagers(),
-    //     ]);
-    
-    //     // Step 1: Create a mapping from delivery_programme_id to an array of programme_manager_ids
-    //     const programmeManagersMapping = managers.reduce((acc, manager) => {
-    //       const { delivery_programme_id, programme_manager_id } = manager;
-    //       if (!acc[delivery_programme_id]) {
-    //         acc[delivery_programme_id] = [];
-    //       }
-    //       acc[delivery_programme_id].push(programme_manager_id);
-    //       return acc;
-    //     }, {});
-    
-    //     // Step 2: Prepare initial values for each delivery programme
-    //     const preparedProgrammes = programmes.map(programme => ({
-    //       ...programme,
-    //       // Assuming you want to store an array of manager IDs for the programme_managers field
-    //       programme_managers: programmeManagersMapping[programme.id] || [],
-    //     }));
-    
-    //     setPreparedProgrammes(preparedProgrammes);
-    //     console.log("prepare" ,preparedProgrammes)
-    
-    //     // Now, preparedProgrammes contains all the necessary data, including mapped programme managers
-    //     // This array is ready to be used to set initial values in your forms or state
-    
-    //   } catch (e: any) {
-    //     errorApi.post(e);
-    //   }
-    // };
-    
 
 
   const getAllDeliveryProgrammes = async () => {
@@ -115,22 +68,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
   };
 
 
-  // const handleEdit = (programmeId) => {
-  //   // Find the programme data by ID
-  //   const programmeToEdit = preparedProgrammes.find(programme => programme.id === programmeId);
-
-  //   console.log("p to edit", programmeToEdit)
-    
-  //   if (!programmeToEdit) {
-  //     console.error('Programme not found');
-  //     return;
-  //   }
   
-  //   // Set the found programme data as formData, which will be used as initialValues
-  //   setFormData(programmeToEdit);
-  //   setIsModalOpen(true); // Open the modal for editing
-  // };
-    
 
   const handleCloseModal = () => {
     setFormData({});
@@ -157,11 +95,10 @@ export const DeliveryProgrammeViewPageComponent = () => {
       return;
     }
 
-    const dataToSend = transformDeliveryProgrammeManagers(deliveryProgramme);
 
     try {
   
-      await deliveryprogClient.updateDeliveryProgramme(dataToSend);
+      await deliveryprogClient.updateDeliveryProgramme(deliveryProgramme);
       alertApi.post({
         message: `Updated`,
         severity: 'success',
@@ -192,36 +129,12 @@ export const DeliveryProgrammeViewPageComponent = () => {
       field: 'arms_length_body',
       highlight: false,
       type: 'string',
-      render: rowData => {
-        const label = getArmsLengthBodyDropDown.find(
-          option => option.value === rowData.arms_length_body,
-        )?.label;
-        return label;
-      },
     },
 
-    {
-      title: 'Programme Manager',
-      field: 'programme_manager',
-      highlight: false,
-      type: 'string',
-      render: rowData => {
-        const programmeManagers = programmeManagersMap[rowData.id];
-        if (!programmeManagers) return "Unknown";
-        return (
-          <> 
-           {programmeManagers.split(", ").map((manager) => (
-    
-          <div key={manager}>{manager}</div> 
-           ))}
-          </>
-        )
-      }
-    },
 
     {
       title: 'Description',
-      field: 'delivery_programme_code',
+      field: 'description',
       highlight: false,
       type: 'string',
     },
@@ -285,7 +198,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
             onSubmit={handleUpdate}
             initialValues={formData}
             mode="edit"
-            fields={formFields}
+            fields={fields}
           />
         )}
 
