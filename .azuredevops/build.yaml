@@ -35,7 +35,7 @@ resources:
       name: DEFRA/adp-pipeline-common
       endpoint: DEFRA
       type: github
-      ref: refs/heads/rv/323021
+      ref: refs/heads/main
 
 extends:
   template: /pipelines/common-aca-app-build.yaml@DEFRA-ADPPipelineCommon
@@ -55,5 +55,4 @@ extends:
     appDeployConfig:
       filepath: ".azuredevops/backstage.yaml"  
       variableGroups:
-        - adp-portal-ssv3
-        - adp-portal-ssv5
+        - adp-portal-<environment>
