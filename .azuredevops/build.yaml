@@ -41,7 +41,7 @@ extends:
   template: /pipelines/common-aca-app-build.yaml@DEFRA-ADPPipelineCommon
   parameters:
     deployFromFeature: ${{ parameters.deployFromFeature }}
-    appName: 'adp-portal'    
+    appName: 'adp-portal'
     privateAgentName: ''
     containerAppName: 'ssvadpinfca3401-portal-web'
     deployConfigOnly: ${{ parameters.deployConfigOnly }}
