@@ -39,7 +39,7 @@ extends:
     deployFromFeature: ${{ parameters.deployFromFeature }}
     appName: 'adp-portal'
     privateAgentName: ''
-    containerAppName: '01-portal-web'
+    containerAppName: 'portal-web'
     appBuildConfig:
       appFrameworkType: "nodejs"  
       projectPath: "./package.json"
