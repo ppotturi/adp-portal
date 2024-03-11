@@ -67,19 +67,22 @@ export async function createProgrammeRouter(
     if (programmeManager && deliveryProgramme !== null) {
       deliveryProgramme.programme_managers = programmeManager;
       res.json(deliveryProgramme);
-    } 
+    }
   });
 
   router.get('/catalogEntities', async (_req, res) => {
-    const response = await catalog.getEntities({
+    const catalogApiResponse = await catalog.getEntities({
       filter: {
         kind: 'User',
-        'relations.memberOf':
-          'group:default/ag-azure-cdo-adp-platformengineers',
+        'relations.memberOf': 'group:default/ag-azure-cdo-adp-platformengineers',
       },
-      fields: ['metadata'],
+      fields: [
+        'metadata.name',
+        'metadata.annotations.graph.microsoft.com/user-id',
+        'metadata.annotations.microsoft.com/email'
+      ],
     });
-    res.json(response);
+    res.json(catalogApiResponse);
   });
 
   router.post('/deliveryProgramme', async (req, res) => {
@@ -112,6 +115,7 @@ export async function createProgrammeRouter(
             deliveryProgramme.id,
             deliveryProgramme,
             programmeManagersStore,
+            catalog
           );
         } else {
           req.body.programme_managers = [];
@@ -176,6 +180,7 @@ export async function createProgrammeRouter(
           deliveryProgramme.id,
           deliveryProgramme,
           programmeManagersStore,
+          catalog
         );
 
         const removedManagers: ProgrammeManager[] = [];
