@@ -74,7 +74,6 @@ export async function createProgrammeRouter(
     const catalogApiResponse = await catalog.getEntities({
       filter: {
         kind: 'User',
-        'relations.memberOf': 'group:default/ag-azure-cdo-adp-platformengineers',
       },
       fields: [
         'metadata.name',

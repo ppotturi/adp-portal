@@ -9,6 +9,7 @@ import { AlbRouterOptions } from './service/armsLengthBodyRouter';
 import { ProgrammeManagerStore } from './deliveryProgramme/deliveryProgrammeManagerStore';
 import { CatalogClient } from '@backstage/catalog-client';
 import { Entity } from '@backstage/catalog-model';
+import { NotFoundError } from '@backstage/errors';
 
 export function createName(name: string) {
   const nameValue = name.replace(/\s+/g, '-').toLowerCase().substring(0, 64);
@@ -82,17 +83,15 @@ export async function addProgrammeManager(
 
   if (programmeManagers !== undefined) {
     for (const manager of programmeManagers) {
+      const managerDetails = await getProgrammeManagerDetails(
+        manager.aad_entity_ref_id,
+        catalogEntity,
+      );
       const store = {
         aad_entity_ref_id: manager.aad_entity_ref_id,
         delivery_programme_id: deliveryProgrammeId,
-        name: await getProgrammeManagerName(
-          manager.aad_entity_ref_id,
-          catalogEntity,
-        ),
-        email: await getProgrammeManagerEmail(
-          manager.aad_entity_ref_id,
-          catalogEntity,
-        ),
+        name:  managerDetails.name,
+        email: managerDetails.email,
       };
       const programmeManager = await ProgrammeManagerStore.add(store);
       deliveryProgramme.programme_managers.push(programmeManager);
@@ -119,7 +118,7 @@ export async function deleteProgrammeManager(
   }
 }
 
-export async function getProgrammeManagerName(
+export async function getProgrammeManagerDetails(
   aad_entity_ref_id: string,
   catalog: Entity[],
 ) {
@@ -128,41 +127,27 @@ export async function getProgrammeManagerName(
       object.metadata.annotations!['graph.microsoft.com/user-id'] ===
       aad_entity_ref_id,
   );
-
   if (findManagerById !== undefined) {
     const metadataName = findManagerById.metadata.name;
     const name = metadataName
       .replace(/^user:default\//, '')
       .replace(/_defra.*$/, '')
-      .replace(/[\._]/g, ' ');
+      .replace(/[\._]/g, ' ')
+      .replace(/onmicrosoft.*$/, '')
+      .trim()
 
-    const nameCapitalized = name
+    const managerName = name
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
 
-    return nameCapitalized;
-  } else {
-    throw new Error('Could not find programme manager name');
-  }
-}
-
-export async function getProgrammeManagerEmail(
-  aad_entity_ref_id: string,
-  catalog: Entity[],
-) {
-  const findManagerById = catalog.find(
-    object =>
-      object.metadata.annotations!['graph.microsoft.com/user-id'] ===
-      aad_entity_ref_id,
-  );
-
-  if (findManagerById !== undefined) {
     const managerEmail =
       findManagerById.metadata.annotations!['microsoft.com/email'];
 
-    return managerEmail;
+    return { name: managerName, email: managerEmail };
   } else {
-    throw new Error('Could not find programme manager email');
+    throw new NotFoundError(
+      `Could not find Programme Managers details`,
+    );
   }
 }
