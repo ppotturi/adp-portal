@@ -24,16 +24,16 @@ export const DeliveryProgrammeFormFields = [
   {
     label: 'Arms Length Body',
     name: 'arms_length_body',
-    select: false,
-    // options: [{}, {}],
+    // select: true,
+  
   },
 
   {
     label: 'Programme Managers',
-    name: 'programme_manager',
-    select: false,
-    // multiple: true,
-    // options: [{}, {}],
+    name: 'programme_managers',
+    select: true,
+    multiple: true,
+
   },
 
   {

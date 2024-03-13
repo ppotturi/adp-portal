@@ -23,6 +23,8 @@ import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
 import { DeliveryProgrammeApi } from './api/DeliveryProgrammeApi';
 import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
 
+
+
 export const DeliveryProgrammeViewPageComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({});
@@ -36,7 +38,8 @@ export const DeliveryProgrammeViewPageComponent = () => {
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
   const fields = DeliveryProgrammeFormFields;
-  
+
+ 
 
 
   const deliveryprogClient: DeliveryProgrammeApi = new DeliveryProgrammeClient(
@@ -46,10 +49,10 @@ export const DeliveryProgrammeViewPageComponent = () => {
 
 
 
-
   const getAllDeliveryProgrammes = async () => {
     try {
       const data = await deliveryprogClient.getDeliveryProgrammes();
+      console.log(data)
    
       setTableData(data);
     } catch (e: any) {
@@ -62,14 +65,21 @@ export const DeliveryProgrammeViewPageComponent = () => {
     
   }, [key]);
 
-  const handleEdit = (DeliveryProgramme: React.SetStateAction<{}>) => {
-    setFormData(DeliveryProgramme);
-    setIsModalOpen(true);
+  const handleEdit = async (deliveryProgramme: DeliveryProgramme) => {
+
+    try {
+      const detailedProgramme = await deliveryprogClient.getDeliveryProgrammeById(deliveryProgramme.id);
+      setFormData(detailedProgramme);
+      setIsModalOpen(true);
+    } catch (e: any) {
+      console.log(e)
+      errorApi.post(e);
+    }
   };
 
+  console.log("form data ", formData)
 
   
-
   const handleCloseModal = () => {
     setFormData({});
     setIsModalOpen(false);
@@ -110,6 +120,8 @@ export const DeliveryProgrammeViewPageComponent = () => {
     }
   };
 
+
+
   const columns: TableColumn[] = [
     {
       title: 'Title',
@@ -130,7 +142,6 @@ export const DeliveryProgrammeViewPageComponent = () => {
       highlight: false,
       type: 'string',
     },
-
 
     {
       title: 'Description',

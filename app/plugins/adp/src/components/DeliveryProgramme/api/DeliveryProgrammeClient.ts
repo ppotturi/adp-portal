@@ -32,6 +32,7 @@ export class DeliveryProgrammeClient implements DeliveryProgrammeApi {
     }
   }
 
+
   async createDeliveryProgramme(data: any): Promise<DeliveryProgramme[]> {
     const url = await this.getApiUrl();
 
@@ -82,6 +83,20 @@ export class DeliveryProgrammeClient implements DeliveryProgrammeApi {
       throw new Error('Failed to fetch Delivery Programmes: ${error.message}');
     }
   }
+
+  async getDeliveryProgrammeById(id: string): Promise<DeliveryProgramme> {
+    try {
+      const url = await this.getApiUrl();
+      const response = await this.fetchApi.fetch(`${url}/${id}`);
+      if (!response.ok) {
+        throw await ResponseError.fromResponse(response);
+      }
+      return await response.json();
+    } catch (error) {
+      throw new Error(`Failed to fetch Delivery Programme by ID`);
+    }
+  }
+  
 
 }
 

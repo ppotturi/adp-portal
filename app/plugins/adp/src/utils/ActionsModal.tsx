@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC} from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -58,6 +58,8 @@ export const ActionsModal: FC<ActionsModalProps> = ({
   });
   const errorApi = useApi(alertApiRef);
 
+
+
   const onFormSubmit = async (data: any) => {
     try {
       await onSubmit(data);
@@ -110,7 +112,7 @@ export const ActionsModal: FC<ActionsModalProps> = ({
       margin="dense"
       select
       SelectProps={{
-        multiple: field.multiple,
+        multiple: true,
         renderValue: field.multiple ? (selected) => <SelectedChipsRenderer selected={selected || []} /> : undefined,
       }}
       {...register(field.name, {
@@ -128,7 +130,7 @@ export const ActionsModal: FC<ActionsModalProps> = ({
             }
           : undefined,
       })}
-      // defaultValue={field.multiple ? initialValues = ["one" , "two"] || [] : initialValues[field.name] || ''}
+      defaultValue={field.multiple ? (initialValues[field.name] || []).map((item: any) => item.name) : initialValues[field.name] || ''}
       error={!!errors[field.name]}
       helperText={errors[field.name]?.message ?? field.helperText}
     >

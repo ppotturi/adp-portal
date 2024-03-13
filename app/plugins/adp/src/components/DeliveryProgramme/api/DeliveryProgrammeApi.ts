@@ -7,6 +7,7 @@ export const DeliveryProgrammeApiRef = createApiRef<DeliveryProgramme>({
 
 export interface DeliveryProgrammeApi {
   getDeliveryProgrammes(): Promise<DeliveryProgramme[]>;
+  getDeliveryProgrammeById(id: string): Promise <DeliveryProgramme>;
   updateDeliveryProgramme(data: any): Promise<DeliveryProgramme[]>;
   createDeliveryProgramme(data: any): Promise<DeliveryProgramme[]>;
   getDeliveryPManagers(): Promise<ProgrammeManager[]>;
