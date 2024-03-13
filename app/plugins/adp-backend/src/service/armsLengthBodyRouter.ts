@@ -105,8 +105,7 @@ export async function createAlbRouter(
 
   const router = Router();
   router.use(express.json());
-
-  // Define routes
+  
   router.get('/health', (_, response) => {
     logger.info('PONG!');
     response.json({ status: 'ok' });
@@ -114,6 +113,11 @@ export async function createAlbRouter(
 
   router.get('/armsLengthBody', async (_req, res) => {
     const data = await armsLengthBodiesStore.getAll();
+    res.json(data);
+  });
+
+  router.get('/armsLengthBody/:id', async (_req, res) => {
+    const data = await armsLengthBodiesStore.get(_req.params.id);
     res.json(data);
   });
 

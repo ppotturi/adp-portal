@@ -1,3 +1,5 @@
+import { Entity } from '@backstage/catalog-model';
+
 export const expectedProgrammeData = {
   programme_managers: [],
   title: 'Test title expectedProgrammeData',
@@ -11,20 +13,14 @@ export const expectedProgrammeData = {
 export const expectedProgrammeDataWithManager = {
   programme_managers: [
     {
-      aad_entity_ref_id: 'test id 1',
-      email: 'test1@email.com',
-      name: 'test 1',
+      aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d7342',
     },
-    {
-      aad_entity_ref_id: 'test id 2',
-      email: 'test2@email.com',
-      name: 'test 2',
-    },
-    {
-      aad_entity_ref_id: 'test id 3',
-      email: 'test3@email.com',
-      name: 'test 3',
-    },
+    // {
+    //   aad_entity_ref_id: 'test id 2',
+    // },
+    // {
+    //   aad_entity_ref_id: 'test id 3',
+    // },
   ],
   title: 'Test title expectedProgrammeDataWithManager',
   alias: 'Test Alias',
@@ -56,3 +52,18 @@ export const expectedProgrammeDataWithoutManager = {
   updated_by: 'john',
   name: 'test-title-expectedprogrammewithoutmanager',
 };
+
+export const exampleCatalog: Entity[] = [
+  {
+    apiVersion: 'backstage.io/v1alpha1',
+    kind: 'Component',
+    metadata: {
+      name: 'test.test.onmicrosoft.com',
+      annotations: {
+        'microsoft.com/email': 'test.test@onmicrosoft.com',
+        'graph.microsoft.com/user-id': 'a9dc2414-0626-43d2-993d-a53aac4d7342',
+      },
+    },
+    
+  },
+];

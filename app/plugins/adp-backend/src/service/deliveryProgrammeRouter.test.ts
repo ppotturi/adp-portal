@@ -14,6 +14,7 @@ import {
   expectedProgrammeDataWithManager,
 } from '../deliveryProgramme/programmeTestData';
 import { albRequiredFields } from '../armsLengthBody/albTestData';
+import { CatalogClient } from '@backstage/catalog-client';
 
 describe('createRouter', () => {
   let programmeApp: express.Express;
@@ -56,6 +57,7 @@ describe('createRouter', () => {
   beforeAll(async () => {
     const programmeRouter = await createProgrammeRouter(mockOptions);
     const albRouter = await createAlbRouter(mockOptions);
+    const catalog = new CatalogClient({ discoveryApi: mockOptions.discovery });
     programmeApp = express().use(programmeRouter);
     albApp = express().use(albRouter);
   });
