@@ -42,9 +42,8 @@ extends:
   parameters:
     deployFromFeature: ${{ parameters.deployFromFeature }}
     programmeName: "adp"
-    appName: 'adp-portal'
+    appName: 'adp-portal-web'
     privateAgentName: ''
-    containerAppName: 'portal-web'
     deployConfigOnly: ${{ parameters.deployConfigOnly }}
     appBuildConfig:
       appFrameworkType: "nodejs"  
