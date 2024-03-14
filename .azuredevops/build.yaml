@@ -55,4 +55,4 @@ extends:
     appDeployConfig:
       filepath: ".azuredevops/backstage.yaml"  
       variableGroups:
-        - adp-portal-<environment>
+        - adp-portal-web-<environment>
