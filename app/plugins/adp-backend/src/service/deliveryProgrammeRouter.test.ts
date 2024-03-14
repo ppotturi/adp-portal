@@ -14,7 +14,66 @@ import {
   expectedProgrammeDataWithManager,
 } from '../deliveryProgramme/programmeTestData';
 import { albRequiredFields } from '../armsLengthBody/albTestData';
-import { CatalogClient } from '@backstage/catalog-client';
+import {
+  CatalogRequestOptions,
+  GetEntitiesRequest,
+} from '@backstage/catalog-client';
+
+let catalogRequestOptions: CatalogRequestOptions;
+jest.mock('@backstage/catalog-client', () => ({
+  CatalogClient: jest.fn().mockImplementation(() => ({
+    getEntities: async (
+      request: GetEntitiesRequest,
+      options: CatalogRequestOptions,
+    ) => {
+      catalogRequestOptions = options;
+      return {
+        items: [
+          {
+            metadata: {
+              name: 'test1.test.onmicrosoft.com',
+              annotations: {
+                'microsoft.com/email': 'test1.test@onmicrosoft.com',
+                'graph.microsoft.com/user-id':
+                  'a9dc2414-0626-43d2-993d-a53aac4d73421',
+              },
+            },
+          },
+          {
+            metadata: {
+              name: 'test2.test.onmicrosoft.com',
+              annotations: {
+                'microsoft.com/email': 'test2.test@onmicrosoft.com',
+                'graph.microsoft.com/user-id':
+                  'a9dc2414-0626-43d2-993d-a53aac4d73422',
+              },
+            },
+          },
+          {
+            metadata: {
+              name: 'test3.test.onmicrosoft.com',
+              annotations: {
+                'microsoft.com/email': 'test3.test@onmicrosoft.com',
+                'graph.microsoft.com/user-id':
+                  'a9dc2414-0626-43d2-993d-a53aac4d73423',
+              },
+            },
+          },
+          {
+            metadata: {
+              name: 'test4.test.onmicrosoft.com',
+              annotations: {
+                'microsoft.com/email': 'test4.test@onmicrosoft.com',
+                'graph.microsoft.com/user-id':
+                  'a9dc2414-0626-43d2-993d-a53aac4d73424',
+              },
+            },
+          },
+        ],
+      };
+    },
+  })),
+}));
 
 describe('createRouter', () => {
   let programmeApp: express.Express;
@@ -57,7 +116,6 @@ describe('createRouter', () => {
   beforeAll(async () => {
     const programmeRouter = await createProgrammeRouter(mockOptions);
     const albRouter = await createAlbRouter(mockOptions);
-    const catalog = new CatalogClient({ discoveryApi: mockOptions.discovery });
     programmeApp = express().use(programmeRouter);
     albApp = express().use(albRouter);
   });
@@ -89,6 +147,13 @@ describe('createRouter', () => {
     });
   });
 
+  describe('GET /catalogEntities', () => {
+    it('returns ok', async () => {
+      const response = await request(programmeApp).get('/catalogEntities');
+      expect(response.status).toEqual(200);
+    });
+  });
+
   describe('POST /deliveryProgramme', () => {
     it('returns ok', async () => {
       const creator = await getCurrentUsername(
@@ -113,7 +178,6 @@ describe('createRouter', () => {
       const getProgrammeManagers = await request(programmeApp).get(
         '/programmeManager',
       );
-
       expect(getProgrammeManagers.body.length).toBe(3);
       expect(response.status).toEqual(200);
     });
@@ -205,14 +269,10 @@ describe('createRouter', () => {
         id: currentData.id,
         programme_managers: [
           {
-            aad_entity_ref_id: 'string 1',
-            email: 'test1@email.com',
-            name: 'string1',
+            aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
           },
           {
-            aad_entity_ref_id: 'string 123',
-            email: 'test2@email.com',
-            name: 'string2',
+            aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73424',
           },
         ],
       };
@@ -226,39 +286,44 @@ describe('createRouter', () => {
       const updatedData = getUpdatedData.body.find(
         (e: { title: string }) => e.title === 'Test title 1 patch',
       );
+
       expect(updatedData.name).toBe(
         'test-title-expectedprogrammedatawithmanager',
       );
-      const getProgrammeManagers = await request(programmeApp).get(
-        '/programmeManager',
+      const getDeliveryProgrammesWithPM = await request(programmeApp).get(
+        `/deliveryProgramme/${updatedData.id}`,
       );
-      const getCurrentProgrammeManagers = getProgrammeManagers.body.filter(
-        (id: { delivery_programme_id: string }) =>
-          id.delivery_programme_id === updatedData.id,
-      );
-      expect(getCurrentProgrammeManagers.length).toBe(2);
+
+      const programmeManagers =
+        getDeliveryProgrammesWithPM.body.programme_managers;
+
+      expect(programmeManagers.length).toBe(2);
       expect(
-        getCurrentProgrammeManagers.some(
+        programmeManagers.some(
           (manager: { aad_entity_ref_id: string }) =>
-            manager.aad_entity_ref_id === 'string 1',
+            manager.aad_entity_ref_id ===
+            'a9dc2414-0626-43d2-993d-a53aac4d73421',
         ),
       ).toBeTruthy();
       expect(
-        getCurrentProgrammeManagers.some(
+        programmeManagers.some(
           (manager: { aad_entity_ref_id: string }) =>
-            manager.aad_entity_ref_id === 'string 123',
+            manager.aad_entity_ref_id ===
+            'a9dc2414-0626-43d2-993d-a53aac4d73424',
         ),
       ).toBeTruthy();
       expect(
-        getCurrentProgrammeManagers.some(
+        programmeManagers.some(
           (manager: { aad_entity_ref_id: string }) =>
-            manager.aad_entity_ref_id === 'string 2',
+            manager.aad_entity_ref_id ===
+            'a9dc2414-0626-43d2-993d-a53aac4d73422',
         ),
       ).toBeFalsy();
       expect(
-        getCurrentProgrammeManagers.some(
+        programmeManagers.some(
           (manager: { aad_entity_ref_id: string }) =>
-            manager.aad_entity_ref_id === 'string 3',
+            manager.aad_entity_ref_id ===
+            'a9dc2414-0626-43d2-993d-a53aac4d73423',
         ),
       ).toBeFalsy();
     });
