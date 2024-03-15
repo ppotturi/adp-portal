@@ -126,12 +126,24 @@ export async function getProgrammeManagerDetails(
   console.log("getProgrammeManagerDetails called with aad_entity_ref_id:", aad_entity_ref_id);
   console.log("Catalog length:", catalog.length);
 
+  // catalog.forEach(object => {
+  //   let userId;
+  //   if (object.metadata.annotations && 'graph.microsoft.com/user-id' in object.metadata.annotations) {
+  //     userId = object.metadata.annotations['graph.microsoft.com/user-id'];
+  //   }
+  //   console.log(userId);
+  // });
 
-      const findManagerById = catalog.find(
-      object =>
-      object.metadata.annotations!['graph.microsoft.com/user-id'] ===
-      aad_entity_ref_id,
-    );
+  catalog.forEach((item, index) => {
+    console.log(`Item ${index + 1}:`, item);
+  });
+
+  const findManagerById = catalog.find(object => {
+    const userId = object.metadata.annotations!['graph.microsoft.com/user-id'];
+    console.log("Comparing against userId:", userId);
+    return userId === aad_entity_ref_id;
+  });
+
 if (findManagerById !== undefined) {
   console.log("Manager found:", findManagerById);
       const metadataName = findManagerById.metadata.name;
