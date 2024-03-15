@@ -22,6 +22,7 @@ import {
   getCurrentUsername,
 } from '../utils';
 import { ProgrammeManagerStore } from '../deliveryProgramme/deliveryProgrammeManagerStore';
+import { Entity } from '@backstage/catalog-model';
 
 export interface ProgrammeRouterOptions {
   logger: Logger;
@@ -78,7 +79,7 @@ export async function createProgrammeRouter(
       fields: [
         'metadata.name',
         'metadata.annotations.graph.microsoft.com/user-id',
-        'metadata.annotations.microsoft.com/email'
+        'metadata.annotations.microsoft.com/email',
       ],
     });
     res.json(catalogApiResponse);
@@ -109,12 +110,25 @@ export async function createProgrammeRouter(
 
         const programmeManagers = req.body.programme_managers;
         if (programmeManagers !== undefined) {
+          const catalogEntities = await catalog.getEntities({
+            filter: {
+              kind: 'User',
+            },
+            fields: [
+              'metadata.name',
+              'metadata.annotations.graph.microsoft.com/user-id',
+              'metadata.annotations.microsoft.com/email',
+            ],
+          });
+
+          const catalogEntity: Entity[] = catalogEntities.items;
+
           addProgrammeManager(
             programmeManagers,
             deliveryProgramme.id,
             deliveryProgramme,
             programmeManagersStore,
-            catalog
+            catalogEntity,
           );
         } else {
           req.body.programme_managers = [];
@@ -176,13 +190,27 @@ export async function createProgrammeRouter(
             updatedManagers.push(updatedManager);
           }
         }
+        const catalogEntities = await catalog.getEntities({
+          filter: {
+            kind: 'User',
+            'relations.memberOf':
+              'group:default/ag-azure-cdo-adp-platformengineers',
+          },
+          fields: [
+            'metadata.name',
+            'metadata.annotations.graph.microsoft.com/user-id',
+            'metadata.annotations.microsoft.com/email',
+          ],
+        });
+
+        const catalogEntity: Entity[] = catalogEntities.items;
 
         addProgrammeManager(
           updatedManagers,
           deliveryProgramme.id,
           deliveryProgramme,
           programmeManagersStore,
-          catalog
+          catalogEntity,
         );
 
         const removedManagers: ProgrammeManager[] = [];

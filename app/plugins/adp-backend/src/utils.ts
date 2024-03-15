@@ -7,7 +7,6 @@ import { IdentityApi } from '@backstage/plugin-auth-node';
 import express from 'express';
 import { AlbRouterOptions } from './service/armsLengthBodyRouter';
 import { ProgrammeManagerStore } from './deliveryProgramme/deliveryProgrammeManagerStore';
-import { CatalogClient } from '@backstage/catalog-client';
 import { Entity } from '@backstage/catalog-model';
 import { NotFoundError } from '@backstage/errors';
 
@@ -65,22 +64,8 @@ export async function addProgrammeManager(
   deliveryProgrammeId: string,
   deliveryProgramme: DeliveryProgramme,
   ProgrammeManagerStore: ProgrammeManagerStore,
-  catalog: CatalogClient,
+  catalogEntity: Entity[],
 ) {
-  const catalogEntities = await catalog.getEntities({
-    filter: {
-      kind: 'User',
-      'relations.memberOf': 'group:default/ag-azure-cdo-adp-platformengineers',
-    },
-    fields: [
-      'metadata.name',
-      'metadata.annotations.graph.microsoft.com/user-id',
-      'metadata.annotations.microsoft.com/email',
-    ],
-  });
-
-  const catalogEntity: Entity[] = catalogEntities.items;
-
   if (programmeManagers !== undefined) {
     for (const manager of programmeManagers) {
       const managerDetails = await getProgrammeManagerDetails(
@@ -90,7 +75,7 @@ export async function addProgrammeManager(
       const store = {
         aad_entity_ref_id: manager.aad_entity_ref_id,
         delivery_programme_id: deliveryProgrammeId,
-        name:  managerDetails.name,
+        name: managerDetails.name,
         email: managerDetails.email,
       };
       const programmeManager = await ProgrammeManagerStore.add(store);
