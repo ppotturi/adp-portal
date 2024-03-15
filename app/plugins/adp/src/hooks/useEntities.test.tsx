@@ -4,7 +4,7 @@ import { TestApiProvider } from '@backstage/test-utils';
 import { useEntities } from './useEntities'; // Adjust the import path as necessary
 import { errorApiRef} from '@backstage/core-plugin-api';
 import { catalogApiRef } from '@backstage/plugin-catalog-react';
-import { act } from '@testing-library/react';
+
 
 
 

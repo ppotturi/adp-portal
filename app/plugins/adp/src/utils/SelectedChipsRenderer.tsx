@@ -1,19 +1,27 @@
 import React from 'react';
 import { Box, Chip } from '@material-ui/core';
 
-const SelectedChipsRenderer = ({ selected }) => {
-  if (!Array.isArray(selected)) {
-    return null; 
+const SelectedChipsRenderer = ({ selected, options }) => {
+  if (!Array.isArray(selected) || !Array.isArray(options)) {
+    return null;
   }
+
+  console.log("selected", selected, "options", options)
+
+  const getLabel = (value: any) => {
+    const option = options.find((option: { value: any; }) => option.value === value);
+    return option ? option.label : value; 
+  };
 
   return (
     <Box display="flex" flexWrap="wrap">
       {selected.map((value) => (
-        <Chip key={value} label={value} color="primary" size="small" />
+        <Chip key={value} label={getLabel(value)} color="primary" size="small" />
       ))}
     </Box>
   );
 };
+
 
 export default SelectedChipsRenderer;
 

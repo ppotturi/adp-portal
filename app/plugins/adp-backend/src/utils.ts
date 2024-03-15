@@ -122,30 +122,48 @@ export async function getProgrammeManagerDetails(
   aad_entity_ref_id: string,
   catalog: Entity[],
 ) {
-  const findManagerById = catalog.find(
-    object =>
+
+  console.log("getProgrammeManagerDetails called with aad_entity_ref_id:", aad_entity_ref_id);
+  console.log("Catalog length:", catalog.length);
+
+
+      const findManagerById = catalog.find(
+      object =>
       object.metadata.annotations!['graph.microsoft.com/user-id'] ===
       aad_entity_ref_id,
-  );
-  if (findManagerById !== undefined) {
-    const metadataName = findManagerById.metadata.name;
-    const name = metadataName
-      .replace(/^user:default\//, '')
-      .replace(/_defra.*$/, '')
-      .replace(/[\._]/g, ' ')
-      .replace(/onmicrosoft.*$/, '')
-      .trim()
+    );
+if (findManagerById !== undefined) {
+  console.log("Manager found:", findManagerById);
+      const metadataName = findManagerById.metadata.name;
 
-    const managerName = name
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+      console.log("Original metadataName:", metadataName);
 
-    const managerEmail =
+      const name = metadataName
+        .replace(/^user:default\//, '')
+        .replace(/_defra.*$/, '')
+        .replace(/[\._]/g, ' ')
+        .replace(/onmicrosoft.*$/, '')
+        .trim()
+
+      
+        console.log("Processed name before capitalization:", name);
+
+      const managerName = name
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+
+        console.log("Final managerName:", managerName);
+
+      const managerEmail =
       findManagerById.metadata.annotations!['microsoft.com/email'];
 
-    return { name: managerName, email: managerEmail };
-  } else {
+      console.log("Manager email:", managerEmail);
+
+
+      return { name: managerName, email: managerEmail };
+    } else {
+      console.log("Manager not found for aad_entity_ref_id:", aad_entity_ref_id);
     throw new NotFoundError(
       `Could not find Programme Managers details`,
     );

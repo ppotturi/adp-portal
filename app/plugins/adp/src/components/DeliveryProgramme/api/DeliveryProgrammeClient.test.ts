@@ -22,19 +22,37 @@ describe('armsLengthBodyClient', () => {
   });
 
   describe('get delivery programmes', () => {
-    it('fetches delivery programmes successfully', async () => {
-      const mockData = [{ name: 'Test Body' }];
-      fetchApi.fetch.mockResolvedValue({
-        ok: true,
-        json: jest.fn().mockResolvedValue(mockData),
-      });
-
+    it('fetches delivery programmes successfully and provides ALB names', async () => {
+      const mockDeliveryProgrammes = [
+        { id: '1', name: 'Programme 1', arms_length_body: 'alb1' },
+        { id: '2', name: 'Programme 2', arms_length_body: 'alb2' },
+      ];
+      const mockAlbNamesMapping = {
+        alb1: 'ALB Name 1',
+        alb2: 'ALB Name 2',
+      };
+  
+      fetchApi.fetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: jest.fn().mockResolvedValue(mockDeliveryProgrammes),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: jest.fn().mockResolvedValue(mockAlbNamesMapping),
+        });
+  
       const result = await client.getDeliveryProgrammes();
-      expect(result).toEqual(mockData);
+  
+      const expected = [
+        { ...mockDeliveryProgrammes[0], arms_length_body_name: 'ALB Name 1' },
+        { ...mockDeliveryProgrammes[1], arms_length_body_name: 'ALB Name 2' },
+      ];
+  
+      expect(result).toEqual(expected);
       expect(discoveryApi.getBaseUrl).toHaveBeenCalledWith('adp');
-      expect(fetchApi.fetch).toHaveBeenCalledWith(
-        'http://localhost/DeliveryProgramme',
-      );
+      expect(fetchApi.fetch).toHaveBeenNthCalledWith(1, 'http://localhost/DeliveryProgramme');
+      expect(fetchApi.fetch).toHaveBeenNthCalledWith(2, 'http://localhost/armslengthbodynames');
     });
 
     it('throws an error when the fetch fails', async () => {
@@ -115,31 +133,36 @@ describe('armsLengthBodyClient', () => {
       );
     });
   });
+  describe('getDeliveryProgrammeById', () => {
+    it('fetches a delivery programme by ID successfully', async () => {
 
-  describe('get delivery programme managers', () => {
-    it('fetches delivery programmes managers successfully', async () => {
-      const mockData = [{ name: 'Test Manager' }];
+      const mockProgramme = { id: '1', name: 'Test Programme' };
       fetchApi.fetch.mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockData),
+        json: jest.fn().mockResolvedValue(mockProgramme),
       });
-
-      const result = await client.getDeliveryPManagers();
-      expect(result).toEqual(mockData);
+  
+   
+      const result = await client.getDeliveryProgrammeById('1');
+      expect(result).toEqual(mockProgramme);
       expect(discoveryApi.getBaseUrl).toHaveBeenCalledWith('adp');
-      expect(fetchApi.fetch).toHaveBeenCalledWith(
-        'http://localhost/programmeManager',
-      );
+     
+      expect(fetchApi.fetch).toHaveBeenCalledWith('http://localhost/DeliveryProgramme/1');
     });
-    it('throws an error when the fetch fails', async () => {
+  
+    it('throws an error when fetching a delivery programme by ID fails', async () => {
+  
       fetchApi.fetch.mockResolvedValue({
         ok: false,
-        status: 400,
-        statusText: 'BadRequest',
-        json: jest.fn().mockResolvedValue({ error: 'Not found' }),
+        status: 404,
+        statusText: 'Not Found',
+        json: jest.fn().mockResolvedValue({ error: 'Programme not found' }),
       });
+  
 
-      await expect(client.getDeliveryPManagers()).rejects.toThrow();
+      await expect(client.getDeliveryProgrammeById('nonexistent-id')).rejects.toThrow('Failed to fetch Delivery Programme by ID');
     });
   });
+  
+ 
 });

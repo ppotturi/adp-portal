@@ -1,12 +1,10 @@
 import { DeliveryProgrammeApi } from './DeliveryProgrammeApi';
-import { DeliveryProgramme , ProgrammeManager } from '@internal/plugin-adp-common';
+import { DeliveryProgramme } from '@internal/plugin-adp-common';
 
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { ResponseError } from '@backstage/errors';
 
 export class DeliveryProgrammeClient implements DeliveryProgrammeApi {
- 
-
   private discoveryApi: DiscoveryApi;
   private fetchApi: FetchApi;
 
@@ -22,16 +20,41 @@ export class DeliveryProgrammeClient implements DeliveryProgrammeApi {
   async getDeliveryProgrammes(): Promise<DeliveryProgramme[]> {
     try {
       const url = await this.getApiUrl();
-      const response = await this.fetchApi.fetch(url);
-      if (!response.ok) {
-        throw await ResponseError.fromResponse(response);
+
+      const albNamesUrl = `${await this.discoveryApi.getBaseUrl(
+        'adp',
+      )}/armslengthbodynames`;
+
+      const [deliveryProgrammesResponse, albNamesResponse] = await Promise.all([
+        this.fetchApi.fetch(url),
+        this.fetchApi.fetch(albNamesUrl),
+      ]);
+
+      if (!deliveryProgrammesResponse.ok || !albNamesResponse.ok) {
+        throw new Error('Failed to fetch data');
       }
-      return response.json();
+
+      const [deliveryProgrammes, albNamesMapping] = await Promise.all([
+        deliveryProgrammesResponse.json(),
+        albNamesResponse.json(),
+      ]);
+
+      const deliveryProgrammesWithNames = deliveryProgrammes.map(
+        (programme: { arms_length_body: string | number }) => ({
+          ...programme,
+
+          arms_length_body_name:
+            albNamesMapping[programme.arms_length_body] || 'Unknown ALB Name',
+        }),
+      );
+
+      return deliveryProgrammesWithNames;
     } catch (error) {
-      throw new Error('Failed to fetch Delivery Programmes: ${error.message}');
+      throw new Error(
+        `Failed to fetch Delivery Programmes`,
+      );
     }
   }
-
 
   async createDeliveryProgramme(data: any): Promise<DeliveryProgramme[]> {
     const url = await this.getApiUrl();
@@ -70,20 +93,6 @@ export class DeliveryProgrammeClient implements DeliveryProgrammeApi {
     return updatedData;
   }
 
-
-  async getDeliveryPManagers(): Promise<ProgrammeManager[]> {
-    try {
-      
-      const response = await this.fetchApi.fetch(`${await this.discoveryApi.getBaseUrl('adp')}/programmeManager`);
-      if (!response.ok) {
-        throw await ResponseError.fromResponse(response);
-      }
-      return response.json();
-    } catch (error) {
-      throw new Error('Failed to fetch Delivery Programmes: ${error.message}');
-    }
-  }
-
   async getDeliveryProgrammeById(id: string): Promise<DeliveryProgramme> {
     try {
       const url = await this.getApiUrl();
@@ -96,8 +105,6 @@ export class DeliveryProgrammeClient implements DeliveryProgrammeApi {
       throw new Error(`Failed to fetch Delivery Programme by ID`);
     }
   }
-  
-
 }
 
 export type { DeliveryProgrammeApi };

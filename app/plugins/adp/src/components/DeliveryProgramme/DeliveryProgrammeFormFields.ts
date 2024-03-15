@@ -24,7 +24,8 @@ export const DeliveryProgrammeFormFields = [
   {
     label: 'Arms Length Body',
     name: 'arms_length_body',
-    // select: true,
+    select: true,
+    multiple: false,
   
   },
 

@@ -66,6 +66,20 @@ export class ArmsLengthBodyClient implements ArmsLengthBodyApi {
     const updatedData: ArmsLengthBody[] = await response.json();
     return updatedData;
   }
+
+  async getArmsLengthBodyNames(): Promise<Record<string, string>> { 
+    try {
+      const albNamesUrl = `${await this.discoveryApi.getBaseUrl('adp')}/armslengthbodynames`;
+  
+      const response = await this.fetchApi.fetch(albNamesUrl);
+      if (!response.ok) {
+        throw await ResponseError.fromResponse(response);
+      }
+      return response.json();
+    } catch (error) {
+      throw new Error(`Failed to fetch arms length bodies`); 
+    }
+  }
 }
 
 export type { ArmsLengthBodyApi };

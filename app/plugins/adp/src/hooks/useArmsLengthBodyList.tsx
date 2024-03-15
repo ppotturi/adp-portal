@@ -21,12 +21,12 @@ export const useArmsLengthBodyList = (): { label: string; value: string }[]  => 
 
   useEffect(() => {
     const albClient = new ArmsLengthBodyClient(discoveryApi, fetchApi);
-    const fetchArmsLengthBodies = async () => {
+    const fetchArmsLengthBodiesList = async () => {
       try {
-        const bodies = await albClient.getArmsLengthBodies();
-        const formattedBodies = bodies.map(body => ({
-          label: body.title,
-          value: body.id,
+        const bodies = await albClient.getArmsLengthBodyNames();
+        const formattedBodies = Object.entries(bodies).map(([value, label]) => ({
+          label,
+          value,
         }));
         setOptions(formattedBodies);
       } catch (e: any) {
@@ -34,7 +34,7 @@ export const useArmsLengthBodyList = (): { label: string; value: string }[]  => 
       }
     };
 
-    fetchArmsLengthBodies();
+    fetchArmsLengthBodiesList();
   }, [discoveryApi, fetchApi, errorApi]);
 
   return options;

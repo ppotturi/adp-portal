@@ -1,4 +1,5 @@
-import React, { FC} from 'react';
+import React,{ FC, useState} from 'react';
+import { Controller } from 'react-hook-form';
 import {
   Dialog,
   DialogTitle,
@@ -7,8 +8,8 @@ import {
   Button,
   TextField,
   MenuItem,
-
-  
+  Box,
+  Chip,
 } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
 import { alertApiRef, useApi } from '@backstage/core-plugin-api';
@@ -35,8 +36,8 @@ interface ActionsModalProps {
     multiline?: boolean;
     maxRows?: number;
     select?: boolean;
-    multiple?: boolean; 
-    options?: { label: string; value: string }[]; 
+    multiple?: boolean;
+    options?: { label: string; value: string }[];
   }[];
 }
 
@@ -50,25 +51,47 @@ export const ActionsModal: FC<ActionsModalProps> = ({
 }) => {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm({
     defaultValues: initialValues,
   });
-  const errorApi = useApi(alertApiRef);
 
 
 
-  const onFormSubmit = async (data: any) => {
+
+  const onFormSubmit = async (data: { programme_managers: any[]; }) => {
+ 
+    const formattedProgrammeManagers = data.programme_managers.map(manager => {
+      return { aad_entity_ref_id: manager };
+  });
+
+  console.log(formattedProgrammeManagers)
+
+    
+    const finalData = {
+        ...data,
+        programme_managers: formattedProgrammeManagers,
+    };
+
+    console.log('Final form submit data:', finalData);
+
     try {
-      await onSubmit(data);
-      reset();
-      onClose();
-    } catch (e: any) {
-      errorApi.post(e);
+        await onSubmit(finalData); 
+        reset(); 
+        onClose(); 
+    } catch (e) {
+        console.error(e);
+       
     }
-  };
+};
+
+
+
+
+console.log("inital values", initialValues)
 
 
   const renderTextField = (field: any) => (
@@ -102,7 +125,11 @@ export const ActionsModal: FC<ActionsModalProps> = ({
     />
   );
 
+
+
+  
   const renderSelectField = (field: any) => (
+    
     <TextField
       key={field.name}
       id={field.name}
@@ -112,8 +139,8 @@ export const ActionsModal: FC<ActionsModalProps> = ({
       margin="dense"
       select
       SelectProps={{
-        multiple: true,
-        renderValue: field.multiple ? (selected) => <SelectedChipsRenderer selected={selected || []} /> : undefined,
+        multiple: field.multiple,
+        renderValue: field.multiple ? (selected) => <SelectedChipsRenderer selected={selected || []} options={field.options}/> : undefined,
       }}
       {...register(field.name, {
         required: field.validations?.required ? 'This field is required' : undefined,
@@ -130,7 +157,7 @@ export const ActionsModal: FC<ActionsModalProps> = ({
             }
           : undefined,
       })}
-      defaultValue={field.multiple ? (initialValues[field.name] || []).map((item: any) => item.name) : initialValues[field.name] || ''}
+      defaultValue={field.multiple ? initialValues[field.name]?.map((item: any) => item.aad_entity_ref_id) : initialValues[field.name] || ''}
       error={!!errors[field.name]}
       helperText={errors[field.name]?.message ?? field.helperText}
     >
@@ -142,6 +169,45 @@ export const ActionsModal: FC<ActionsModalProps> = ({
     </TextField>
   );
 
+  // const renderSelectField = (field: any) => {
+  //   const [selectedValue, setSelectedValue] = useState(() => 
+  //     field.multiple ? initialValues[field.name]?.map((item: any) => item.aad_entity_ref_id) : initialValues[field.name] || ''
+  //   );
+  
+  //   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //     setSelectedValue(event.target.value);
+  //   };
+  
+  //   return (
+  //     <TextField
+  //       key={field.name}
+  //       id={field.name}
+  //       label={field.label}
+  //       variant="outlined"
+  //       fullWidth
+  //       margin="dense"
+  //       select
+  //       SelectProps={{
+  //         multiple: field.multiple,
+  //         value: selectedValue,
+  //         onChange: handleChange,
+  //         renderValue: selected => <SelectedChipsRenderer selected={selected || []} options={field.options} />,
+  //       }}
+  //       {...register(field.name)}
+  //       error={!!errors[field.name]}
+  //       helperText={errors[field.name]?.message ?? field.helperText}
+  //     >
+  //       {field.options.map((option: any) => (
+  //         <MenuItem key={option.value} value={option.value}>
+  //           {option.label}
+  //         </MenuItem>
+  //       ))}
+  //     </TextField>
+  //   );
+  // };
+  
+  
+  
   return (
     <Dialog open={open} onClose={onClose} >
       <DialogTitle>{`${mode === 'edit' ? 'Edit' : 'Create'}: ${initialValues.title || ''}`}</DialogTitle>
@@ -174,3 +240,5 @@ export const ActionsModal: FC<ActionsModalProps> = ({
     </Dialog>
   );
 };
+
+

@@ -121,6 +121,22 @@ export async function createAlbRouter(
     res.json(data);
   });
 
+  router.get('/armsLengthBodyNames', async (_req, res) => {
+    try {
+      const armsLengthBodies = await armsLengthBodiesStore.getAll();
+      const idNameMapping = armsLengthBodies.reduce<Record<string, string>>((acc, alb) => {
+        acc[alb.id] = alb.title;
+        return acc;
+      }, {});
+      
+      res.json(idNameMapping);
+    } catch (error) {
+      console.error(error);
+      throw new InputError('Error');
+    }
+  });
+  
+
   router.post('/armsLengthBody', async (req, res) => {
     try {
       if (!isArmsLengthBodyCreateRequest(req.body)) {

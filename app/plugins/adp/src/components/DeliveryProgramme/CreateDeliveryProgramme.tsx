@@ -12,9 +12,11 @@ import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
-import { useEntities } from '../../hooks/useEntities';
-import { transformDeliveryProgrammeManagers } from '../../utils/transformDeliveryProgrammeManagers';
-import { prepareDeliveryProgrammeFormFields } from '../../utils/prepareDeliveryProgrammeFormFields';
+
+
+
+import { useProgrammeManagersList } from '../../hooks/useProgrammeManagersList';
+import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
 
 interface CreateDeliveryProgrammeProps {
   refetchDeliveryProgramme: () => void;
@@ -29,7 +31,8 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
   const fetchApi = useApi(fetchApiRef);
   const errorApi = useApi(errorApiRef);
   const getArmsLengthBodyDropDown = useArmsLengthBodyList();
-  const getUserEntities = useEntities();
+  const getProgrammeManagerDropDown = useProgrammeManagersList()
+  
 
   const deliveryprogClient = new DeliveryProgrammeClient(
     discoveryApi,
@@ -43,18 +46,25 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+ 
+  const getAlbOptionFields = () => {
+    return DeliveryProgrammeFormFields.map(field => {
+      if (field.name === 'arms_length_body') {
+        return { ...field, options: getArmsLengthBodyDropDown };
+      } else if (field.name === 'programme_managers') {
+        return { ...field, options: getProgrammeManagerDropDown };
+      }
+      return field;
+    });
+  };
 
-  const formFields = prepareDeliveryProgrammeFormFields(
-    getArmsLengthBodyDropDown,
-    getUserEntities,
-  );
 
   const handleSubmit = async (deliveryProgramme: DeliveryProgramme) => {
-    const dataToSend = transformDeliveryProgrammeManagers(deliveryProgramme);
+
 
     try {
     
-      await deliveryprogClient.createDeliveryProgramme(dataToSend);
+      await deliveryprogClient.createDeliveryProgramme(deliveryProgramme);
       alertApi.post({
         message: 'Delivery Programme created successfully.',
         severity: 'success',
@@ -92,7 +102,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
           onSubmit={handleSubmit}
           initialValues={{}}
           mode="create"
-          fields={formFields}
+          fields={getAlbOptionFields()}
         />
       )}
     </>

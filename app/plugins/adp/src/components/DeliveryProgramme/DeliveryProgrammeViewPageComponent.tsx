@@ -22,6 +22,9 @@ import CreateDeliveryProgramme from './CreateDeliveryProgramme';
 import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
 import { DeliveryProgrammeApi } from './api/DeliveryProgrammeApi';
 import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
+import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
+import { useProgrammeManagersList } from '../../hooks/useProgrammeManagersList';
+
 
 
 
@@ -37,9 +40,11 @@ export const DeliveryProgrammeViewPageComponent = () => {
   const errorApi = useApi(errorApiRef);
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
-  const fields = DeliveryProgrammeFormFields;
+  const getArmsLengthBodyDropDown = useArmsLengthBodyList();
+  const getProgrammeManagerDropDown = useProgrammeManagersList()
 
- 
+
+console.log(getProgrammeManagerDropDown)
 
 
   const deliveryprogClient: DeliveryProgrammeApi = new DeliveryProgrammeClient(
@@ -52,8 +57,6 @@ export const DeliveryProgrammeViewPageComponent = () => {
   const getAllDeliveryProgrammes = async () => {
     try {
       const data = await deliveryprogClient.getDeliveryProgrammes();
-      console.log(data)
-   
       setTableData(data);
     } catch (e: any) {
       errorApi.post(e);
@@ -77,7 +80,6 @@ export const DeliveryProgrammeViewPageComponent = () => {
     }
   };
 
-  console.log("form data ", formData)
 
   
   const handleCloseModal = () => {
@@ -105,7 +107,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
       return;
     }
 
-
+  
     try {
   
       await deliveryprogClient.updateDeliveryProgramme(deliveryProgramme);
@@ -120,6 +122,16 @@ export const DeliveryProgrammeViewPageComponent = () => {
     }
   };
 
+  const getAlbOptionFields = () => {
+    return DeliveryProgrammeFormFields.map(field => {
+      if (field.name === 'arms_length_body') {
+        return { ...field, options: getArmsLengthBodyDropDown };
+      } else if (field.name === 'programme_managers') {
+        return { ...field, options: getProgrammeManagerDropDown };
+      }
+      return field;
+    });
+  };
 
 
   const columns: TableColumn[] = [
@@ -138,7 +150,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
 
     {
       title: 'Arms Length Body',
-      field: 'arms_length_body',
+      field: 'arms_length_body_name',
       highlight: false,
       type: 'string',
     },
@@ -160,13 +172,14 @@ export const DeliveryProgrammeViewPageComponent = () => {
     {
       width: '',
       highlight: true,
-      render: rowData => {
+      render: (rowData: any) => { 
+        const data = rowData as DeliveryProgramme; 
         return (
           <Button
             variant="contained"
             color="default"
-            onClick={() => handleEdit(rowData)}
-            data-testid={`delivery-programme-edit-button-${rowData.id}`}
+            onClick={() => handleEdit(data)}
+            data-testid={`delivery-programme-edit-button-${data.id}`}
           >
             Edit
           </Button>
@@ -209,7 +222,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
             onSubmit={handleUpdate}
             initialValues={formData}
             mode="edit"
-            fields={fields}
+            fields={getAlbOptionFields()}
           />
         )}
 
