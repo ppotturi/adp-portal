@@ -1,4 +1,4 @@
-import React,{ FC} from 'react';
+import React, { FC } from 'react';
 
 import {
   Dialog,
@@ -8,11 +8,11 @@ import {
   Button,
   TextField,
   MenuItem,
- 
 } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
 
 import SelectedChipsRenderer from './SelectedChipsRenderer';
+import { alertApiRef, useApi } from '@backstage/core-plugin-api';
 
 interface ActionsModalProps {
   open: boolean;
@@ -56,41 +56,30 @@ export const ActionsModal: FC<ActionsModalProps> = ({
   } = useForm({
     defaultValues: initialValues,
   });
+  const errorApi = useApi(alertApiRef);
 
+  const onFormSubmit = async (data: any) => {
+    const formattedProgrammeManagers = data.programme_managers.map(
+      (manager: any) => {
+        return { aad_entity_ref_id: manager };
+      },
+    );
 
+    console.log(formattedProgrammeManagers);
 
-
-  const onFormSubmit = async (data: { programme_managers: any[]; }) => {
- 
-    const formattedProgrammeManagers = data.programme_managers.map(manager => {
-      return { aad_entity_ref_id: manager };
-  });
-
-  console.log(formattedProgrammeManagers)
-
-    
     const finalData = {
-        ...data,
-        programme_managers: formattedProgrammeManagers,
+      ...data,
+      programme_managers: formattedProgrammeManagers,
     };
 
-    console.log('Final form submit data:', finalData);
-
     try {
-        await onSubmit(finalData); 
-        reset(); 
-        onClose(); 
-    } catch (e) {
-        console.error(e);
-       
+      await onSubmit(finalData);
+      reset();
+      onClose();
+    } catch (e:any) {
+      errorApi.post(e);
     }
-};
-
-
-
-
-console.log("inital values", initialValues)
-
+  };
 
   const renderTextField = (field: any) => (
     <TextField
@@ -101,7 +90,9 @@ console.log("inital values", initialValues)
       fullWidth
       margin="dense"
       {...register(field.name, {
-        required: field.validations?.required ? 'This field is required' : undefined,
+        required: field.validations?.required
+          ? 'This field is required'
+          : undefined,
         maxLength: field.validations?.maxLength
           ? {
               value: field.validations.maxLength,
@@ -123,11 +114,7 @@ console.log("inital values", initialValues)
     />
   );
 
-
-
-  
   const renderSelectField = (field: any) => (
-    
     <TextField
       key={field.name}
       id={field.name}
@@ -138,10 +125,19 @@ console.log("inital values", initialValues)
       select
       SelectProps={{
         multiple: field.multiple,
-        renderValue: field.multiple ? (selected) => <SelectedChipsRenderer selected={selected || []} options={field.options}/> : undefined,
+        renderValue: field.multiple
+          ? selected => (
+              <SelectedChipsRenderer
+                selected={selected || []}
+                options={field.options}
+              />
+            )
+          : undefined,
       }}
       {...register(field.name, {
-        required: field.validations?.required ? 'This field is required' : undefined,
+        required: field.validations?.required
+          ? 'This field is required'
+          : undefined,
         maxLength: field.validations?.maxLength
           ? {
               value: field.validations.maxLength,
@@ -155,11 +151,19 @@ console.log("inital values", initialValues)
             }
           : undefined,
       })}
-      defaultValue={field.multiple ? initialValues[field.name]?.map((item: any) => item.aad_entity_ref_id) : initialValues[field.name] || ''}
+      defaultValue={
+        field.multiple
+          ? Array.isArray(initialValues[field.name])
+            ? initialValues[field.name].map(
+                (item: any) => item.aad_entity_ref_id,
+              )
+            : []
+          : initialValues[field.name] || ''
+      }
       error={!!errors[field.name]}
       helperText={errors[field.name]?.message ?? field.helperText}
     >
-      {field.options?.map((option:any) => (
+      {field.options?.map((option: any) => (
         <MenuItem key={option.value} value={option.value}>
           {option.label}
         </MenuItem>
@@ -167,57 +171,16 @@ console.log("inital values", initialValues)
     </TextField>
   );
 
-  // const renderSelectField = (field: any) => {
-  //   const [selectedValue, setSelectedValue] = useState(() => 
-  //     field.multiple ? initialValues[field.name]?.map((item: any) => item.aad_entity_ref_id) : initialValues[field.name] || ''
-  //   );
-  
-  //   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-  //     setSelectedValue(event.target.value);
-  //   };
-  
-  //   return (
-  //     <TextField
-  //       key={field.name}
-  //       id={field.name}
-  //       label={field.label}
-  //       variant="outlined"
-  //       fullWidth
-  //       margin="dense"
-  //       select
-  //       SelectProps={{
-  //         multiple: field.multiple,
-  //         value: selectedValue,
-  //         onChange: handleChange,
-  //         renderValue: selected => <SelectedChipsRenderer selected={selected || []} options={field.options} />,
-  //       }}
-  //       {...register(field.name)}
-  //       error={!!errors[field.name]}
-  //       helperText={errors[field.name]?.message ?? field.helperText}
-  //     >
-  //       {field.options.map((option: any) => (
-  //         <MenuItem key={option.value} value={option.value}>
-  //           {option.label}
-  //         </MenuItem>
-  //       ))}
-  //     </TextField>
-  //   );
-  // };
-  
-  
-  
   return (
-    <Dialog open={open} onClose={onClose} >
-      <DialogTitle>{`${mode === 'edit' ? 'Edit' : 'Create'}: ${initialValues.title || ''}`}</DialogTitle>
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>{`${mode === 'edit' ? 'Edit' : 'Create'}: ${
+        initialValues.title || ''
+      }`}</DialogTitle>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <DialogContent>
-          {fields.map((field) => (
-            field.select ? (
-              renderSelectField(field)
-            ) : (
-              renderTextField(field)
-            )
-          ))}
+          {fields.map(field =>
+            field.select ? renderSelectField(field) : renderTextField(field),
+          )}
         </DialogContent>
         <DialogActions>
           <Button
@@ -230,7 +193,11 @@ console.log("inital values", initialValues)
           >
             Cancel
           </Button>
-          <Button type="submit" color="primary" data-testid="actions-modal-update-button">
+          <Button
+            type="submit"
+            color="primary"
+            data-testid="actions-modal-update-button"
+          >
             Update
           </Button>
         </DialogActions>
@@ -238,5 +205,3 @@ console.log("inital values", initialValues)
     </Dialog>
   );
 };
-
-

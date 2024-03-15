@@ -13,8 +13,6 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
 
-
-
 import { useProgrammeManagersList } from '../../hooks/useProgrammeManagersList';
 import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
 
@@ -31,8 +29,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
   const fetchApi = useApi(fetchApiRef);
   const errorApi = useApi(errorApiRef);
   const getArmsLengthBodyDropDown = useArmsLengthBodyList();
-  const getProgrammeManagerDropDown = useProgrammeManagersList()
-  
+  const getProgrammeManagerDropDown = useProgrammeManagersList();
 
   const deliveryprogClient = new DeliveryProgrammeClient(
     discoveryApi,
@@ -46,7 +43,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
- 
+
   const getAlbOptionFields = () => {
     return DeliveryProgrammeFormFields.map(field => {
       if (field.name === 'arms_length_body') {
@@ -58,12 +55,8 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
     });
   };
 
-
   const handleSubmit = async (deliveryProgramme: DeliveryProgramme) => {
-
-
     try {
-    
       await deliveryprogClient.createDeliveryProgramme(deliveryProgramme);
       alertApi.post({
         message: 'Delivery Programme created successfully.',
