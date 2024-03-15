@@ -8,42 +8,13 @@ import {
   fetchApiRef,
 } from '@backstage/core-plugin-api';
 import { TestApiProvider, renderInTestApp } from '@backstage/test-utils';
-import { catalogApiRef } from '@backstage/plugin-catalog-react';
 
 const mockAlertApi = { post: jest.fn() };
 const mockErrorApi = { post: jest.fn() };
 const mockDiscoveryApi = { getBaseUrl: jest.fn() };
 const mockFetchApi = { fetch: jest.fn() };
 
-const entities = [
-  {
-    "metadata": {
-      "namespace": "default",
-      "name": "userone.onmicrosoft.com"
-    },
-    "spec": {
-      "profile": {
-        "displayName": "user one"
-      }
-    }
-  },
-  {
-    "metadata": {
-      "namespace": "default",
-      "name": "usertwo.onmicrosoft.com"
-    },
-    "spec": {
-      "profile": {
-        "displayName": "user two"
-      }
-    }
-  }
-];
-const mockCatalogApi = {
-  getEntities: jest
-    .fn()
-    .mockImplementation(async () => ({ items: entities })),
-};
+
 
 const mockGetDeliveryProgrammes = jest.fn();
 const mockCreateDeliveryProgramme = jest.fn().mockResolvedValue({});
@@ -66,7 +37,6 @@ describe('Create Delivery Programme', () => {
         [alertApiRef, mockAlertApi],
         [errorApiRef, mockErrorApi],
         [discoveryApiRef, mockDiscoveryApi],
-        [catalogApiRef, mockCatalogApi],
         [fetchApiRef, mockFetchApi]
       ]}
     >
@@ -108,10 +78,10 @@ describe('Create Delivery Programme', () => {
         description: 'Description for Delivery Programme 1',
         programme_managers: [
           {
-            "programme_manager_id": "user:default/test123"
+            "aad_entity_ref_id": "135f37a9-d404-439-90a3-0745f326b005"
           },
           {
-            "programme_manager_id": "user:default/test345"
+            "aad_entity_ref_id": "135f37a9-d404-435-90a3-0745f326b005"
           },
         ],
         arms_length_body: 'Arms Length Body 1',

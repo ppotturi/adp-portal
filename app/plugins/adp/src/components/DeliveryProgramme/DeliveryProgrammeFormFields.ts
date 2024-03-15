@@ -28,7 +28,7 @@ export const DeliveryProgrammeFormFields = [
       required: true,
     },
     select: true,
-    multiple: false,
+    
   },
 
   {
