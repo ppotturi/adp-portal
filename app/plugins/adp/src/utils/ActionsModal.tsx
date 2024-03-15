@@ -1,5 +1,5 @@
-import React,{ FC, useState} from 'react';
-import { Controller } from 'react-hook-form';
+import React,{ FC} from 'react';
+
 import {
   Dialog,
   DialogTitle,
@@ -8,11 +8,10 @@ import {
   Button,
   TextField,
   MenuItem,
-  Box,
-  Chip,
+ 
 } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
-import { alertApiRef, useApi } from '@backstage/core-plugin-api';
+
 import SelectedChipsRenderer from './SelectedChipsRenderer';
 
 interface ActionsModalProps {
@@ -51,7 +50,6 @@ export const ActionsModal: FC<ActionsModalProps> = ({
 }) => {
   const {
     register,
-    control,
     handleSubmit,
     formState: { errors },
     reset,

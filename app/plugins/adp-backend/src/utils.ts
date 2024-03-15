@@ -107,62 +107,32 @@ export async function getProgrammeManagerDetails(
   aad_entity_ref_id: string,
   catalog: Entity[],
 ) {
-
-  console.log("getProgrammeManagerDetails called with aad_entity_ref_id:", aad_entity_ref_id);
-  console.log("Catalog length:", catalog.length);
-
-  // catalog.forEach(object => {
-  //   let userId;
-  //   if (object.metadata.annotations && 'graph.microsoft.com/user-id' in object.metadata.annotations) {
-  //     userId = object.metadata.annotations['graph.microsoft.com/user-id'];
-  //   }
-  //   console.log(userId);
-  // });
-
-  catalog.forEach((item, index) => {
-    console.log(`Item ${index + 1}:`, item);
-  });
-
   const findManagerById = catalog.find(object => {
     const userId = object.metadata.annotations!['graph.microsoft.com/user-id'];
-    console.log("Comparing against userId:", userId);
+
     return userId === aad_entity_ref_id;
   });
 
-if (findManagerById !== undefined) {
-  console.log("Manager found:", findManagerById);
-      const metadataName = findManagerById.metadata.name;
+  if (findManagerById !== undefined) {
+    const metadataName = findManagerById.metadata.name;
 
-      console.log("Original metadataName:", metadataName);
+    const name = metadataName
+      .replace(/^user:default\//, '')
+      .replace(/_defra.*$/, '')
+      .replace(/[\._]/g, ' ')
+      .replace(/onmicrosoft.*$/, '')
+      .trim();
 
-      const name = metadataName
-        .replace(/^user:default\//, '')
-        .replace(/_defra.*$/, '')
-        .replace(/[\._]/g, ' ')
-        .replace(/onmicrosoft.*$/, '')
-        .trim()
+    const managerName = name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
 
-      
-        console.log("Processed name before capitalization:", name);
-
-      const managerName = name
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-
-        console.log("Final managerName:", managerName);
-
-      const managerEmail =
+    const managerEmail =
       findManagerById.metadata.annotations!['microsoft.com/email'];
 
-      console.log("Manager email:", managerEmail);
-
-
-      return { name: managerName, email: managerEmail };
-    } else {
-      console.log("Manager not found for aad_entity_ref_id:", aad_entity_ref_id);
-    throw new NotFoundError(
-      `Could not find Programme Managers details`,
-    );
+    return { name: managerName, email: managerEmail };
+  } else {
+    throw new NotFoundError(`Could not find Programme Managers details`);
   }
 }
