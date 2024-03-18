@@ -12,6 +12,8 @@ import { DeliveryProgrammeStore } from '../deliveryProgramme/deliveryProgrammeSt
 import { AdpDatabase } from '../database/adpDatabase';
 import { PluginDatabaseManager } from '@backstage/backend-common';
 import { defaultProgrammeGroupTransformer } from './deliveryProgrammeTransformers';
+import { DeliveryProjectStore } from '../deliveryProject/deliveryProjectStore';
+import { defaultProjectGroupTransformer } from './deliveryProjectTransformer';
 
 /**
  * An entity provider that adds the ADP Data Model entities to the catalog.
@@ -124,8 +126,16 @@ export class AdpDbModelEntityProvider implements EntityProvider {
     const { markReadComplete } = this.trackProgress(logger);
 
     const albEntities = await this.readArmsLengthBodies(logger, database);
-    const programmeEntities = await this.readDeliveryProgrammes(logger,database)
-    const entities = {...albEntities, ...programmeEntities}
+    const programmeEntities = await this.readDeliveryProgrammes(
+      logger,
+      database,
+    );
+    const projectEntities = await this.readDeliveryProjects(logger, database);
+    const entities = {
+      ...albEntities,
+      ...programmeEntities,
+      ...projectEntities,
+    };
     const { markCommitComplete } = markReadComplete(entities);
 
     await this.connection.applyMutation({
@@ -164,8 +174,10 @@ export class AdpDbModelEntityProvider implements EntityProvider {
     return entities;
   }
 
-  
-  private async readDeliveryProgrammes(logger: Logger, database: PluginDatabaseManager): Promise<GroupEntity[]> {
+  private async readDeliveryProgrammes(
+    logger: Logger,
+    database: PluginDatabaseManager,
+  ): Promise<GroupEntity[]> {
     logger.info('Discovering All Arms Length Body');
     const adpDatabase = AdpDatabase.create(database);
     const deliveryProgrammesStore = new DeliveryProgrammeStore(
@@ -180,6 +192,32 @@ export class AdpDbModelEntityProvider implements EntityProvider {
 
     for (const deliveryProgramme of deliveryProgrammes) {
       const entity = await defaultProgrammeGroupTransformer(deliveryProgramme);
+      if (entity) {
+        entities.push(entity);
+      }
+    }
+
+    return entities;
+  }
+
+  private async readDeliveryProjects(
+    logger: Logger,
+    database: PluginDatabaseManager,
+  ): Promise<GroupEntity[]> {
+    logger.info('Discovering All Delivery Projects');
+    const adpDatabase = AdpDatabase.create(database);
+    const deliveryProjectsStore = new DeliveryProjectStore(
+      await adpDatabase.get(),
+    );
+
+    const deliveryProjects = await deliveryProjectsStore.getAll();
+
+    const entities: GroupEntity[] = [];
+
+    logger.info(`Discovered ${deliveryProjects.length} Delivery Projects`);
+
+    for (const project of deliveryProjects) {
+      const entity = await defaultProjectGroupTransformer(project);
       if (entity) {
         entities.push(entity);
       }
