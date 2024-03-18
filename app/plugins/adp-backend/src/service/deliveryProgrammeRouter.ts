@@ -133,7 +133,7 @@ export async function createProgrammeRouter(
         } else {
           req.body.programme_managers = [];
         }
-        res.json(deliveryProgramme);
+        res.status(201).json(deliveryProgramme);
       }
     } catch (error) {
       throw new InputError('Error');
@@ -145,16 +145,16 @@ export async function createProgrammeRouter(
       if (!isDeliveryProgrammeUpdateRequest(req.body)) {
         throw new InputError('Invalid payload');
       }
-      const data: DeliveryProgramme[] = await deliveryProgrammesStore.getAll();
 
-      const currentData = data.find(object => object.id === req.body.id);
+      const allProgrammes = await deliveryProgrammesStore.getAll()
+      const currentData = await deliveryProgrammesStore.get(req.body.id);
       const updatedTitle = req.body?.title;
-      const currentTitle = currentData?.title;
+      const currentTitle = currentData!.title;
       const isTitleChanged = updatedTitle && currentTitle !== updatedTitle;
 
       if (isTitleChanged) {
         const isDuplicate: boolean = await checkForDuplicateTitle(
-          data,
+          allProgrammes,
           updatedTitle,
         );
         if (isDuplicate) {
@@ -190,8 +190,6 @@ export async function createProgrammeRouter(
         const catalogEntities = await catalog.getEntities({
           filter: {
             kind: 'User',
-            'relations.memberOf':
-              'group:default/ag-azure-cdo-adp-platformengineers',
           },
           fields: [
             'metadata.name',
@@ -229,8 +227,7 @@ export async function createProgrammeRouter(
           programmeManagersStore,
         );
       }
-
-      res.json(deliveryProgramme);
+      res.status(204).json(deliveryProgramme);
     } catch (error) {
       throw new InputError('Error');
     }

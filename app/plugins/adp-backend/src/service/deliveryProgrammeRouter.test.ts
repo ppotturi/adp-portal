@@ -170,7 +170,7 @@ describe('createRouter', () => {
       const getAlbId = getExistingAlbData.body[0].id;
       const expectedProgramme = {
         ...expectedProgrammeDataWithManager,
-        arms_length_body: getAlbId,
+        arms_length_body_id: getAlbId,
       };
       const response = await request(programmeApp)
         .post('/deliveryProgramme')
@@ -179,7 +179,7 @@ describe('createRouter', () => {
         '/programmeManager',
       );
       expect(getProgrammeManagers.body.length).toBe(3);
-      expect(response.status).toEqual(200);
+      expect(response.status).toEqual(201);
     });
 
     it('returns Error', async () => {
@@ -210,14 +210,14 @@ describe('createRouter', () => {
       const getAlbId = getExistingAlbData.body[0].id;
       const existingProgramme = {
         ...expectedProgrammeData,
-        arms_length_body: getAlbId,
+        arms_length_body_id: getAlbId,
       };
       await request(programmeApp)
         .post('/deliveryProgramme')
         .send(existingProgramme);
       const newProgramme = {
         ...expectedProgrammeData,
-        arms_length_body: getAlbId,
+        arms_length_body_id: getAlbId,
       };
       const response = await request(programmeApp)
         .post('/deliveryProgramme')
@@ -246,13 +246,13 @@ describe('createRouter', () => {
       const expectedProgramme = {
         ...expectedProgrammeDataWithManager,
         title: 'title',
-        arms_length_body: getAlbId,
+        arms_length_body_id: getAlbId,
       };
 
       const postRequest = await request(programmeApp)
         .post('/deliveryProgramme')
         .send(expectedProgramme);
-      expect(postRequest.status).toEqual(200);
+      expect(postRequest.status).toEqual(201);
       const getCurrentData = await request(programmeApp).get(
         '/deliveryProgramme',
       );
@@ -279,7 +279,7 @@ describe('createRouter', () => {
       const patchRequest = await request(programmeApp)
         .patch('/deliveryProgramme')
         .send(updatedProgramme);
-      expect(patchRequest.status).toEqual(200);
+      expect(patchRequest.status).toEqual(204);
       const getUpdatedData = await request(programmeApp).get(
         '/deliveryProgramme',
       );
@@ -343,7 +343,7 @@ describe('createRouter', () => {
       const getAlbId = getExistingAlbData.body[0].id;
       const programmeData = {
         ...expectedProgrammeData,
-        arms_length_body: getAlbId,
+        arms_length_body_id: getAlbId,
       };
       const response = await request(programmeApp)
         .post('/deliveryProgramme')
