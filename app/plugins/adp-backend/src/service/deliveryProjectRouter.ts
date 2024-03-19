@@ -67,10 +67,12 @@ export async function createProjectRouter(
           req.body,
           author,
         );
-        res.json(deliveryProject);
+        res.status(201).json(deliveryProject);
       }
     } catch (error) {
-      throw new InputError((error as Error).message);
+      const errMsg = (error as Error).message;
+      logger.error('Error in creating a delivery project: ', errMsg);
+      throw new InputError(errMsg);
     }
   });
 
@@ -79,16 +81,19 @@ export async function createProjectRouter(
       if (!isDeliveryProjectUpdateRequest(req.body)) {
         throw new InputError('Invalid payload');
       }
-      const data: DeliveryProject[] = await deliveryProjectStore.getAll();
+      const allProjects: DeliveryProject[] =
+        await deliveryProjectStore.getAll();
 
-      const currentData = data.find(object => object.id === req.body.id);
+      const currentData = allProjects.find(
+        project => project.id === req.body.id,
+      );
       const updatedTitle = req.body?.title;
       const currentTitle = currentData?.title;
       const isTitleChanged = updatedTitle && currentTitle !== updatedTitle;
 
       if (isTitleChanged) {
         const isDuplicate: boolean = await checkForDuplicateTitle(
-          data,
+          allProjects,
           updatedTitle,
         );
         if (isDuplicate) {
@@ -104,9 +109,11 @@ export async function createProjectRouter(
         req.body,
         author,
       );
-      res.json(deliveryProject);
+      res.status(201).json(deliveryProject);
     } catch (error) {
-      throw new InputError('Error');
+      const errMsg = (error as Error).message;
+      logger.error('Error in updating a delivery project: ', errMsg);
+      throw new InputError(errMsg);
     }
   });
   router.use(errorHandler());
