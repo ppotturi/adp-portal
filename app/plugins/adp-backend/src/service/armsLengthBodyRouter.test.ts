@@ -92,7 +92,7 @@ describe('createRouter', () => {
       const response = await request(app)
         .post('/armsLengthBody')
         .send(expectedALB);
-      expect(response.status).toEqual(200);
+      expect(response.status).toEqual(201);
       expect(checkDuplicate).toBe(false);
     },6000);
 
@@ -143,7 +143,7 @@ describe('createRouter', () => {
       const postRequest = await request(app)
         .post('/armsLengthBody')
         .send(expectedALB);
-      expect(postRequest.status).toEqual(200);
+      expect(postRequest.status).toEqual(201);
       const getCurrentData = await request(app).get('/armsLengthBody');
       const currentData = getCurrentData.body.find(
         (e: { title: string }) => e.title === 'Test ALB',
@@ -156,9 +156,9 @@ describe('createRouter', () => {
       const patchRequest = await request(app)
         .patch('/armsLengthBody')
         .send(updatedALB);
-      expect(patchRequest.status).toEqual(200);
-      const getUpdatedData = await request(app).get('/armsLengthBody');
-      const updatedData = getUpdatedData.body.find(
+      expect(patchRequest.status).toEqual(204);
+      const getUpdatedtData = await request(app).get('/armsLengthBody');
+      const updatedData = getUpdatedtData.body.find(
         (e: { title: string }) => e.title === 'Test ALB updated',
       );
       expect(updatedData.name).toBe('test-alb');

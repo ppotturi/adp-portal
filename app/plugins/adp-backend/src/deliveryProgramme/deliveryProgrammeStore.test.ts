@@ -52,7 +52,7 @@ describe('DeliveryProgrammeStore', () => {
         'id' | 'created_at' | 'updated_at' | 'programme_managers'
       > = {
         ...expectedProgrammeDataWithName,
-        arms_length_body: albId,
+        arms_length_body_id: albId,
       };
       const newManagers: Omit<
         ProgrammeManager,
@@ -141,7 +141,7 @@ describe('DeliveryProgrammeStore', () => {
       const expectedProgramme = [
         {
           ...expectedProgrammeDataWithoutManager,
-          arms_length_body: albId,
+          arms_length_body_id: albId,
         },
       ];
       await knex('delivery_programme').insert(expectedProgramme);
@@ -163,7 +163,7 @@ describe('DeliveryProgrammeStore', () => {
       const expectedProgramme = [
         {
           ...expectedProgrammeDataWithoutManager,
-          arms_length_body: albId,
+          arms_length_body_id: albId,
         },
       ];
       const insertProgrammeId = await knex('delivery_programme').insert(
@@ -196,7 +196,7 @@ describe('DeliveryProgrammeStore', () => {
       const expectedProgramme = [
         {
           ...expectedProgrammeDataWithoutManager,
-          arms_length_body: albId,
+          arms_length_body_id: albId,
         },
       ];
       await knex('delivery_programme').insert(expectedProgramme);
@@ -219,7 +219,7 @@ describe('DeliveryProgrammeStore', () => {
       const expectedProgramme = [
         {
           ...expectedProgrammeDataWithoutManager,
-          arms_length_body: albId,
+          arms_length_body_id: albId,
         },
       ];
       const insertProgrammeId = await knex('delivery_programme').insert(
@@ -261,7 +261,7 @@ describe('DeliveryProgrammeStore', () => {
       const expectedProgramme = [
         {
           ...expectedProgrammeDataWithoutManager,
-          arms_length_body: albId,
+          arms_length_body_id: albId,
         },
       ];
       await knex('delivery_programme').insert(expectedProgramme);
@@ -295,7 +295,7 @@ describe('DeliveryProgrammeStore', () => {
       const albId = insertAlbId[1].id;
       const updateWithoutId = {
         ...expectedProgrammeDataWithoutManager,
-        arms_length_body: albId,
+        arms_length_body_id: albId,
       };
       await expect(
         async () =>
