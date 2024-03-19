@@ -51,7 +51,7 @@ describe('armsLengthBodyClient', () => {
   
       expect(result).toEqual(expected);
       expect(discoveryApi.getBaseUrl).toHaveBeenCalledWith('adp');
-      expect(fetchApi.fetch).toHaveBeenNthCalledWith(1, 'http://localhost/DeliveryProgramme');
+      expect(fetchApi.fetch).toHaveBeenNthCalledWith(1, 'http://localhost/deliveryProgramme');
       expect(fetchApi.fetch).toHaveBeenNthCalledWith(2, 'http://localhost/armslengthbodynames');
     });
 
@@ -147,7 +147,7 @@ describe('armsLengthBodyClient', () => {
       expect(result).toEqual(mockProgramme);
       expect(discoveryApi.getBaseUrl).toHaveBeenCalledWith('adp');
      
-      expect(fetchApi.fetch).toHaveBeenCalledWith('http://localhost/DeliveryProgramme/1');
+      expect(fetchApi.fetch).toHaveBeenCalledWith('http://localhost/deliveryProgramme/1');
     });
   
     it('throws an error when fetching a delivery programme by ID fails', async () => {

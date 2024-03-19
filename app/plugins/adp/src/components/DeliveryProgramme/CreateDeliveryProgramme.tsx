@@ -44,7 +44,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
     setIsModalOpen(false);
   };
 
-  const getAlbOptionFields = () => {
+  const getOptionFields = () => {
     return DeliveryProgrammeFormFields.map(field => {
       if (field.name === 'arms_length_body') {
         return { ...field, options: getArmsLengthBodyDropDown };
@@ -95,7 +95,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
           onSubmit={handleSubmit}
           initialValues={{}}
           mode="create"
-          fields={getAlbOptionFields()}
+          fields={getOptionFields()}
         />
       )}
     </>

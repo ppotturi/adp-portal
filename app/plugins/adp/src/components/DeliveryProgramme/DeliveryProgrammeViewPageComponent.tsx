@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { Button ,Typography } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import {
   Header,
   Page,
@@ -17,16 +17,17 @@ import {
   alertApiRef,
   errorApiRef,
 } from '@backstage/core-plugin-api';
-import { DeliveryProgramme } from '@internal/plugin-adp-common';
+import {
+  DeliveryProgramme,
+  adpProgrammmeCreatePermission,
+} from '@internal/plugin-adp-common';
 import CreateDeliveryProgramme from './CreateDeliveryProgramme';
 import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
 import { DeliveryProgrammeApi } from './api/DeliveryProgrammeApi';
 import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
 import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
 import { useProgrammeManagersList } from '../../hooks/useProgrammeManagersList';
-
-
-
+import { usePermission } from '@backstage/plugin-permission-react';
 
 export const DeliveryProgrammeViewPageComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,18 +42,16 @@ export const DeliveryProgrammeViewPageComponent = () => {
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
   const getArmsLengthBodyDropDown = useArmsLengthBodyList();
-  const getProgrammeManagerDropDown = useProgrammeManagersList()
-
-
-console.log(getProgrammeManagerDropDown)
-
+  const getProgrammeManagerDropDown = useProgrammeManagersList();
 
   const deliveryprogClient: DeliveryProgrammeApi = new DeliveryProgrammeClient(
     discoveryApi,
     fetchApi,
   );
 
-
+  const { allowed } = usePermission({
+    permission: adpProgrammmeCreatePermission,
+  });
 
   const getAllDeliveryProgrammes = async () => {
     try {
@@ -64,24 +63,20 @@ console.log(getProgrammeManagerDropDown)
   };
 
   useEffect(() => {
-    getAllDeliveryProgrammes()
-    
+    getAllDeliveryProgrammes();
   }, [key]);
 
   const handleEdit = async (deliveryProgramme: DeliveryProgramme) => {
-
     try {
-      const detailedProgramme = await deliveryprogClient.getDeliveryProgrammeById(deliveryProgramme.id);
+      const detailedProgramme =
+        await deliveryprogClient.getDeliveryProgrammeById(deliveryProgramme.id);
       setFormData(detailedProgramme);
       setIsModalOpen(true);
     } catch (e: any) {
-      console.log(e)
       errorApi.post(e);
     }
   };
 
-
-  
   const handleCloseModal = () => {
     setFormData({});
     setIsModalOpen(false);
@@ -107,9 +102,7 @@ console.log(getProgrammeManagerDropDown)
       return;
     }
 
-  
     try {
-  
       await deliveryprogClient.updateDeliveryProgramme(deliveryProgramme);
       alertApi.post({
         message: `Updated`,
@@ -122,7 +115,7 @@ console.log(getProgrammeManagerDropDown)
     }
   };
 
-  const getAlbOptionFields = () => {
+  const getOptionFields = () => {
     return DeliveryProgrammeFormFields.map(field => {
       if (field.name === 'arms_length_body') {
         return { ...field, options: getArmsLengthBodyDropDown };
@@ -132,7 +125,6 @@ console.log(getProgrammeManagerDropDown)
       return field;
     });
   };
-
 
   const columns: TableColumn[] = [
     {
@@ -172,17 +164,19 @@ console.log(getProgrammeManagerDropDown)
     {
       width: '',
       highlight: true,
-      render: (rowData: any) => { 
-        const data = rowData as DeliveryProgramme; 
+      render: (rowData: any) => {
+        const data = rowData as DeliveryProgramme;
         return (
-          <Button
-            variant="contained"
-            color="default"
-            onClick={() => handleEdit(data)}
-            data-testid={`delivery-programme-edit-button-${data.id}`}
-          >
-            Edit
-          </Button>
+          allowed && (
+            <Button
+              variant="contained"
+              color="default"
+              onClick={() => handleEdit(data)}
+              data-testid={`delivery-programme-edit-button-${data.id}`}
+            >
+              Edit
+            </Button>
+          )
         );
       },
     },
@@ -215,18 +209,16 @@ console.log(getProgrammeManagerDropDown)
           isCompact={true}
         />
 
-        {isModalOpen && (
+        {isModalOpen && allowed && (
           <ActionsModal
             open={isModalOpen}
             onClose={handleCloseModal}
             onSubmit={handleUpdate}
             initialValues={formData}
             mode="edit"
-            fields={getAlbOptionFields()}
+            fields={getOptionFields()}
           />
         )}
-
-
       </Content>
     </Page>
   );

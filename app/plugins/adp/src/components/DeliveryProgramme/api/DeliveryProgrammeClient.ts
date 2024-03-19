@@ -14,7 +14,7 @@ export class DeliveryProgrammeClient implements DeliveryProgrammeApi {
   }
 
   private async getApiUrl(): Promise<string> {
-    return `${await this.discoveryApi.getBaseUrl('adp')}/DeliveryProgramme`;
+    return `${await this.discoveryApi.getBaseUrl('adp')}/deliveryProgramme`;
   }
 
   async getDeliveryProgrammes(): Promise<DeliveryProgramme[]> {

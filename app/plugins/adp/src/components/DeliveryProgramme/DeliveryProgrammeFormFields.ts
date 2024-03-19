@@ -28,9 +28,7 @@ export const DeliveryProgrammeFormFields = [
       required: true,
     },
     select: true,
-    
   },
-
   {
     label: 'Programme Managers',
     name: 'programme_managers',
@@ -40,7 +38,6 @@ export const DeliveryProgrammeFormFields = [
     select: true,
     multiple: true,
   },
-
   {
     label: 'Finance Code',
     name: 'finance_code',
@@ -49,7 +46,6 @@ export const DeliveryProgrammeFormFields = [
     label: 'Delivery Programme Code',
     name: 'delivery_programme_code',
   },
-
   {
     label: 'Delivery Programme Description',
     name: 'description',
