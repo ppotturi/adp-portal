@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 import { NotFoundError } from '@backstage/errors';
-import { ArmsLengthBody } from '../types';
+import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import { createName } from '../utils';
 
 const TABLE_NAME = 'arms_length_body';
@@ -17,7 +17,6 @@ type Row = {
   updated_by?: string;
   updated_at: Date;
 };
-
 
 export type PartialArmsLengthBody = Partial<ArmsLengthBody>;
 
@@ -50,8 +49,8 @@ export class ArmsLengthBodyStore {
       id: row.id,
       created_at: new Date(row.created_at),
       updated_at: row.updated_at
-        ? new Date(row?.updated_at)
-        : new Date(row.created_at),
+      ? new Date(row?.updated_at)
+      : new Date(row.created_at),
     }));
   }
 
@@ -84,14 +83,14 @@ export class ArmsLengthBodyStore {
           id: row.id,
           created_at: new Date(row.created_at),
           updated_at: row.updated_at
-            ? new Date(row?.updated_at)
-            : new Date(row.created_at),
+          ? new Date(row?.updated_at)
+          : new Date(row.created_at),
         }
       : null;
   }
 
   async add(
-    armsLengthBody: Omit<ArmsLengthBody, 'id' | 'created_at'>,
+    armsLengthBody: Omit<ArmsLengthBody, 'id' | 'created_at' | 'updated_at'>,
     creator: string,
     owner: string,
   ): Promise<ArmsLengthBody> {
@@ -143,14 +142,7 @@ export class ArmsLengthBodyStore {
 
     const updated = new Date();
 
-    const updatedData: Partial<ArmsLengthBody> = {
-      ...armsLengthBody,
-      updated_at: updated,
-    };
-
-    if ('tableData' in updatedData) {
-      delete updatedData['tableData'];
-    }
+    const updatedData: Partial<ArmsLengthBody> = { ...armsLengthBody };
 
     if (Object.keys(updatedData).length === 0) {
       return existingALB;
@@ -167,4 +159,3 @@ export class ArmsLengthBodyStore {
     return { ...existingALB, ...updatedData, updated_at: updated };
   }
 }
- 

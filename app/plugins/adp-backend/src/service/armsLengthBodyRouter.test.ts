@@ -156,7 +156,7 @@ describe('createRouter', () => {
       const patchRequest = await request(app)
         .patch('/armsLengthBody')
         .send(updatedALB);
-      expect(patchRequest.status).toEqual(204);
+      expect(patchRequest.status).toEqual(200);
       const getUpdatedtData = await request(app).get('/armsLengthBody');
       const updatedData = getUpdatedtData.body.find(
         (e: { title: string }) => e.title === 'Test ALB updated',

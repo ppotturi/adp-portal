@@ -279,7 +279,7 @@ describe('createRouter', () => {
       const patchRequest = await request(programmeApp)
         .patch('/deliveryProgramme')
         .send(updatedProgramme);
-      expect(patchRequest.status).toEqual(204);
+      expect(patchRequest.status).toEqual(200);
       const getUpdatedData = await request(programmeApp).get(
         '/deliveryProgramme',
       );

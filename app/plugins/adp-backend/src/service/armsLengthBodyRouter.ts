@@ -20,7 +20,6 @@ export interface AlbRouterOptions {
   config: Config;
 }
 
-
 export async function createAlbRouter(
   options: AlbRouterOptions,
 ): Promise<express.Router> {
@@ -44,7 +43,6 @@ export async function createAlbRouter(
         alias: 'EA',
         name: 'environment-agency',
         description: '',
-        updated_at: undefined
       },
       'Seed',
       'Seed',
@@ -57,7 +55,6 @@ export async function createAlbRouter(
         alias: 'APHA',
         name: 'animal-and-plant-health',
         description: '',
-        updated_at: undefined
       },
       'Seed',
       'Seed',
@@ -70,7 +67,6 @@ export async function createAlbRouter(
         alias: 'RPA',
         name: 'rural-payments-agency',
         description: '',
-        updated_at: undefined 
       },
       'Seed',
       'Seed',
@@ -83,7 +79,6 @@ export async function createAlbRouter(
         alias: 'NE',
         name: 'natural-england',
         description: '',
-        updated_at: undefined
       },
       'Seed',
       'Seed',
@@ -96,7 +91,6 @@ export async function createAlbRouter(
         alias: 'MMO',
         name: 'marine-and-maritime',
         description: '',
-        updated_at: undefined
       },
       'Seed',
       'Seed',
@@ -105,7 +99,7 @@ export async function createAlbRouter(
 
   const router = Router();
   router.use(express.json());
-  
+
   router.get('/health', (_, response) => {
     logger.info('PONG!');
     response.json({ status: 'ok' });
@@ -124,18 +118,19 @@ export async function createAlbRouter(
   router.get('/armsLengthBodyNames', async (_req, res) => {
     try {
       const armsLengthBodies = await armsLengthBodiesStore.getAll();
-      const idNameMapping = armsLengthBodies.reduce<Record<string, string>>((acc, alb) => {
+      const armsLengthBodiesNames = armsLengthBodies.reduce<
+        Record<string, string>
+      >((acc, alb) => {
         acc[alb.id] = alb.title;
         return acc;
       }, {});
-      
-      res.json(idNameMapping);
+
+      res.json(armsLengthBodiesNames);
     } catch (error) {
       console.error(error);
       throw new InputError('Error');
     }
   });
-  
 
   router.post('/armsLengthBody', async (req, res) => {
     try {
@@ -166,12 +161,16 @@ export async function createAlbRouter(
 
   router.patch('/armsLengthBody', async (req, res) => {
     try {
-      if (!isArmsLengthBodyUpdateRequest(req.body)) {
+      const requestBody = { ...req.body };
+      delete requestBody.tableData;
+
+      if (!isArmsLengthBodyUpdateRequest(requestBody)) {
         throw new InputError('Invalid payload');
       }
-      const allArmsLengthBodies: ArmsLengthBody[] = await armsLengthBodiesStore.getAll();
-      const currentData = await armsLengthBodiesStore.get(req.body.id)
-      const updatedTitle = req.body?.title;
+      const allArmsLengthBodies: ArmsLengthBody[] =
+        await armsLengthBodiesStore.getAll();
+      const currentData = await armsLengthBodiesStore.get(requestBody.id);
+      const updatedTitle = requestBody?.title;
       const currentTitle = currentData?.title;
       const isTitleChanged = updatedTitle && currentTitle !== updatedTitle;
 
@@ -187,10 +186,10 @@ export async function createAlbRouter(
       }
       const creator = await getCurrentUsername(identity, req);
       const armsLengthBody = await armsLengthBodiesStore.update(
-        req.body,
+        requestBody,
         creator,
       );
-      res.status(204).json(armsLengthBody);
+      res.status(200).json(armsLengthBody);
     } catch (error) {
       throw new InputError('Error');
     }
