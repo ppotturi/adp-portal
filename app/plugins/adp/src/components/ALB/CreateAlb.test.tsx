@@ -32,6 +32,7 @@ jest.mock('@backstage/plugin-permission-react', () => ({
 const mockGetArmsLengthBodies = jest.fn();
 const mockCreateArmsLengthBody = jest.fn().mockResolvedValue({});
 const mockRefetchArmsLengthBody = jest.fn();
+
 jest.mock('./api/AlbClient', () => ({
   ArmsLengthBodyClient: jest.fn().mockImplementation(() => ({
     getArmsLengthBodies: mockGetArmsLengthBodies,
@@ -82,7 +83,7 @@ describe('CreateAlb', () => {
 
   it('Add ALB can create an Arms Length Body', async () => {
     const updatedTableData = [
-      { title: 'ALB 1', description: 'Description for ALB 1' },
+      { title: 'ALB 1', description: 'Description for ALB 1', alias: 'Alias 1'},
     ];
 
     const rendered = await render();
@@ -94,6 +95,9 @@ describe('CreateAlb', () => {
     act(() => {
       fireEvent.change(rendered.getByLabelText('Title'), {
         target: { value: 'ALB 1' },
+      });
+      fireEvent.change(rendered.getByLabelText('Alias'), {
+        target: { value: 'Alias 1' },
       });
       fireEvent.change(rendered.getByLabelText('ALB Description'), {
         target: { value: 'Description for ALB 1' },
@@ -109,7 +113,7 @@ describe('CreateAlb', () => {
     await waitFor(() => {
       expect(mockCreateArmsLengthBody).toHaveBeenCalledWith({
         description: 'Description for ALB 1',
-        alias: '',
+        alias: 'Alias 1',
         title: 'ALB 1',
         url: '',
       });

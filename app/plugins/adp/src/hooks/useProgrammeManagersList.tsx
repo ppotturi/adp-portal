@@ -29,16 +29,7 @@ export const useProgrammeManagersList = (): ProgrammeManagersListOptions[] => {
         const data = await response.json();
 
         const formattedProgrammeManagers = data.items.map((item: any) => {
-          const transformedName = item.metadata.name
-            .replace(/^user:default\//, '')
-            .replace(/_defra.*$/, '')
-            .replace(/[\._]/g, ' ')
-            .replace(/onmicrosoft.*$/, '')
-            .trim()
-            .split(' ')
-            .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-            .join(' ');
-
+          const transformedName = item.spec.profile.displayName
           return {
             label: transformedName,
             value: item.metadata.annotations['graph.microsoft.com/user-id'],

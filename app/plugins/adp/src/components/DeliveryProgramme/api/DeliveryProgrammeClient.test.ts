@@ -24,8 +24,8 @@ describe('armsLengthBodyClient', () => {
   describe('get delivery programmes', () => {
     it('fetches delivery programmes successfully and provides ALB names', async () => {
       const mockDeliveryProgrammes = [
-        { id: '1', name: 'Programme 1', arms_length_body: 'alb1' },
-        { id: '2', name: 'Programme 2', arms_length_body: 'alb2' },
+        { id: '1', name: 'Programme 1', arms_length_body_id: 'alb1' },
+        { id: '2', name: 'Programme 2', arms_length_body_id: 'alb2' },
       ];
       const mockAlbNamesMapping = {
         alb1: 'ALB Name 1',
@@ -45,8 +45,8 @@ describe('armsLengthBodyClient', () => {
       const result = await client.getDeliveryProgrammes();
   
       const expected = [
-        { ...mockDeliveryProgrammes[0], arms_length_body_name: 'ALB Name 1' },
-        { ...mockDeliveryProgrammes[1], arms_length_body_name: 'ALB Name 2' },
+        { ...mockDeliveryProgrammes[0], arms_length_body_id_name: 'ALB Name 1' },
+        { ...mockDeliveryProgrammes[1], arms_length_body_id_name: 'ALB Name 2' },
       ];
   
       expect(result).toEqual(expected);

@@ -40,11 +40,11 @@ export class DeliveryProgrammeClient implements DeliveryProgrammeApi {
       ]);
 
       const deliveryProgrammesWithNames = deliveryProgrammes.map(
-        (programme: { arms_length_body: string | number }) => ({
+        (programme: { arms_length_body_id: string | number }) => ({
           ...programme,
 
-          arms_length_body_name:
-            albNamesMapping[programme.arms_length_body] || 'Unknown ALB Name',
+          arms_length_body_id_name:
+            albNamesMapping[programme.arms_length_body_id] || 'Unknown ALB Name',
         }),
       );
 
@@ -58,7 +58,6 @@ export class DeliveryProgrammeClient implements DeliveryProgrammeApi {
 
   async createDeliveryProgramme(data: any): Promise<DeliveryProgramme[]> {
     const url = await this.getApiUrl();
-
     const response = await this.fetchApi.fetch(url, {
       method: 'POST',
       headers: {

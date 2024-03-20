@@ -46,7 +46,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
 
   const getOptionFields = () => {
     return DeliveryProgrammeFormFields.map(field => {
-      if (field.name === 'arms_length_body') {
+      if (field.name === 'arms_length_body_id') {
         return { ...field, options: getArmsLengthBodyDropDown };
       } else if (field.name === 'programme_managers') {
         return { ...field, options: getProgrammeManagerDropDown };

@@ -59,24 +59,27 @@ export const ActionsModal: FC<ActionsModalProps> = ({
   const errorApi = useApi(alertApiRef);
 
   const onFormSubmit = async (data: any) => {
-    const formattedProgrammeManagers = data.programme_managers.map(
-      (manager: any) => {
-        return { aad_entity_ref_id: manager };
-      },
-    );
+    let finalData = {};
 
-    console.log(formattedProgrammeManagers);
-
-    const finalData = {
-      ...data,
-      programme_managers: formattedProgrammeManagers,
-    };
+    if (data.programme_managers !== undefined) {
+      const formattedProgrammeManagers = data.programme_managers.map(
+        (manager: any) => {
+          return { aad_entity_ref_id: manager };
+        },
+      );
+      finalData = {
+        ...data,
+        programme_managers: formattedProgrammeManagers,
+      };
+    } else {
+      finalData = { ...data };
+    }
 
     try {
       await onSubmit(finalData);
       reset();
       onClose();
-    } catch (e:any) {
+    } catch (e: any) {
       errorApi.post(e);
     }
   };

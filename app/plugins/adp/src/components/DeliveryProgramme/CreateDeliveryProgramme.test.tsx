@@ -8,17 +8,31 @@ import {
   fetchApiRef,
 } from '@backstage/core-plugin-api';
 import { TestApiProvider, renderInTestApp } from '@backstage/test-utils';
+import {
+  PermissionApi,
+  permissionApiRef,
+} from '@backstage/plugin-permission-react';
+import { AuthorizeResult } from '@backstage/plugin-permission-common';
 
 const mockAlertApi = { post: jest.fn() };
 const mockErrorApi = { post: jest.fn() };
 const mockDiscoveryApi = { getBaseUrl: jest.fn() };
 const mockFetchApi = { fetch: jest.fn() };
 
+const mockAuthorize = jest
+  .fn()
+  .mockImplementation(async () => ({ result: AuthorizeResult.ALLOW }));
+const permissionApi: Partial<PermissionApi> = { authorize: mockAuthorize };
 
+jest.mock('@backstage/plugin-permission-react', () => ({
+  ...jest.requireActual('@backstage/plugin-permission-react'),
+  usePermission: jest.fn().mockReturnValue({ allowed: true }),
+}));
 
 const mockGetDeliveryProgrammes = jest.fn();
 const mockCreateDeliveryProgramme = jest.fn().mockResolvedValue({});
 const mockRefetchDeliveryProgramme = jest.fn();
+
 jest.mock('./api/DeliveryProgrammeClient', () => ({
   DeliveryProgrammeClient: jest.fn().mockImplementation(() => ({
     getDeliveryProgrammes: mockGetDeliveryProgrammes,
@@ -26,9 +40,17 @@ jest.mock('./api/DeliveryProgrammeClient', () => ({
   })),
 }));
 
-jest.mock('../../utils/transformDeliveryProgrammeManagers', () => ({
-  transformDeliveryProgrammeManagers: jest.fn()
+jest.mock('../../hooks/useArmsLengthBodyList', () => ({
+  useArmsLengthBodyList: jest.fn(() => [
+    { label: 'Arms Length Body 1', value: '1' },
+    { label: 'Arms Length Body 2', value: '2' },
+  ]),
 }));
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  mockAuthorize.mockClear();
+});
 
 describe('Create Delivery Programme', () => {
   const element = (
@@ -37,7 +59,8 @@ describe('Create Delivery Programme', () => {
         [alertApiRef, mockAlertApi],
         [errorApiRef, mockErrorApi],
         [discoveryApiRef, mockDiscoveryApi],
-        [fetchApiRef, mockFetchApi]
+        [fetchApiRef, mockFetchApi],
+        [permissionApiRef, permissionApi],
       ]}
     >
       <CreateDeliveryProgramme
@@ -75,17 +98,18 @@ describe('Create Delivery Programme', () => {
     const updatedTableData = [
       {
         title: 'Delivery Programme 1',
-        description: 'Description for Delivery Programme 1',
+        alias: 'DeliveryProgramme1',
         programme_managers: [
           {
-            "aad_entity_ref_id": "135f37a9-d404-439-90a3-0745f326b005"
+            aad_entity_ref_id: '1',
           },
           {
-            "aad_entity_ref_id": "135f37a9-d404-435-90a3-0745f326b005"
+            aad_entity_ref_id: '2',
           },
         ],
-        arms_length_body: 'Arms Length Body 1',
-        delivery_programme_code: 'Delivery Program Code',
+        arms_length_body_id: '1',
+        description: 'Description 1',
+        delivery_programme_code: 'Delivery Programme Code'
       },
     ];
 
@@ -97,7 +121,7 @@ describe('Create Delivery Programme', () => {
 
     act(() => {
       fireEvent.change(rendered.getByLabelText('Title'), {
-        target: { value: 'Delivery Programme 1' },
+        target: { value: 'Delivery Programme' },
       });
 
       fireEvent.change(
@@ -119,13 +143,28 @@ describe('Create Delivery Programme', () => {
     mockGetDeliveryProgrammes.mockResolvedValue(updatedTableData);
 
     await waitFor(() => {
-      expect(mockCreateDeliveryProgramme).toHaveBeenCalled();
+      expect(mockGetDeliveryProgrammes).toHaveBeenCalledWith({
+        title: 'Delivery Programme',
+        alias: 'DeliveryProgramme1',
+        programme_managers: [
+          {
+            aad_entity_ref_id: '1',
+          },
+          {
+            aad_entity_ref_id: '2',
+          },
+        ],
+        arms_length_body_id: '1',
+        description: 'Description for Delivery Programme 1',
+        delivery_programme_code: 'Delivery Programme Code 1',
+        url: '',
+        finance_code: ''
+      });
       expect(mockAlertApi.post).toHaveBeenNthCalledWith(1, {
         display: 'transient',
         message: 'Delivery Programme created successfully.',
         severity: 'success',
       });
-
     });
   });
 
@@ -154,10 +193,13 @@ describe('Create Delivery Programme', () => {
       fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
     });
 
-
     await waitFor(() => {
-      expect(mockCreateDeliveryProgramme).toHaveBeenCalled();
-
+      expect(mockCreateDeliveryProgramme).toHaveBeenCalledWith({
+        description: 'Description for Delivery Programme 1',
+        alias: '',
+        title: 'Delivery Programme 1',
+        url: '',
+      });
       expect(mockErrorApi.post).toHaveBeenCalledWith(expect.any(Error));
 
       expect(mockAlertApi.post).toHaveBeenNthCalledWith(1, {

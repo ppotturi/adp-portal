@@ -20,6 +20,7 @@ describe('ActionsModal', () => {
   const initialValues = {
     title: 'Test Record',
     description: 'Test Description',
+    programme_managers: ['manager 1', 'manager 2']
   };
 
   const fields = [

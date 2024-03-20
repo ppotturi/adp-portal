@@ -116,8 +116,8 @@ export const DeliveryProgrammeViewPageComponent = () => {
   };
 
   const getOptionFields = () => {
-    return DeliveryProgrammeFormFields.map(field => {
-      if (field.name === 'arms_length_body') {
+     return DeliveryProgrammeFormFields.map(field => {
+      if (field.name === 'arms_length_body_id') {
         return { ...field, options: getArmsLengthBodyDropDown };
       } else if (field.name === 'programme_managers') {
         return { ...field, options: getProgrammeManagerDropDown };
@@ -142,7 +142,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
 
     {
       title: 'Arms Length Body',
-      field: 'arms_length_body_name',
+      field: 'arms_length_body_id_name',
       highlight: false,
       type: 'string',
     },
