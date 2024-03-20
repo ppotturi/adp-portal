@@ -46,13 +46,26 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
 
   const getOptionFields = () => {
     return DeliveryProgrammeFormFields.map(field => {
-      if (field.name === 'arms_length_body') {
+      if (field.name === 'arms_length_body_id') {
         return { ...field, options: getArmsLengthBodyDropDown };
       } else if (field.name === 'programme_managers') {
         return { ...field, options: getProgrammeManagerDropDown };
       }
       return field;
     });
+  };
+
+  const testData = async (deliveryProgramme: any) => {
+    const formattedProgrammeManagers = deliveryProgramme.programme_managers.map(
+      (manager: any) => {
+        return { aad_entity_ref_id: manager };
+      },
+    );
+    const data = {
+      ...deliveryProgramme,
+      programme_managers: formattedProgrammeManagers,
+    };
+    return data;
   };
 
   const handleSubmit = async (deliveryProgramme: DeliveryProgramme) => {
@@ -96,6 +109,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
           initialValues={{}}
           mode="create"
           fields={getOptionFields()}
+          transformedData={testData}
         />
       )}
     </>

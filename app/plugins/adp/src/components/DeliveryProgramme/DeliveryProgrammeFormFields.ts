@@ -23,7 +23,7 @@ export const DeliveryProgrammeFormFields = [
   },
   {
     label: 'Arms Length Body',
-    name: 'arms_length_body',
+    name: 'arms_length_body_id',
     validations: {
       required: true,
     },
@@ -45,6 +45,9 @@ export const DeliveryProgrammeFormFields = [
   {
     label: 'Delivery Programme Code',
     name: 'delivery_programme_code',
+    validations: {
+      required: true,
+    },
   },
   {
     label: 'Delivery Programme Description',

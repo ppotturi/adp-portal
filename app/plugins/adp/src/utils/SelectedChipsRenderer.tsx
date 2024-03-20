@@ -6,22 +6,25 @@ const SelectedChipsRenderer = ({ selected, options }) => {
     return null;
   }
 
-  console.log("selected", selected, "options", options)
-
   const getLabel = (value: any) => {
-    const option = options.find((option: { value: any; }) => option.value === value);
-    return option ? option.label : value; 
+    const option = options.find(
+      (option: { value: any }) => option.value === value,
+    );
+    return option ? option.label : value;
   };
 
   return (
     <Box display="flex" flexWrap="wrap">
-      {selected.map((value) => (
-        <Chip key={value} label={getLabel(value)} color="primary" size="small" />
+      {selected.map(value => (
+        <Chip
+          key={value}
+          label={getLabel(value)}
+          color="primary"
+          size="small"
+        />
       ))}
     </Box>
   );
 };
 
-
 export default SelectedChipsRenderer;
-

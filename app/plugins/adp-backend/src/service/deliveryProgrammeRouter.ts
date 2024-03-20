@@ -80,6 +80,7 @@ export async function createProgrammeRouter(
         'metadata.name',
         'metadata.annotations.graph.microsoft.com/user-id',
         'metadata.annotations.microsoft.com/email',
+        'spec.profile.displayName',
       ],
     });
     res.json(catalogApiResponse);
@@ -149,9 +150,9 @@ export async function createProgrammeRouter(
         throw new InputError('Invalid payload');
       }
 
-      const allProgrammes = await deliveryProgrammesStore.getAll()
-      const currentData = await deliveryProgrammesStore.get(req.body.id);
-      const updatedTitle = req.body?.title;
+      const allProgrammes = await deliveryProgrammesStore.getAll();
+      const currentData = await deliveryProgrammesStore.get(requestBody.id);
+      const updatedTitle = requestBody?.title;
       const currentTitle = currentData!.title;
       const isTitleChanged = updatedTitle && currentTitle !== updatedTitle;
       if (isTitleChanged) {
@@ -229,7 +230,7 @@ export async function createProgrammeRouter(
           programmeManagersStore,
         );
       }
-      res.status(204).json(deliveryProgramme);
+      res.status(200).json(deliveryProgramme);
     } catch (error) {
       throw new InputError('Error');
     }
@@ -237,17 +238,16 @@ export async function createProgrammeRouter(
 
   router.use(errorHandler());
   return router;
-  
 
-function isDeliveryProgrammeCreateRequest(
-  request: Omit<DeliveryProgramme, 'id' | 'created_at'>,
-) {
-  return typeof request?.title === 'string';
-}
+  function isDeliveryProgrammeCreateRequest(
+    request: Omit<DeliveryProgramme, 'id' | 'created_at'>,
+  ) {
+    return typeof request?.title === 'string';
+  }
 
-function isDeliveryProgrammeUpdateRequest(
-  request: Omit<PartialDeliveryProgramme, 'updated_at'>,
-) {
-  return typeof request?.id === 'string';
-}
+  function isDeliveryProgrammeUpdateRequest(
+    request: Omit<PartialDeliveryProgramme, 'updated_at'>,
+  ) {
+    return typeof request?.id === 'string';
+  }
 }

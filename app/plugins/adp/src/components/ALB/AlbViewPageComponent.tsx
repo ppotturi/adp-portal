@@ -37,7 +37,7 @@ export const AlbViewPageComponent = () => {
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
   const fields = albFormFields;
-
+  
   const albClient: ArmsLengthBodyApi = new ArmsLengthBodyClient(
     discoveryApi,
     fetchApi,
@@ -172,7 +172,12 @@ export const AlbViewPageComponent = () => {
         <Typography paragraph>
           View or add Arms Length Bodies to the Azure Developer Platform.
         </Typography>
-        <DefaultTable data={tableData} columns={columns} title="View all" />
+        <DefaultTable
+          data={tableData}
+          columns={columns}
+          title="View all"
+          // isCompact={true}
+        />
 
         {isModalOpen && allowed && (
           <ActionsModal
