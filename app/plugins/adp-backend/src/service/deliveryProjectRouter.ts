@@ -30,19 +30,26 @@ export async function createProjectRouter(
   const router = Router();
   router.use(express.json());
 
-  router.get('/health', (_, response) => {
-    logger.info('PONG!');
-    response.json({ status: 'ok' });
-  });
-
   router.get('/deliveryProject', async (_req, res) => {
-    const data = await deliveryProjectStore.getAll();
-    res.json(data);
+    try {
+      const data = await deliveryProjectStore.getAll();
+      res.json(data);
+    } catch (error) {
+      const errMsg = (error as Error).message;
+      logger.error('Error in retrieving delivery projects: ', errMsg);
+      throw new InputError(errMsg);
+    }
   });
 
   router.get('/deliveryProject/:id', async (_req, res) => {
-    const deliveryProject = await deliveryProjectStore.get(_req.params.id);
-    res.json(deliveryProject);
+    try {
+      const deliveryProject = await deliveryProjectStore.get(_req.params.id);
+      res.json(deliveryProject);
+    } catch (error) {
+      const errMsg = (error as Error).message;
+      logger.error('Error in retrieving a delivery project: ', errMsg);
+      throw new InputError(errMsg);
+    }
   });
 
   router.post('/deliveryProject', async (req, res) => {
