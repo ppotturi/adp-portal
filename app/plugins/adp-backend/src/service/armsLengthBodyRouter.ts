@@ -20,6 +20,7 @@ export interface AlbRouterOptions {
   config: Config;
 }
 
+
 export async function createAlbRouter(
   options: AlbRouterOptions,
 ): Promise<express.Router> {
@@ -43,6 +44,7 @@ export async function createAlbRouter(
         alias: 'EA',
         name: 'environment-agency',
         description: '',
+        updated_at: undefined
       },
       'Seed',
       'Seed',
@@ -55,6 +57,7 @@ export async function createAlbRouter(
         alias: 'APHA',
         name: 'animal-and-plant-health',
         description: '',
+        updated_at: undefined
       },
       'Seed',
       'Seed',
@@ -67,6 +70,7 @@ export async function createAlbRouter(
         alias: 'RPA',
         name: 'rural-payments-agency',
         description: '',
+        updated_at: undefined 
       },
       'Seed',
       'Seed',
@@ -79,6 +83,7 @@ export async function createAlbRouter(
         alias: 'NE',
         name: 'natural-england',
         description: '',
+        updated_at: undefined
       },
       'Seed',
       'Seed',
@@ -91,6 +96,7 @@ export async function createAlbRouter(
         alias: 'MMO',
         name: 'marine-and-maritime',
         description: '',
+        updated_at: undefined
       },
       'Seed',
       'Seed',
@@ -115,6 +121,22 @@ export async function createAlbRouter(
     res.json(data);
   });
 
+  router.get('/armsLengthBodyNames', async (_req, res) => {
+    try {
+      const armsLengthBodies = await armsLengthBodiesStore.getAll();
+      const idNameMapping = armsLengthBodies.reduce<Record<string, string>>((acc, alb) => {
+        acc[alb.id] = alb.title;
+        return acc;
+      }, {});
+      
+      res.json(idNameMapping);
+    } catch (error) {
+      console.error(error);
+      throw new InputError('Error');
+    }
+  });
+  
+
   router.post('/armsLengthBody', async (req, res) => {
     try {
       if (!isArmsLengthBodyCreateRequest(req.body)) {
@@ -135,7 +157,7 @@ export async function createAlbRouter(
           creator,
           owner,
         );
-        res.json(armsLengthBody);
+        res.status(201).json(armsLengthBody);
       }
     } catch (error) {
       throw new InputError('Error');
@@ -147,15 +169,15 @@ export async function createAlbRouter(
       if (!isArmsLengthBodyUpdateRequest(req.body)) {
         throw new InputError('Invalid payload');
       }
-      const data: ArmsLengthBody[] = await armsLengthBodiesStore.getAll();
-      const currentData = data.find(object => object.id === req.body.id);
+      const allArmsLengthBodies: ArmsLengthBody[] = await armsLengthBodiesStore.getAll();
+      const currentData = await armsLengthBodiesStore.get(req.body.id)
       const updatedTitle = req.body?.title;
       const currentTitle = currentData?.title;
       const isTitleChanged = updatedTitle && currentTitle !== updatedTitle;
 
       if (isTitleChanged) {
         const isDuplicate: boolean = await checkForDuplicateTitle(
-          data,
+          allArmsLengthBodies,
           updatedTitle,
         );
         if (isDuplicate) {
@@ -168,7 +190,7 @@ export async function createAlbRouter(
         req.body,
         creator,
       );
-      res.json(armsLengthBody);
+      res.status(204).json(armsLengthBody);
     } catch (error) {
       throw new InputError('Error');
     }

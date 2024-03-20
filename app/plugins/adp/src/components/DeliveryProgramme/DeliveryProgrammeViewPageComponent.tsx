@@ -18,27 +18,33 @@ import {
   errorApiRef,
 } from '@backstage/core-plugin-api';
 import {
-  ArmsLengthBody,
+  DeliveryProgramme,
   adpProgrammmeCreatePermission,
 } from '@internal/plugin-adp-common';
-import { ArmsLengthBodyClient } from './api/AlbClient';
-import { ArmsLengthBodyApi } from './api/AlbApi';
-import CreateAlb from './CreateAlb';
-import { albFormFields } from './AlbFormFields';
+import CreateDeliveryProgramme from './CreateDeliveryProgramme';
+import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
+import { DeliveryProgrammeApi } from './api/DeliveryProgrammeApi';
+import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
+import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
+import { useProgrammeManagersList } from '../../hooks/useProgrammeManagersList';
 import { usePermission } from '@backstage/plugin-permission-react';
 
-export const AlbViewPageComponent = () => {
+export const DeliveryProgrammeViewPageComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({});
-  const [tableData, setTableData] = useState<ArmsLengthBody[]>([]);
-  const [key, refetchArmsLengthBody] = useReducer(i => i + 1, 0);
+  const [tableData, setTableData] = useState<DeliveryProgramme[]>([]);
+  const [key, refetchDeliveryProgramme] = useReducer(i => {
+    return i + 1;
+  }, 0);
+
   const alertApi = useApi(alertApiRef);
   const errorApi = useApi(errorApiRef);
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
-  const fields = albFormFields;
+  const getArmsLengthBodyDropDown = useArmsLengthBodyList();
+  const getProgrammeManagerDropDown = useProgrammeManagersList();
 
-  const albClient: ArmsLengthBodyApi = new ArmsLengthBodyClient(
+  const deliveryprogClient: DeliveryProgrammeApi = new DeliveryProgrammeClient(
     discoveryApi,
     fetchApi,
   );
@@ -47,9 +53,9 @@ export const AlbViewPageComponent = () => {
     permission: adpProgrammmeCreatePermission,
   });
 
-  const getAllArmsLengthBodies = async () => {
+  const getAllDeliveryProgrammes = async () => {
     try {
-      const data = await albClient.getArmsLengthBodies();
+      const data = await deliveryprogClient.getDeliveryProgrammes();
       setTableData(data);
     } catch (e: any) {
       errorApi.post(e);
@@ -57,12 +63,18 @@ export const AlbViewPageComponent = () => {
   };
 
   useEffect(() => {
-    getAllArmsLengthBodies();
+    getAllDeliveryProgrammes();
   }, [key]);
 
-  const handleEdit = (ArmsLengthBody: React.SetStateAction<{}>) => {
-    setFormData(ArmsLengthBody);
-    setIsModalOpen(true);
+  const handleEdit = async (deliveryProgramme: DeliveryProgramme) => {
+    try {
+      const detailedProgramme =
+        await deliveryprogClient.getDeliveryProgrammeById(deliveryProgramme.id);
+      setFormData(detailedProgramme);
+      setIsModalOpen(true);
+    } catch (e: any) {
+      errorApi.post(e);
+    }
   };
 
   const handleCloseModal = () => {
@@ -77,12 +89,12 @@ export const AlbViewPageComponent = () => {
     );
   };
 
-  const handleUpdate = async (armsLengthBody: ArmsLengthBody) => {
-    if (!isNameUnique(armsLengthBody.title, armsLengthBody.id)) {
+  const handleUpdate = async (deliveryProgramme: DeliveryProgramme) => {
+    if (!isNameUnique(deliveryProgramme.title, deliveryProgramme.id)) {
       setIsModalOpen(true);
 
       alertApi.post({
-        message: `The title '${armsLengthBody.title}' is already in use. Please choose a different title.`,
+        message: `The title '${deliveryProgramme.title}' is already in use. Please choose a different title.`,
         severity: 'error',
         display: 'permanent',
       });
@@ -91,16 +103,27 @@ export const AlbViewPageComponent = () => {
     }
 
     try {
-      await albClient.updateArmsLengthBody(armsLengthBody);
+      await deliveryprogClient.updateDeliveryProgramme(deliveryProgramme);
       alertApi.post({
         message: `Updated`,
         severity: 'success',
         display: 'transient',
       });
-      refetchArmsLengthBody();
+      refetchDeliveryProgramme();
     } catch (e: any) {
       errorApi.post(e);
     }
+  };
+
+  const getOptionFields = () => {
+    return DeliveryProgrammeFormFields.map(field => {
+      if (field.name === 'arms_length_body') {
+        return { ...field, options: getArmsLengthBodyDropDown };
+      } else if (field.name === 'programme_managers') {
+        return { ...field, options: getProgrammeManagerDropDown };
+      }
+      return field;
+    });
   };
 
   const columns: TableColumn[] = [
@@ -116,36 +139,40 @@ export const AlbViewPageComponent = () => {
       highlight: false,
       type: 'string',
     },
+
+    {
+      title: 'Arms Length Body',
+      field: 'arms_length_body_name',
+      highlight: false,
+      type: 'string',
+    },
+
     {
       title: 'Description',
       field: 'description',
       highlight: false,
       type: 'string',
     },
-    {
-      title: 'Website',
-      field: 'url',
-      highlight: false,
-      type: 'string',
-    },
+
     {
       title: 'Updated At',
       field: 'updated_at',
       highlight: false,
       type: 'datetime',
     },
+
     {
       width: '',
       highlight: true,
-      render: (rowData: {}) => {
-        const alb = rowData as ArmsLengthBody;
+      render: (rowData: any) => {
+        const data = rowData as DeliveryProgramme;
         return (
           allowed && (
             <Button
               variant="contained"
               color="default"
-              onClick={() => handleEdit(rowData)}
-              data-testid={`alb-edit-button-${alb.id}`}
+              onClick={() => handleEdit(data)}
+              data-testid={`delivery-programme-edit-button-${data.id}`}
             >
               Edit
             </Button>
@@ -162,17 +189,25 @@ export const AlbViewPageComponent = () => {
         subtitle="ADP Platform Configuration"
       />
       <Content>
-        <ContentHeader title="Arms Length Bodies">
-          <CreateAlb refetchArmsLengthBody={refetchArmsLengthBody} />
+        <ContentHeader title="Delivery Programmes">
+          <CreateDeliveryProgramme
+            refetchDeliveryProgramme={refetchDeliveryProgramme}
+          />
           <SupportButton>
             View or manage units within the DEFRA delivery organization on the
             Azure Developer Platform.
           </SupportButton>
         </ContentHeader>
         <Typography paragraph>
-          View or add Arms Length Bodies to the Azure Developer Platform.
+          View or add Delivery Programmes to the Azure Developer Platform.
         </Typography>
-        <DefaultTable data={tableData} columns={columns} title="View all" />
+
+        <DefaultTable
+          data={tableData}
+          columns={columns}
+          title="View all"
+          isCompact={true}
+        />
 
         {isModalOpen && allowed && (
           <ActionsModal
@@ -181,7 +216,7 @@ export const AlbViewPageComponent = () => {
             onSubmit={handleUpdate}
             initialValues={formData}
             mode="edit"
-            fields={fields}
+            fields={getOptionFields()}
           />
         )}
       </Content>

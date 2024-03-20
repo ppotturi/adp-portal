@@ -106,7 +106,7 @@ describe('AlbViewPageComponent', () => {
       expect(
         rendered.findByText('Arms Length Bodies'),
       ).resolves.toBeInTheDocument();
-      expect(mockErrorApi.post).toHaveBeenCalledTimes(1);
+      expect(mockErrorApi.post).toHaveBeenCalledWith(expect.objectContaining({message: 'Cannot fetch ALB'}))
     });
   });
 
@@ -130,7 +130,7 @@ describe('AlbViewPageComponent', () => {
     });
 
     act(() => {
-      fireEvent.click(rendered.getByTestId('edit-modal-cancel-button'));
+      fireEvent.click(rendered.getByTestId('actions-modal-cancel-button'));
     });
 
     await waitFor(() => {
@@ -184,7 +184,7 @@ describe('AlbViewPageComponent', () => {
     });
 
     act(() => {
-      fireEvent.click(rendered.getByTestId('edit-modal-update-button'));
+      fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
     });
     mockGetArmsLengthBodies.mockResolvedValue(updatedTableData);
 
@@ -227,7 +227,7 @@ describe('AlbViewPageComponent', () => {
     });
 
     act(() => {
-      fireEvent.click(rendered.getByTestId('edit-modal-update-button'));
+      fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
     });
     mockGetArmsLengthBodies.mockResolvedValue(updatedTableData);
 
@@ -271,7 +271,7 @@ describe('AlbViewPageComponent', () => {
     });
 
     act(() => {
-      fireEvent.click(rendered.getByTestId('edit-modal-update-button'));
+      fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
     });
     mockGetArmsLengthBodies.mockResolvedValue(updatedTableData);
 
@@ -279,4 +279,6 @@ describe('AlbViewPageComponent', () => {
       expect(mockErrorApi.post).toHaveBeenCalledTimes(1);
     });
   });
+
+  
 });

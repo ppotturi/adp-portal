@@ -108,13 +108,15 @@ export async function getProgrammeManagerDetails(
   aad_entity_ref_id: string,
   catalog: Entity[],
 ) {
-  const findManagerById = catalog.find(
-    object =>
-      object.metadata.annotations!['graph.microsoft.com/user-id'] ===
-      aad_entity_ref_id,
-  );
+  const findManagerById = catalog.find(object => {
+    const userId = object.metadata.annotations!['graph.microsoft.com/user-id'];
+
+    return userId === aad_entity_ref_id;
+  });
+
   if (findManagerById !== undefined) {
     const metadataName = findManagerById.metadata.name;
+
     const name = metadataName
       .replace(/^user:default\//, '')
       .replace(/_defra.*$/, '')

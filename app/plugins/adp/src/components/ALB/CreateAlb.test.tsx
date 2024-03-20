@@ -72,7 +72,7 @@ describe('CreateAlb', () => {
     });
 
     act(() => {
-      fireEvent.click(rendered.getByTestId('edit-modal-cancel-button'));
+      fireEvent.click(rendered.getByTestId('actions-modal-cancel-button'));
     });
 
     await waitFor(() => {
@@ -101,7 +101,7 @@ describe('CreateAlb', () => {
     });
 
     act(() => {
-      fireEvent.click(rendered.getByTestId('edit-modal-update-button'));
+      fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
     });
 
     mockGetArmsLengthBodies.mockResolvedValue(updatedTableData);
@@ -109,7 +109,7 @@ describe('CreateAlb', () => {
     await waitFor(() => {
       expect(mockCreateArmsLengthBody).toHaveBeenCalledWith({
         description: 'Description for ALB 1',
-        short_name: '',
+        alias: '',
         title: 'ALB 1',
         url: '',
       });
@@ -140,13 +140,13 @@ describe('CreateAlb', () => {
     });
 
     act(() => {
-      fireEvent.click(rendered.getByTestId('edit-modal-update-button'));
+      fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
     });
 
     await waitFor(() => {
       expect(mockCreateArmsLengthBody).toHaveBeenCalledWith({
         description: 'Description for ALB 1',
-        short_name: '',
+        alias: '',
         title: 'ALB 1',
         url: '',
       });
@@ -156,7 +156,7 @@ describe('CreateAlb', () => {
       expect(mockAlertApi.post).toHaveBeenNthCalledWith(1, {
         display: 'permanent',
         message:
-          "The name 'ALB 1' is already in use. Please choose a different name.",
+          "The title 'ALB 1' is already in use. Please choose a different name.",
         severity: 'error',
       });
     });
