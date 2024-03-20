@@ -55,6 +55,19 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
     });
   };
 
+  const testData = async (deliveryProgramme: any) => {
+    const formattedProgrammeManagers = deliveryProgramme.programme_managers.map(
+      (manager: any) => {
+        return { aad_entity_ref_id: manager };
+      },
+    );
+    const data = {
+      ...deliveryProgramme,
+      programme_managers: formattedProgrammeManagers,
+    };
+    return data;
+  };
+
   const handleSubmit = async (deliveryProgramme: DeliveryProgramme) => {
     try {
       await deliveryprogClient.createDeliveryProgramme(deliveryProgramme);
@@ -96,6 +109,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
           initialValues={{}}
           mode="create"
           fields={getOptionFields()}
+          transformedData={testData}
         />
       )}
     </>

@@ -18,6 +18,7 @@ interface ActionsModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (data: any) => Promise<void>;
+  transformedData?: (data: any) => Promise<void>;
   initialValues: Record<string, any>;
   mode: 'create' | 'edit';
   fields: {
@@ -44,6 +45,7 @@ export const ActionsModal: FC<ActionsModalProps> = ({
   open,
   onClose,
   onSubmit,
+  transformedData,
   initialValues,
   mode,
   fields,
@@ -59,22 +61,7 @@ export const ActionsModal: FC<ActionsModalProps> = ({
   const errorApi = useApi(alertApiRef);
 
   const onFormSubmit = async (data: any) => {
-    let finalData = {};
-
-    if (data.programme_managers !== undefined) {
-      const formattedProgrammeManagers = data.programme_managers.map(
-        (manager: any) => {
-          return { aad_entity_ref_id: manager };
-        },
-      );
-      finalData = {
-        ...data,
-        programme_managers: formattedProgrammeManagers,
-      };
-    } else {
-      finalData = { ...data };
-    }
-
+    const finalData = transformedData? await transformedData(data) : data
     try {
       await onSubmit(finalData);
       reset();

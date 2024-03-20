@@ -143,7 +143,7 @@ describe('Create Delivery Programme', () => {
     mockGetDeliveryProgrammes.mockResolvedValue(updatedTableData);
 
     await waitFor(() => {
-      expect(mockGetDeliveryProgrammes).toHaveBeenCalledWith({
+      expect(mockCreateDeliveryProgramme).toHaveBeenCalledWith({
         title: 'Delivery Programme',
         alias: 'DeliveryProgramme1',
         programme_managers: [
