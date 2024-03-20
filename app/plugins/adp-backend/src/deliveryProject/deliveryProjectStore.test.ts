@@ -35,7 +35,7 @@ describe('DeliveryProjectStore', () => {
       const albId = insertAlbId[1].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
-        arms_length_body: albId,
+        arms_length_body_id: albId,
       };
       const insertProgrammeId = await knex('delivery_programme').insert(
         programme,
@@ -71,7 +71,7 @@ describe('DeliveryProjectStore', () => {
       const albId = insertAlbId[1].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
-        arms_length_body: albId,
+        arms_length_body_id: albId,
       };
       const insertProgrammeId = await knex('delivery_programme').insert(
         programme,
@@ -102,7 +102,7 @@ describe('DeliveryProjectStore', () => {
       const albId = insertAlbId[1].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
-        arms_length_body: albId,
+        arms_length_body_id: albId,
       };
       const insertProgrammeId = await knex('delivery_programme').insert(
         programme,
@@ -136,7 +136,7 @@ describe('DeliveryProjectStore', () => {
       const albId = insertAlbId[1].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
-        arms_length_body: albId,
+        arms_length_body_id: albId,
       };
       const insertProgrammeId = await knex('delivery_programme').insert(
         programme,
@@ -169,7 +169,7 @@ describe('DeliveryProjectStore', () => {
       const albId = insertAlbId[1].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
-        arms_length_body: albId,
+        arms_length_body_id: albId,
       };
       const insertProgrammeId = await knex('delivery_programme').insert(
         programme,
@@ -215,7 +215,7 @@ describe('DeliveryProjectStore', () => {
       const albId = insertAlbId[1].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
-        arms_length_body: albId,
+        arms_length_body_id: albId,
       };
       const insertProgrammeId = await knex('delivery_programme').insert(
         programme,
@@ -253,7 +253,7 @@ describe('DeliveryProjectStore', () => {
       const albId = insertAlbId[1].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
-        arms_length_body: albId,
+        arms_length_body_id: albId,
       };
       const insertProgrammeId = await knex('delivery_programme').insert(
         programme,
