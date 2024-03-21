@@ -1,5 +1,8 @@
 import { DeliveryProjectApi } from './DeliveryProjectApi';
-import { DeliveryProject } from '@internal/plugin-adp-common';
+import {
+  DeliveryProgramme,
+  DeliveryProject,
+} from '@internal/plugin-adp-common';
 
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { ResponseError } from '@backstage/errors';
@@ -20,14 +23,32 @@ export class DeliveryProjectClient implements DeliveryProjectApi {
   async getDeliveryProjects(): Promise<DeliveryProject[]> {
     try {
       const url = await this.getApiUrl();
+      const deliveryProgrammeUrl = `${await this.discoveryApi.getBaseUrl(
+        'adp',
+      )}/deliveryProgramme`;
 
-      const deliveryProjectsResponse = await this.fetchApi.fetch(url);
-      if (!deliveryProjectsResponse.ok) {
+      const [deliveryProjectsResponse, deliveryProgrammeResponse] =
+        await Promise.all([
+          this.fetchApi.fetch(url),
+          this.fetchApi.fetch(deliveryProgrammeUrl),
+        ]);
+      if (!deliveryProjectsResponse.ok || !deliveryProgrammeResponse.ok) {
         throw new Error('Failed to fetch data');
       }
-      const deliveryProjects = await deliveryProjectsResponse.json();
+      const deliveryProjects: DeliveryProject[] =
+        await deliveryProjectsResponse.json();
+      const deliveryProgrammes: DeliveryProgramme[] =
+        await deliveryProgrammeResponse.json();
 
-      return deliveryProjects;
+      const deliveryProjectWithProgramme = deliveryProjects.map(proj => {
+        return {
+          ...proj,
+          delivery_programme_name: deliveryProgrammes.find(
+            p => p.id === proj.delivery_programme_id,
+          )?.title,
+        };
+      });
+      return deliveryProjectWithProgramme;
     } catch (error) {
       throw new Error(`Failed to fetch Delivery Project`);
     }

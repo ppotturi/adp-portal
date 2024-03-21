@@ -24,18 +24,39 @@ describe('deliveryProjectClient', () => {
   describe('get delivery projects', () => {
     it('fetches delivery projects successfully', async () => {
       const mockDeliveryProjects = [
-        { id: '1', name: 'Project 1' },
-        { id: '2', name: 'Project 2' },
+        {
+          id: '1',
+          name: 'Project 1',
+          title: 'Project 1',
+          delivery_programme_id: '1',
+        },
+        {
+          id: '2',
+          name: 'Project 1',
+          title: 'Project 2',
+          delivery_programme_id: '2',
+        },
       ];
-      fetchApi.fetch.mockResolvedValueOnce({
-        ok: true,
-        json: jest.fn().mockResolvedValue(mockDeliveryProjects),
-      });
+
+      const mockDeliveryProgrammes = [
+        { id: '1', title: 'Programme 1' },
+        { id: '2', title: 'Programme 2' },
+      ];
+
+      fetchApi.fetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: jest.fn().mockResolvedValue(mockDeliveryProjects),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: jest.fn().mockResolvedValue(mockDeliveryProgrammes),
+        });
 
       const result = await client.getDeliveryProjects();
       const expected = [
-        { ...mockDeliveryProjects[0] },
-        { ...mockDeliveryProjects[1] },
+        { ...mockDeliveryProjects[0], delivery_programme_name: 'Programme 1' },
+        { ...mockDeliveryProjects[1], delivery_programme_name: 'Programme 2' },
       ];
 
       expect(result).toEqual(expected);
