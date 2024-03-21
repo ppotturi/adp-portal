@@ -22,14 +22,24 @@ describe('useProgrammeManagersList', () => {
           {
             metadata: {
               name: 'user:default/jane_doe_defra',
-              annotations: {'graph.microsoft.com/user-id': 'jane.doe@example.com'},
+              annotations: {'graph.microsoft.com/user-id': 'testUserId1'},
             },
+            spec: {
+              profile: {
+                displayName: "Jane Doe (guest)"
+              }
+            }
           },
           {
             metadata: {
               name: 'user:default/john_doe_defra',
-              annotations: {'graph.microsoft.com/user-id': 'john.doe@example.com'},
+              annotations: {'graph.microsoft.com/user-id': 'testUserId2'},
             },
+            spec: {
+              profile: {
+                displayName: "John Doe (guest)"
+              }
+            }
           },
         ],
       }),
@@ -54,8 +64,8 @@ describe('useProgrammeManagersList', () => {
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('adp');
     expect(mockFetchApi.fetch).toHaveBeenCalledWith('http://localhost/adp/catalogentities');
     expect(result.current).toEqual([
-      { label: 'Jane Doe', value: 'jane.doe@example.com' },
-      { label: 'John Doe', value: 'john.doe@example.com' },
+      { label: 'Jane Doe (guest)', value: 'testUserId1' },
+      { label: 'John Doe (guest)', value: 'testUserId2' },
     ]);
   });
 

@@ -119,6 +119,7 @@ export async function createProgrammeRouter(
               'metadata.name',
               'metadata.annotations.graph.microsoft.com/user-id',
               'metadata.annotations.microsoft.com/email',
+              'spec.profile.displayName',
             ],
           });
 
@@ -198,6 +199,7 @@ export async function createProgrammeRouter(
             'metadata.name',
             'metadata.annotations.graph.microsoft.com/user-id',
             'metadata.annotations.microsoft.com/email',
+            'spec.profile.displayName',
           ],
         });
 

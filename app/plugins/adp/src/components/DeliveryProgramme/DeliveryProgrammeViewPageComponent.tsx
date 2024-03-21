@@ -26,7 +26,7 @@ import { DeliveryProgrammeClient } from './api/DeliveryProgrammeClient';
 import { DeliveryProgrammeApi } from './api/DeliveryProgrammeApi';
 import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
 import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
-import { useProgrammeManagersList } from '../../hooks/useProgrammeManagersList';
+import { transformedData, useProgrammeManagersList } from '../../hooks/useProgrammeManagersList';
 import { usePermission } from '@backstage/plugin-permission-react';
 
 export const DeliveryProgrammeViewPageComponent = () => {
@@ -214,6 +214,7 @@ export const DeliveryProgrammeViewPageComponent = () => {
             open={isModalOpen}
             onClose={handleCloseModal}
             onSubmit={handleUpdate}
+            transformedData={transformedData}
             initialValues={formData}
             mode="edit"
             fields={getOptionFields()}

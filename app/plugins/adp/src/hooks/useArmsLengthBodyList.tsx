@@ -24,10 +24,10 @@ export const useArmsLengthBodyList = (): { label: string; value: string }[]  => 
     const fetchArmsLengthBodiesList = async () => {
       try {
         const bodies = await albClient.getArmsLengthBodyNames();
-        const formattedBodies = Object.entries(bodies).map(([value, label]) => ({
-          label,
-          value,
-        }));
+          const formattedBodies = Object.entries(bodies).map(([value, label]) => ({
+            label,
+            value,
+          }));
         setOptions(formattedBodies);
       } catch (e: any) {
         errorApi.post(e);
