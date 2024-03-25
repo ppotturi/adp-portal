@@ -61,7 +61,7 @@ export const ActionsModal: FC<ActionsModalProps> = ({
   const errorApi = useApi(alertApiRef);
 
   const onFormSubmit = async (data: any) => {
-    const finalData = transformedData? await transformedData(data) : data
+    const finalData = transformedData ? await transformedData(data) : data;
     try {
       await onSubmit(finalData);
       reset();
