@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, waitFor, act } from '@testing-library/react';
+import { fireEvent, waitFor, act, getByRole } from '@testing-library/react';
 import CreateDeliveryProgramme from './CreateDeliveryProgramme';
 import {
   alertApiRef,
@@ -13,6 +13,7 @@ import {
   permissionApiRef,
 } from '@backstage/plugin-permission-react';
 import { AuthorizeResult } from '@backstage/plugin-permission-common';
+import userEvent from '@testing-library/user-event';
 
 const mockAlertApi = { post: jest.fn() };
 const mockErrorApi = { post: jest.fn() };
@@ -42,8 +43,14 @@ jest.mock('./api/DeliveryProgrammeClient', () => ({
 
 jest.mock('../../hooks/useArmsLengthBodyList', () => ({
   useArmsLengthBodyList: jest.fn(() => [
-    { label: 'Arms Length Body 1', value: '1' },
-    { label: 'Arms Length Body 2', value: '2' },
+    { label: 'Arms Length Body 1', value: 'alb1' },
+    { label: 'Arms Length Body 2', value: 'alb2' },
+  ]),
+}));
+
+jest.mock('../../hooks/useProgrammeManagersList', () => ({
+  useProgrammeManagersList: jest.fn(() => [
+    { label: 'Jane Doe', value: 'testUserId1' },
   ]),
 }));
 
@@ -97,68 +104,60 @@ describe('Create Delivery Programme', () => {
   it('Add Delivery Programme can create a Delivery Programme', async () => {
     const updatedTableData = [
       {
-        title: 'Delivery Programme 1',
-        alias: 'DeliveryProgramme1',
-        programme_managers: [
-          {
-            aad_entity_ref_id: '1',
-          },
-          {
-            aad_entity_ref_id: '2',
-          },
-        ],
-        arms_length_body_id: '1',
-        description: 'Description 1',
-        delivery_programme_code: 'Delivery Programme Code'
+        title: 'Delivery Programme ',
+        alias: 'Alias for Delivery Programme',
+        arms_length_body_id: 'alb1',
+        programme_managers: ['testUserId1'],
+        delivery_programme_code: 'Delivery Programme Code',
+        description: 'Description for Delivery Programme',
       },
     ];
 
     const rendered = await render();
 
-    act(() => {
-      fireEvent.click(rendered.getByTestId('create-delivery-programme-button'));
+    fireEvent.click(rendered.getByTestId('create-delivery-programme-button'));
+
+    fireEvent.change(rendered.getByLabelText('Title'), {
+      target: { value: 'Delivery Programme' },
     });
 
-    act(() => {
-      fireEvent.change(rendered.getByLabelText('Title'), {
-        target: { value: 'Delivery Programme' },
-      });
-
-      fireEvent.change(
-        rendered.getByLabelText('Delivery Programme Description'),
-        {
-          target: { value: 'Description for Delivery Programme 1' },
-        },
-      );
-
-      fireEvent.change(rendered.getByLabelText('Delivery Programme Code'), {
-        target: { value: 'Delivery Programme Code 1' },
-      });
+    fireEvent.change(rendered.getByLabelText('Alias'), {
+      target: { value: 'Alias for Delivery Programme' },
     });
 
-    act(() => {
-      fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
+    userEvent.click(rendered.getByLabelText('Arms Length Body'));
+    await waitFor(() =>
+      userEvent.click(rendered.getByText(/Arms Length Body 1/i)),
+    );
+
+    userEvent.click(rendered.getByLabelText('Programme Managers'));
+    await waitFor(() => userEvent.click(rendered.getByText(/Jane Doe/i)));
+
+    fireEvent.change(rendered.getByLabelText('Delivery Programme Code'), {
+      target: { value: 'Delivery Programme Code' },
     });
+
+    fireEvent.change(
+      rendered.getByLabelText('Delivery Programme Description'),
+      {
+        target: { value: 'Description for Delivery Programme' },
+      },
+    );
+
+    fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
 
     mockGetDeliveryProgrammes.mockResolvedValue(updatedTableData);
 
     await waitFor(() => {
       expect(mockCreateDeliveryProgramme).toHaveBeenCalledWith({
         title: 'Delivery Programme',
-        alias: 'DeliveryProgramme1',
-        programme_managers: [
-          {
-            aad_entity_ref_id: '1',
-          },
-          {
-            aad_entity_ref_id: '2',
-          },
-        ],
-        arms_length_body_id: '1',
-        description: 'Description for Delivery Programme 1',
-        delivery_programme_code: 'Delivery Programme Code 1',
+        alias: 'Alias for Delivery Programme',
+        programme_managers: ['testUserId1'],
+        arms_length_body_id: 'alb1',
+        description: 'Description for Delivery Programme',
+        delivery_programme_code: 'Delivery Programme Code',
         url: '',
-        finance_code: ''
+        finance_code: '',
       });
       expect(mockAlertApi.post).toHaveBeenNthCalledWith(1, {
         display: 'transient',
@@ -173,39 +172,54 @@ describe('Create Delivery Programme', () => {
 
     const rendered = await render();
 
-    act(() => {
-      fireEvent.click(rendered.getByTestId('create-delivery-programme-button'));
+    fireEvent.click(rendered.getByTestId('create-delivery-programme-button'));
+
+    fireEvent.change(rendered.getByLabelText('Title'), {
+      target: { value: 'Delivery Programme' },
     });
 
-    act(() => {
-      fireEvent.change(rendered.getByLabelText('Title'), {
-        target: { value: 'Delivery Programme 1' },
-      });
-      fireEvent.change(
-        rendered.getByLabelText('Delivery Programme Description'),
-        {
-          target: { value: 'Description for Delivery Programme 1' },
-        },
-      );
+    fireEvent.change(rendered.getByLabelText('Alias'), {
+      target: { value: 'Alias for Delivery Programme' },
     });
 
-    act(() => {
-      fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
+    userEvent.click(rendered.getByLabelText('Arms Length Body'));
+    await waitFor(() =>
+      userEvent.click(rendered.getByText(/Arms Length Body 1/i)),
+    );
+
+    userEvent.click(rendered.getByLabelText('Programme Managers'));
+    await waitFor(() => userEvent.click(rendered.getByText(/Jane Doe/i)));
+
+    fireEvent.change(rendered.getByLabelText('Delivery Programme Code'), {
+      target: { value: 'Delivery Programme Code' },
     });
+
+    fireEvent.change(
+      rendered.getByLabelText('Delivery Programme Description'),
+      {
+        target: { value: 'Description for Delivery Programme' },
+      },
+    );
+
+    fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
 
     await waitFor(() => {
       expect(mockCreateDeliveryProgramme).toHaveBeenCalledWith({
-        description: 'Description for Delivery Programme 1',
-        alias: '',
-        title: 'Delivery Programme 1',
+        title: 'Delivery Programme',
+        alias: 'Alias for Delivery Programme',
+        programme_managers: ['testUserId1'],
+        arms_length_body_id: 'alb1',
+        description: 'Description for Delivery Programme',
+        delivery_programme_code: 'Delivery Programme Code',
         url: '',
+        finance_code: '',
       });
       expect(mockErrorApi.post).toHaveBeenCalledWith(expect.any(Error));
 
       expect(mockAlertApi.post).toHaveBeenNthCalledWith(1, {
         display: 'permanent',
         message:
-          "The title 'Delivery Programme 1' is already in use. Please choose a different title.",
+          "The title 'Delivery Programme' is already in use. Please choose a different title.",
         severity: 'error',
       });
     });

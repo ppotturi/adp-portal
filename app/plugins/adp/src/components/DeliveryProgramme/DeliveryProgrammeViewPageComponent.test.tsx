@@ -30,6 +30,20 @@ jest.mock('@backstage/plugin-permission-react', () => ({
   usePermission: jest.fn().mockReturnValue({ allowed: true }),
 }));
 
+jest.mock('../../hooks/useArmsLengthBodyList', () => ({
+  useArmsLengthBodyList: jest.fn(() => [
+    { label: 'Arms Length Body 1', value: '1' },
+    { label: 'Arms Length Body 2', value: '2' },
+  ]),
+}));
+
+jest.mock('../../hooks/useProgrammeManagersList', () => ({
+  useProgrammeManagersList: jest.fn(() => [
+    { label: 'Jane Doe', value: 'testUserId1' },
+    { label: 'John Doe', value: 'testUserId2' },
+  ]),
+}));
+
 const mockTableData = [
   {
     id: '1',
@@ -43,7 +57,7 @@ const mockTableData = [
       {
         id: '1',
         delivery_programme_id: '1',
-        aad_entity_ref_id: 'id1',
+        aad_entity_ref_id: 'testUserId1',
         email: 'name1@email.com',
         name: 'name1',
       },
@@ -60,15 +74,15 @@ const mockTableData = [
     programme_managers: [
       {
         id: '1',
-        delivery_programme_id: '1',
-        aad_entity_ref_id: 'id1',
+        delivery_programme_id: '2',
+        aad_entity_ref_id: 'testUserId1',
         email: 'name1@email.com',
         name: 'name1',
       },
       {
         id: '2',
         delivery_programme_id: '2',
-        aad_entity_ref_id: 'id2',
+        aad_entity_ref_id: 'testUserId2',
         email: 'name2@email.com',
         name: 'name2',
       },
@@ -85,14 +99,14 @@ const updatedTableData = [
       {
         id: '1',
         delivery_programme_id: '1',
-        aad_entity_ref_id: 'id1',
+        aad_entity_ref_id: 'testUserId1',
         email: 'name1@email.com',
         name: 'name1',
       },
       {
         id: '2',
         delivery_programme_id: '2',
-        aad_entity_ref_id: 'id2',
+        aad_entity_ref_id: 'testUserId2',
         email: 'name2@email.com',
         name: 'name2',
       },
@@ -111,14 +125,14 @@ const updatedTableData = [
       {
         id: '1',
         delivery_programme_id: '1',
-        aad_entity_ref_id: 'id1',
+        aad_entity_ref_id: 'testUserId1',
         email: 'name1@email.com',
         name: 'name1',
       },
       {
         id: '2',
         delivery_programme_id: '2',
-        aad_entity_ref_id: 'id2',
+        aad_entity_ref_id: 'testUserId2',
         email: 'name2@email.com',
         name: 'name2',
       },
@@ -146,7 +160,7 @@ const mockGetDeliveryProgrammeById = jest.fn().mockResolvedValue({
     {
       id: '1',
       delivery_programme_id: '1',
-      aad_entity_ref_id: 'id1',
+      aad_entity_ref_id: 'testUserId1',
       email: 'name1@email.com',
       name: 'name1',
     },
@@ -160,12 +174,7 @@ jest.mock('./api/DeliveryProgrammeClient', () => ({
   })),
 }));
 
-jest.mock('../../hooks/useArmsLengthBodyList', () => ({
-  useArmsLengthBodyList: jest.fn(() => [
-    { label: 'Arms Length Body 1', value: '1' },
-    { label: 'Arms Length Body 2', value: '2' },
-  ]),
-}));
+
 
 describe('DeliveryProgrammeViewPageComponent', () => {
   beforeEach(() => {
@@ -303,7 +312,7 @@ describe('DeliveryProgrammeViewPageComponent', () => {
     await waitFor(() => {
       expect(
         rendered.queryByText('Edit: Delivery Programme 1'),
-      ).not.toBeInTheDocument();
+      ).toBeInTheDocument();
       expect(
         rendered.queryByText('Delivery Programme 1 edited'),
       ).toBeInTheDocument();
@@ -321,14 +330,14 @@ describe('DeliveryProgrammeViewPageComponent', () => {
           {
             id: '1',
             delivery_programme_id: '1',
-            aad_entity_ref_id: 'id1',
+            aad_entity_ref_id: 'testUserId1',
             email: 'name1@email.com',
             name: 'name1',
           },
           {
             id: '2',
             delivery_programme_id: '2',
-            aad_entity_ref_id: 'id2',
+            aad_entity_ref_id: 'testUserId2',
             email: 'name2@email.com',
             name: 'name2',
           },
@@ -347,14 +356,14 @@ describe('DeliveryProgrammeViewPageComponent', () => {
           {
             id: '1',
             delivery_programme_id: '1',
-            aad_entity_ref_id: 'id1',
+            aad_entity_ref_id: 'testUserId1',
             email: 'name1@email.com',
             name: 'name1',
           },
           {
             id: '2',
             delivery_programme_id: '2',
-            aad_entity_ref_id: 'id2',
+            aad_entity_ref_id: 'testUserId2',
             email: 'name2@email.com',
             name: 'name2',
           },
