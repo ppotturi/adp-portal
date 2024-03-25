@@ -174,7 +174,7 @@ export async function createProgrammeRouter(
         requestBody,
         author,
       );
-
+      
       const programmeManagers = req.body.programme_managers;
       if (programmeManagers !== undefined) {
         const existingProgrammeManagers = await programmeManagersStore.get(

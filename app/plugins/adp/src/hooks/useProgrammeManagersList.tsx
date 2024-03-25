@@ -52,7 +52,11 @@ export const useProgrammeManagersList = (): ProgrammeManagersListOptions[] => {
 export const transformedData = async (deliveryProgramme: any) => {
   const formattedProgrammeManagers = deliveryProgramme.programme_managers.map(
     (manager: any) => {
-      return { aad_entity_ref_id: manager };
+      if (manager.aad_entity_ref_id === undefined) {
+        return { aad_entity_ref_id: manager };
+      } else {
+        return manager;
+      }
     },
   );
   const data = {
