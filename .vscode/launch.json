@@ -18,6 +18,22 @@
       },
       {
         "type": "node",
+        "name": "Debug Jest tests-adp",
+        "request": "launch",
+        "args": [
+          "repo",
+          "test",
+          "--runInBand",
+          "--watchAll=false",
+          "--testPathPattern=src/components/DeliveryProject"
+        ],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "program": "node_modules/.bin/backstage-cli",
+        "cwd": "${workspaceFolder}/app/plugins/adp"
+      },
+      {
+        "type": "node",
         "name": "Debug Jest tests - Custom Actions",
         "request": "launch",
         "args": [
