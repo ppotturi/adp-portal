@@ -108,159 +108,159 @@ describe('DeliveryProjectViewPageComponent', () => {
     jest.clearAllMocks();
   });
 
-  // it('fetches and displays delivery projects in the table upon loading', async () => {
-  //   mockGetDeliveryProjects.mockResolvedValue(mockTableData);
-  //   const rendered = await render();
+  it('fetches and displays delivery projects in the table upon loading', async () => {
+    mockGetDeliveryProjects.mockResolvedValue(mockTableData);
+    const rendered = await render();
 
-  //   await waitFor(() => {
-  //     expect(rendered.getByText('Delivery Project 1')).toBeInTheDocument();
-  //   });
-  // });
+    await waitFor(() => {
+      expect(rendered.getByText('Delivery Project 1')).toBeInTheDocument();
+    });
+  });
 
-  // it('should throw error when DeliveryProjectClient throws error', async () => {
-  //   mockGetDeliveryProjects.mockImplementation(() => {
-  //     throw new Error('Cannot fetch Delivery Project');
-  //   });
+  it('should throw error when DeliveryProjectClient throws error', async () => {
+    mockGetDeliveryProjects.mockImplementation(() => {
+      throw new Error('Cannot fetch Delivery Project');
+    });
 
-  //   const rendered = await render();
+    const rendered = await render();
 
-  //   await waitFor(async () => {
-  //     expect(
-  //       await rendered.findByText('Delivery Projects'),
-  //     ).toBeInTheDocument();
-  //     expect(mockErrorApi.post).toHaveBeenCalledWith(
-  //       expect.objectContaining({
-  //         message: 'Cannot fetch Delivery Project',
-  //       }),
-  //     );
-  //   });
-  // });
+    await waitFor(async () => {
+      expect(
+        await rendered.findByText('Delivery Projects'),
+      ).toBeInTheDocument();
+      expect(mockErrorApi.post).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'Cannot fetch Delivery Project',
+        }),
+      );
+    });
+  });
 
-  // it('should open edit modal when edit button is clicked', async () => {
-  //   mockGetDeliveryProjects.mockResolvedValue(mockTableData);
-  //   const rendered = await render();
-  //   act(() => {
-  //     fireEvent.click(rendered.getByTestId('delivery-project-edit-button-1'));
-  //   });
+  it('should open edit modal when edit button is clicked', async () => {
+    mockGetDeliveryProjects.mockResolvedValue(mockTableData);
+    const rendered = await render();
+    act(() => {
+      fireEvent.click(rendered.getByTestId('delivery-project-edit-button-1'));
+    });
 
-  //   await waitFor(() => {
-  //     expect(
-  //       rendered.getByText('Edit: Delivery Project 1'),
-  //     ).toBeInTheDocument();
-  //   });
-  // });
+    await waitFor(() => {
+      expect(
+        rendered.getByText('Edit: Delivery Project 1'),
+      ).toBeInTheDocument();
+    });
+  });
 
-  // it('should close edit modal when cancel button is clicked', async () => {
-  //   mockGetDeliveryProjects.mockResolvedValue(mockTableData);
-  //   const rendered = await render();
-  //   act(() => {
-  //     fireEvent.click(rendered.getByTestId('delivery-project-edit-button-1'));
-  //   });
+  it('should close edit modal when cancel button is clicked', async () => {
+    mockGetDeliveryProjects.mockResolvedValue(mockTableData);
+    const rendered = await render();
+    act(() => {
+      fireEvent.click(rendered.getByTestId('delivery-project-edit-button-1'));
+    });
 
-  //   await waitFor(() => {
-  //     expect(
-  //       rendered.getByTestId('actions-modal-cancel-button'),
-  //     ).toBeInTheDocument();
-  //   });
+    await waitFor(() => {
+      expect(
+        rendered.getByTestId('actions-modal-cancel-button'),
+      ).toBeInTheDocument();
+    });
 
-  //   act(() => {
-  //     fireEvent.click(rendered.getByTestId('actions-modal-cancel-button'));
-  //   });
+    act(() => {
+      fireEvent.click(rendered.getByTestId('actions-modal-cancel-button'));
+    });
 
-  //   await waitFor(() => {
-  //     expect(
-  //       rendered.queryByText('Edit: Delivery Project 1'),
-  //     ).not.toBeInTheDocument();
-  //   });
-  // });
+    await waitFor(() => {
+      expect(
+        rendered.queryByText('Edit: Delivery Project 1'),
+      ).not.toBeInTheDocument();
+    });
+  });
 
-  // it('should open add modal when add button is clicked', async () => {
-  //   mockGetDeliveryProjects.mockResolvedValue(mockTableData);
-  //   const rendered = await render();
+  it('should open add modal when add button is clicked', async () => {
+    mockGetDeliveryProjects.mockResolvedValue(mockTableData);
+    const rendered = await render();
 
-  //   fireEvent.click(rendered.getByTestId('create-delivery-project-button'));
+    fireEvent.click(rendered.getByTestId('create-delivery-project-button'));
 
-  //   await waitFor(() => {
-  //     expect(rendered.getByText('Create:')).toBeInTheDocument();
-  //   });
-  // });
+    await waitFor(() => {
+      expect(rendered.getByText('Create:')).toBeInTheDocument();
+    });
+  });
 
-  // it('should update the item when update button is clicked', async () => {
-  //   mockGetDeliveryProjects.mockResolvedValue(mockTableData);
-  //   const rendered = await render();
+  it('should update the item when update button is clicked', async () => {
+    mockGetDeliveryProjects.mockResolvedValue(mockTableData);
+    const rendered = await render();
 
-  //   fireEvent.click(rendered.getByTestId('delivery-project-edit-button-1'));
+    fireEvent.click(rendered.getByTestId('delivery-project-edit-button-1'));
 
-  //   await waitFor(() => {
-  //     expect(rendered.queryByText('Title')).toBeInTheDocument();
-  //     expect(rendered.queryByText('Delivery Project 1')).toBeInTheDocument();
-  //   });
+    await waitFor(() => {
+      expect(rendered.queryByText('Title')).toBeInTheDocument();
+      expect(rendered.queryByText('Delivery Project 1')).toBeInTheDocument();
+    });
 
-  //   fireEvent.change(rendered.getByLabelText('Title'), {
-  //     target: { value: 'Delivery Project 1 updated' },
-  //   });
+    fireEvent.change(rendered.getByLabelText('Title'), {
+      target: { value: 'Delivery Project 1 updated' },
+    });
 
-  //   fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
+    fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
 
-  //   mockGetDeliveryProjects.mockResolvedValue(updatedTableData);
+    mockGetDeliveryProjects.mockResolvedValue(updatedTableData);
 
-  //   await waitFor(() => {
-  //     expect(mockUpdateDeliveryProject).toHaveBeenCalled();
-  //     expect(mockAlertApi.post).toHaveBeenNthCalledWith(1, {
-  //       display: 'transient',
-  //       message: 'Updated',
-  //       severity: 'success',
-  //     });
-  //     expect(
-  //       rendered.queryByText('Edit: Delivery Project 1'),
-  //     ).not.toBeInTheDocument();
-  //     expect(
-  //       rendered.queryByText('Delivery Project 1 updated'),
-  //     ).toBeInTheDocument();
-  //   });
-  // });
+    await waitFor(() => {
+      expect(mockUpdateDeliveryProject).toHaveBeenCalled();
+      expect(mockAlertApi.post).toHaveBeenNthCalledWith(1, {
+        display: 'transient',
+        message: 'Updated',
+        severity: 'success',
+      });
+      expect(
+        rendered.queryByText('Edit: Delivery Project 1'),
+      ).not.toBeInTheDocument();
+      expect(
+        rendered.queryByText('Delivery Project 1 updated'),
+      ).toBeInTheDocument();
+    });
+  });
 
-  // it('should not update the item when update button is clicked and has a non-unique title', async () => {
-  //   mockGetDeliveryProjects.mockResolvedValue(mockTableData);
-  //   const updatedTableData = [
-  //     {
-  //       id: '1',
-  //       title: 'Delivery Project 1',
-  //       description: 'Description 1',
-  //       delivery_project_code: '1',
-  //       created_at: '2021-01-01T00:00:00Z',
-  //       updated_at: '2021-01-01T00:00:00Z',
-  //       delivery_programme_id: '1',
-  //     },
-  //   ];
-  //   mockUpdateDeliveryProject.mockResolvedValue(updatedTableData);
-  //   const rendered = await render();
-  //   act(() => {
-  //     fireEvent.click(rendered.getByTestId('delivery-project-edit-button-1'));
-  //   });
-  //   await waitFor(() => {
-  //     expect(rendered.queryByText('Title')).toBeInTheDocument();
-  //   });
-  //   act(() => {
-  //     fireEvent.change(rendered.getByLabelText('Title'), {
-  //       target: { value: 'Delivery Project 1' },
-  //     });
-  //   });
+  it('should not update the item when update button is clicked and has a non-unique title', async () => {
+    mockGetDeliveryProjects.mockResolvedValue(mockTableData);
+    const updatedTableData = [
+      {
+        id: '1',
+        title: 'Delivery Project 1',
+        description: 'Description 1',
+        delivery_project_code: '1',
+        created_at: '2021-01-01T00:00:00Z',
+        updated_at: '2021-01-01T00:00:00Z',
+        delivery_programme_id: '1',
+      },
+    ];
+    mockUpdateDeliveryProject.mockResolvedValue(updatedTableData);
+    const rendered = await render();
+    act(() => {
+      fireEvent.click(rendered.getByTestId('delivery-project-edit-button-1'));
+    });
+    await waitFor(() => {
+      expect(rendered.queryByText('Title')).toBeInTheDocument();
+    });
+    act(() => {
+      fireEvent.change(rendered.getByLabelText('Title'), {
+        target: { value: 'Delivery Project 1' },
+      });
+    });
 
-  //   act(() => {
-  //     fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
-  //   });
-  //   mockGetDeliveryProjects.mockResolvedValue(updatedTableData);
+    act(() => {
+      fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
+    });
+    mockGetDeliveryProjects.mockResolvedValue(updatedTableData);
 
-  //   await waitFor(() => {
-  //     expect(
-  //       rendered.queryByText('Edit: Delivery Project 1'),
-  //     ).toBeInTheDocument();
-  //     expect(mockAlertApi.post).toHaveBeenCalledTimes(1);
-  //   });
-  // });
+    await waitFor(() => {
+      expect(
+        rendered.queryByText('Edit: Delivery Project 1'),
+      ).toBeInTheDocument();
+      expect(mockAlertApi.post).toHaveBeenCalledTimes(1);
+    });
+  });
 
-  it('should call AlertApi when update fails', async () => {
+  it('should call ErrorApi when update fails', async () => {
     mockGetDeliveryProjects.mockResolvedValue(mockTableData);
     mockUpdateDeliveryProject.mockRejectedValue(new Error('Update failed'));
     const rendered = await render();
