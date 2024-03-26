@@ -21,7 +21,8 @@ export const useProgrammeManagersList = (): ProgrammeManagersListOptions[] => {
   useEffect(() => {
     const fetchProgrammeManagersList = async () => {
       try {
-        const ProgrammeManagersListUrl = await discoveryApi.getBaseUrl('adp') + '/catalogentities';
+        const ProgrammeManagersListUrl =
+          (await discoveryApi.getBaseUrl('adp')) + '/catalogentities';
         const response = await fetchApi.fetch(ProgrammeManagersListUrl);
         if (!response.ok) {
           throw new Error('Failed to fetch programme managers list');
@@ -29,7 +30,7 @@ export const useProgrammeManagersList = (): ProgrammeManagersListOptions[] => {
         const data = await response.json();
 
         const formattedProgrammeManagers = data.items.map((item: any) => {
-          const transformedName = item.spec.profile.displayName
+          const transformedName = item.spec.profile.displayName;
           return {
             label: transformedName,
             value: item.metadata.annotations['graph.microsoft.com/user-id'],
@@ -46,4 +47,21 @@ export const useProgrammeManagersList = (): ProgrammeManagersListOptions[] => {
   }, [discoveryApi, fetchApi, errorApi]);
 
   return options;
+};
+
+export const transformedData = async (deliveryProgramme: any) => {
+  const formattedProgrammeManagers = deliveryProgramme.programme_managers.map(
+    (manager: any) => {
+      if (manager.aad_entity_ref_id === undefined) {
+        return { aad_entity_ref_id: manager };
+      } else {
+        return manager;
+      }
+    },
+  );
+  const data = {
+    ...deliveryProgramme,
+    programme_managers: formattedProgrammeManagers,
+  };
+  return data;
 };

@@ -30,20 +30,37 @@ jest.mock('@backstage/plugin-permission-react', () => ({
   usePermission: jest.fn().mockReturnValue({ allowed: true }),
 }));
 
+jest.mock('../../hooks/useArmsLengthBodyList', () => ({
+  useArmsLengthBodyList: jest.fn(() => [
+    { label: 'Arms Length Body 1', value: '1' },
+    { label: 'Arms Length Body 2', value: '2' },
+  ]),
+}));
+
+jest.mock('../../hooks/useProgrammeManagersList', () => ({
+  useProgrammeManagersList: jest.fn(() => [
+    { label: 'Jane Doe', value: 'testUserId1' },
+    { label: 'John Doe', value: 'testUserId2' },
+  ]),
+}));
+
 const mockTableData = [
   {
     id: '1',
     title: 'Delivery Programme 1',
     alias: 'DeliveryProgramme1',
     description: 'Description 1',
+    finance_code: '',
+    delivery_programme_code: '1',
     url: 'http://deliveryprogramme.com',
     created_at: '2021-01-01T00:00:00Z',
+    updated_at: '2021-01-01T00:00:00Z',
     arms_length_body_id: '1',
     programme_managers: [
       {
         id: '1',
         delivery_programme_id: '1',
-        aad_entity_ref_id: 'id1',
+        aad_entity_ref_id: 'testUserId1',
         email: 'name1@email.com',
         name: 'name1',
       },
@@ -54,21 +71,24 @@ const mockTableData = [
     title: 'Delivery Programme 2',
     alias: 'DeliveryProgramme2',
     description: 'Description 2',
+    finance_code: '',
+    delivery_programme_code: '1',
     url: 'http://deliveryprogramme.com',
     created_at: '2021-01-01T00:00:00Z',
+    updated_at: '2021-01-01T00:00:00Z',
     arms_length_body_id: '2',
     programme_managers: [
       {
         id: '1',
-        delivery_programme_id: '1',
-        aad_entity_ref_id: 'id1',
+        delivery_programme_id: '2',
+        aad_entity_ref_id: 'testUserId1',
         email: 'name1@email.com',
         name: 'name1',
       },
       {
         id: '2',
         delivery_programme_id: '2',
-        aad_entity_ref_id: 'id2',
+        aad_entity_ref_id: 'testUserId2',
         email: 'name2@email.com',
         name: 'name2',
       },
@@ -81,23 +101,10 @@ const updatedTableData = [
     id: '1',
     title: 'Delivery Programme 1 edited',
     alias: 'DeliveryProgramme1',
-    programme_managers: [
-      {
-        id: '1',
-        delivery_programme_id: '1',
-        aad_entity_ref_id: 'id1',
-        email: 'name1@email.com',
-        name: 'name1',
-      },
-      {
-        id: '2',
-        delivery_programme_id: '2',
-        aad_entity_ref_id: 'id2',
-        email: 'name2@email.com',
-        name: 'name2',
-      },
-    ],
+    programme_managers: ['testUserId1'],
     arms_length_body_id: '1',
+    finance_code: '',
+    delivery_programme_code: '1',
     description: 'Description 1',
     url: 'http://delivery1.com',
     created_at: '2021-01-01T00:00:00Z',
@@ -107,22 +114,9 @@ const updatedTableData = [
     id: '2',
     title: 'Delivery Programme 2',
     alias: 'DeliveryProgramme2',
-    programme_managers: [
-      {
-        id: '1',
-        delivery_programme_id: '1',
-        aad_entity_ref_id: 'id1',
-        email: 'name1@email.com',
-        name: 'name1',
-      },
-      {
-        id: '2',
-        delivery_programme_id: '2',
-        aad_entity_ref_id: 'id2',
-        email: 'name2@email.com',
-        name: 'name2',
-      },
-    ],
+    finance_code: '',
+    delivery_programme_code: '1',
+    programme_managers: ['testUserId1', 'testUserId2'],
     arms_length_body_id: '2',
     description: 'Description 2',
     url: 'http://delivery2.com',
@@ -138,15 +132,17 @@ const mockGetDeliveryProgrammeById = jest.fn().mockResolvedValue({
   title: 'Delivery Programme 1',
   alias: 'DeliveryProgramme1',
   description: 'Description 1',
-  url: 'http://deliveryprogramme.com',
+  url: 'http://delivery1.com',
   created_at: '2021-01-01T00:00:00Z',
   updated_at: '2021-01-02T00:00:00Z',
-  arms_length_body_id: '2',
+  finance_code: '',
+  delivery_programme_code: '1',
+  arms_length_body_id: '1',
   programme_managers: [
     {
       id: '1',
       delivery_programme_id: '1',
-      aad_entity_ref_id: 'id1',
+      aad_entity_ref_id: 'testUserId1',
       email: 'name1@email.com',
       name: 'name1',
     },
@@ -158,13 +154,6 @@ jest.mock('./api/DeliveryProgrammeClient', () => ({
     updateDeliveryProgramme: mockUpdateDeliveryProgramme,
     getDeliveryProgrammeById: mockGetDeliveryProgrammeById,
   })),
-}));
-
-jest.mock('../../hooks/useArmsLengthBodyList', () => ({
-  useArmsLengthBodyList: jest.fn(() => [
-    { label: 'Arms Length Body 1', value: '1' },
-    { label: 'Arms Length Body 2', value: '2' },
-  ]),
 }));
 
 describe('DeliveryProgrammeViewPageComponent', () => {
@@ -266,9 +255,7 @@ describe('DeliveryProgrammeViewPageComponent', () => {
     mockGetDeliveryProgrammes.mockResolvedValue(mockTableData);
     const rendered = await render();
 
-    act(() => {
-      fireEvent.click(rendered.getByTestId('create-delivery-programme-button'));
-    });
+    fireEvent.click(rendered.getByTestId('create-delivery-programme-button'));
 
     await waitFor(() => {
       expect(rendered.getByText('Create:')).toBeInTheDocument();
@@ -277,30 +264,50 @@ describe('DeliveryProgrammeViewPageComponent', () => {
 
   it('should update the item when update button is clicked', async () => {
     mockGetDeliveryProgrammes.mockResolvedValue(mockTableData);
-
-    mockUpdateDeliveryProgramme.mockResolvedValue(updatedTableData);
     const rendered = await render();
 
-    act(() => {
-      fireEvent.click(rendered.getByTestId('delivery-programme-edit-button-1'));
-    });
+    fireEvent.click(rendered.getByTestId('delivery-programme-edit-button-1'));
 
     await waitFor(() => {
       expect(rendered.queryByText('Title')).toBeInTheDocument();
+      expect(rendered.queryByText('Delivery Programme 1')).toBeInTheDocument();
     });
 
-    act(() => {
-      fireEvent.change(rendered.getByLabelText('Title'), {
-        target: { value: 'Delivery Programme 1 edited' },
-      });
+    fireEvent.change(rendered.getByLabelText('Title'), {
+      target: { value: 'Delivery Programme 1 edited' },
     });
 
-    act(() => {
-      fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
-    });
+    fireEvent.click(rendered.getByTestId('actions-modal-update-button'));
+
     mockGetDeliveryProgrammes.mockResolvedValue(updatedTableData);
 
     await waitFor(() => {
+      expect(mockUpdateDeliveryProgramme).toHaveBeenCalledWith({
+        id: '1',
+        title: 'Delivery Programme 1 edited',
+        alias: 'DeliveryProgramme1',
+        finance_code: '',
+        delivery_programme_code: '1',
+        programme_managers: [
+          {
+            id: '1',
+            delivery_programme_id: '1',
+            aad_entity_ref_id: 'testUserId1',
+            email: 'name1@email.com',
+            name: 'name1',
+          },
+        ],
+        arms_length_body_id: '1',
+        description: 'Description 1',
+        url: 'http://delivery1.com',
+        created_at: '2021-01-01T00:00:00Z',
+        updated_at: '2021-01-02T00:00:00Z',
+      });
+      expect(mockAlertApi.post).toHaveBeenNthCalledWith(1, {
+        display: 'transient',
+        message: 'Updated',
+        severity: 'success',
+      });
       expect(
         rendered.queryByText('Edit: Delivery Programme 1'),
       ).not.toBeInTheDocument();
@@ -317,44 +324,41 @@ describe('DeliveryProgrammeViewPageComponent', () => {
         id: '1',
         title: 'Delivery Programme 2',
         alias: 'DeliveryProgramme1',
+        finance_code: '',
+        delivery_programme_code: '1',
         programme_managers: [
           {
             id: '1',
             delivery_programme_id: '1',
-            aad_entity_ref_id: 'id1',
+            aad_entity_ref_id: 'testUserId1',
             email: 'name1@email.com',
             name: 'name1',
-          },
-          {
-            id: '2',
-            delivery_programme_id: '2',
-            aad_entity_ref_id: 'id2',
-            email: 'name2@email.com',
-            name: 'name2',
           },
         ],
         arms_length_body_id: '1',
         description: 'Description 1',
         url: 'http://delivery1.com',
         created_at: '2021-01-01T00:00:00Z',
-        updated_at: '2021-01-01T00:00:00Z',
+        updated_at: '2021-01-02T00:00:00Z',
       },
       {
         id: '2',
         title: 'Delivery Programme 2',
         alias: 'DeliveryProgramme2',
+        finance_code: '',
+        delivery_programme_code: '1',
         programme_managers: [
           {
             id: '1',
             delivery_programme_id: '1',
-            aad_entity_ref_id: 'id1',
+            aad_entity_ref_id: 'testUserId1',
             email: 'name1@email.com',
             name: 'name1',
           },
           {
             id: '2',
             delivery_programme_id: '2',
-            aad_entity_ref_id: 'id2',
+            aad_entity_ref_id: 'testUserId2',
             email: 'name2@email.com',
             name: 'name2',
           },

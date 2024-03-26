@@ -119,6 +119,7 @@ export async function createProgrammeRouter(
               'metadata.name',
               'metadata.annotations.graph.microsoft.com/user-id',
               'metadata.annotations.microsoft.com/email',
+              'spec.profile.displayName',
             ],
           });
 
@@ -173,7 +174,7 @@ export async function createProgrammeRouter(
         requestBody,
         author,
       );
-
+      
       const programmeManagers = req.body.programme_managers;
       if (programmeManagers !== undefined) {
         const existingProgrammeManagers = await programmeManagersStore.get(
@@ -198,6 +199,7 @@ export async function createProgrammeRouter(
             'metadata.name',
             'metadata.annotations.graph.microsoft.com/user-id',
             'metadata.annotations.microsoft.com/email',
+            'spec.profile.displayName',
           ],
         });
 

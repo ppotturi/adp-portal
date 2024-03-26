@@ -1,6 +1,9 @@
 import React from 'react';
 import { renderHook } from '@testing-library/react-hooks';
-import { useProgrammeManagersList } from './useProgrammeManagersList';
+import {
+  transformedData,
+  useProgrammeManagersList,
+} from './useProgrammeManagersList';
 import { TestApiProvider } from '@backstage/test-utils';
 import {
   errorApiRef,
@@ -22,13 +25,23 @@ describe('useProgrammeManagersList', () => {
           {
             metadata: {
               name: 'user:default/jane_doe_defra',
-              annotations: {'graph.microsoft.com/user-id': 'jane.doe@example.com'},
+              annotations: { 'graph.microsoft.com/user-id': 'testUserId1' },
+            },
+            spec: {
+              profile: {
+                displayName: 'Jane Doe (guest)',
+              },
             },
           },
           {
             metadata: {
               name: 'user:default/john_doe_defra',
-              annotations: {'graph.microsoft.com/user-id': 'john.doe@example.com'},
+              annotations: { 'graph.microsoft.com/user-id': 'testUserId2' },
+            },
+            spec: {
+              profile: {
+                displayName: 'John Doe (guest)',
+              },
             },
           },
         ],
@@ -47,17 +60,36 @@ describe('useProgrammeManagersList', () => {
       </TestApiProvider>
     );
 
-    const { result, waitForNextUpdate } = renderHook(() => useProgrammeManagersList(), { wrapper });
+    const { result, waitForNextUpdate } = renderHook(
+      () => useProgrammeManagersList(),
+      { wrapper },
+    );
 
     await waitForNextUpdate();
 
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('adp');
-    expect(mockFetchApi.fetch).toHaveBeenCalledWith('http://localhost/adp/catalogentities');
+    expect(mockFetchApi.fetch).toHaveBeenCalledWith(
+      'http://localhost/adp/catalogentities',
+    );
     expect(result.current).toEqual([
-      { label: 'Jane Doe', value: 'jane.doe@example.com' },
-      { label: 'John Doe', value: 'john.doe@example.com' },
+      { label: 'Jane Doe (guest)', value: 'testUserId1' },
+      { label: 'John Doe (guest)', value: 'testUserId2' },
     ]);
   });
+});
 
+describe('transformedData', () => {
+  it('should transform Programme.managers into an array of objects with id properties', async () => {
+    const mockProgramme = {
+      programme_managers: ['123', '456'],
+    };
 
+    const result = await transformedData(mockProgramme);
+
+    expect(result).toHaveProperty('programme_managers');
+    expect(result.programme_managers).toEqual([
+      { aad_entity_ref_id: '123' },
+      { aad_entity_ref_id: '456' },
+    ]);
+  });
 });

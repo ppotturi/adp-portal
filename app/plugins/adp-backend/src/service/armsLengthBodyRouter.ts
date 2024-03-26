@@ -116,20 +116,15 @@ export async function createAlbRouter(
   });
 
   router.get('/armsLengthBodyNames', async (_req, res) => {
-    try {
-      const armsLengthBodies = await armsLengthBodiesStore.getAll();
-      const armsLengthBodiesNames = armsLengthBodies.reduce<
-        Record<string, string>
-      >((acc, alb) => {
-        acc[alb.id] = alb.title;
-        return acc;
-      }, {});
+    const armsLengthBodies = await armsLengthBodiesStore.getAll();
+    const armsLengthBodiesNames = armsLengthBodies.reduce<
+      Record<string, string>
+    >((acc, alb) => {
+      acc[alb.id] = alb.title;
+      return acc;
+    }, {});
 
-      res.json(armsLengthBodiesNames);
-    } catch (error) {
-      console.error(error);
-      throw new InputError('Error');
-    }
+    res.json(armsLengthBodiesNames);
   });
 
   router.post('/armsLengthBody', async (req, res) => {

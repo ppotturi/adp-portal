@@ -189,13 +189,23 @@ export const ActionsModal: FC<ActionsModalProps> = ({
           >
             Cancel
           </Button>
-          <Button
-            type="submit"
-            color="primary"
-            data-testid="actions-modal-update-button"
-          >
-            Update
-          </Button>
+          {mode === 'edit' ? (
+            <Button
+              type="submit"
+              color="primary"
+              data-testid="actions-modal-update-button"
+            >
+              Update
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              color="primary"
+              data-testid="actions-modal-update-button"
+            >
+              Create
+            </Button>
+          )}
         </DialogActions>
       </form>
     </Dialog>

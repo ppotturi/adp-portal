@@ -13,7 +13,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
 import { useArmsLengthBodyList } from '../../hooks/useArmsLengthBodyList';
 
-import { useProgrammeManagersList } from '../../hooks/useProgrammeManagersList';
+import { transformedData, useProgrammeManagersList } from '../../hooks/useProgrammeManagersList';
 import { DeliveryProgrammeFormFields } from './DeliveryProgrammeFormFields';
 
 interface CreateDeliveryProgrammeProps {
@@ -53,19 +53,6 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
       }
       return field;
     });
-  };
-
-  const testData = async (deliveryProgramme: any) => {
-    const formattedProgrammeManagers = deliveryProgramme.programme_managers.map(
-      (manager: any) => {
-        return { aad_entity_ref_id: manager };
-      },
-    );
-    const data = {
-      ...deliveryProgramme,
-      programme_managers: formattedProgrammeManagers,
-    };
-    return data;
   };
 
   const handleSubmit = async (deliveryProgramme: DeliveryProgramme) => {
@@ -109,7 +96,7 @@ const CreateDeliveryProgramme: React.FC<CreateDeliveryProgrammeProps> = ({
           initialValues={{}}
           mode="create"
           fields={getOptionFields()}
-          transformedData={testData}
+          transformedData={transformedData}
         />
       )}
     </>
