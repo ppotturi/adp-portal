@@ -176,7 +176,7 @@ export const AlbViewPageComponent = () => {
           data={tableData}
           columns={columns}
           title="View all"
-          // isCompact={true}
+          isCompact={true}
         />
 
         {isModalOpen && allowed && (
