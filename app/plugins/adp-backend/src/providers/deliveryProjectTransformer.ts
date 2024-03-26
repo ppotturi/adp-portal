@@ -20,7 +20,7 @@ export const defaultProjectGroupTransformer: GroupTransformer = async (
       annotations: {
         'backstage.io/managed-by-location': `adp:delivery-project\\${deliveryProject.name}`,
         'backstage.io/managed-by-origin-location':
-          '`adp:delivery-project\\${deliveryProject.name}`',
+          `adp:delivery-project\\${deliveryProject.name}`,
       },
       links: [{ url: deliveryProject.url ? deliveryProject.url : '' }],
     },
