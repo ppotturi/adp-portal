@@ -15,14 +15,13 @@ import {
   DeliveryProgramme,
   ProgrammeManager,
 } from '@internal/plugin-adp-common';
-import {
-  addProgrammeManager,
-  checkForDuplicateTitle,
-  deleteProgrammeManager,
-  getCurrentUsername,
-} from '../utils';
+import { checkForDuplicateTitle, getCurrentUsername } from '../utils/utils';
 import { ProgrammeManagerStore } from '../deliveryProgramme/deliveryProgrammeManagerStore';
 import { Entity } from '@backstage/catalog-model';
+import {
+  addProgrammeManager,
+  deleteProgrammeManager,
+} from '../service-utils/deliveryProgrammeUtils';
 
 export interface ProgrammeRouterOptions {
   logger: Logger;
@@ -146,7 +145,7 @@ export async function createProgrammeRouter(
         throw new InputError('Invalid payload');
       }
 
-      const allProgrammes = await deliveryProgrammesStore.getAll()
+      const allProgrammes = await deliveryProgrammesStore.getAll();
       const currentData = await deliveryProgrammesStore.get(req.body.id);
       const updatedTitle = req.body?.title;
       const currentTitle = currentData!.title;

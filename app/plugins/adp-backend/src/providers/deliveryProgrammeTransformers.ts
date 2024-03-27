@@ -1,6 +1,6 @@
 import { GroupEntity } from '@backstage/catalog-model';
 import { DeliveryProgramme } from '@internal/plugin-adp-common';
-import { createTransformerTitle } from '../utils';
+import { createTransformerTitle } from '../utils/utils';
 
 export type GroupTransformer = (
   deliveryProgramme: DeliveryProgramme,
@@ -14,7 +14,7 @@ export const defaultProgrammeGroupTransformer: GroupTransformer = async (
     kind: 'Group',
     metadata: {
       name: deliveryProgramme.name,
-      title: createTransformerTitle(deliveryProgramme.title, deliveryProgramme.alias),
+      title: createTransformerTitle(deliveryProgramme.title, deliveryProgramme?.alias),
       description: deliveryProgramme?.description,
       tags: [],
       annotations: {

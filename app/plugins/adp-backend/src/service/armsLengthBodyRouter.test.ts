@@ -7,7 +7,7 @@ import express from 'express';
 import request from 'supertest';
 import { createAlbRouter } from './armsLengthBodyRouter';
 import { ConfigReader } from '@backstage/config';
-import { getCurrentUsername , checkForDuplicateTitle, getOwner} from '../utils';
+import { getCurrentUsername , checkForDuplicateTitle, getOwner} from '../utils/utils';
 
 describe('createRouter', () => {
   let app: express.Express;

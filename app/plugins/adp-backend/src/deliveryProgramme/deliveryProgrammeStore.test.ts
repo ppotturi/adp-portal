@@ -6,10 +6,8 @@ import {
 } from './deliveryProgrammeStore';
 import { NotFoundError } from '@backstage/errors';
 import {
-  addProgrammeManager,
-  deleteProgrammeManager,
   createName,
-} from '../utils';
+} from '../utils/utils';
 import { expectedAlbsWithName } from '../armsLengthBody/albTestData';
 import {
   DeliveryProgramme,
@@ -21,6 +19,7 @@ import {
   exampleCatalog,
 } from './programmeTestData';
 import { ProgrammeManagerStore } from './deliveryProgrammeManagerStore';
+import { addProgrammeManager, deleteProgrammeManager } from '../service-utils/deliveryProgrammeUtils';
 
 describe('DeliveryProgrammeStore', () => {
   const databases = TestDatabases.create();

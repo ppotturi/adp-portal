@@ -11,7 +11,7 @@ import {
 } from '../armsLengthBody/armsLengthBodyStore';
 import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import { Config } from '@backstage/config';
-import { checkForDuplicateTitle, getCurrentUsername, getOwner } from '../utils';
+import { checkForDuplicateTitle, getCurrentUsername, getOwner } from '../utils/utils';
 
 export interface AlbRouterOptions {
   logger: Logger;

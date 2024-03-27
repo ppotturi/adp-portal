@@ -7,7 +7,7 @@ import express from 'express';
 import request from 'supertest';
 import { createProgrammeRouter } from './deliveryProgrammeRouter';
 import { ConfigReader } from '@backstage/config';
-import { getCurrentUsername, getOwner } from '../utils';
+import { getCurrentUsername, getOwner } from '../utils/utils';
 import { createAlbRouter } from './armsLengthBodyRouter';
 import {
   expectedProgrammeData,

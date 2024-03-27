@@ -5,7 +5,7 @@ import {
   PartialArmsLengthBody,
 } from './armsLengthBodyStore';
 import { NotFoundError } from '@backstage/errors';
-import { createName } from '../utils';
+import { createName } from '../utils/utils';
 import {
   expectedAlb,
   expectedAlbs,
