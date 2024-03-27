@@ -16,7 +16,7 @@ import {
 import {
   expectedProgrammeDataWithName,
   expectedProgrammeDataWithoutManager,
-  exampleCatalog,
+  catalogTestData,
 } from './programmeTestData';
 import { ProgrammeManagerStore } from './deliveryProgrammeManagerStore';
 import { addProgrammeManager, deleteProgrammeManager } from '../service-utils/deliveryProgrammeUtils';
@@ -78,7 +78,7 @@ describe('DeliveryProgrammeStore', () => {
         addResult.id,
         addResult,
         managerStore,
-        exampleCatalog,
+        catalogTestData,
       );
       const allManagers = await managerStore.getAll();
       expect(allManagers.length).toBe(3);

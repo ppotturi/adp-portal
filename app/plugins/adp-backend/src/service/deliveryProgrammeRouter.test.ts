@@ -10,6 +10,7 @@ import { ConfigReader } from '@backstage/config';
 import { getCurrentUsername, getOwner } from '../utils/utils';
 import { createAlbRouter } from './armsLengthBodyRouter';
 import {
+  catalogTestData,
   expectedProgrammeData,
   expectedProgrammeDataWithManager,
 } from '../deliveryProgramme/programmeTestData';
@@ -28,48 +29,7 @@ jest.mock('@backstage/catalog-client', () => ({
     ) => {
       catalogRequestOptions = options;
       return {
-        items: [
-          {
-            metadata: {
-              name: 'test1.test.onmicrosoft.com',
-              annotations: {
-                'microsoft.com/email': 'test1.test@onmicrosoft.com',
-                'graph.microsoft.com/user-id':
-                  'a9dc2414-0626-43d2-993d-a53aac4d73421',
-              },
-            },
-          },
-          {
-            metadata: {
-              name: 'test2.test.onmicrosoft.com',
-              annotations: {
-                'microsoft.com/email': 'test2.test@onmicrosoft.com',
-                'graph.microsoft.com/user-id':
-                  'a9dc2414-0626-43d2-993d-a53aac4d73422',
-              },
-            },
-          },
-          {
-            metadata: {
-              name: 'test3.test.onmicrosoft.com',
-              annotations: {
-                'microsoft.com/email': 'test3.test@onmicrosoft.com',
-                'graph.microsoft.com/user-id':
-                  'a9dc2414-0626-43d2-993d-a53aac4d73423',
-              },
-            },
-          },
-          {
-            metadata: {
-              name: 'test4.test.onmicrosoft.com',
-              annotations: {
-                'microsoft.com/email': 'test4.test@onmicrosoft.com',
-                'graph.microsoft.com/user-id':
-                  'a9dc2414-0626-43d2-993d-a53aac4d73424',
-              },
-            },
-          },
-        ],
+        items: catalogTestData,
       };
     },
   })),
@@ -178,6 +138,10 @@ describe('createRouter', () => {
       const getProgrammeManagers = await request(programmeApp).get(
         '/programmeManager',
       );
+      const getProgrammeById = await request(programmeApp).get(
+        `/deliveryProgramme/${response.body.id}`,
+      );
+      expect(getProgrammeById.status).toEqual(200);
       expect(getProgrammeManagers.body.length).toBe(3);
       expect(response.status).toEqual(201);
     });
@@ -279,7 +243,7 @@ describe('createRouter', () => {
       const patchRequest = await request(programmeApp)
         .patch('/deliveryProgramme')
         .send(updatedProgramme);
-      expect(patchRequest.status).toEqual(204);
+      expect(patchRequest.status).toEqual(200);
       const getUpdatedData = await request(programmeApp).get(
         '/deliveryProgramme',
       );

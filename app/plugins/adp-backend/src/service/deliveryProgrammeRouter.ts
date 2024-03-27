@@ -79,6 +79,7 @@ export async function createProgrammeRouter(
         'metadata.name',
         'metadata.annotations.graph.microsoft.com/user-id',
         'metadata.annotations.microsoft.com/email',
+        'spec.profile.displayName',
       ],
     });
     res.json(catalogApiResponse);
@@ -117,6 +118,7 @@ export async function createProgrammeRouter(
               'metadata.name',
               'metadata.annotations.graph.microsoft.com/user-id',
               'metadata.annotations.microsoft.com/email',
+              'spec.profile.displayName',
             ],
           });
 
@@ -141,16 +143,18 @@ export async function createProgrammeRouter(
 
   router.patch('/deliveryProgramme', async (req, res) => {
     try {
-      if (!isDeliveryProgrammeUpdateRequest(req.body)) {
+      const requestBody = { ...req.body };
+      delete requestBody.tableData;
+
+      if (!isDeliveryProgrammeUpdateRequest(requestBody)) {
         throw new InputError('Invalid payload');
       }
 
       const allProgrammes = await deliveryProgrammesStore.getAll();
-      const currentData = await deliveryProgrammesStore.get(req.body.id);
-      const updatedTitle = req.body?.title;
+      const currentData = await deliveryProgrammesStore.get(requestBody.id);
+      const updatedTitle = requestBody?.title;
       const currentTitle = currentData!.title;
       const isTitleChanged = updatedTitle && currentTitle !== updatedTitle;
-
       if (isTitleChanged) {
         const isDuplicate: boolean = await checkForDuplicateTitle(
           allProgrammes,
@@ -166,10 +170,10 @@ export async function createProgrammeRouter(
 
       const author = await getCurrentUsername(identity, req);
       const deliveryProgramme = await deliveryProgrammesStore.update(
-        req.body,
+        requestBody,
         author,
       );
-
+      
       const programmeManagers = req.body.programme_managers;
       if (programmeManagers !== undefined) {
         const existingProgrammeManagers = await programmeManagersStore.get(
@@ -194,6 +198,7 @@ export async function createProgrammeRouter(
             'metadata.name',
             'metadata.annotations.graph.microsoft.com/user-id',
             'metadata.annotations.microsoft.com/email',
+            'spec.profile.displayName',
           ],
         });
 
@@ -226,23 +231,24 @@ export async function createProgrammeRouter(
           programmeManagersStore,
         );
       }
-      res.status(204).json(deliveryProgramme);
+      res.status(200).json(deliveryProgramme);
     } catch (error) {
       throw new InputError('Error');
     }
   });
+
   router.use(errorHandler());
   return router;
-}
 
-function isDeliveryProgrammeCreateRequest(
-  request: Omit<DeliveryProgramme, 'id' | 'created_at'>,
-) {
-  return typeof request?.title === 'string';
-}
+  function isDeliveryProgrammeCreateRequest(
+    request: Omit<DeliveryProgramme, 'id' | 'created_at'>,
+  ) {
+    return typeof request?.title === 'string';
+  }
 
-function isDeliveryProgrammeUpdateRequest(
-  request: Omit<PartialDeliveryProgramme, 'updated_at'>,
-) {
-  return typeof request?.id === 'string';
+  function isDeliveryProgrammeUpdateRequest(
+    request: Omit<PartialDeliveryProgramme, 'updated_at'>,
+  ) {
+    return typeof request?.id === 'string';
+  }
 }
