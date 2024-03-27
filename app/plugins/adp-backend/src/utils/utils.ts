@@ -1,6 +1,7 @@
 import {
   ArmsLengthBody,
-  DeliveryProgramme
+  DeliveryProgramme,
+  DeliveryProject,
 } from '@internal/plugin-adp-common';
 import { IdentityApi } from '@backstage/plugin-auth-node';
 import express from 'express';
@@ -18,7 +19,7 @@ export function createTransformerTitle(title: string, alias?: string) {
 }
 
 export async function checkForDuplicateTitle(
-  store: DeliveryProgramme[] | ArmsLengthBody[],
+  store: DeliveryProgramme[] | ArmsLengthBody[] | DeliveryProject[],
   title: string,
 ): Promise<boolean> {
   title = title.trim().toLowerCase();
