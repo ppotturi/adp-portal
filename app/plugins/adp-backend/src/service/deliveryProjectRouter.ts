@@ -10,7 +10,7 @@ import {
   PartialDeliveryProject,
 } from '../deliveryProject/deliveryProjectStore';
 import { DeliveryProject } from '@internal/plugin-adp-common';
-import { checkForDuplicateTitle, getCurrentUsername } from '../utils';
+import { checkForDuplicateTitle, getCurrentUsername } from '../utils/utils';
 
 export interface ProjectRouterOptions {
   logger: Logger;
