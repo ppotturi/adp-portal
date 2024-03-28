@@ -52,26 +52,47 @@ export async function createProgrammeRouter(
   });
 
   router.get('/deliveryProgramme', async (_req, res) => {
-    const data = await deliveryProgrammesStore.getAll();
-    res.json(data);
+    try {
+      const data = await deliveryProgrammesStore.getAll();
+      res.json(data);
+    } catch (error) {
+      const errMsg = (error as Error).message;
+      logger.error('Error in retrieving delivery programmes: ', errMsg);
+      throw new InputError(errMsg);
+    }
   });
 
   router.get('/programmeManager', async (_req, res) => {
-    const data = await programmeManagersStore.getAll();
-    res.json(data);
+    try {
+      const data = await programmeManagersStore.getAll();
+      res.json(data);
+    } catch (error) {
+      const errMsg = (error as Error).message;
+      logger.error('Error in retrieving programme managers: ', errMsg);
+      throw new InputError(errMsg);
+    }
   });
 
   router.get('/deliveryProgramme/:id', async (_req, res) => {
-    const deliveryProgramme = await deliveryProgrammesStore.get(_req.params.id);
-    const programmeManager = await programmeManagersStore.get(_req.params.id);
-    if (programmeManager && deliveryProgramme !== null) {
-      deliveryProgramme.programme_managers = programmeManager;
-      res.json(deliveryProgramme);
+    try {
+      const deliveryProgramme = await deliveryProgrammesStore.get(
+        _req.params.id,
+      );
+      const programmeManager = await programmeManagersStore.get(_req.params.id);
+      if (programmeManager && deliveryProgramme !== null) {
+        deliveryProgramme.programme_managers = programmeManager;
+        res.json(deliveryProgramme);
+      }
+    } catch (error) {
+      const errMsg = (error as Error).message;
+      logger.error('Error in retrieving delivery programme: ', errMsg);
+      throw new InputError(errMsg);
     }
   });
 
   router.get('/catalogEntities', async (_req, res) => {
-    const catalogApiResponse = await catalog.getEntities({
+    try {
+      const catalogApiResponse = await catalog.getEntities({
       filter: {
         kind: 'User',
       },
@@ -83,6 +104,11 @@ export async function createProgrammeRouter(
       ],
     });
     res.json(catalogApiResponse);
+    } catch (error) {
+      const errMsg = (error as Error).message;
+      logger.error('Error in retrieving catalog entities: ', errMsg);
+      throw new InputError(errMsg);
+    }
   });
 
   router.post('/deliveryProgramme', async (req, res) => {
@@ -137,7 +163,9 @@ export async function createProgrammeRouter(
         res.status(201).json(deliveryProgramme);
       }
     } catch (error) {
-      throw new InputError('Error');
+      const errMsg = (error as Error).message;
+      logger.error('Error in creating a delivery programme: ', errMsg);
+      throw new InputError(errMsg);
     }
   });
 
@@ -173,7 +201,7 @@ export async function createProgrammeRouter(
         requestBody,
         author,
       );
-      
+
       const programmeManagers = req.body.programme_managers;
       if (programmeManagers !== undefined) {
         const existingProgrammeManagers = await programmeManagersStore.get(
@@ -233,7 +261,9 @@ export async function createProgrammeRouter(
       }
       res.status(200).json(deliveryProgramme);
     } catch (error) {
-      throw new InputError('Error');
+      const errMsg = (error as Error).message;
+      logger.error('Error in updating a delivery project: ', errMsg);
+      throw new InputError(errMsg);
     }
   });
 

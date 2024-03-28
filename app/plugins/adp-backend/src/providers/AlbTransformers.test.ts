@@ -27,7 +27,7 @@ describe('defaultAlbGroupTransformer', () => {
           'backstage.io/managed-by-location':
             'adp:arms-length-body\\environment-agency',
           'backstage.io/managed-by-origin-location':
-            '`adp:arms-length-body\\${armsLengthBody.name}`',
+            `adp:arms-length-body\\environment-agency`,
         },
         links: [
           {url: 'https://www.example.uk/'}

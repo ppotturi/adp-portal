@@ -1,5 +1,5 @@
 import { NotFoundError } from '@backstage/errors';
-import { exampleCatalog } from '../deliveryProgramme/programmeTestData';
+import { catalogTestData } from '../deliveryProgramme/programmeTestData';
 import { getProgrammeManagerDetails } from './deliveryProgrammeUtils';
 
 describe('getProgrammeManagerDetails', () => {
@@ -7,7 +7,7 @@ describe('getProgrammeManagerDetails', () => {
       await expect(
         getProgrammeManagerDetails(
           'a9dc2414-0626-43d2-993d-a53aac4d73421',
-          exampleCatalog,
+          catalogTestData,
         ),
       ).resolves.toEqual({ email: 'test1.test@onmicrosoft.com', name: 'Test1 Test' });
     });
@@ -16,7 +16,7 @@ describe('getProgrammeManagerDetails', () => {
       expect(
         getProgrammeManagerDetails(
           'a9dc2414-0626-43d2-993d-a53aac4d7341',
-          exampleCatalog,
+          catalogTestData,
         ),
       ).rejects.toThrow(NotFoundError);
     });

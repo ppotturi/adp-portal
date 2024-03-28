@@ -53,6 +53,30 @@ export const expectedProgrammeDataWithoutManager = {
   name: 'test-title-expectedprogrammewithoutmanager',
 };
 
+export const programmeManagerList = [
+  {
+    id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
+    delivery_programme_id: '05aaeb30-58c3-40b9-8a60-a45a5b337355',
+    aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
+    email: 'test1.test@onmicrosoft.com',
+    name: 'test 1',
+  },
+  {
+    id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
+    delivery_programme_id: '05aaeb30-58c3-40b9-8a60-a45a5b337355',
+    aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73422',
+    email: 'test3.test@onmicrosoft.com',
+    name: 'test 3',
+  },
+  {
+    id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
+    delivery_programme_id: '05aaeb30-58c3-40b9-8a60-a45a5b337355',
+    aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73423',
+    email: 'test3.test@onmicrosoft.com',
+    name: 'test 3',
+  },
+];
+
 export const catalogTestData: Entity[] = [
   {
     apiVersion: 'backstage.io/v1alpha1',
@@ -66,9 +90,9 @@ export const catalogTestData: Entity[] = [
     },
     spec: {
       profile: {
-        displayName: 'test1'
-      }
-    }
+        displayName: 'test1',
+      },
+    },
   },
   {
     apiVersion: 'backstage.io/v1alpha1',
@@ -82,9 +106,9 @@ export const catalogTestData: Entity[] = [
     },
     spec: {
       profile: {
-        displayName: 'test2'
-      }
-    }
+        displayName: 'test2',
+      },
+    },
   },
   {
     apiVersion: 'backstage.io/v1alpha1',
@@ -98,9 +122,9 @@ export const catalogTestData: Entity[] = [
     },
     spec: {
       profile: {
-        displayName: 'test3'
-      }
-    }
+        displayName: 'test3',
+      },
+    },
   },
   {
     apiVersion: 'backstage.io/v1alpha1',
@@ -114,8 +138,8 @@ export const catalogTestData: Entity[] = [
     },
     spec: {
       profile: {
-        displayName: 'test4'
-      }
-    }
-  }
+        displayName: 'test4',
+      },
+    },
+  },
 ];

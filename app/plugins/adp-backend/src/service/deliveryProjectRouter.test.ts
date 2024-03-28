@@ -15,6 +15,7 @@ import {
   GetEntitiesRequest,
 } from '@backstage/catalog-client';
 import { InputError } from '@backstage/errors';
+import { catalogTestData } from '../deliveryProgramme/programmeTestData';
 
 let catalogRequestOptions: CatalogRequestOptions;
 jest.mock('@backstage/catalog-client', () => ({
@@ -25,48 +26,7 @@ jest.mock('@backstage/catalog-client', () => ({
     ) => {
       catalogRequestOptions = options;
       return {
-        items: [
-          {
-            metadata: {
-              name: 'test1.test.onmicrosoft.com',
-              annotations: {
-                'microsoft.com/email': 'test1.test@onmicrosoft.com',
-                'graph.microsoft.com/user-id':
-                  'a9dc2414-0626-43d2-993d-a53aac4d73421',
-              },
-            },
-          },
-          {
-            metadata: {
-              name: 'test2.test.onmicrosoft.com',
-              annotations: {
-                'microsoft.com/email': 'test2.test@onmicrosoft.com',
-                'graph.microsoft.com/user-id':
-                  'a9dc2414-0626-43d2-993d-a53aac4d73422',
-              },
-            },
-          },
-          {
-            metadata: {
-              name: 'test3.test.onmicrosoft.com',
-              annotations: {
-                'microsoft.com/email': 'test3.test@onmicrosoft.com',
-                'graph.microsoft.com/user-id':
-                  'a9dc2414-0626-43d2-993d-a53aac4d73423',
-              },
-            },
-          },
-          {
-            metadata: {
-              name: 'test4.test.onmicrosoft.com',
-              annotations: {
-                'microsoft.com/email': 'test4.test@onmicrosoft.com',
-                'graph.microsoft.com/user-id':
-                  'a9dc2414-0626-43d2-993d-a53aac4d73424',
-              },
-            },
-          },
-        ],
+        items: catalogTestData
       };
     },
   })),

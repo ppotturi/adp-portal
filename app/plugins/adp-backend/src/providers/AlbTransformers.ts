@@ -20,7 +20,7 @@ export const defaultAlbGroupTransformer: GroupTransformer = async (
       annotations: {
         'backstage.io/managed-by-location': `adp:arms-length-body\\${armsLengthBody.name}`,
         'backstage.io/managed-by-origin-location':
-          '`adp:arms-length-body\\${armsLengthBody.name}`',
+          `adp:arms-length-body\\${armsLengthBody.name}`,
       },
       links: [{ url: armsLengthBody.url ? armsLengthBody.url : '' }],
     },

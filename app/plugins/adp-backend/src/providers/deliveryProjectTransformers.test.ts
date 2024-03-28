@@ -28,7 +28,7 @@ describe('defaultProjectGroupTransformer', () => {
           'backstage.io/managed-by-location':
             'adp:delivery-project\\test-title-1',
           'backstage.io/managed-by-origin-location':
-            '`adp:delivery-project\\${deliveryProject.name}`',
+            `adp:delivery-project\\test-title-1`,
         },
         links: [{ url: 'https://www.example.uk/' }],
       },
