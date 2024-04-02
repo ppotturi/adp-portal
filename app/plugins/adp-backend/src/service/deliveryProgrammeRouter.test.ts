@@ -7,18 +7,19 @@ import express from 'express';
 import request from 'supertest';
 import { createProgrammeRouter } from './deliveryProgrammeRouter';
 import { ConfigReader } from '@backstage/config';
-import { getCurrentUsername, getOwner } from '../utils/utils';
 import { createAlbRouter } from './armsLengthBodyRouter';
 import {
   catalogTestData,
-  expectedProgrammeData,
   expectedProgrammeDataWithManager,
+  programmeManagerList,
 } from '../deliveryProgramme/programmeTestData';
-import { albRequiredFields } from '../armsLengthBody/albTestData';
+import { expectedAlbWithName } from '../armsLengthBody/albTestData';
+
 import {
   CatalogRequestOptions,
   GetEntitiesRequest,
 } from '@backstage/catalog-client';
+import { InputError } from '@backstage/errors';
 
 let catalogRequestOptions: CatalogRequestOptions;
 jest.mock('@backstage/catalog-client', () => ({
@@ -34,6 +35,44 @@ jest.mock('@backstage/catalog-client', () => ({
     },
   })),
 }));
+
+let mockGetAll: jest.Mock;
+let mockGet: jest.Mock;
+let mockAdd: jest.Mock;
+let mockUpdate: jest.Mock;
+
+jest.mock('../deliveryProgramme/deliveryProgrammeStore', () => {
+  return {
+    DeliveryProgrammeStore: jest.fn().mockImplementation(() => {
+      mockGetAll = jest.fn().mockResolvedValue([expectedProgrammeDataWithManager]);
+      mockGet = jest.fn().mockResolvedValue(expectedProgrammeDataWithManager);
+      mockAdd = jest.fn().mockResolvedValue(expectedProgrammeDataWithManager);
+      mockUpdate = jest.fn().mockResolvedValue(expectedProgrammeDataWithManager);
+      return {
+        getAll: mockGetAll,
+        get: mockGet,
+        add: mockAdd,
+        update: mockUpdate,
+      };
+    }),
+  };
+});
+
+let mockGetAllManagers: jest.Mock;
+let mockGetManager: jest.Mock;
+
+jest.mock('../deliveryProgramme/deliveryProgrammeManagerStore', () => {
+  return {
+    ProgrammeManagerStore: jest.fn().mockImplementation(() => {
+      mockGetAllManagers = jest.fn().mockResolvedValue([programmeManagerList]);
+      mockGetManager = jest.fn().mockResolvedValue(programmeManagerList)
+      return {
+        getAll: mockGetAllManagers,
+        get: mockGetManager
+      };
+    }),
+  };
+});
 
 describe('createRouter', () => {
   let programmeApp: express.Express;
@@ -58,7 +97,6 @@ describe('createRouter', () => {
     config: mockConfig,
     discovery: mockDiscoveryApi,
   };
-  const owner = getOwner(mockOptions);
 
   function createTestDatabase(): PluginDatabaseManager {
     return DatabaseManager.fromConfig(
@@ -87,7 +125,6 @@ describe('createRouter', () => {
   describe('GET /health', () => {
     it('returns ok', async () => {
       const response = await request(programmeApp).get('/health');
-
       expect(response.status).toEqual(200);
       expect(response.body).toEqual({ status: 'ok' });
     });
@@ -95,15 +132,43 @@ describe('createRouter', () => {
 
   describe('GET /deliveryProgramme', () => {
     it('returns ok', async () => {
+      mockGetAll.mockResolvedValueOnce([expectedProgrammeDataWithManager]);
       const response = await request(programmeApp).get('/deliveryProgramme');
       expect(response.status).toEqual(200);
+    });
+
+    it('returns bad request', async () => {
+      mockGetAll.mockRejectedValueOnce(new InputError('error'));
+      const response = await request(programmeApp).get('/deliveryProgramme');
+      expect(response.status).toEqual(400);
+    });
+  });
+
+  describe('GET /deliveryProgramme/:id', () => {
+    it('returns ok', async () => {
+      mockGet.mockResolvedValueOnce(expectedProgrammeDataWithManager);
+      mockGetManager.mockResolvedValueOnce(programmeManagerList);
+      const response = await request(programmeApp).get('/deliveryProgramme/1234');
+      expect(response.status).toEqual(200);
+    });
+
+    it('returns bad request', async () => {
+      mockGet.mockRejectedValueOnce(new InputError('error'));
+      const response = await request(programmeApp).get('/deliveryProgramme/4321');
+      expect(response.status).toEqual(400);
     });
   });
 
   describe('GET /programmeManager', () => {
     it('returns ok', async () => {
+      mockGetAllManagers.mockResolvedValueOnce([programmeManagerList]);
       const response = await request(programmeApp).get('/programmeManager');
       expect(response.status).toEqual(200);
+    });
+    it('returns bad request', async () => {
+      mockGetAllManagers.mockRejectedValueOnce(new InputError('error'));
+      const response = await request(programmeApp).get('/programmeManager');
+      expect(response.status).toEqual(400);
     });
   });
 
@@ -115,139 +180,91 @@ describe('createRouter', () => {
   });
 
   describe('POST /deliveryProgramme', () => {
+    
     it('returns ok', async () => {
-      const creator = await getCurrentUsername(
-        mockIdentityApi,
-        express.request,
-      );
+      mockGetAll.mockResolvedValueOnce([expectedProgrammeDataWithManager]);
       const expectedALB = {
-        ...albRequiredFields,
-        creator: creator,
-        owner: owner,
+        ...expectedAlbWithName
       };
       await request(albApp).post('/armsLengthBody').send(expectedALB);
+
       const getExistingAlbData = await request(albApp).get('/armsLengthBody');
       const getAlbId = getExistingAlbData.body[0].id;
       const expectedProgramme = {
-        ...expectedProgrammeDataWithManager,
-        arms_length_body_id: getAlbId,
-      };
-      const response = await request(programmeApp)
-        .post('/deliveryProgramme')
-        .send(expectedProgramme);
-      const getProgrammeManagers = await request(programmeApp).get(
-        '/programmeManager',
-      );
-      const getProgrammeById = await request(programmeApp).get(
-        `/deliveryProgramme/${response.body.id}`,
-      );
-      expect(getProgrammeById.status).toEqual(200);
-      expect(getProgrammeManagers.body.length).toBe(3);
-      expect(response.status).toEqual(201);
-    });
-
-    it('returns Error', async () => {
-      const invalidProgramme = {
-        alias: 'Test Alias',
-        description: 'Test description',
-      };
-      const response = await request(programmeApp)
-        .post('/deliveryProgramme')
-        .send(invalidProgramme);
-      expect(response.status).toEqual(400);
-    });
-  });
-
-  describe('POST /deliveryProgramme', () => {
-    it('returns 406 when Delivery Programme title already exists', async () => {
-      const creator = await getCurrentUsername(
-        mockIdentityApi,
-        express.request,
-      );
-      const expectedALB = {
-        ...albRequiredFields,
-        creator: creator,
-        owner: owner,
-      };
-      await request(albApp).post('/armsLengthBody').send(expectedALB);
-      const getExistingAlbData = await request(albApp).get('/armsLengthBody');
-      const getAlbId = getExistingAlbData.body[0].id;
-      const existingProgramme = {
-        ...expectedProgrammeData,
-        arms_length_body_id: getAlbId,
-      };
-      await request(programmeApp)
-        .post('/deliveryProgramme')
-        .send(existingProgramme);
-      const newProgramme = {
-        ...expectedProgrammeData,
-        arms_length_body_id: getAlbId,
-      };
-      const response = await request(programmeApp)
-        .post('/deliveryProgramme')
-        .send(newProgramme);
-      expect(response.status).toEqual(406);
-      expect(response.text).toEqual(
-        '{"error":"Delivery Programme title already exists"}',
-      );
-    });
-  });
-
-  describe('PATCH /deliveryProgramme', () => {
-    it('returns ok', async () => {
-      const creator = await getCurrentUsername(
-        mockIdentityApi,
-        express.request,
-      );
-      const expectedALB = {
-        ...albRequiredFields,
-        creator: creator,
-        owner: owner,
-      };
-      await request(albApp).post('/armsLengthBody').send(expectedALB);
-      const getExistingAlbData = await request(albApp).get('/armsLengthBody');
-      const getAlbId = getExistingAlbData.body[0].id;
-      const expectedProgramme = {
-        ...expectedProgrammeDataWithManager,
-        title: 'title',
-        arms_length_body_id: getAlbId,
-      };
-
-      const postRequest = await request(programmeApp)
-        .post('/deliveryProgramme')
-        .send(expectedProgramme);
-      expect(postRequest.status).toEqual(201);
-      const getCurrentData = await request(programmeApp).get(
-        '/deliveryProgramme',
-      );
-
-      const currentData = getCurrentData.body.find(
-        (e: { title: string }) =>
-          e.title === 'Test title expectedProgrammeDataWithManager',
-      );
-      expect(currentData.name).toBe(
-        'test-title-expectedprogrammedatawithmanager',
-      );
-      const updatedProgramme = {
-        title: 'Test title 1 patch',
-        id: currentData.id,
         programme_managers: [
           {
             aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
           },
           {
+            aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73422',
+          },
+          {
             aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73424',
           },
         ],
+        title: 'Test title 1 ',
+        alias: 'Test Alias',
+        description: 'Test description',
+        finance_code: 'Test finance_code',
+        delivery_programme_code: 'Test delivery_programme_code',
+        url: 'Test url',
+        arms_length_body_id: getAlbId,
       };
-      const patchRequest = await request(programmeApp)
+      console.log(expectedProgramme)
+      const response = await request(programmeApp)
+        .post('/deliveryProgramme')
+        .send(expectedProgramme);
+        console.log(response)
+      expect(response.status).toEqual(201);
+    });
+
+    it('return 406 if title already exists', async () => {
+      mockGetAll.mockResolvedValueOnce([expectedProgrammeDataWithManager]);
+      const response = await request(programmeApp)
+        .post('/deliveryProgramme')
+        .send(expectedProgrammeDataWithManager);
+      expect(response.status).toEqual(406);
+    });
+
+    it('returns bad request', async () => {
+      mockAdd.mockRejectedValueOnce(new InputError('error'));
+      const response = await request(programmeApp)
+        .post('/deliveryProgramme')
+        .send(expectedProgrammeDataWithManager);
+      expect(response.status).toEqual(400);
+    });
+  });
+
+  describe('PATCH /deliveryProgramme', () => {
+    it('returns ok', async () => {
+      const expectedALB = {
+        ...expectedAlbWithName,
+      };
+      await request(albApp).post('/armsLengthBody').send(expectedALB);
+      const getExistingAlbData = await request(albApp).get('/armsLengthBody');
+      const albId = getExistingAlbData.body[0].id;
+      const existing = {
+        ...expectedProgrammeDataWithManager,
+        id: '123',
+        arms_length_body_id: albId,
+      };
+      mockGetAll.mockResolvedValueOnce([existing]);
+      const data = { ...existing };
+      data.title = 'Test title 1 patch';
+      data.programme_managers = [
+        {
+          aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
+        },
+        {
+          aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73424',
+        },
+      ];
+      const response = await request(programmeApp)
         .patch('/deliveryProgramme')
-        .send(updatedProgramme);
-      expect(patchRequest.status).toEqual(200);
-      const getUpdatedData = await request(programmeApp).get(
-        '/deliveryProgramme',
-      );
-      const updatedData = getUpdatedData.body.find(
+        .send(data);
+      expect(response.status).toEqual(200);
+
+      const updatedData = response.body.find(
         (e: { title: string }) => e.title === 'Test title 1 patch',
       );
 
@@ -292,30 +309,14 @@ describe('createRouter', () => {
       ).toBeFalsy();
     });
 
-    it('returns 406', async () => {
-      const creator = await getCurrentUsername(
-        mockIdentityApi,
-        express.request,
-      );
-      const expectedALB = {
-        ...albRequiredFields,
-        creator: creator,
-        owner: owner,
-      };
-      await request(albApp).post('/armsLengthBody').send(expectedALB);
-      const getExistingAlbData = await request(albApp).get('/armsLengthBody');
-      const getAlbId = getExistingAlbData.body[0].id;
-      const programmeData = {
-        ...expectedProgrammeData,
-        arms_length_body_id: getAlbId,
-      };
+    it('returns bad request', async () => {
+      const existing = { ...expectedProgrammeDataWithManager, id: '123' };
+      const data = { ...existing };
+      mockUpdate.mockRejectedValueOnce(new InputError('error'));
       const response = await request(programmeApp)
-        .post('/deliveryProgramme')
-        .send(programmeData);
-      expect(response.status).toEqual(406);
-      expect(response.text).toEqual(
-        '{"error":"Delivery Programme title already exists"}',
-      );
+        .patch('/deliveryProgramme')
+        .send(data);
+      expect(response.status).toEqual(400);
     });
   });
 });

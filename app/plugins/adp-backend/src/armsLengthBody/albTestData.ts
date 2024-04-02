@@ -9,7 +9,3 @@ export const expectedAlbWithName = {
   name: 'alb-example-1',
 };
 
-export const albNames = {
-  '123': 'ALB 1',
-  '1234': 'ALB 2',
-};

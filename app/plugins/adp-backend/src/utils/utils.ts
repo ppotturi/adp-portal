@@ -44,5 +44,3 @@ export function getOwner(options: AlbRouterOptions): string {
   const owner = ownerGroup.getString('programmeAdminGroup');
   return owner;
 }
-
-

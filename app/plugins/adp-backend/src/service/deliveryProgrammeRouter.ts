@@ -133,7 +133,6 @@ export async function createProgrammeRouter(
           req.body,
           author,
         );
-
         const programmeManagers = req.body.programme_managers;
         if (programmeManagers !== undefined) {
           const catalogEntities = await catalog.getEntities({
