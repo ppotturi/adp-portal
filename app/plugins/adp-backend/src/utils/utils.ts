@@ -7,7 +7,6 @@ import { IdentityApi } from '@backstage/plugin-auth-node';
 import express from 'express';
 import { AlbRouterOptions } from '../service/armsLengthBodyRouter';
 
-
 export function createName(name: string) {
   const nameValue = name.replace(/\s+/g, '-').toLowerCase().substring(0, 64);
   return nameValue;

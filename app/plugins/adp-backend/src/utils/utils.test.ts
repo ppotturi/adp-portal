@@ -4,9 +4,6 @@ import {
   checkForDuplicateTitle,
 } from './utils';
 import express from 'express';
-import { NotFoundError } from '@backstage/errors';
-import { catalogTestData } from '../deliveryProgramme/programmeTestData';
-import { getProgrammeManagerDetails } from '../service-utils/deliveryProgrammeUtils';
 
 describe('createName', () => {
   it('replaces spaces with dashes and converts to lowercase', () => {
