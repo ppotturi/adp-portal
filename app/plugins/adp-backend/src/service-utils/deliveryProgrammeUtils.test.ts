@@ -7,7 +7,7 @@ describe('getProgrammeManagerDetails', () => {
     await expect(
       getProgrammeManagerDetails(
         'a9dc2414-0626-43d2-993d-a53aac4d73421',
-        catalogTestData,
+        catalogTestData.items,
       ),
     ).resolves.toEqual({
       email: 'test1.test@onmicrosoft.com',
@@ -19,7 +19,7 @@ describe('getProgrammeManagerDetails', () => {
     expect(
       getProgrammeManagerDetails(
         'a9dc2414-0626-43d2-993d-a53aac4d7341',
-        catalogTestData,
+        catalogTestData.items,
       ),
     ).rejects.toThrow(NotFoundError);
   });
@@ -30,7 +30,7 @@ describe('getProgrammeManagerDetails', () => {
     await expect(
       getProgrammeManagerDetails(
         'a9dc2414-0626-43d2-993d-a53aac4d73421',
-        catalogTestData,
+        catalogTestData.items,
       ),
     ).resolves.toEqual({
       email: 'test1.test@onmicrosoft.com',
@@ -42,7 +42,7 @@ describe('getProgrammeManagerDetails', () => {
     expect(
       getProgrammeManagerDetails(
         'a9dc2414-0626-43d2-993d-a53aac4d7341',
-        catalogTestData,
+        catalogTestData.items,
       ),
     ).rejects.toThrow(NotFoundError);
   });

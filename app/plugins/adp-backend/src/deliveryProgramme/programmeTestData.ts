@@ -1,4 +1,4 @@
-import { Entity } from '@backstage/catalog-model';
+import { GetEntitiesResponse } from '@backstage/catalog-client';
 
 export const expectedProgrammeData = {
   programme_managers: [],
@@ -74,23 +74,6 @@ export const programmeManagerList = [
     email: 'test3.test@onmicrosoft.com',
     name: 'test 3',
   },
-];
-
-export const updatedProgrammeManagerList = [
-  {
-    id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
-    delivery_programme_id: '123',
-    aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
-    email: 'test1.test@onmicrosoft.com',
-    name: 'test 1',
-  },
-  {
-    id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
-    delivery_programme_id: '123',
-    aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73423',
-    email: 'test3.test@onmicrosoft.com',
-    name: 'test 3',
-  },
   {
     id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
     delivery_programme_id: '123',
@@ -98,71 +81,84 @@ export const updatedProgrammeManagerList = [
     email: 'test4.test@onmicrosoft.com',
     name: 'test 4',
   },
+  {
+    id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
+    delivery_programme_id: '1234',
+    aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73423',
+    email: 'test3.test@onmicrosoft.com',
+    name: 'test 3',
+  },
 ];
 
-export const catalogTestData: Entity[] = [
-  {
-    apiVersion: 'backstage.io/v1alpha1',
-    kind: 'Component',
-    metadata: {
-      name: 'test1.test.onmicrosoft.com',
-      annotations: {
-        'microsoft.com/email': 'test1.test@onmicrosoft.com',
-        'graph.microsoft.com/user-id': 'a9dc2414-0626-43d2-993d-a53aac4d73421',
+export const catalogTestData: GetEntitiesResponse = {
+  items: [
+    {
+      apiVersion: 'backstage.io/v1alpha1',
+      kind: 'Component',
+      metadata: {
+        name: 'test1.test.onmicrosoft.com',
+        annotations: {
+          'microsoft.com/email': 'test1.test@onmicrosoft.com',
+          'graph.microsoft.com/user-id':
+            'a9dc2414-0626-43d2-993d-a53aac4d73421',
+        },
+      },
+      spec: {
+        profile: {
+          displayName: 'test1',
+        },
       },
     },
-    spec: {
-      profile: {
-        displayName: 'test1',
+    {
+      apiVersion: 'backstage.io/v1alpha1',
+      kind: 'Component',
+      metadata: {
+        name: 'test2.test.onmicrosoft.com',
+        annotations: {
+          'microsoft.com/email': 'test2.test@onmicrosoft.com',
+          'graph.microsoft.com/user-id':
+            'a9dc2414-0626-43d2-993d-a53aac4d73422',
+        },
+      },
+      spec: {
+        profile: {
+          displayName: 'test2',
+        },
       },
     },
-  },
-  {
-    apiVersion: 'backstage.io/v1alpha1',
-    kind: 'Component',
-    metadata: {
-      name: 'test2.test.onmicrosoft.com',
-      annotations: {
-        'microsoft.com/email': 'test2.test@onmicrosoft.com',
-        'graph.microsoft.com/user-id': 'a9dc2414-0626-43d2-993d-a53aac4d73422',
+    {
+      apiVersion: 'backstage.io/v1alpha1',
+      kind: 'Component',
+      metadata: {
+        name: 'test3.test.onmicrosoft.com',
+        annotations: {
+          'microsoft.com/email': 'test3.test@onmicrosoft.com',
+          'graph.microsoft.com/user-id':
+            'a9dc2414-0626-43d2-993d-a53aac4d73423',
+        },
+      },
+      spec: {
+        profile: {
+          displayName: 'test3',
+        },
       },
     },
-    spec: {
-      profile: {
-        displayName: 'test2',
+    {
+      apiVersion: 'backstage.io/v1alpha1',
+      kind: 'Component',
+      metadata: {
+        name: 'test4.test.onmicrosoft.com',
+        annotations: {
+          'microsoft.com/email': 'test4.test@onmicrosoft.com',
+          'graph.microsoft.com/user-id':
+            'a9dc2414-0626-43d2-993d-a53aac4d73424',
+        },
+      },
+      spec: {
+        profile: {
+          displayName: 'test4',
+        },
       },
     },
-  },
-  {
-    apiVersion: 'backstage.io/v1alpha1',
-    kind: 'Component',
-    metadata: {
-      name: 'test3.test.onmicrosoft.com',
-      annotations: {
-        'microsoft.com/email': 'test3.test@onmicrosoft.com',
-        'graph.microsoft.com/user-id': 'a9dc2414-0626-43d2-993d-a53aac4d73423',
-      },
-    },
-    spec: {
-      profile: {
-        displayName: 'test3',
-      },
-    },
-  },
-  {
-    apiVersion: 'backstage.io/v1alpha1',
-    kind: 'Component',
-    metadata: {
-      name: 'test4.test.onmicrosoft.com',
-      annotations: {
-        'microsoft.com/email': 'test4.test@onmicrosoft.com',
-        'graph.microsoft.com/user-id': 'a9dc2414-0626-43d2-993d-a53aac4d73424',
-      },
-    },
-    spec: {
-      profile: {
-        displayName: 'test4',
-      },
-    },
-  },
-];
+  ],
+};
