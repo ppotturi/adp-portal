@@ -19,7 +19,7 @@ export const expectedProgrammeDataWithManager = {
       aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73422',
     },
     {
-      aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73424',
+      aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73423',
     },
   ],
   title: 'Test title expectedProgrammeDataWithManager',
@@ -32,7 +32,6 @@ export const expectedProgrammeDataWithManager = {
 };
 
 export const expectedProgrammeDataWithName = {
-  programme_managers: [],
   title: 'Test title expectedProgrammeDataWithName',
   alias: 'Test Alias',
   description: 'Test description',
@@ -56,24 +55,48 @@ export const expectedProgrammeDataWithoutManager = {
 export const programmeManagerList = [
   {
     id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
-    delivery_programme_id: '05aaeb30-58c3-40b9-8a60-a45a5b337355',
+    delivery_programme_id: '123',
     aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
     email: 'test1.test@onmicrosoft.com',
     name: 'test 1',
   },
   {
     id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
-    delivery_programme_id: '05aaeb30-58c3-40b9-8a60-a45a5b337355',
+    delivery_programme_id: '123',
     aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73422',
+    email: 'test2.test@onmicrosoft.com',
+    name: 'test 2',
+  },
+  {
+    id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
+    delivery_programme_id: '123',
+    aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73423',
+    email: 'test3.test@onmicrosoft.com',
+    name: 'test 3',
+  },
+];
+
+export const updatedProgrammeManagerList = [
+  {
+    id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
+    delivery_programme_id: '123',
+    aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
+    email: 'test1.test@onmicrosoft.com',
+    name: 'test 1',
+  },
+  {
+    id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
+    delivery_programme_id: '123',
+    aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73423',
     email: 'test3.test@onmicrosoft.com',
     name: 'test 3',
   },
   {
     id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
-    delivery_programme_id: '05aaeb30-58c3-40b9-8a60-a45a5b337355',
-    aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73423',
-    email: 'test3.test@onmicrosoft.com',
-    name: 'test 3',
+    delivery_programme_id: '123',
+    aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73424',
+    email: 'test4.test@onmicrosoft.com',
+    name: 'test 4',
   },
 ];
 

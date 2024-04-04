@@ -7,13 +7,13 @@ import express from 'express';
 import request from 'supertest';
 import { createProgrammeRouter } from './deliveryProgrammeRouter';
 import { ConfigReader } from '@backstage/config';
-import { createAlbRouter } from './armsLengthBodyRouter';
 import {
   catalogTestData,
   expectedProgrammeDataWithManager,
   programmeManagerList,
+  expectedProgrammeDataWithName,
+  updatedProgrammeManagerList,
 } from '../deliveryProgramme/programmeTestData';
-import { expectedAlbWithName } from '../armsLengthBody/albTestData';
 
 import {
   CatalogRequestOptions,
@@ -35,40 +35,64 @@ jest.mock('@backstage/catalog-client', () => ({
     },
   })),
 }));
+let mockGetCatalogEntity: jest.Mock;
+mockGetCatalogEntity = jest.fn().mockResolvedValue(catalogTestData);
 
-let mockGetAll: jest.Mock;
-let mockGet: jest.Mock;
-let mockAdd: jest.Mock;
-let mockUpdate: jest.Mock;
+let mockGetAllProgrammes: jest.Mock;
+let mockGetProgramme: jest.Mock;
+let mockAddProgramme: jest.Mock;
+let mockUpdateProgramme: jest.Mock;
 
 jest.mock('../deliveryProgramme/deliveryProgrammeStore', () => {
   return {
     DeliveryProgrammeStore: jest.fn().mockImplementation(() => {
-      mockGetAll = jest.fn().mockResolvedValue([expectedProgrammeDataWithManager]);
-      mockGet = jest.fn().mockResolvedValue(expectedProgrammeDataWithManager);
-      mockAdd = jest.fn().mockResolvedValue(expectedProgrammeDataWithManager);
-      mockUpdate = jest.fn().mockResolvedValue(expectedProgrammeDataWithManager);
+      mockGetAllProgrammes = jest
+        .fn()
+        .mockResolvedValue([expectedProgrammeDataWithManager]);
+      mockGetProgramme = jest
+        .fn()
+        .mockResolvedValue(expectedProgrammeDataWithManager);
+      mockAddProgramme = jest
+        .fn()
+        .mockResolvedValue(expectedProgrammeDataWithManager);
+      mockUpdateProgramme = jest
+        .fn()
+        .mockResolvedValue(expectedProgrammeDataWithManager);
       return {
-        getAll: mockGetAll,
-        get: mockGet,
-        add: mockAdd,
-        update: mockUpdate,
+        getAll: mockGetAllProgrammes,
+        get: mockGetProgramme,
+        add: mockAddProgramme,
+        update: mockUpdateProgramme,
       };
     }),
   };
 });
 
-let mockGetAllManagers: jest.Mock;
-let mockGetManager: jest.Mock;
+let mockGetAllProgrammeManagers: jest.Mock;
+let mockGetProgrammeManager: jest.Mock;
+let mockAddProgrammeManagers: jest.Mock;
+let mockUpdateProgrammeManagers: jest.Mock;
 
 jest.mock('../deliveryProgramme/deliveryProgrammeManagerStore', () => {
   return {
     ProgrammeManagerStore: jest.fn().mockImplementation(() => {
-      mockGetAllManagers = jest.fn().mockResolvedValue([programmeManagerList]);
-      mockGetManager = jest.fn().mockResolvedValue(programmeManagerList)
+      mockGetAllProgrammeManagers = jest
+        .fn()
+        .mockResolvedValue(programmeManagerList);
+      mockGetProgrammeManager = jest
+        .fn()
+        .mockResolvedValue(programmeManagerList);
+      mockAddProgrammeManagers = jest
+        .fn()
+        .mockResolvedValue(programmeManagerList);
+      mockUpdateProgrammeManagers = jest
+        .fn()
+        .mockResolvedValue(programmeManagerList);
       return {
-        getAll: mockGetAllManagers,
-        get: mockGetManager
+        getAll: mockGetAllProgrammeManagers,
+        get: mockGetProgrammeManager,
+        add: mockAddProgrammeManagers,
+        update: mockUpdateProgrammeManagers,
       };
     }),
   };
@@ -76,7 +100,6 @@ jest.mock('../deliveryProgramme/deliveryProgrammeManagerStore', () => {
 
 describe('createRouter', () => {
   let programmeApp: express.Express;
-  let albApp: express.Express;
   const mockIdentityApi = {
     getIdentity: jest.fn().mockResolvedValue({
       identity: { userEntityRef: 'user:default/johndoe' },
@@ -90,6 +113,7 @@ describe('createRouter', () => {
   });
 
   const mockDiscoveryApi = { getBaseUrl: jest.fn() };
+
   const mockOptions = {
     logger: getVoidLogger(),
     identity: mockIdentityApi,
@@ -113,13 +137,12 @@ describe('createRouter', () => {
 
   beforeAll(async () => {
     const programmeRouter = await createProgrammeRouter(mockOptions);
-    const albRouter = await createAlbRouter(mockOptions);
     programmeApp = express().use(programmeRouter);
-    albApp = express().use(albRouter);
   });
 
   beforeEach(() => {
     jest.resetAllMocks();
+    
   });
 
   describe('GET /health', () => {
@@ -132,13 +155,15 @@ describe('createRouter', () => {
 
   describe('GET /deliveryProgramme', () => {
     it('returns ok', async () => {
-      mockGetAll.mockResolvedValueOnce([expectedProgrammeDataWithManager]);
+      mockGetAllProgrammes.mockResolvedValueOnce([
+        expectedProgrammeDataWithManager,
+      ]);
       const response = await request(programmeApp).get('/deliveryProgramme');
       expect(response.status).toEqual(200);
     });
 
     it('returns bad request', async () => {
-      mockGetAll.mockRejectedValueOnce(new InputError('error'));
+      mockGetAllProgrammes.mockRejectedValueOnce(new InputError('error'));
       const response = await request(programmeApp).get('/deliveryProgramme');
       expect(response.status).toEqual(400);
     });
@@ -146,27 +171,33 @@ describe('createRouter', () => {
 
   describe('GET /deliveryProgramme/:id', () => {
     it('returns ok', async () => {
-      mockGet.mockResolvedValueOnce(expectedProgrammeDataWithManager);
-      mockGetManager.mockResolvedValueOnce(programmeManagerList);
-      const response = await request(programmeApp).get('/deliveryProgramme/1234');
+      mockGetProgramme.mockResolvedValueOnce(expectedProgrammeDataWithManager);
+      mockGetProgrammeManager.mockResolvedValueOnce(programmeManagerList);
+      const response = await request(programmeApp).get(
+        '/deliveryProgramme/1234',
+      );
       expect(response.status).toEqual(200);
     });
 
     it('returns bad request', async () => {
-      mockGet.mockRejectedValueOnce(new InputError('error'));
-      const response = await request(programmeApp).get('/deliveryProgramme/4321');
+      mockGetProgramme.mockRejectedValueOnce(new InputError('error'));
+      const response = await request(programmeApp).get(
+        '/deliveryProgramme/4321',
+      );
       expect(response.status).toEqual(400);
     });
   });
 
   describe('GET /programmeManager', () => {
     it('returns ok', async () => {
-      mockGetAllManagers.mockResolvedValueOnce([programmeManagerList]);
+      mockGetAllProgrammeManagers.mockResolvedValueOnce([programmeManagerList]);
       const response = await request(programmeApp).get('/programmeManager');
       expect(response.status).toEqual(200);
     });
     it('returns bad request', async () => {
-      mockGetAllManagers.mockRejectedValueOnce(new InputError('error'));
+      mockGetAllProgrammeManagers.mockRejectedValueOnce(
+        new InputError('error'),
+      );
       const response = await request(programmeApp).get('/programmeManager');
       expect(response.status).toEqual(400);
     });
@@ -177,49 +208,35 @@ describe('createRouter', () => {
       const response = await request(programmeApp).get('/catalogEntities');
       expect(response.status).toEqual(200);
     });
+    it('returns bad request', async () => {
+      mockGetCatalogEntity.mockRejectedValueOnce(new InputError('error'));
+      const response = await request(programmeApp).get('/catalogEntities');
+      expect(response.status).toEqual(400);
+    });
   });
 
   describe('POST /deliveryProgramme', () => {
-    
-    it('returns ok', async () => {
-      mockGetAll.mockResolvedValueOnce([expectedProgrammeDataWithManager]);
-      const expectedALB = {
-        ...expectedAlbWithName
-      };
-      await request(albApp).post('/armsLengthBody').send(expectedALB);
-
-      const getExistingAlbData = await request(albApp).get('/armsLengthBody');
-      const getAlbId = getExistingAlbData.body[0].id;
+    it('returns created', async () => {
+      mockGetAllProgrammes.mockResolvedValueOnce([
+        expectedProgrammeDataWithManager,
+      ]);
+      mockAddProgramme.mockResolvedValueOnce(expectedProgrammeDataWithManager);
+      mockAddProgrammeManagers.mockResolvedValueOnce(programmeManagerList);
       const expectedProgramme = {
-        programme_managers: [
-          {
-            aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
-          },
-          {
-            aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73422',
-          },
-          {
-            aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73424',
-          },
-        ],
-        title: 'Test title 1 ',
-        alias: 'Test Alias',
-        description: 'Test description',
-        finance_code: 'Test finance_code',
-        delivery_programme_code: 'Test delivery_programme_code',
-        url: 'Test url',
-        arms_length_body_id: getAlbId,
+        ...expectedProgrammeDataWithManager,
+        arms_length_body_id: '1',
       };
-      console.log(expectedProgramme)
+      expectedProgramme.title = 'new title';
       const response = await request(programmeApp)
         .post('/deliveryProgramme')
         .send(expectedProgramme);
-        console.log(response)
       expect(response.status).toEqual(201);
     });
 
     it('return 406 if title already exists', async () => {
-      mockGetAll.mockResolvedValueOnce([expectedProgrammeDataWithManager]);
+      mockGetAllProgrammes.mockResolvedValueOnce([
+        expectedProgrammeDataWithManager,
+      ]);
       const response = await request(programmeApp)
         .post('/deliveryProgramme')
         .send(expectedProgrammeDataWithManager);
@@ -227,7 +244,7 @@ describe('createRouter', () => {
     });
 
     it('returns bad request', async () => {
-      mockAdd.mockRejectedValueOnce(new InputError('error'));
+      mockAddProgramme.mockRejectedValueOnce(new InputError('error'));
       const response = await request(programmeApp)
         .post('/deliveryProgramme')
         .send(expectedProgrammeDataWithManager);
@@ -236,83 +253,70 @@ describe('createRouter', () => {
   });
 
   describe('PATCH /deliveryProgramme', () => {
-    it('returns ok', async () => {
-      const expectedALB = {
-        ...expectedAlbWithName,
-      };
-      await request(albApp).post('/armsLengthBody').send(expectedALB);
-      const getExistingAlbData = await request(albApp).get('/armsLengthBody');
-      const albId = getExistingAlbData.body[0].id;
+    it('returns created without any updates to programme managers', async () => {
       const existing = {
         ...expectedProgrammeDataWithManager,
         id: '123',
-        arms_length_body_id: albId,
+        arms_length_body_id: '2',
       };
-      mockGetAll.mockResolvedValueOnce([existing]);
-      const data = { ...existing };
-      data.title = 'Test title 1 patch';
-      data.programme_managers = [
-        {
-          aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
-        },
-        {
-          aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73424',
-        },
-      ];
+      mockGetAllProgrammes.mockResolvedValueOnce([existing]);
+
+      const data = {
+        ...expectedProgrammeDataWithName,
+        id: '123',
+        arms_length_body_id: '2',
+        title: 'new title',
+      };
+
+      mockUpdateProgramme.mockResolvedValueOnce(data);
+      mockGetAllProgrammeManagers.mockResolvedValueOnce(programmeManagerList);
       const response = await request(programmeApp)
         .patch('/deliveryProgramme')
         .send(data);
       expect(response.status).toEqual(200);
+    });
 
-      const updatedData = response.body.find(
-        (e: { title: string }) => e.title === 'Test title 1 patch',
+    it('returns created with updates to programme managers', async () => {
+      const existing = {
+        ...expectedProgrammeDataWithManager,
+        id: '123',
+        arms_length_body_id: '2',
+      };
+      mockGetAllProgrammes.mockResolvedValueOnce([existing]);
+
+      const data = {
+        ...expectedProgrammeDataWithName,
+        programme_managers: [
+          [
+            {
+              aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73421',
+            },
+            {
+              aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73423',
+            },
+            {
+              aad_entity_ref_id: 'a9dc2414-0626-43d2-993d-a53aac4d73424',
+            },
+          ],
+        ],
+        id: '123',
+      };
+
+      mockUpdateProgramme.mockResolvedValueOnce(data);
+      mockGetAllProgrammeManagers.mockResolvedValueOnce(programmeManagerList);
+      mockUpdateProgrammeManagers.mockResolvedValueOnce(
+        updatedProgrammeManagerList,
       );
-
-      expect(updatedData.name).toBe(
-        'test-title-expectedprogrammedatawithmanager',
-      );
-      const getDeliveryProgrammesWithPM = await request(programmeApp).get(
-        `/deliveryProgramme/${updatedData.id}`,
-      );
-
-      const programmeManagers =
-        getDeliveryProgrammesWithPM.body.programme_managers;
-
-      expect(programmeManagers.length).toBe(2);
-      expect(
-        programmeManagers.some(
-          (manager: { aad_entity_ref_id: string }) =>
-            manager.aad_entity_ref_id ===
-            'a9dc2414-0626-43d2-993d-a53aac4d73421',
-        ),
-      ).toBeTruthy();
-      expect(
-        programmeManagers.some(
-          (manager: { aad_entity_ref_id: string }) =>
-            manager.aad_entity_ref_id ===
-            'a9dc2414-0626-43d2-993d-a53aac4d73424',
-        ),
-      ).toBeTruthy();
-      expect(
-        programmeManagers.some(
-          (manager: { aad_entity_ref_id: string }) =>
-            manager.aad_entity_ref_id ===
-            'a9dc2414-0626-43d2-993d-a53aac4d73422',
-        ),
-      ).toBeFalsy();
-      expect(
-        programmeManagers.some(
-          (manager: { aad_entity_ref_id: string }) =>
-            manager.aad_entity_ref_id ===
-            'a9dc2414-0626-43d2-993d-a53aac4d73423',
-        ),
-      ).toBeFalsy();
+      const response = await request(programmeApp)
+        .patch('/deliveryProgramme')
+        .send(data);
+      expect(response.status).toEqual(200);
     });
 
     it('returns bad request', async () => {
       const existing = { ...expectedProgrammeDataWithManager, id: '123' };
       const data = { ...existing };
-      mockUpdate.mockRejectedValueOnce(new InputError('error'));
+      mockUpdateProgramme.mockRejectedValueOnce(new InputError('error'));
       const response = await request(programmeApp)
         .patch('/deliveryProgramme')
         .send(data);

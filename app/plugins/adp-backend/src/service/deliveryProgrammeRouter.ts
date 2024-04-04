@@ -93,17 +93,17 @@ export async function createProgrammeRouter(
   router.get('/catalogEntities', async (_req, res) => {
     try {
       const catalogApiResponse = await catalog.getEntities({
-      filter: {
-        kind: 'User',
-      },
-      fields: [
-        'metadata.name',
-        'metadata.annotations.graph.microsoft.com/user-id',
-        'metadata.annotations.microsoft.com/email',
-        'spec.profile.displayName',
-      ],
-    });
-    res.json(catalogApiResponse);
+        filter: {
+          kind: 'User',
+        },
+        fields: [
+          'metadata.name',
+          'metadata.annotations.graph.microsoft.com/user-id',
+          'metadata.annotations.microsoft.com/email',
+          'spec.profile.displayName',
+        ],
+      });
+      res.json(catalogApiResponse);
     } catch (error) {
       const errMsg = (error as Error).message;
       logger.error('Error in retrieving catalog entities: ', errMsg);
@@ -177,8 +177,13 @@ export async function createProgrammeRouter(
         throw new InputError('Invalid payload');
       }
 
-      const allProgrammes = await deliveryProgrammesStore.getAll();
-      const currentData = await deliveryProgrammesStore.get(requestBody.id);
+      const allProgrammes: DeliveryProgramme[] =
+        await deliveryProgrammesStore.getAll();
+
+      const currentData = allProgrammes.find(
+        programme => programme.id === req.body.id,
+      );
+
       const updatedTitle = requestBody?.title;
       const currentTitle = currentData!.title;
       const isTitleChanged = updatedTitle && currentTitle !== updatedTitle;
@@ -200,7 +205,6 @@ export async function createProgrammeRouter(
         requestBody,
         author,
       );
-
       const programmeManagers = req.body.programme_managers;
       if (programmeManagers !== undefined) {
         const existingProgrammeManagers = await programmeManagersStore.get(
@@ -268,16 +272,16 @@ export async function createProgrammeRouter(
 
   router.use(errorHandler());
   return router;
+}
 
-  function isDeliveryProgrammeCreateRequest(
-    request: Omit<DeliveryProgramme, 'id' | 'created_at'>,
-  ) {
-    return typeof request?.title === 'string';
-  }
+function isDeliveryProgrammeCreateRequest(
+  request: Omit<DeliveryProgramme, 'id' | 'created_at'>,
+) {
+  return typeof request?.title === 'string';
+}
 
-  function isDeliveryProgrammeUpdateRequest(
-    request: Omit<PartialDeliveryProgramme, 'updated_at'>,
-  ) {
-    return typeof request?.id === 'string';
-  }
+function isDeliveryProgrammeUpdateRequest(
+  request: Omit<PartialDeliveryProgramme, 'updated_at'>,
+) {
+  return typeof request?.id === 'string';
 }

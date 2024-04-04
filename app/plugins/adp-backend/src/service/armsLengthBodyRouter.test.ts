@@ -115,6 +115,11 @@ describe('createRouter', () => {
       const response = await request(app).get('/armsLengthBodyNames');
       expect(response.status).toEqual(200);
     });
+    it('returns ok', async () => {
+      mockGetAll.mockRejectedValueOnce([expectedAlbWithName]);
+      const response = await request(app).get('/armsLengthBodyNames');
+      expect(response.status).toEqual(400);
+    });
   });
 
   describe('POST /armsLengthBody', () => {

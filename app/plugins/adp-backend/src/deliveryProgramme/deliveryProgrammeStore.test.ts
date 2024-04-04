@@ -15,6 +15,7 @@ import {
   expectedProgrammeDataWithName,
   expectedProgrammeDataWithoutManager,
   catalogTestData,
+  programmeManagerList,
 } from './programmeTestData';
 import { ProgrammeManagerStore } from './deliveryProgrammeManagerStore';
 import {
@@ -81,7 +82,7 @@ describe('DeliveryProgrammeStore', () => {
         managerStore,
         catalogTestData,
       );
-      const allManagers = await managerStore.getAll();
+      const allManagers = await managerStore.get(addResult.id);
       expect(allManagers.length).toBe(3);
       expect(
         allManagers.some(
@@ -136,7 +137,6 @@ describe('DeliveryProgrammeStore', () => {
         expectedAlbWithName,
         ['id'],
       );
-
       const albId = insertAlbId[0].id;
       const expectedProgramme = [
         {
