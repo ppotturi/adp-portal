@@ -1,7 +1,7 @@
-import { defaultProgrammeGroupTransformer } from './deliveryProgrammeTransformers';
+import { deliveryProgrammeGroupTransformer } from './deliveryProgrammeTransformers';
 
-describe('defaultProgrammeGroupTransformer', () => {
-  it('should transform valid ArmsLengthBody to GroupEntity', async () => {
+describe('deliveryProgrammeGroupTransformer', () => {
+  it('should transform a valid ArmsLengthBody to a GroupEntity', async () => {
     const deliveryProgramme = {
       programme_managers: [],
       title: 'Test title 1',
@@ -39,7 +39,7 @@ describe('defaultProgrammeGroupTransformer', () => {
       },
     };
 
-    const result = await defaultProgrammeGroupTransformer(deliveryProgramme);
+    const result = await deliveryProgrammeGroupTransformer(deliveryProgramme);
     expect(result).toEqual(expectedGroupEntity);
   });
 });

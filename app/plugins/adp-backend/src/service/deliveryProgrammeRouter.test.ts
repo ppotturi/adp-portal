@@ -14,21 +14,11 @@ import {
   expectedProgrammeDataWithName,
   updatedProgrammeManagerList,
 } from '../deliveryProgramme/programmeTestData';
-
-import {
-  CatalogRequestOptions,
-  GetEntitiesRequest,
-} from '@backstage/catalog-client';
 import { InputError } from '@backstage/errors';
 
-let catalogRequestOptions: CatalogRequestOptions;
 jest.mock('@backstage/catalog-client', () => ({
   CatalogClient: jest.fn().mockImplementation(() => ({
-    getEntities: async (
-      request: GetEntitiesRequest,
-      options: CatalogRequestOptions,
-    ) => {
-      catalogRequestOptions = options;
+    getEntities: async () => {
       return {
         items: catalogTestData,
       };
