@@ -13,11 +13,6 @@ export function createName(name: string) {
   return nameValue;
 }
 
-export function createTransformerTitle(title: string, alias?: string) {
-  const titleValue = alias ? title + ' ' + `(${alias})` : title;
-  return titleValue;
-}
-
 export async function checkForDuplicateTitle(
   store: DeliveryProgramme[] | ArmsLengthBody[] | DeliveryProject[],
   title: string,

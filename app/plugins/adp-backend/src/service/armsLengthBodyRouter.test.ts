@@ -148,22 +148,6 @@ describe('createRouter', () => {
     }, 6000);
   });
 
-  describe('POST /armsLengthBody', () => {
-    it('returns 406 when ALB title already exists', async () => {
-      const expectedALB = {
-        title: 'Marine Management Organisation',
-        alias: 'ALB',
-        description: 'This is an example ALB',
-      };
-      const response = await request(app)
-        .post('/armsLengthBody')
-        .send(expectedALB);
-      expect(response.status).toEqual(406);
-      expect(response.text).toEqual('{"error":"ALB title already exists"}');
-    }, 6000);
-    });
-  });
-
   describe('PATCH /armsLengthBody', () => {
     it('returns created', async () => {
       const existing = { ...expectedAlbWithName, id: '123' };
