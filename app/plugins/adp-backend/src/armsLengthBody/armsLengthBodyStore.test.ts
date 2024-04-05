@@ -5,8 +5,8 @@ import {
   PartialArmsLengthBody,
 } from './armsLengthBodyStore';
 import { NotFoundError } from '@backstage/errors';
-import { createName } from '../utils/utils';
-import { expectedAlbWithName } from './albTestData';
+import { createName } from '../utils/index';
+import { expectedAlbWithName } from '../testData/albTestData';
 
 describe('armsLengthBodyStore', () => {
   const databases = TestDatabases.create();

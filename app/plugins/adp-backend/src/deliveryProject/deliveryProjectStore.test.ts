@@ -6,9 +6,9 @@ import {
 } from './deliveryProjectStore';
 import { NotFoundError } from '@backstage/errors';
 import { DeliveryProject } from '@internal/plugin-adp-common';
-import { expectedProjectDataWithName } from './projectTestData';
-import { expectedProgrammeDataWithoutManager } from '../deliveryProgramme/programmeTestData';
-import { expectedAlbWithName } from '../armsLengthBody/albTestData';
+import { expectedProjectDataWithName } from '../testData/projectTestData';
+import { expectedProgrammeDataWithoutManager } from '../testData/programmeTestData';
+import { expectedAlbWithName } from '../testData/albTestData';
 
 describe('DeliveryProjectStore', () => {
   const databases = TestDatabases.create();

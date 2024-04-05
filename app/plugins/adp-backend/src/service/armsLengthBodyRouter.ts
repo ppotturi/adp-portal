@@ -15,7 +15,7 @@ import {
   checkForDuplicateTitle,
   getCurrentUsername,
   getOwner,
-} from '../utils/utils';
+} from '../utils/index';
 
 export interface AlbRouterOptions {
   logger: Logger;
@@ -49,9 +49,9 @@ export async function createAlbRouter(
       const data = await armsLengthBodiesStore.getAll();
       res.json(data);
     } catch (error) {
-      const errMsg = (error as Error).message;
-      logger.error('Error in retrieving arms length bodies: ', errMsg);
-      throw new InputError(errMsg);
+      const albError = (error as Error);
+      logger.error('Error in retrieving arms length bodies: ', albError);
+      throw new InputError(albError.message);
     }
   });
 
@@ -60,9 +60,9 @@ export async function createAlbRouter(
       const data = await armsLengthBodiesStore.get(_req.params.id);
       res.json(data);
     } catch (error) {
-      const errMsg = (error as Error).message;
-      logger.error('Error in retrieving arms length body: ', errMsg);
-      throw new InputError(errMsg);
+      const albError = (error as Error);
+      logger.error('Error in retrieving arms length body: ', albError);
+      throw new InputError(albError.message);
     }
   });
 
@@ -77,9 +77,9 @@ export async function createAlbRouter(
       }, {});
       res.json(armsLengthBodiesNames);
     } catch (error) {
-      const errMsg = (error as Error).message;
-      logger.error('Error in retrieving arms length bodies names: ', errMsg);
-      throw new InputError(errMsg);
+      const albError = (error as Error);
+      logger.error('Error in retrieving arms length bodies names: ', albError);
+      throw new InputError(albError.message);
     }
   });
 
@@ -105,9 +105,9 @@ export async function createAlbRouter(
         res.status(201).json(armsLengthBody);
       }
     } catch (error) {
-      const errMsg = (error as Error).message;
-      logger.error('Error in creating a arms length body: ', errMsg);
-      throw new InputError(errMsg);
+      const albError = (error as Error);
+      logger.error('Error in creating a arms length body: ', albError);
+      throw new InputError(albError.message);
     }
   });
 
@@ -143,9 +143,9 @@ export async function createAlbRouter(
       );
       res.status(200).json(armsLengthBody);
     } catch (error) {
-      const errMsg = (error as Error).message;
-      logger.error('Error in updating a arms length body: ', errMsg);
-      throw new InputError(errMsg);
+      const albError = (error as Error);
+      logger.error('Error in updating a arms length body: ', albError);
+      throw new InputError(albError.message);
     }
   });
   router.use(errorHandler());

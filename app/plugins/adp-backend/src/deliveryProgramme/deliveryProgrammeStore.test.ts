@@ -5,8 +5,8 @@ import {
   PartialDeliveryProgramme,
 } from './deliveryProgrammeStore';
 import { NotFoundError } from '@backstage/errors';
-import { createName } from '../utils/utils';
-import { expectedAlbWithName } from '../armsLengthBody/albTestData';
+import { createName } from '../utils/index';
+import { expectedAlbWithName } from '../testData/albTestData';
 import {
   DeliveryProgramme,
   ProgrammeManager,
@@ -14,13 +14,13 @@ import {
 import {
   expectedProgrammeDataWithName,
   expectedProgrammeDataWithoutManager,
-  catalogTestData,
-} from './programmeTestData';
+} from '../testData/programmeTestData'
 import { ProgrammeManagerStore } from './deliveryProgrammeManagerStore';
 import {
   addProgrammeManager,
   deleteProgrammeManager,
 } from '../service-utils/deliveryProgrammeUtils';
+import { catalogTestData } from '../testData/catalogEntityTestData';
 
 describe('DeliveryProgrammeStore', () => {
   const databases = TestDatabases.create();
