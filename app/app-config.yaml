@@ -186,3 +186,7 @@ catalog:
 techRadar: 
   data: https://raw.githubusercontent.com/defra/adp-software-templates/main/tech-radars/development-tech-radar.json
 
+adp:
+  fluxOnboarding:
+    apiBaseUrl: ${ADP_PORTAL_API_ENDPOINT}/FluxConfig
+
