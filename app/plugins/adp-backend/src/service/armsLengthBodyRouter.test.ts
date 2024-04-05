@@ -102,7 +102,9 @@ describe('createRouter', () => {
         .send(expectedALB);
       expect(response.status).toEqual(201);
       expect(checkDuplicate).toBe(false);
-      const getAlbById = await request(app).get(`/armsLengthBody/${response.body.id}`);
+      const getAlbById = await request(app).get(
+        `/armsLengthBody/${response.body.id}`,
+      );
       expect(getAlbById.status).toEqual(200);
     }, 6000);
 
