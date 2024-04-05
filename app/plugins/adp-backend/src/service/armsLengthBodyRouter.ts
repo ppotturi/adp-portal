@@ -11,7 +11,11 @@ import {
 } from '../armsLengthBody/armsLengthBodyStore';
 import { ArmsLengthBody } from '@internal/plugin-adp-common';
 import { Config } from '@backstage/config';
-import { checkForDuplicateTitle, getCurrentUsername, getOwner } from '../utils';
+import {
+  checkForDuplicateTitle,
+  getCurrentUsername,
+  getOwner,
+} from '../utils/index';
 
 export interface AlbRouterOptions {
   logger: Logger;
@@ -41,25 +45,37 @@ export async function createAlbRouter(
   });
 
   router.get('/armsLengthBody', async (_req, res) => {
-    const data = await armsLengthBodiesStore.getAll();
-    res.json(data);
+    try {
+      const data = await armsLengthBodiesStore.getAll();
+      res.json(data);
+    } catch (error) {
+      const albError = (error as Error);
+      logger.error('Error in retrieving arms length bodies: ', albError);
+      throw new InputError(albError.message);
+    }
   });
 
   router.get('/armsLengthBody/:id', async (_req, res) => {
-    const data = await armsLengthBodiesStore.get(_req.params.id);
-    res.json(data);
+    try {
+      const data = await armsLengthBodiesStore.get(_req.params.id);
+      res.json(data);
+    } catch (error) {
+      const albError = (error as Error);
+      logger.error('Error in retrieving arms length body: ', albError);
+      throw new InputError(albError.message);
+    }
   });
 
   router.get('/armsLengthBodyNames', async (_req, res) => {
-    const armsLengthBodies = await armsLengthBodiesStore.getAll();
-    const armsLengthBodiesNames = armsLengthBodies.reduce<
-      Record<string, string>
-    >((acc, alb) => {
-      acc[alb.id] = alb.title;
-      return acc;
-    }, {});
-
-    res.json(armsLengthBodiesNames);
+    try {
+      const armsLengthBodies = await armsLengthBodiesStore.getAll();
+      const armsLengthBodiesNames = Object.fromEntries(armsLengthBodies.map(alb => [alb.id, alb.title]));
+      res.json(armsLengthBodiesNames);
+    } catch (error) {
+      const albError = (error as Error);
+      logger.error('Error in retrieving arms length bodies names: ', albError);
+      throw new InputError(albError.message);
+    }
   });
 
   router.post('/armsLengthBody', async (req, res) => {
@@ -67,7 +83,6 @@ export async function createAlbRouter(
       if (!isArmsLengthBodyCreateRequest(req.body)) {
         throw new InputError('Invalid payload');
       }
-
       const data: ArmsLengthBody[] = await armsLengthBodiesStore.getAll();
       const isDuplicate: boolean = await checkForDuplicateTitle(
         data,
@@ -85,7 +100,9 @@ export async function createAlbRouter(
         res.status(201).json(armsLengthBody);
       }
     } catch (error) {
-      throw new InputError('Error');
+      const albError = (error as Error);
+      logger.error('Error in creating a arms length body: ', albError);
+      throw new InputError(albError.message);
     }
   });
 
@@ -121,7 +138,9 @@ export async function createAlbRouter(
       );
       res.status(200).json(armsLengthBody);
     } catch (error) {
-      throw new InputError('Error');
+      const albError = (error as Error);
+      logger.error('Error in updating a arms length body: ', albError);
+      throw new InputError(albError.message);
     }
   });
   router.use(errorHandler());

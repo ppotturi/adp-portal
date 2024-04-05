@@ -5,8 +5,8 @@ import {
   PartialArmsLengthBody,
 } from './armsLengthBodyStore';
 import { NotFoundError } from '@backstage/errors';
-import { createName } from '../utils';
-import { expectedAlb, expectedAlbsWithName } from './albTestData';
+import { createName } from '../utils/index';
+import { expectedAlbWithName } from '../testData/albTestData';
 
 describe('armsLengthBodyStore', () => {
   const databases = TestDatabases.create();
@@ -24,10 +24,12 @@ describe('armsLengthBodyStore', () => {
     'should create a new ALB',
     async databaseId => {
       const { store } = await createDatabase(databaseId);
-
-      const addResult = await store.add(expectedAlb, 'test', 'test group');
-
-      expect(addResult.name).toEqual(createName(expectedAlb.title));
+      const addResult = await store.add(
+        expectedAlbWithName,
+        'test',
+        'test group',
+      );
+      expect(addResult.name).toEqual(createName(expectedAlbWithName.title));
       expect(addResult.id).toBeDefined();
       expect(addResult.created_at).toBeDefined();
       expect(addResult.updated_at).toBeDefined();
@@ -48,22 +50,20 @@ describe('armsLengthBodyStore', () => {
     'should get a ALBs from the database',
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
-
       const insertedIds = await knex('arms_length_body').insert(
-        expectedAlbsWithName,
+        expectedAlbWithName,
         ['id'],
       );
+      const test2Id = insertedIds[0].id;
 
-      // Get the 'Test 2' ALB
-      const test2Id = insertedIds[1].id;
       const getResult = await store.get(test2Id);
 
       expect(getResult).toBeDefined();
-      expect(getResult?.title).toBe('ALB Example 2');
-      expect(getResult?.alias).toBe('ALB 2');
-      expect(getResult?.description).toBe('This is an example ALB 2');
+      expect(getResult?.title).toBe('ALB Example 1');
+      expect(getResult?.alias).toBe('ALB 1');
+      expect(getResult?.description).toBe('This is an example ALB 1');
       expect(getResult?.creator).toBe('john');
-      expect(getResult?.owner).toBe('johnD');
+      expect(getResult?.owner).toBe('john');
       expect(getResult?.url).toBe('http://www.example.com/index.html');
     },
   );
@@ -72,11 +72,8 @@ describe('armsLengthBodyStore', () => {
     'should return null if a ALB cannot be found in the database',
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
-
-      await knex('arms_length_body').insert(expectedAlbsWithName);
-
+      await knex('arms_length_body').insert(expectedAlbWithName);
       const getResult = await store.get('12345');
-
       expect(getResult).toBeNull();
     },
   );
@@ -87,12 +84,10 @@ describe('armsLengthBodyStore', () => {
       const { knex, store } = await createDatabase(databaseId);
 
       const insertedIds = await knex('arms_length_body').insert(
-        expectedAlbsWithName,
+        expectedAlbWithName,
         ['id'],
       );
-
-      // Get the 'Test 2' ALB
-      const test2Id = insertedIds[1].id;
+      const test2Id = insertedIds[0].id;
       const expectedUpdate: PartialArmsLengthBody = {
         id: test2Id,
         title: 'ALB Example',
@@ -115,7 +110,7 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      await knex('arms_length_body').insert(expectedAlbsWithName);
+      await knex('arms_length_body').insert(expectedAlbWithName);
 
       await expect(
         async () =>
@@ -140,7 +135,7 @@ describe('armsLengthBodyStore', () => {
     async databaseId => {
       const { knex, store } = await createDatabase(databaseId);
 
-      await knex('arms_length_body').insert(expectedAlbsWithName);
+      await knex('arms_length_body').insert(expectedAlbWithName);
       await store.getAll();
       const updateWithoutId = {
         creator: 'n/a',

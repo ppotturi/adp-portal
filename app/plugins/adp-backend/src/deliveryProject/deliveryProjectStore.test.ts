@@ -6,9 +6,9 @@ import {
 } from './deliveryProjectStore';
 import { NotFoundError } from '@backstage/errors';
 import { DeliveryProject } from '@internal/plugin-adp-common';
-import { expectedProjectDataWithName } from './projectTestData';
-import { expectedProgrammeDataWithoutManager } from '../deliveryProgramme/programmeTestData';
-import { expectedAlbsWithName } from '../armsLengthBody/albTestData';
+import { expectedProjectDataWithName } from '../testData/projectTestData';
+import { expectedProgrammeDataWithoutManager } from '../testData/programmeTestData';
+import { expectedAlbWithName } from '../testData/albTestData';
 
 describe('DeliveryProjectStore', () => {
   const databases = TestDatabases.create();
@@ -29,10 +29,10 @@ describe('DeliveryProjectStore', () => {
       const { knex, projectStore } = await createDatabase(databaseId);
 
       const insertAlbId = await knex('arms_length_body').insert(
-        expectedAlbsWithName,
+        expectedAlbWithName,
         ['id'],
       );
-      const albId = insertAlbId[1].id;
+      const albId = insertAlbId[0].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
         arms_length_body_id: albId,
@@ -65,10 +65,10 @@ describe('DeliveryProjectStore', () => {
     async databaseId => {
       const { knex, projectStore } = await createDatabase(databaseId);
       const insertAlbId = await knex('arms_length_body').insert(
-        expectedAlbsWithName,
+        expectedAlbWithName,
         ['id'],
       );
-      const albId = insertAlbId[1].id;
+      const albId = insertAlbId[0].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
         arms_length_body_id: albId,
@@ -96,10 +96,10 @@ describe('DeliveryProjectStore', () => {
     async databaseId => {
       const { knex, projectStore } = await createDatabase(databaseId);
       const insertAlbId = await knex('arms_length_body').insert(
-        expectedAlbsWithName,
+        expectedAlbWithName,
         ['id'],
       );
-      const albId = insertAlbId[1].id;
+      const albId = insertAlbId[0].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
         arms_length_body_id: albId,
@@ -130,10 +130,10 @@ describe('DeliveryProjectStore', () => {
     async databaseId => {
       const { knex, projectStore } = await createDatabase(databaseId);
       const insertAlbId = await knex('arms_length_body').insert(
-        expectedAlbsWithName,
+        expectedAlbWithName,
         ['id'],
       );
-      const albId = insertAlbId[1].id;
+      const albId = insertAlbId[0].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
         arms_length_body_id: albId,
@@ -163,10 +163,10 @@ describe('DeliveryProjectStore', () => {
     async databaseId => {
       const { knex, projectStore } = await createDatabase(databaseId);
       const insertAlbId = await knex('arms_length_body').insert(
-        expectedAlbsWithName,
+        expectedAlbWithName,
         ['id'],
       );
-      const albId = insertAlbId[1].id;
+      const albId = insertAlbId[0].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
         arms_length_body_id: albId,
@@ -209,10 +209,10 @@ describe('DeliveryProjectStore', () => {
     async databaseId => {
       const { knex, projectStore } = await createDatabase(databaseId);
       const insertAlbId = await knex('arms_length_body').insert(
-        expectedAlbsWithName,
+        expectedAlbWithName,
         ['id'],
       );
-      const albId = insertAlbId[1].id;
+      const albId = insertAlbId[0].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
         arms_length_body_id: albId,
@@ -247,10 +247,10 @@ describe('DeliveryProjectStore', () => {
     async databaseId => {
       const { knex, projectStore } = await createDatabase(databaseId);
       const insertAlbId = await knex('arms_length_body').insert(
-        expectedAlbsWithName,
+        expectedAlbWithName,
         ['id'],
       );
-      const albId = insertAlbId[1].id;
+      const albId = insertAlbId[0].id;
       const programme = {
         ...expectedProgrammeDataWithoutManager,
         arms_length_body_id: albId,
