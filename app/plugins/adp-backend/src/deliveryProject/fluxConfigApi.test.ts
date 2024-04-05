@@ -1,6 +1,6 @@
 import { ConfigReader } from '@backstage/config';
 import { FluxConfigApi } from './fluxConfigApi';
-import { expectedProgrammeDataWithManager } from '../deliveryProgramme/programmeTestData';
+import { expectedProgrammeDataWithManager } from '../testData/programmeTestData';
 import { DeliveryProgrammeStore } from '../deliveryProgramme/deliveryProgrammeStore';
 import fetch, {Response} from 'node-fetch';
 
