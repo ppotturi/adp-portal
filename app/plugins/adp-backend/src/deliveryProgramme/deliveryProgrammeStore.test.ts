@@ -27,9 +27,11 @@ describe('DeliveryProgrammeStore', () => {
 
   async function createDatabase(databaseId: TestDatabaseId) {
     const knex = await databases.init(databaseId);
-    await AdpDatabase.runMigrations(knex);
-    const programmeStore = new DeliveryProgrammeStore(knex);
-    const managerStore = new ProgrammeManagerStore(knex);
+    const db = AdpDatabase.create({
+      getClient: () => Promise.resolve(knex),
+    });
+    const programmeStore = new DeliveryProgrammeStore(await db.get());
+    const managerStore = new ProgrammeManagerStore(await db.get());
 
     return { knex, programmeStore, managerStore };
   }
@@ -131,22 +133,9 @@ describe('DeliveryProgrammeStore', () => {
   it.each(databases.eachSupportedId())(
     'should get all Delivery Programmes from the database',
     async databaseId => {
-      const { knex, programmeStore } = await createDatabase(databaseId);
-      const insertAlbId = await knex('arms_length_body').insert(
-        expectedAlbsWithName,
-        ['id'],
-      );
-
-      const albId = insertAlbId[1].id;
-      const expectedProgramme = [
-        {
-          ...expectedProgrammeDataWithoutManager,
-          arms_length_body_id: albId,
-        },
-      ];
-      await knex('delivery_programme').insert(expectedProgramme);
+      const { programmeStore } = await createDatabase(databaseId);
       const getAllResult = await programmeStore.getAll();
-      expect(getAllResult).toHaveLength(1);
+      expect(getAllResult).toHaveLength(7);
     },
   );
 
