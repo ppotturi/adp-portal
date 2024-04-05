@@ -11,8 +11,8 @@ import {
 } from '../deliveryProject/deliveryProjectStore';
 import { DeliveryProject } from '@internal/plugin-adp-common';
 import { checkForDuplicateTitle, getCurrentUsername } from '../utils';
-import { DeliveryProgrammeStore } from '../deliveryProgramme';
-import { FluxConfigApi } from '../deliveryProject';
+import { DeliveryProgrammeStore } from '../deliveryProgramme/deliveryProgrammeStore';
+import { FluxConfigApi } from '../deliveryProject/fluxConfigApi';
 import { Config } from '@backstage/config';
 
 export interface ProjectRouterOptions {

@@ -1,7 +1,7 @@
 import { Config } from '@backstage/config';
 import { DeliveryProject } from '@internal/plugin-adp-common';
 import fetch from 'node-fetch';
-import { DeliveryProgrammeStore } from '../deliveryProgramme';
+import { DeliveryProgrammeStore } from '../deliveryProgramme/deliveryProgrammeStore';
 
 export type FluxConfig = {
   key: string;

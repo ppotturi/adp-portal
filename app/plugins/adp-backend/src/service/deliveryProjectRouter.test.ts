@@ -9,6 +9,7 @@ import { createProjectRouter } from './deliveryProjectRouter';
 import { ConfigReader } from '@backstage/config';
 import { expectedProjectDataWithName } from '../deliveryProject/projectTestData';
 import { InputError } from '@backstage/errors';
+import { expectedProgrammeDataWithName } from '../deliveryProgramme/programmeTestData';
 
 jest.mock('@backstage/catalog-client', () => ({
   CatalogClient: jest.fn().mockImplementation(() => ({
@@ -61,24 +62,76 @@ jest.mock('@backstage/catalog-client', () => ({
   })),
 }));
 
-let mockGetAll: jest.Mock;
-let mockGet: jest.Mock;
-let mockAdd: jest.Mock;
-let mockUpdate: jest.Mock;
+let mockProjectGetAll: jest.Mock;
+let mockProjectGet: jest.Mock;
+let mockProjectAdd: jest.Mock;
+let mockProjectUpdate: jest.Mock;
 
 jest.mock('../deliveryProject/deliveryProjectStore', () => {
   return {
     DeliveryProjectStore: jest.fn().mockImplementation(() => {
-      mockGetAll = jest.fn().mockResolvedValue([expectedProjectDataWithName]);
-      mockGet = jest.fn().mockResolvedValue(expectedProjectDataWithName);
-      mockAdd = jest.fn().mockResolvedValue(expectedProjectDataWithName);
-      mockUpdate = jest.fn().mockResolvedValue(expectedProjectDataWithName);
+      mockProjectGetAll = jest
+        .fn()
+        .mockResolvedValue([expectedProjectDataWithName]);
+      mockProjectGet = jest.fn().mockResolvedValue(expectedProjectDataWithName);
+      mockProjectAdd = jest.fn().mockResolvedValue(expectedProjectDataWithName);
+      mockProjectUpdate = jest
+        .fn()
+        .mockResolvedValue(expectedProjectDataWithName);
 
       return {
-        getAll: mockGetAll,
-        get: mockGet,
-        add: mockAdd,
-        update: mockUpdate,
+        getAll: mockProjectGetAll,
+        get: mockProjectGet,
+        add: mockProjectAdd,
+        update: mockProjectUpdate,
+      };
+    }),
+  };
+});
+
+let mockProgrammeGetAll: jest.Mock;
+let mockProgrammeGet: jest.Mock;
+let mockProgrammeAdd: jest.Mock;
+let mockProgrammeUpdate: jest.Mock;
+
+jest.mock('../deliveryProgramme/deliveryProgrammeStore', () => {
+  return {
+    DeliveryProgrammeStore: jest.fn().mockImplementation(() => {
+      mockProgrammeGetAll = jest
+        .fn()
+        .mockResolvedValue([expectedProgrammeDataWithName]);
+      mockProgrammeGet = jest
+        .fn()
+        .mockResolvedValue(expectedProgrammeDataWithName);
+      mockProgrammeAdd = jest
+        .fn()
+        .mockResolvedValue(expectedProgrammeDataWithName);
+      mockProgrammeUpdate = jest
+        .fn()
+        .mockResolvedValue(expectedProgrammeDataWithName);
+
+      return {
+        getAll: mockProgrammeGetAll,
+        get: mockProgrammeGet,
+        add: mockProgrammeAdd,
+        update: mockProgrammeUpdate,
+      };
+    }),
+  };
+});
+
+let mockCreateFluxConfig: jest.Mock;
+let mockGetFluxConfig: jest.Mock;
+
+jest.mock('../deliveryProject/fluxConfigApi', () => {
+  return {
+    FluxConfigApi: jest.fn().mockImplementation(() => {
+      mockCreateFluxConfig = jest.fn().mockResolvedValue({});
+      mockGetFluxConfig = jest.fn().mockResolvedValue({});
+
+      return {
+        createFluxConfig: mockCreateFluxConfig,
+        getFluxConfig: mockGetFluxConfig,
       };
     }),
   };
@@ -95,6 +148,11 @@ describe('createRouter', () => {
   const mockConfig = new ConfigReader({
     rbac: {
       programmeAdminGroup: 'test',
+    },
+    adp: {
+      fluxOnboarding: {
+        apiBaseUrl: 'https://portal-api/FluxOnboarding',
+      },
     },
   });
 
@@ -131,13 +189,13 @@ describe('createRouter', () => {
 
   describe('GET /deliveryProject', () => {
     it('returns ok', async () => {
-      mockGetAll.mockResolvedValueOnce([expectedProjectDataWithName]);
+      mockProjectGetAll.mockResolvedValueOnce([expectedProjectDataWithName]);
       const response = await request(projectApp).get('/deliveryProject');
       expect(response.status).toEqual(200);
     });
 
     it('returns bad request', async () => {
-      mockGetAll.mockRejectedValueOnce(new InputError('error'));
+      mockProjectGetAll.mockRejectedValueOnce(new InputError('error'));
       const response = await request(projectApp).get('/deliveryProject');
       expect(response.status).toEqual(400);
     });
@@ -145,13 +203,13 @@ describe('createRouter', () => {
 
   describe('GET /deliveryProject/:id', () => {
     it('returns ok', async () => {
-      mockGet.mockResolvedValueOnce(expectedProjectDataWithName);
+      mockProjectGet.mockResolvedValueOnce(expectedProjectDataWithName);
       const response = await request(projectApp).get('/deliveryProject/1234');
       expect(response.status).toEqual(200);
     });
 
     it('returns bad request', async () => {
-      mockGet.mockRejectedValueOnce(new InputError('error'));
+      mockProjectGet.mockRejectedValueOnce(new InputError('error'));
       const response = await request(projectApp).get('/deliveryProject/4321');
       expect(response.status).toEqual(400);
     });
@@ -159,7 +217,8 @@ describe('createRouter', () => {
 
   describe('POST /deliveryProject', () => {
     it('returns created', async () => {
-      mockGetAll.mockResolvedValueOnce([expectedProjectDataWithName]);
+      mockProjectGetAll.mockResolvedValueOnce([expectedProjectDataWithName]);
+      //mockCreateFluxConfig.mockResolvedValueOnce({});
       const data = { ...expectedProjectDataWithName };
       data.title = 'new title';
       const response = await request(projectApp)
@@ -169,7 +228,7 @@ describe('createRouter', () => {
     });
 
     it('return 406 if title already exists', async () => {
-      mockGetAll.mockResolvedValueOnce([expectedProjectDataWithName]);
+      mockProjectGetAll.mockResolvedValueOnce([expectedProjectDataWithName]);
       const response = await request(projectApp)
         .post('/deliveryProject')
         .send(expectedProjectDataWithName);
@@ -177,7 +236,7 @@ describe('createRouter', () => {
     });
 
     it('returns bad request', async () => {
-      mockAdd.mockRejectedValueOnce(new InputError('error'));
+      mockProjectAdd.mockRejectedValueOnce(new InputError('error'));
       const response = await request(projectApp)
         .post('/deliveryProject')
         .send(expectedProjectDataWithName);
@@ -188,7 +247,7 @@ describe('createRouter', () => {
   describe('PATCH /deliveryProject', () => {
     it('returns created', async () => {
       const existing = { ...expectedProjectDataWithName, id: '123' };
-      mockGetAll.mockResolvedValueOnce([existing]);
+      mockProjectGetAll.mockResolvedValueOnce([existing]);
       const data = { ...existing };
       data.title = 'new title';
       const response = await request(projectApp)
@@ -200,7 +259,7 @@ describe('createRouter', () => {
     it('returns bad request', async () => {
       const existing = { ...expectedProjectDataWithName, id: '123' };
       const data = { ...existing };
-      mockUpdate.mockRejectedValueOnce(new InputError('error'));
+      mockProjectUpdate.mockRejectedValueOnce(new InputError('error'));
       const response = await request(projectApp)
         .patch('/deliveryProject')
         .send(data);
