@@ -69,12 +69,7 @@ export async function createAlbRouter(
   router.get('/armsLengthBodyNames', async (_req, res) => {
     try {
       const armsLengthBodies = await armsLengthBodiesStore.getAll();
-      const armsLengthBodiesNames = armsLengthBodies.reduce<
-        Record<string, string>
-      >((acc, alb) => {
-        acc[alb.id] = alb.title;
-        return acc;
-      }, {});
+      const armsLengthBodiesNames = Object.fromEntries(armsLengthBodies.map(alb => [alb.id, alb.title]));
       res.json(armsLengthBodiesNames);
     } catch (error) {
       const albError = (error as Error);
