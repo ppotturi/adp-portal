@@ -11,22 +11,26 @@ import {
 } from '../deliveryProject/deliveryProjectStore';
 import { DeliveryProject } from '@internal/plugin-adp-common';
 import { checkForDuplicateTitle, getCurrentUsername } from '../utils';
+import { DeliveryProgrammeStore } from '../deliveryProgramme';
+import { FluxConfigApi } from '../deliveryProject';
+import { Config } from '@backstage/config';
 
 export interface ProjectRouterOptions {
   logger: Logger;
   identity: IdentityApi;
   database: PluginDatabaseManager;
+  config: Config
 }
 
 export async function createProjectRouter(
   options: ProjectRouterOptions,
 ): Promise<express.Router> {
-  const { logger, identity, database } = options;
+  const { logger, identity, database, config } = options;
   const adpDatabase = AdpDatabase.create(database);
   const deliveryProjectStore = new DeliveryProjectStore(
     await adpDatabase.get(),
   );
-
+  
   const router = Router();
   router.use(express.json());
 
@@ -58,6 +62,11 @@ export async function createProjectRouter(
         throw new InputError('Invalid payload');
       }
 
+      const deliveryProgrammeStore = new DeliveryProgrammeStore(
+        await adpDatabase.get(),
+      );
+      const fluxConfigApi = new FluxConfigApi(config, deliveryProgrammeStore);
+
       const data: DeliveryProject[] = await deliveryProjectStore.getAll();
 
       const isDuplicate: boolean = await checkForDuplicateTitle(
@@ -74,6 +83,9 @@ export async function createProjectRouter(
           req.body,
           author,
         );
+
+        await fluxConfigApi.createFluxConfig(deliveryProject);
+
         res.status(201).json(deliveryProject);
       }
     } catch (error) {

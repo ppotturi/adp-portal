@@ -29,30 +29,37 @@ export type FluxTeamConfig = {
 };
 
 export class FluxConfigApi {
-  #apiBaseUrl: string;
-  #deliveryProgrammeStore: DeliveryProgrammeStore;
+  private readonly apiBaseUrl: string;
+  private readonly deliveryProgrammeStore: DeliveryProgrammeStore;
+  private readonly config: Config;
 
   constructor(config: Config, deliveryProgrammeStore: DeliveryProgrammeStore) {
-    this.#apiBaseUrl = config.getString('adp.fluxOnboarding.apiBaseUrl');
-    this.#deliveryProgrammeStore = deliveryProgrammeStore;
+    this.apiBaseUrl = config.getString('adp.fluxOnboarding.apiBaseUrl');
+    this.deliveryProgrammeStore = deliveryProgrammeStore;
+    this.config = config;
   }
 
-  async CreateFluxConfig(deliveryProject: DeliveryProject) {
-    const endpoint = `${this.#apiBaseUrl}/create/${deliveryProject.name}`;
+  async createFluxConfig(deliveryProject: DeliveryProject) {
+    const endpoint = `${this.apiBaseUrl}/create/${deliveryProject.name}`;
 
-    const deliveryProgramme = await this.#deliveryProgrammeStore.get(deliveryProject.delivery_programme_id);
+    const deliveryProgramme = await this.deliveryProgrammeStore.get(
+      deliveryProject.delivery_programme_id,
+    );
 
     if (!deliveryProgramme) {
-      throw new Error(`Delivery Programme with ID ${deliveryProject.delivery_programme_id} for project ${deliveryProject.id} not found`);
+      throw new Error(
+        `Delivery Programme with ID ${deliveryProject.delivery_programme_id} for project ${deliveryProject.id} not found`,
+      );
     }
+
+    const configValues = this.parseConfigKeyValues('adp.fluxOnboarding.defaultConfigVariables');
 
     const teamConfig = {
       programmeName: deliveryProgramme.name,
       serviceCode: deliveryProject.name,
+      teamName: deliveryProject.name,
       services: [],
-      configVariables: {
-        key: 'value',
-      },
+      configVariables: configValues,
     };
 
     const response = await fetch(endpoint, {
@@ -70,8 +77,8 @@ export class FluxConfigApi {
     }
   }
 
-  async GetFluxConfig(teamName: string): Promise<FluxTeamConfig | null> {
-    const endpoint = `${this.#apiBaseUrl}/get/${teamName}`;
+  async getFluxConfig(teamName: string): Promise<FluxTeamConfig | null> {
+    const endpoint = `${this.apiBaseUrl}/get/${teamName}`;
     const statusCodeNotFound = 404;
 
     const response = await fetch(endpoint, {
@@ -90,5 +97,20 @@ export class FluxConfigApi {
     const fluxTeamConfig = (await response.json()) as FluxTeamConfig;
 
     return fluxTeamConfig;
+  }
+
+  private parseConfigKeyValues(configKey: string) {
+    const keyValueMap = new Map();
+
+    if (this.config.has(configKey)) {
+      this.config
+        .getConfigArray(configKey)
+        .forEach(configVar => {
+          keyValueMap.set(configVar.getString('key'), configVar.getString('value'));
+        });
+    }
+
+    const keyValues = Object.fromEntries(keyValueMap.entries());
+    return keyValues;
   }
 }
