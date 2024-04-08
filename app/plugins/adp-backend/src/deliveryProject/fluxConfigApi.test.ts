@@ -2,7 +2,7 @@ import { ConfigReader } from '@backstage/config';
 import { FluxConfigApi } from './fluxConfigApi';
 import { expectedProgrammeDataWithManager } from '../testData/programmeTestData';
 import { DeliveryProgrammeStore } from '../deliveryProgramme/deliveryProgrammeStore';
-import fetch, {Response} from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
 
 jest.mock('node-fetch', () => jest.fn());
 const mockedFetch: jest.MockedFunction<typeof fetch> =
@@ -39,8 +39,6 @@ jest.mock('../deliveryProgramme/deliveryProgrammeStore', () => {
   };
 });
 
-const mockDeliveryProgrammeStore = jest.mocked(DeliveryProgrammeStore, {shallow: false});
-
 describe('FluxConfigApi', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -55,8 +53,11 @@ describe('FluxConfigApi', () => {
   });
 
   it('initializes correctly from required parameters', () => {
-    
-    const fluxConfigApi = new FluxConfigApi(mockConfig, mockDeliveryProgrammeStore.mock.instances[0]);
+    const mockDeliveryProgrammeStore = new DeliveryProgrammeStore(null!);
+    const fluxConfigApi = new FluxConfigApi(
+      mockConfig,
+      mockDeliveryProgrammeStore,
+    );
 
     expect(fluxConfigApi).toBeDefined();
   });
@@ -108,7 +109,11 @@ describe('FluxConfigApi', () => {
       status: 200,
     } as unknown as Response);
 
-    const fluxConfigApi = new FluxConfigApi(mockConfig, mockDeliveryProgrammeStore.mock.instances[0]);
+    const mockDeliveryProgrammeStore = new DeliveryProgrammeStore(null!);
+    const fluxConfigApi = new FluxConfigApi(
+      mockConfig,
+      mockDeliveryProgrammeStore,
+    );
     const fluxTeamConfig = await fluxConfigApi.getFluxConfig('test-team');
 
     expect(fluxTeamConfig).toBeDefined();
@@ -121,7 +126,11 @@ describe('FluxConfigApi', () => {
       status: 404,
     } as unknown as Response);
 
-    const fluxConfigApi = new FluxConfigApi(mockConfig, mockDeliveryProgrammeStore.mock.instances[0]);
+    const mockDeliveryProgrammeStore = new DeliveryProgrammeStore(null!);
+    const fluxConfigApi = new FluxConfigApi(
+      mockConfig,
+      mockDeliveryProgrammeStore,
+    );
     const fluxTeamConfig = await fluxConfigApi.getFluxConfig('test-team');
 
     expect(fluxTeamConfig).toBeNull();
@@ -131,18 +140,24 @@ describe('FluxConfigApi', () => {
     mockedFetch.mockResolvedValue({
       ok: false,
       status: 500,
-      statusText: 'Something went wrong'
+      statusText: 'Something went wrong',
     } as unknown as Response);
 
-    const fluxConfigApi = new FluxConfigApi(mockConfig, mockDeliveryProgrammeStore.mock.instances[0]);
+    const mockDeliveryProgrammeStore = new DeliveryProgrammeStore(null!);
+    const fluxConfigApi = new FluxConfigApi(
+      mockConfig,
+      mockDeliveryProgrammeStore,
+    );
 
-    expect(fluxConfigApi.getFluxConfig('test-team')).rejects.toThrow(/Unexpected response from FluxConfig API/);
+    expect(fluxConfigApi.getFluxConfig('test-team')).rejects.toThrow(
+      /Unexpected response from FluxConfig API/,
+    );
   });
 
   it('should create Flux team configuration', async () => {
     mockedFetch.mockResolvedValue({
       ok: true,
-      status: 204
+      status: 204,
     } as unknown as Response);
 
     const deliveryProject = {
@@ -153,10 +168,14 @@ describe('FluxConfigApi', () => {
       delivery_programme_id: '123',
       delivery_project_code: '123',
       created_at: new Date(),
-      updated_at: new Date()
+      updated_at: new Date(),
     };
 
-    const fluxConfigApi = new FluxConfigApi(mockConfig, mockDeliveryProgrammeStore.mock.instances[0]);
+    const mockDeliveryProgrammeStore = new DeliveryProgrammeStore(null!);
+    const fluxConfigApi = new FluxConfigApi(
+      mockConfig,
+      mockDeliveryProgrammeStore,
+    );
     await fluxConfigApi.createFluxConfig(deliveryProject);
 
     expect(fetch).toHaveBeenCalled();
@@ -166,7 +185,7 @@ describe('FluxConfigApi', () => {
     mockedFetch.mockResolvedValue({
       ok: false,
       status: 500,
-      statusText: 'Something went wrong'
+      statusText: 'Something went wrong',
     } as unknown as Response);
 
     const deliveryProject = {
@@ -177,11 +196,17 @@ describe('FluxConfigApi', () => {
       delivery_programme_id: '123',
       delivery_project_code: '123',
       created_at: new Date(),
-      updated_at: new Date()
+      updated_at: new Date(),
     };
 
-    const fluxConfigApi = new FluxConfigApi(mockConfig, mockDeliveryProgrammeStore.mock.instances[0]);
-    
-    expect(fluxConfigApi.createFluxConfig(deliveryProject)).rejects.toThrow(/Unexpected response from FluxConfig API/)
+    const mockDeliveryProgrammeStore = new DeliveryProgrammeStore(null!);
+    const fluxConfigApi = new FluxConfigApi(
+      mockConfig,
+      mockDeliveryProgrammeStore,
+    );
+
+    expect(fluxConfigApi.createFluxConfig(deliveryProject)).rejects.toThrow(
+      /Unexpected response from FluxConfig API/,
+    );
   });
 });

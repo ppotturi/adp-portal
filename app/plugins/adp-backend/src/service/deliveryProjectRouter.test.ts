@@ -178,7 +178,7 @@ describe('createRouter', () => {
   describe('POST /deliveryProject', () => {
     it('returns created', async () => {
       mockProjectGetAll.mockResolvedValueOnce([expectedProjectDataWithName]);
-      //mockCreateFluxConfig.mockResolvedValueOnce({});
+      mockCreateFluxConfig.mockResolvedValueOnce(undefined);
       const data = { ...expectedProjectDataWithName };
       data.title = 'new title';
       const response = await request(projectApp)
