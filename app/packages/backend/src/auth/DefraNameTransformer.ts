@@ -10,11 +10,11 @@ import {
 } from '@backstage/plugin-catalog-backend-module-msgraph';
 // Can we write a test for theis function in tha file with the same name
 
-function hasIdOrDisplayName(user: User) {
-  return user.id || user.displayName;
+function hasEmailOrUserPrincipalName(user:  MicrosoftGraph.User) {
+  return user.mail || user.userPrincipalName ;
 }
 
-function createEntitiyFromOrignalUser(name: string, user: User, idToUse: string | undefined | null) {
+function createEntitiyFromOrignalUser(name: string, user:  MicrosoftGraph.User, idToUse: string | undefined | null) {
   const entity: UserEntity = {
     apiVersion: 'backstage.io/v1alpha1',
     kind: 'User',
@@ -36,7 +36,7 @@ function createEntitiyFromOrignalUser(name: string, user: User, idToUse: string 
   return entity;
 }
 
-function addPhotoIfRequired(userPhoto: string | undefined, entity: UserEntityV1alpha1) {
+function addPhotoIfRequired(userPhoto: string | undefined, entity: UserEntity) {
   if (userPhoto) {
     entity.spec.profile!.picture = userPhoto;
   }
@@ -44,18 +44,22 @@ function addPhotoIfRequired(userPhoto: string | undefined, entity: UserEntityV1a
   return entity;
 }
 
-function chooseIdIfEmailIsBlank(user: User) {
-  return (user.mail === undefined || user.mail?.length === 0) ? user.id : user.mail;
+function mailIsBlank(user: User) {
+  return user.mail === undefined || user.mail?.length === 0 || user.mail === null;
+}
+
+function chooseUserPrincipalIfEmailIsBlank(user:  MicrosoftGraph.User) {
+  return mailIsBlank(user) ? user.userPrincipalName:  user.mail;
 }
 
 export async function defraADONameTransformer(
   user: MicrosoftGraph.User,
   userPhoto?: string,
 ): Promise<UserEntity | undefined> {
-    if (!hasIdOrDisplayName(user) ) {
+    if (!hasEmailOrUserPrincipalName(user) ) {
       return undefined;
     }
-    const idToUse  = chooseIdIfEmailIsBlank(user);
+    const idToUse  = chooseUserPrincipalIfEmailIsBlank(user);
     const name = normalizeEntityName(idToUse);
     const entity = createEntitiyFromOrignalUser(name, user, idToUse);
     return addPhotoIfRequired(userPhoto, entity);

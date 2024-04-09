@@ -37,7 +37,7 @@ describe('Test original Function', () => {
 
   });
   it('If missing email does not transform the at all', async () => {
-    const mockGraphUser = { id: 'mockGraphUser', displayName: 'User', mail: ''  };
+    const mockGraphUser = { id: 'mockGraphUser', displayName: 'User', mail: '', userPrincipalName: 'freds@example.com'  };
     const mockUserPhoto = 'mockUserPhoto';
 
     const result = await defaultUserTransformer(mockGraphUser, mockUserPhoto);
@@ -49,7 +49,7 @@ describe('Test original Function', () => {
   });
 });
 
-describe('myUserTransformer', () => {
+describe('Defra ADO User Transformer', () => {
   it('Same Default Behavior as defaultUserTransformer ', async () => {
     const {mockGraphUser, mockUserPhoto} = default_setup_data();
 
@@ -58,19 +58,64 @@ describe('myUserTransformer', () => {
 
   });
 
-  it('Parses UPN correctly for name ', async () => {
+  it('Parses UPN correctly for email is blank ', async () => {
 
-
-    const mockGraphUser = { id: 'someone@there.com', displayName: 'User', mail: ''  };
+    const mockGraphUser = { id: 'someone@there.com', displayName: 'User', mail: '', userPrincipalName: 'freds@example.com'  };
     const mockUserPhoto = 'mockUserPhoto';
 
     const result = await defraADONameTransformer(mockGraphUser, mockUserPhoto);
     expect(result?.apiVersion).toBe('backstage.io/v1alpha1'); // Example assertion
     expect(result?.kind).toBe('User');
-    expect(result?.metadata?.name).toBe('someone_there.com');
+    expect(result?.metadata?.name).toBe('freds_example.com');
     expect(result?.spec?.profile?.displayName).toBe('User' );
     // Assume if there was no email, the email was the UPN
-    expect(result?.spec?.profile?.email).toBe('someone@there.com')
+    expect(result?.spec?.profile?.email).toBe('freds@example.com')
 
+  });
+  it('Parses UPN correctly for email is undefined ', async () => {
+
+    const mockGraphUser = { id: 'someone@there.com', displayName: 'User', mail: undefined, userPrincipalName: 'freds@example.com'  };
+    const mockUserPhoto = 'mockUserPhoto';
+
+    const result = await defraADONameTransformer(mockGraphUser, mockUserPhoto);
+    expect(result?.apiVersion).toBe('backstage.io/v1alpha1'); // Example assertion
+    expect(result?.kind).toBe('User');
+    expect(result?.metadata?.name).toBe('freds_example.com');
+    expect(result?.spec?.profile?.displayName).toBe('User' );
+    // Assume if there was no email, the email was the UPN
+    expect(result?.spec?.profile?.email).toBe('freds@example.com')
+
+  });
+
+  it('Parses UPN correctly for email is null ', async () => {
+
+    const mockGraphUser = { id: 'someone@there.com', displayName: 'User', mail: null, userPrincipalName: 'freds@example.com'  };
+    const mockUserPhoto = 'mockUserPhoto';
+
+    const result = await defraADONameTransformer(mockGraphUser, mockUserPhoto);
+    expect(result?.apiVersion).toBe('backstage.io/v1alpha1'); // Example assertion
+    expect(result?.kind).toBe('User');
+    expect(result?.metadata?.name).toBe('freds_example.com');
+    expect(result?.spec?.profile?.displayName).toBe('User' );
+    // Assume if there was no email, the email was the UPN
+    expect(result?.spec?.profile?.email).toBe('freds@example.com')
+
+  });
+
+  it("Check get undefined it principalUserName and email is blank", async () => {
+
+    const mockGraphUser = { id: 'someone@there.com', displayName: 'User', mail: '', userPrincipalName: ''  };
+    const mockUserPhoto = 'mockUserPhoto';
+
+    const result = await defraADONameTransformer(mockGraphUser, mockUserPhoto);
+    expect(result).toBeUndefined();
+  });
+  it("Check get undefined it principalUserName and email is blank", async () => {
+
+    const mockGraphUser = { id: 'someone@there.com', displayName: 'User', mail: undefined, userPrincipalName: undefined  };
+    const mockUserPhoto = 'mockUserPhoto';
+
+    const result = await defraADONameTransformer(mockGraphUser, mockUserPhoto);
+    expect(result).toBeUndefined();
   });
 });
