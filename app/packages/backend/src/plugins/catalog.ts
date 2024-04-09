@@ -2,8 +2,12 @@ import { CatalogBuilder } from '@backstage/plugin-catalog-backend';
 import { ScaffolderEntitiesProcessor } from '@backstage/plugin-catalog-backend-module-scaffolder-entity-model';
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
-import { MicrosoftGraphOrgEntityProvider } from '@backstage/plugin-catalog-backend-module-msgraph';
+import {
+  defaultUserTransformer,
+  MicrosoftGraphOrgEntityProvider
+} from '@backstage/plugin-catalog-backend-module-msgraph';
 import { GithubEntityProvider } from '@backstage/plugin-catalog-backend-module-github';
+import {defraADONameTransformer} from "../auth/DefraNameTransformer";
 
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -14,6 +18,7 @@ export default async function createPlugin(
     MicrosoftGraphOrgEntityProvider.fromConfig(env.config, {
       logger: env.logger,
       scheduler: env.scheduler,
+      userTransformer: defraADONameTransformer,
     }),
   );
 

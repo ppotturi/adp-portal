@@ -10,15 +10,19 @@ import {
 } from '@backstage/plugin-catalog-backend-module-msgraph';
 // Can we write a test for theis function in tha file with the same name
 
-export async function defraRolesTransformer(
+function hasIdOrDisplayName(user: User) {
+  return user.id || user.displayName;
+}
+
+export async function defraADONameTransformer(
   user: MicrosoftGraph.User,
   userPhoto?: string,
 ): Promise<UserEntity | undefined> {
-    if (!user.id || !user.displayName ) {
+    if (!hasIdOrDisplayName(user) ) {
       return undefined;
     }
-    const id_to_use  = (user.mail === undefined || user.mail?.length === 0) ? user.id : user.mail;
-    const name = normalizeEntityName(id_to_use)
+    const idToUse  = (user.mail === undefined || user.mail?.length === 0) ? user.id : user.mail;
+    const name = normalizeEntityName(idToUse)
     const entity: UserEntity = {
       apiVersion: 'backstage.io/v1alpha1',
       kind: 'User',
@@ -32,7 +36,7 @@ export async function defraRolesTransformer(
       spec: {
         profile: {
           displayName: user.displayName!,
-          email: id_to_use!,
+          email: idToUse!,
         },
         memberOf: [],
       },
