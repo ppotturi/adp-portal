@@ -14,6 +14,40 @@ function hasIdOrDisplayName(user: User) {
   return user.id || user.displayName;
 }
 
+function createEntitiyFromOrignalUser(name: string, user: User, idToUse: string | undefined | null) {
+  const entity: UserEntity = {
+    apiVersion: 'backstage.io/v1alpha1',
+    kind: 'User',
+    metadata: {
+      name,
+      annotations: {
+        [MICROSOFT_EMAIL_ANNOTATION]: user.mail!,
+        [MICROSOFT_GRAPH_USER_ID_ANNOTATION]: user.id!,
+      },
+    },
+    spec: {
+      profile: {
+        displayName: user.displayName!,
+        email: idToUse!,
+      },
+      memberOf: [],
+    },
+  };
+  return entity;
+}
+
+function addPhotoIfRequired(userPhoto: string | undefined, entity: UserEntityV1alpha1) {
+  if (userPhoto) {
+    entity.spec.profile!.picture = userPhoto;
+  }
+
+  return entity;
+}
+
+function chooseIdIfEmailIsBlank(user: User) {
+  return (user.mail === undefined || user.mail?.length === 0) ? user.id : user.mail;
+}
+
 export async function defraADONameTransformer(
   user: MicrosoftGraph.User,
   userPhoto?: string,
@@ -21,30 +55,9 @@ export async function defraADONameTransformer(
     if (!hasIdOrDisplayName(user) ) {
       return undefined;
     }
-    const idToUse  = (user.mail === undefined || user.mail?.length === 0) ? user.id : user.mail;
-    const name = normalizeEntityName(idToUse)
-    const entity: UserEntity = {
-      apiVersion: 'backstage.io/v1alpha1',
-      kind: 'User',
-      metadata: {
-        name,
-        annotations: {
-          [MICROSOFT_EMAIL_ANNOTATION]: user.mail!,
-          [MICROSOFT_GRAPH_USER_ID_ANNOTATION]: user.id!,
-        },
-      },
-      spec: {
-        profile: {
-          displayName: user.displayName!,
-          email: idToUse!,
-        },
-        memberOf: [],
-      },
-    };
+    const idToUse  = chooseIdIfEmailIsBlank(user);
+    const name = normalizeEntityName(idToUse);
+    const entity = createEntitiyFromOrignalUser(name, user, idToUse);
+    return addPhotoIfRequired(userPhoto, entity);
 
-  if (userPhoto) {
-    entity.spec.profile!.picture = userPhoto;
-  }
-
-  return entity;
 }
