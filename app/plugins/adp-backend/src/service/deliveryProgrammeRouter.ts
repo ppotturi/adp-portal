@@ -26,6 +26,7 @@ import {
   addProgrammeManager,
   deleteProgrammeManager,
 } from '../service-utils/deliveryProgrammeUtils';
+import { DeliveryProjectStore } from '../deliveryProject/deliveryProjectStore';
 
 export interface ProgrammeRouterOptions {
   logger: Logger;
@@ -46,6 +47,9 @@ export async function createProgrammeRouter(
   const programmeManagersStore = new ProgrammeManagerStore(
     await adpDatabase.get(),
   );
+  const deliveryProjectStore = new DeliveryProjectStore(
+    await adpDatabase.get(),
+  );
 
   const router = Router();
   router.use(express.json());
@@ -57,8 +61,18 @@ export async function createProgrammeRouter(
 
   router.get('/deliveryProgramme', async (_req, res) => {
     try {
-      const data = await deliveryProgrammesStore.getAll();
-      res.json(data);
+      const programmeData = await deliveryProgrammesStore.getAll();
+      const projectData = await deliveryProjectStore.getAll();
+      for (const programme of programmeData) {
+        let programmeChildren = [];
+        for (const project of projectData) {
+          if (project.delivery_programme_id === programme.id) {
+            programmeChildren.push(project.name);
+            programme.children = programmeChildren;
+          }
+        }
+      }
+      res.json(programmeData);
     } catch (error) {
       const deliveryProgramError = error as Error;
       logger.error(
