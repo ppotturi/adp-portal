@@ -17,6 +17,7 @@ export const deliveryProjectGroupTransformer: DeliveryProjectGroupTransformer =
           deliveryProject.title,
           deliveryProject.alias,
         ),
+        description: deliveryProject.description,
         tags: [],
         annotations: {
           'backstage.io/managed-by-location': `adp:delivery-project\\${deliveryProject.name}`,
@@ -29,16 +30,6 @@ export const deliveryProjectGroupTransformer: DeliveryProjectGroupTransformer =
         children: [],
       },
     };
-
-    if (deliveryProject.description) {
-      entity.metadata.description = deliveryProject.description;
-    }
-
-    if (deliveryProject.url) {
-      entity.metadata.links?.push({
-        url: deliveryProject.url ? deliveryProject.url : '',
-      });
-    }
 
     return entity;
   };
