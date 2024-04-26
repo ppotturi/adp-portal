@@ -64,3 +64,5 @@ export function getOwner(options: AlbRouterOptions): string {
   const owner = ownerGroup.getString('programmeAdminGroup');
   return owner;
 }
+
+export type { CreateDeliveryProgrammeAdmin } from './types';

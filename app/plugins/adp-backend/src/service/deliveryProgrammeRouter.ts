@@ -4,36 +4,35 @@ import Router from 'express-promise-router';
 import { Logger } from 'winston';
 import { InputError } from '@backstage/errors';
 import { IdentityApi } from '@backstage/plugin-auth-node';
-import { DiscoveryApi } from '@backstage/core-plugin-api';
-import { CatalogClient } from '@backstage/catalog-client';
+import { CatalogApi } from '@backstage/catalog-client';
 import {
   IDeliveryProgrammeStore,
   PartialDeliveryProgramme,
-} from '../deliveryProgramme/deliveryProgrammeStore';
+} from '../deliveryProgramme';
 import {
   DeliveryProgramme,
-  ProgrammeManager,
+  DeliveryProgrammeAdmin,
 } from '@internal/plugin-adp-common';
 import {
   checkForDuplicateProgrammeCode,
   checkForDuplicateTitle,
   getCurrentUsername,
 } from '../utils/index';
-import { IProgrammeManagerStore } from '../deliveryProgramme';
 import { Entity } from '@backstage/catalog-model';
 import {
   addProgrammeManager,
   deleteProgrammeManager,
 } from '../service-utils/deliveryProgrammeUtils';
 import { IDeliveryProjectStore } from '../deliveryProject';
+import { IDeliveryProgrammeAdminStore } from '../deliveryProgrammeAdmin';
 
 export interface ProgrammeRouterOptions {
   logger: Logger;
   identity: IdentityApi;
-  discovery: DiscoveryApi;
   deliveryProgrammeStore: IDeliveryProgrammeStore;
-  programmeManagerStore: IProgrammeManagerStore;
+  deliveryProgrammeAdminStore: IDeliveryProgrammeAdminStore;
   deliveryProjectStore: IDeliveryProjectStore;
+  catalog: CatalogApi;
 }
 
 export function createProgrammeRouter(
@@ -42,12 +41,11 @@ export function createProgrammeRouter(
   const {
     logger,
     identity,
-    discovery,
     deliveryProgrammeStore,
     deliveryProjectStore,
-    programmeManagerStore,
+    deliveryProgrammeAdminStore,
+    catalog
   } = options;
-  const catalog = new CatalogClient({ discoveryApi: discovery });
 
   const router = Router();
   router.use(express.json());
@@ -81,26 +79,12 @@ export function createProgrammeRouter(
     }
   });
 
-  router.get('/programmeManager', async (_req, res) => {
-    try {
-      const data = await programmeManagerStore.getAll();
-      res.json(data);
-    } catch (error) {
-      const deliveryProgramError = error as Error;
-      logger.error(
-        'Error in retrieving programme managers: ',
-        deliveryProgramError,
-      );
-      throw new InputError(deliveryProgramError.message);
-    }
-  });
-
   router.get('/deliveryProgramme/:id', async (_req, res) => {
     try {
       const deliveryProgramme = await deliveryProgrammeStore.get(
         _req.params.id,
       );
-      const programmeManager = await programmeManagerStore.get(_req.params.id);
+      const programmeManager = await deliveryProgrammeAdminStore.getByDeliveryProgramme(_req.params.id);
       if (programmeManager && deliveryProgramme !== null) {
         deliveryProgramme.programme_managers = programmeManager;
         res.json(deliveryProgramme);
@@ -195,7 +179,7 @@ export function createProgrammeRouter(
           programmeManagers,
           deliveryProgramme.id,
           deliveryProgramme,
-          programmeManagerStore,
+          deliveryProgrammeAdminStore,
           catalogEntity,
         );
       } else {
@@ -264,10 +248,10 @@ export function createProgrammeRouter(
       );
       const programmeManagers = req.body.programme_managers;
       if (programmeManagers !== undefined) {
-        const existingProgrammeManagers = await programmeManagerStore.get(
+        const existingProgrammeManagers = await deliveryProgrammeAdminStore.getByDeliveryProgramme(
           deliveryProgramme.id,
         );
-        const updatedManagers: ProgrammeManager[] = [];
+        const updatedManagers: DeliveryProgrammeAdmin[] = [];
         for (const updatedManager of programmeManagers) {
           if (
             !existingProgrammeManagers.some(
@@ -296,16 +280,16 @@ export function createProgrammeRouter(
           updatedManagers,
           deliveryProgramme.id,
           deliveryProgramme,
-          programmeManagerStore,
+          deliveryProgrammeAdminStore,
           catalogEntity,
         );
 
-        const removedManagers: ProgrammeManager[] = [];
+        const removedManagers: DeliveryProgrammeAdmin[] = [];
 
         for (const existingManager of existingProgrammeManagers) {
           if (
             !programmeManagers.some(
-              (manager: ProgrammeManager) =>
+              (manager: DeliveryProgrammeAdmin) =>
                 manager.aad_entity_ref_id === existingManager.aad_entity_ref_id,
             )
           ) {
@@ -315,8 +299,7 @@ export function createProgrammeRouter(
 
         deleteProgrammeManager(
           removedManagers,
-          deliveryProgramme.id,
-          programmeManagerStore,
+          deliveryProgrammeAdminStore,
         );
       }
       res.status(200).json(deliveryProgramme);
