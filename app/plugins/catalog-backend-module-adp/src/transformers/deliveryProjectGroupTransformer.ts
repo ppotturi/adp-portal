@@ -1,5 +1,12 @@
-import { ANNOTATION_LOCATION, ANNOTATION_ORIGIN_LOCATION, GroupEntity } from '@backstage/catalog-model';
-import { DeliveryProject } from '@internal/plugin-adp-common';
+import {
+  ANNOTATION_LOCATION,
+  ANNOTATION_ORIGIN_LOCATION,
+  GroupEntity,
+} from '@backstage/catalog-model';
+import {
+  DeliveryProject,
+  deliveryProjectDisplayName,
+} from '@internal/plugin-adp-common';
 import { createTransformerTitle } from './utils';
 import { DELIVERY_PROJECT_ID_ANNOTATION } from './constants';
 
@@ -15,7 +22,7 @@ export const deliveryProjectGroupTransformer: DeliveryProjectGroupTransformer =
       metadata: {
         name: deliveryProject.name,
         title: createTransformerTitle(
-          deliveryProject.title,
+          deliveryProjectDisplayName(deliveryProject),
           deliveryProject.alias,
         ),
         description: deliveryProject.description,
@@ -23,7 +30,7 @@ export const deliveryProjectGroupTransformer: DeliveryProjectGroupTransformer =
         annotations: {
           [ANNOTATION_LOCATION]: `adp:delivery-project\\${deliveryProject.name}`,
           [ANNOTATION_ORIGIN_LOCATION]: `adp:delivery-project\\${deliveryProject.name}`,
-          [DELIVERY_PROJECT_ID_ANNOTATION]: deliveryProject.id
+          [DELIVERY_PROJECT_ID_ANNOTATION]: deliveryProject.id,
         },
         links: [],
       },

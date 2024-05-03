@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import { Button, Typography } from '@material-ui/core';
+import React, { useState, useEffect, useReducer, ReactNode } from 'react';
+import { Typography } from '@material-ui/core';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import {
   Header,
   Page,
@@ -8,58 +9,49 @@ import {
   SupportButton,
   TableColumn,
 } from '@backstage/core-components';
-import { DefaultTable } from '../../utils/Table';
-import { ActionsModal } from '../../utils/ActionsModal';
-import {
-  useApi,
-  discoveryApiRef,
-  fetchApiRef,
-  alertApiRef,
-  errorApiRef,
-} from '@backstage/core-plugin-api';
+import { DefaultTable } from '../../utils';
+import { useApi, errorApiRef } from '@backstage/core-plugin-api';
 import {
   DeliveryProject,
-  adpProjectCreatePermission,
+  deliveryProjectDisplayName,
 } from '@internal/plugin-adp-common';
-import CreateDeliveryProject from './CreateDeliveryProject';
-import { DeliveryProjectClient } from './api/DeliveryProjectClient';
-import { DeliveryProjectApi } from './api/DeliveryProjectApi';
-import { deliveryProjectFormFields } from './deliveryProjectFormFields';
-import { useDeliveryProgrammesList } from '../../hooks/useDeliveryProgrammesList';
-import { usePermission } from '@backstage/plugin-permission-react';
-import {
-  isCodeUnique,
-  isNameUnique,
-} from '../../utils/DeliveryProject/DeliveryProjectUtils';
+import { deliveryProjectApiRef } from './api/DeliveryProjectApi';
+import { CreateDeliveryProjectButton } from './CreateDeliveryProjectButton';
+import { EditDeliveryProjectButton } from './EditDeliveryProjectButton';
+
+type DeliveryProjectWithActions = DeliveryProject & {
+  actions: ReactNode;
+};
 
 export const DeliveryProjectViewPageComponent = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({});
-  const [tableData, setTableData] = useState<DeliveryProject[]>([]);
+  const [tableData, setTableData] = useState<DeliveryProjectWithActions[]>([]);
   const [key, refetchDeliveryProject] = useReducer(i => {
     return i + 1;
   }, 0);
 
-  const alertApi = useApi(alertApiRef);
   const errorApi = useApi(errorApiRef);
-  const discoveryApi = useApi(discoveryApiRef);
-  const fetchApi = useApi(fetchApiRef);
-  const programmesList = useDeliveryProgrammesList();
-  const deliveryProgrammeOptions = programmesList.map(x => x.dropdownItem);
-
-  const deliveryProjectClient: DeliveryProjectApi = new DeliveryProjectClient(
-    discoveryApi,
-    fetchApi,
-  );
-
-  const { allowed: allowedToEditAdpProject } = usePermission({
-    permission: adpProjectCreatePermission,
-  });
+  const client = useApi(deliveryProjectApiRef);
 
   const getAllDeliveryProjects = async () => {
     try {
-      const data = await deliveryProjectClient.getDeliveryProjects();
-      setTableData(data);
+      const data = await client.getDeliveryProjects();
+      setTableData(
+        data.map(d => ({
+          ...d,
+          title: deliveryProjectDisplayName(d),
+          actions: (
+            <EditDeliveryProjectButton
+              variant="contained"
+              color="default"
+              deliveryProject={d}
+              data-testid={`delivery-project-edit-button-${d.id}`}
+              onEdited={refetchDeliveryProject}
+            >
+              Edit
+            </EditDeliveryProjectButton>
+          ),
+        })),
+      );
     } catch (e: any) {
       errorApi.post(e);
     }
@@ -69,67 +61,11 @@ export const DeliveryProjectViewPageComponent = () => {
     getAllDeliveryProjects();
   }, [key]);
 
-  const handleEdit = async (deliveryProject: DeliveryProject) => {
-    try {
-      const project = await deliveryProjectClient.getDeliveryProjectById(
-        deliveryProject.id,
-      );
-      setFormData(project);
-      setIsModalOpen(true);
-    } catch (e: any) {
-      errorApi.post(e);
-    }
-  };
-
-  const handleCloseModal = () => {
-    setFormData({});
-    setIsModalOpen(false);
-  };
-
-  const handleUpdate = async (deliveryProject: DeliveryProject) => {
-    if (!isNameUnique(tableData, deliveryProject.title, deliveryProject.id)) {
-      setIsModalOpen(true);
-      alertApi.post({
-        message: `The title '${deliveryProject.title}' is already in use. Please choose a different title.`,
-        severity: 'error',
-        display: 'permanent',
-      });
-      return;
-    }
-    if (
-      !isCodeUnique(
-        tableData,
-        deliveryProject.delivery_project_code,
-        deliveryProject.id,
-      )
-    ) {
-      setIsModalOpen(true);
-      alertApi.post({
-        message: `The service code '${deliveryProject.delivery_project_code}' is already in use. Please choose a different service code.`,
-        severity: 'error',
-        display: 'permanent',
-      });
-      return;
-    }
-
-    try {
-      await deliveryProjectClient.updateDeliveryProject(deliveryProject);
-      alertApi.post({
-        message: `Updated`,
-        severity: 'success',
-        display: 'transient',
-      });
-      refetchDeliveryProject();
-    } catch (e: any) {
-      errorApi.post(e);
-    }
-  };
-
-  const columns: TableColumn[] = [
+  const columns: TableColumn<DeliveryProjectWithActions>[] = [
     {
       title: 'Title',
-      field: 'title',
       highlight: true,
+      field: 'title',
       type: 'string',
     },
     {
@@ -163,21 +99,7 @@ export const DeliveryProjectViewPageComponent = () => {
     {
       width: '',
       highlight: true,
-      render: (rowData: any) => {
-        const data = rowData as DeliveryProject;
-        return (
-          allowedToEditAdpProject && (
-            <Button
-              variant="contained"
-              color="default"
-              onClick={() => handleEdit(data)}
-              data-testid={`delivery-project-edit-button-${data.id}`}
-            >
-              Edit
-            </Button>
-          )
-        );
-      },
+      field: 'actions',
     },
   ];
 
@@ -189,9 +111,16 @@ export const DeliveryProjectViewPageComponent = () => {
       />
       <Content>
         <ContentHeader title="Delivery Projects">
-          <CreateDeliveryProject
-            refetchDeliveryProject={refetchDeliveryProject}
-          />
+          <CreateDeliveryProjectButton
+            variant="contained"
+            size="large"
+            color="primary"
+            data-testid="delivery-project-add-button"
+            startIcon={<AddBoxIcon />}
+            onCreated={refetchDeliveryProject}
+          >
+            Add Delivery Project
+          </CreateDeliveryProjectButton>
           <SupportButton>
             View or manage units within the DEFRA delivery organization on the
             Azure Developer Platform.
@@ -207,20 +136,6 @@ export const DeliveryProjectViewPageComponent = () => {
           title="View all"
           isCompact={true}
         />
-
-        {isModalOpen && allowedToEditAdpProject && (
-          <ActionsModal
-            open={isModalOpen}
-            onClose={handleCloseModal}
-            onSubmit={handleUpdate}
-            initialValues={formData}
-            mode="edit"
-            fields={deliveryProjectFormFields({
-              deliveryProgrammeOptions,
-              disableNamespace: true,
-            })}
-          />
-        )}
       </Content>
     </Page>
   );

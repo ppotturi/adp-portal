@@ -1,4 +1,3 @@
-import { InputError } from '@backstage/errors';
 import { IDeliveryProjectStore } from '../deliveryProject/deliveryProjectStore';
 import {
   GithubTeamDetails,
@@ -65,11 +64,6 @@ export class DeliveryProjectGithubTeamsSyncronizer
     projectName: string,
   ): Promise<TeamConfigs> {
     const deliveryProject = await this.#deliveryProjects.getByName(projectName);
-    if (deliveryProject === null)
-      throw new InputError(`Unknown delivery project ${projectName}`);
-
-    console.log(this.#githubTeamsStore);
-
     const teamDetails = createGithubTeamDetails(deliveryProject);
     const teamIds = await this.#githubTeamsStore.get(deliveryProject.id);
 

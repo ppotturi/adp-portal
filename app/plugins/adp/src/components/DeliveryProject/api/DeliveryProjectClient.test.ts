@@ -1,11 +1,9 @@
+import {
+  CreateDeliveryProjectRequest,
+  UpdateDeliveryProjectRequest,
+} from '@internal/plugin-adp-common';
 import { DeliveryProjectClient } from './DeliveryProjectClient';
-
-jest.mock('@backstage/core-plugin-api', () => ({
-  DiscoveryApi: jest.fn(),
-  FetchApi: jest.fn(() => ({
-    fetch: jest.fn(),
-  })),
-}));
+import { randomUUID } from 'node:crypto';
 
 describe('deliveryProjectClient', () => {
   let client: DeliveryProjectClient;
@@ -87,7 +85,10 @@ describe('deliveryProjectClient', () => {
         json: jest.fn().mockResolvedValue(mockData),
       });
 
-      const updateData = { name: 'New Name' };
+      const updateData: UpdateDeliveryProjectRequest = {
+        title: 'New Name',
+        id: randomUUID(),
+      };
       const result = await client.updateDeliveryProject(updateData);
       expect(result).toEqual(mockData);
     });
@@ -101,14 +102,26 @@ describe('deliveryProjectClient', () => {
         json: jest.fn().mockResolvedValue({ error: errorMessage }),
       });
 
-      const updateData = { name: 'New Name' };
+      const updateData: UpdateDeliveryProjectRequest = {
+        title: 'New Name',
+        id: randomUUID(),
+      };
       await expect(client.updateDeliveryProject(updateData)).rejects.toThrow();
     });
   });
 
   describe('create delivery project', () => {
     it('creates a delivery project successfully', async () => {
-      const newData = { name: 'New Body', delivery_programme_id: '1' };
+      const newData: CreateDeliveryProjectRequest = {
+        title: 'New Body',
+        ado_project: 'ADO Project',
+        delivery_programme_id: randomUUID(),
+        delivery_project_code: 'ABC',
+        description: 'My test project',
+        github_team_visibility: 'public',
+        service_owner: 'test@email.com',
+        team_type: 'delivery',
+      };
       const mockCreateProjectResponse = {
         id: 1,
         name: 'New Body',
@@ -139,18 +152,36 @@ describe('deliveryProjectClient', () => {
     });
 
     it('throws an error when ado project doesnt exists', async () => {
-      const newData = { name: 'New Body' };
+      const newData: CreateDeliveryProjectRequest = {
+        title: 'New Body',
+        ado_project: 'ADO Project',
+        delivery_programme_id: randomUUID(),
+        delivery_project_code: 'ABC',
+        description: 'My test project',
+        github_team_visibility: 'public',
+        service_owner: 'test@email.com',
+        team_type: 'delivery',
+      };
       fetchApi.fetch.mockResolvedValueOnce({
         ok: false,
       });
       await expect(client.createDeliveryProject(newData)).rejects.toThrow(
-        'Failed to create Delivery Project',
+        'Project does not exist in the DEFRA organization ADO, please enter a valid ADO project name',
       );
     });
 
     it('throws an error when the ado project check fails', async () => {
-      const newData = { name: 'New Body' };
-      const errorMessage = 'Failed to create Delivery Project';
+      const newData: CreateDeliveryProjectRequest = {
+        title: 'New Body',
+        ado_project: 'ADO Project',
+        delivery_programme_id: randomUUID(),
+        delivery_project_code: 'ABC',
+        description: 'My test project',
+        github_team_visibility: 'public',
+        service_owner: 'test@email.com',
+        team_type: 'delivery',
+      };
+      const errorMessage = 'Failed to fetch ADO Project details';
       fetchApi.fetch.mockRejectedValue('Unknown error');
       await expect(client.createDeliveryProject(newData)).rejects.toThrow(
         errorMessage,
@@ -158,10 +189,20 @@ describe('deliveryProjectClient', () => {
     });
 
     it('throws an error when createEntraIdGroupsForProject fetchapi returns not ok', async () => {
-      const newData = { name: 'New Body', delivery_programme_id: '1' };
+      const newData: CreateDeliveryProjectRequest = {
+        title: 'New Body',
+        ado_project: 'ADO Project',
+        delivery_programme_id: randomUUID(),
+        delivery_project_code: 'ABC',
+        description: 'My test project',
+        github_team_visibility: 'public',
+        service_owner: 'test@email.com',
+        team_type: 'delivery',
+      };
       const mockCreateProjectResponse = {
         id: 1,
-        name: 'New Body',
+        name: 'new-body',
+        title: 'New Body',
         namespace: 'adp-dmo',
       };
 
@@ -178,13 +219,22 @@ describe('deliveryProjectClient', () => {
         });
 
       await expect(client.createDeliveryProject(newData)).rejects.toThrow(
-        'Failed to create Delivery Project',
+        'Failed to create Entra ID Groups for Project',
       );
     });
 
     it('throws an error when createEntraIdGroupsForProject fetchapi throws error', async () => {
-      const newData = { name: 'New Body' };
-      const errorMessage = 'Failed to create Delivery Project';
+      const newData: CreateDeliveryProjectRequest = {
+        title: 'New Body',
+        ado_project: 'ADO Project',
+        delivery_programme_id: randomUUID(),
+        delivery_project_code: 'ABC',
+        description: 'My test project',
+        github_team_visibility: 'public',
+        service_owner: 'test@email.com',
+        team_type: 'delivery',
+      };
+      const errorMessage = 'Failed to fetch ADO Project details';
       fetchApi.fetch.mockRejectedValue('Unknown error');
       await expect(client.createDeliveryProject(newData)).rejects.toThrow(
         errorMessage,

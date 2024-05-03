@@ -40,7 +40,8 @@
     "npm": "^10.3.0",
     "url-slug": "^4.0.1",
     "winston": "^3.2.1",
-    "yn": "^4.0.0"
+    "yn": "^4.0.0",
+    "zod": "^3.23.5"
   },
   "devDependencies": {
     "@backstage/backend-test-utils": "^0.2.9",
