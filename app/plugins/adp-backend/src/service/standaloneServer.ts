@@ -13,7 +13,7 @@ import { createProgrammeRouter } from './deliveryProgrammeRouter';
 import { Router } from 'express';
 import { createProjectRouter } from './deliveryProjectRouter';
 import { createDeliveryProgrammeAdminRouter } from './deliveryProgrammeAdminRouter';
-import { DeliveryProjectStore } from '../deliveryProject';
+import { DeliveryProjectStore, FluxConfigApi } from '../deliveryProject';
 import { DeliveryProgrammeStore } from '../deliveryProgramme';
 import { DeliveryProgrammeAdminStore } from '../deliveryProgrammeAdmin';
 import { CatalogClient } from '@backstage/catalog-client';
@@ -25,6 +25,12 @@ import {
 import { ArmsLengthBodyStore } from '../armsLengthBody';
 import { DeliveryProjectUserStore } from '../deliveryProjectUser';
 import { createDeliveryProjectUserRouter } from './deliveryProjectUserRouter';
+import {
+  FetchApi,
+  createFetchApiForwardAuthMiddleware,
+  createFetchApiHeadersMiddleware,
+} from '@internal/plugin-fetch-api-backend';
+import { RequestContextMiddleware } from '@internal/plugin-request-context-provider-backend';
 
 export interface ServerOptions {
   port: number;
@@ -54,6 +60,18 @@ export async function startStandaloneServer(
     discovery,
     issuer: await discovery.getExternalBaseUrl('auth'),
   });
+  const requestContext = new RequestContextMiddleware();
+  const fetchApi = new FetchApi({
+    middleware: [
+      createFetchApiForwardAuthMiddleware({
+        requestContext: requestContext.provider,
+        filter: config,
+      }),
+      createFetchApiHeadersMiddleware({
+        'User-Agent': `adp-portal-backend`,
+      }),
+    ],
+  });
   const dbClient = await database.getClient();
   const armsLengthBodyStore = new ArmsLengthBodyStore(dbClient);
   const deliveryProjectStore = new DeliveryProjectStore(dbClient);
@@ -61,9 +79,14 @@ export async function startStandaloneServer(
   const deliveryProgrammeAdminStore = new DeliveryProgrammeAdminStore(dbClient);
   const deliveryProjectUserStore = new DeliveryProjectUserStore(dbClient);
   const githubTeamStore = new GithubTeamStore(dbClient);
+  const fluxConfigApi = new FluxConfigApi(
+    config,
+    deliveryProgrammeStore,
+    fetchApi,
+  );
   const catalog = new CatalogClient({ discoveryApi: discovery });
   const teamSyncronizer = new DeliveryProjectGithubTeamsSyncronizer(
-    new GitHubTeamsApi(config),
+    new GitHubTeamsApi(config, fetchApi),
     deliveryProjectStore,
     githubTeamStore,
     deliveryProjectUserStore,
@@ -95,11 +118,10 @@ export async function startStandaloneServer(
   const deliveryProjectRouter = createProjectRouter({
     logger,
     identity,
-    config,
-    deliveryProgrammeStore,
     deliveryProjectStore,
     teamSyncronizer: teamSyncronizer,
     deliveryProjectUserStore,
+    fluxConfigApi,
   });
 
   const deliveryProjectUserRouter = createDeliveryProjectUserRouter({
@@ -110,6 +132,7 @@ export async function startStandaloneServer(
   });
 
   const router = Router();
+  router.use(requestContext.handler);
   router.use(armsLengthBodyRouter);
   router.use(deliveryProgrammeRouter);
   router.use(deliveryProjectRouter);
