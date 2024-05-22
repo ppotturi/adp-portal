@@ -31,6 +31,10 @@ import {
   createFetchApiHeadersMiddleware,
 } from '@internal/plugin-fetch-api-backend';
 import { RequestContextMiddleware } from '@internal/plugin-request-context-provider-backend';
+import {
+  DeliveryProjectEntraIdGroupsSyncronizer,
+  EntraIdApi,
+} from '../entraId';
 
 export interface ServerOptions {
   port: number;
@@ -91,6 +95,11 @@ export async function startStandaloneServer(
     githubTeamStore,
     deliveryProjectUserStore,
   );
+  const entraIdGroupSyncronizer = new DeliveryProjectEntraIdGroupsSyncronizer(
+    new EntraIdApi(config, fetchApi),
+    deliveryProjectStore,
+    deliveryProjectUserStore,
+  );
 
   const armsLengthBodyRouter = await createAlbRouter({
     logger,
@@ -119,7 +128,7 @@ export async function startStandaloneServer(
     logger,
     identity,
     deliveryProjectStore,
-    teamSyncronizer: teamSyncronizer,
+    teamSyncronizer,
     deliveryProjectUserStore,
     fluxConfigApi,
   });
@@ -128,7 +137,8 @@ export async function startStandaloneServer(
     catalog,
     deliveryProjectUserStore,
     logger,
-    teamSyncronizer: teamSyncronizer,
+    teamSyncronizer,
+    entraIdGroupSyncronizer,
   });
 
   const router = Router();

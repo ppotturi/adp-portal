@@ -15,6 +15,8 @@ import {
   DeliveryProjectUserStore,
   createDeliveryProjectUserRouter,
   FluxConfigApi,
+  EntraIdApi,
+  DeliveryProjectEntraIdGroupsSyncronizer,
 } from '@internal/plugin-adp-backend';
 import { Router } from 'express';
 import type { PluginEnvironment } from '../types';
@@ -52,6 +54,11 @@ export default async function createPlugin({
     githubTeamStore,
     deliveryProjectUserStore,
   );
+  const entraIdGroupSyncronizer = new DeliveryProjectEntraIdGroupsSyncronizer(
+    new EntraIdApi(config, fetchApi),
+    deliveryProjectStore,
+    deliveryProjectUserStore,
+  );
 
   const armsLengthBodyRouter = await createAlbRouter({
     logger,
@@ -82,7 +89,8 @@ export default async function createPlugin({
     catalog,
     deliveryProjectUserStore,
     logger,
-    teamSyncronizer: teamSyncronizer,
+    teamSyncronizer,
+    entraIdGroupSyncronizer,
   });
 
   const deliveryProgrameAdminRouter = createDeliveryProgrammeAdminRouter({

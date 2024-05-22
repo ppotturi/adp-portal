@@ -27,6 +27,7 @@ const allColumns = [
   'is_technical',
   'is_admin',
   'aad_entity_ref_id',
+  'aad_user_principal_name',
   'name',
   'email',
   'github_username',
@@ -87,6 +88,7 @@ export class DeliveryProjectUserStore {
       is_technical,
       name,
       github_username,
+      aad_user_principal_name,
     } = projectUser;
 
     const valid = await checkMany({
@@ -112,6 +114,7 @@ export class DeliveryProjectUserStore {
         name,
         email,
         github_username,
+        aad_user_principal_name,
       },
       allColumns,
     );
@@ -136,6 +139,7 @@ export class DeliveryProjectUserStore {
       github_username,
       delivery_project_id,
       aad_entity_ref_id,
+      aad_user_principal_name,
       email,
       name,
     } = request;
@@ -162,6 +166,7 @@ export class DeliveryProjectUserStore {
         github_username,
         delivery_project_id,
         aad_entity_ref_id,
+        aad_user_principal_name,
         email,
         name,
       },

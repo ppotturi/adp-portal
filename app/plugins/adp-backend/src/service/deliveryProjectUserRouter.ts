@@ -14,6 +14,7 @@ import { z } from 'zod';
 import type { AddDeliveryProjectUser } from '../utils';
 import { getUserEntityFromCatalog } from './catalog';
 import type { IDeliveryProjectGithubTeamsSyncronizer } from '../githubTeam';
+import type { IDeliveryProjectEntraIdGroupsSyncronizer } from '../entraId';
 
 const parseCreateDeliveryProjectUserRequest =
   createParser<CreateDeliveryProjectUserRequest>(
@@ -30,10 +31,11 @@ const parseUpdateDeliveryProjectUserRequest =
   createParser<UpdateDeliveryProjectUserRequest>(
     z.object({
       id: z.string(),
-      delivery_project_id: z.string().optional(),
+      delivery_project_id: z.string(),
       is_technical: z.boolean().optional(),
       is_admin: z.boolean().optional(),
       github_username: z.string().optional(),
+      user_catalog_name: z.string(),
     }),
   );
 
@@ -69,13 +71,18 @@ export interface DeliveryProjectUserRouterOptions {
   deliveryProjectUserStore: IDeliveryProjectUserStore;
   catalog: CatalogApi;
   teamSyncronizer: IDeliveryProjectGithubTeamsSyncronizer;
+  entraIdGroupSyncronizer: IDeliveryProjectEntraIdGroupsSyncronizer;
 }
 
 export function createDeliveryProjectUserRouter(
   options: DeliveryProjectUserRouterOptions,
 ): express.Router {
-  const { deliveryProjectUserStore, catalog, teamSyncronizer, logger } =
-    options;
+  const {
+    deliveryProjectUserStore,
+    catalog,
+    teamSyncronizer,
+    entraIdGroupSyncronizer,
+  } = options;
 
   const router = Router();
   router.use(express.json());
@@ -116,18 +123,21 @@ export function createDeliveryProjectUserRouter(
       email: catalogUser.value.metadata.annotations!['microsoft.com/email'],
       aad_entity_ref_id:
         catalogUser.value.metadata.annotations!['graph.microsoft.com/user-id'],
+      aad_user_principal_name:
+        catalogUser.value.metadata.annotations![
+          'graph.microsoft.com/user-principal-name'
+        ],
       delivery_project_id: body.delivery_project_id,
     };
 
     const addedUser = await deliveryProjectUserStore.add(addUser);
     if (addedUser.success) {
-      await teamSyncronizer
-        .syncronizeById(addedUser.value.delivery_project_id)
-        .catch(reason =>
-          logger.warn(
-            `POST /deliveryProjectUser - could not syncronize GitHub team. ${reason}`,
-          ),
-        );
+      await Promise.allSettled([
+        teamSyncronizer.syncronizeById(addedUser.value.delivery_project_id),
+        entraIdGroupSyncronizer.syncronizeById(
+          addedUser.value.delivery_project_id,
+        ),
+      ]);
     }
 
     respond(body, res, addedUser, errorMapping, { ok: 201 });
@@ -135,15 +145,37 @@ export function createDeliveryProjectUserRouter(
 
   router.patch('/deliveryProjectUser', async (req, res) => {
     const body = parseUpdateDeliveryProjectUserRequest(req.body);
-    const result = await deliveryProjectUserStore.update(body);
+
+    const catalogUser = await getUserEntityFromCatalog(
+      body.user_catalog_name,
+      catalog,
+    );
+
+    if (!catalogUser.success) {
+      respond(body, res, catalogUser, errorMapping);
+      return;
+    }
+
+    const updateUser: UpdateDeliveryProjectUserRequest = {
+      ...body,
+      name: catalogUser.value.spec.profile!.displayName!,
+      email: catalogUser.value.metadata.annotations!['microsoft.com/email'],
+      aad_entity_ref_id:
+        catalogUser.value.metadata.annotations!['graph.microsoft.com/user-id'],
+      aad_user_principal_name:
+        catalogUser.value.metadata.annotations![
+          'graph.microsoft.com/user-principal-name'
+        ],
+    };
+
+    const result = await deliveryProjectUserStore.update(updateUser);
     if (result.success) {
-      await teamSyncronizer
-        .syncronizeById(result.value.delivery_project_id)
-        .catch(reason =>
-          logger.warn(
-            `PATCH /deliveryProjectUser - could not syncronize GitHub team. ${reason}`,
-          ),
-        );
+      await Promise.allSettled([
+        teamSyncronizer.syncronizeById(result.value.delivery_project_id),
+        entraIdGroupSyncronizer.syncronizeById(
+          result.value.delivery_project_id,
+        ),
+      ]);
     }
     respond(body, res, result, errorMapping);
   });

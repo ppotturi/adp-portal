@@ -13,6 +13,7 @@ import type {
   UpdateDeliveryProjectUserRequest,
 } from '@internal/plugin-adp-common';
 import type { IDeliveryProjectGithubTeamsSyncronizer } from '../githubTeam';
+import type { IDeliveryProjectEntraIdGroupsSyncronizer } from '../entraId';
 
 describe('createRouter', () => {
   let deliveryProjectUserApp: express.Express;
@@ -42,16 +43,23 @@ describe('createRouter', () => {
     validateEntity: jest.fn(),
   };
 
-  const mockSyncronizer: jest.Mocked<IDeliveryProjectGithubTeamsSyncronizer> = {
-    syncronizeByName: jest.fn(),
-    syncronizeById: jest.fn(),
-  };
+  const mockGithubTeamSyncronizer: jest.Mocked<IDeliveryProjectGithubTeamsSyncronizer> =
+    {
+      syncronizeByName: jest.fn(),
+      syncronizeById: jest.fn(),
+    };
+
+  const mockEntraIdGroupSyncronizer: jest.Mocked<IDeliveryProjectEntraIdGroupsSyncronizer> =
+    {
+      syncronizeById: jest.fn(),
+    };
 
   const mockOptions: DeliveryProjectUserRouterOptions = {
     catalog: mockCatalogClient,
     deliveryProjectUserStore: mockDeliveryProjectUserStore,
     logger: getVoidLogger(),
-    teamSyncronizer: mockSyncronizer,
+    teamSyncronizer: mockGithubTeamSyncronizer,
+    entraIdGroupSyncronizer: mockEntraIdGroupSyncronizer,
   };
 
   beforeAll(async () => {
@@ -116,7 +124,7 @@ describe('createRouter', () => {
         value: projectUser,
       });
       mockCatalogClient.getEntities.mockResolvedValueOnce(catalogTestData);
-      mockSyncronizer.syncronizeById.mockResolvedValue({
+      mockGithubTeamSyncronizer.syncronizeById.mockResolvedValue({
         admins: {
           id: faker.number.int(),
           description: faker.lorem.sentence(),
@@ -221,7 +229,7 @@ describe('createRouter', () => {
         success: true,
         value: projectUser,
       });
-      mockSyncronizer.syncronizeById.mockResolvedValue({
+      mockGithubTeamSyncronizer.syncronizeById.mockResolvedValue({
         admins: {
           id: faker.number.int(),
           description: faker.lorem.sentence(),
@@ -241,10 +249,15 @@ describe('createRouter', () => {
           slug: faker.company.name(),
         },
       });
+      mockCatalogClient.getEntities.mockResolvedValueOnce(catalogTestData);
 
       const response = await request(deliveryProjectUserApp)
         .patch('/deliveryProjectUser')
-        .send({ id: '123' } satisfies UpdateDeliveryProjectUserRequest);
+        .send({
+          id: '123',
+          delivery_project_id: '123',
+          user_catalog_name: 'user@test.com',
+        } satisfies UpdateDeliveryProjectUserRequest);
 
       expect(response.status).toEqual(200);
       expect(response.body).toMatchObject(
@@ -257,12 +270,14 @@ describe('createRouter', () => {
         success: false,
         errors: ['unknown', 'unknownDeliveryProject'],
       });
+      mockCatalogClient.getEntities.mockResolvedValueOnce(catalogTestData);
 
       const response = await request(deliveryProjectUserApp)
         .patch('/deliveryProjectUser')
         .send({
           id: '123',
           delivery_project_id: 'abc',
+          user_catalog_name: 'user@test.com',
         } satisfies UpdateDeliveryProjectUserRequest);
 
       // assert
@@ -285,6 +300,20 @@ describe('createRouter', () => {
       });
     });
 
+    it('returns a 400 response if catalog user cannot be found', async () => {
+      mockCatalogClient.getEntities.mockResolvedValueOnce({ items: [] });
+
+      const response = await request(deliveryProjectUserApp)
+        .patch('/deliveryProjectUser')
+        .send({
+          id: '123',
+          delivery_project_id: 'abc',
+          user_catalog_name: 'user@test.com',
+        } satisfies UpdateDeliveryProjectUserRequest);
+
+      expect(response.status).toEqual(400);
+    });
+
     it('return 400 if if the request is bad', async () => {
       const response = await request(deliveryProjectUserApp)
         .patch('/deliveryProjectUser')
@@ -298,7 +327,11 @@ describe('createRouter', () => {
       );
       const response = await request(deliveryProjectUserApp)
         .patch('/deliveryProjectUser')
-        .send({ id: '123' } satisfies UpdateDeliveryProjectUserRequest);
+        .send({
+          id: '123',
+          delivery_project_id: '123',
+          user_catalog_name: 'user@test.com',
+        } satisfies UpdateDeliveryProjectUserRequest);
       expect(response.status).toEqual(500);
     });
   });
