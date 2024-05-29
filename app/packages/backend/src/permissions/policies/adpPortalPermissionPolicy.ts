@@ -20,9 +20,14 @@ import {
   templateParameterReadPermission,
   templateStepReadPermission,
 } from '@backstage/plugin-scaffolder-common/alpha';
-import { adpProgrammmeCreatePermission } from '@internal/plugin-adp-common';
+import {
+  adpProgrammmeCreatePermission,
+  deliveryProgrammeAdminCreatePermission,
+} from '@internal/plugin-adp-common';
 import type { RbacUtilities } from '../rbacUtilites';
 import type { Logger } from 'winston';
+import { createCatalogConditionalDecision } from '@backstage/plugin-catalog-backend/alpha';
+import { isGroupMember } from '../rules';
 
 export class AdpPortalPermissionPolicy implements PermissionPolicy {
   constructor(private rbacUtilites: RbacUtilities, private logger: Logger) {}
@@ -41,7 +46,22 @@ export class AdpPortalPermissionPolicy implements PermissionPolicy {
       return { result: AuthorizeResult.ALLOW };
     }
 
-    // gives permission to create for programme admin group
+    // Allow users to create Delivery Programme Admins if they are a member of the specified group.
+    if (
+      user !== undefined &&
+      isPermission(request.permission, deliveryProgrammeAdminCreatePermission)
+    ) {
+      this.logger.debug(
+        `Role: Programme Admin. Permission: ${request.permission.name}`,
+      );
+
+      return createCatalogConditionalDecision(
+        request.permission,
+        isGroupMember({ userRef: user.identity.userEntityRef }),
+      );
+    }
+
+    // Allow users to create components if they are programme admins.
     if (
       (isPermission(request.permission, catalogEntityCreatePermission) ||
         isPermission(request.permission, actionExecutePermission) ||

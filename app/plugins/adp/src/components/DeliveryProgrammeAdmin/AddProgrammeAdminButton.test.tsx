@@ -16,6 +16,7 @@ import {
   emptyForm,
 } from './DeliveryProgrammeAdminFormFields';
 import type * as DialogFormModule from '../../utils/DialogForm';
+import type * as PluginPermissionReactModule from '@backstage/plugin-permission-react';
 
 function setup() {
   const mockAlertApi: jest.Mocked<AlertApi> = {
@@ -53,7 +54,32 @@ const fields: DeliveryProgrammeAdminFields = {
   user_catalog_name: 'user-1234',
 };
 
+const usePermission: jest.MockedFn<
+  typeof PluginPermissionReactModule.usePermission
+> = jest.fn();
 const DialogForm: jest.MockedFn<typeof DialogFormModule.DialogForm> = jest.fn();
+
+jest.mock(
+  '@backstage/plugin-permission-react',
+  () =>
+    ({
+      get usePermission() {
+        return usePermission;
+      },
+      get IdentityPermissionApi(): never {
+        throw new Error('Not mocked');
+      },
+      get PermissionedRoute(): never {
+        throw new Error('Not mocked');
+      },
+      get RequirePermission(): never {
+        throw new Error('Not mocked');
+      },
+      get permissionApiRef(): never {
+        throw new Error('Not mocked');
+      },
+    } satisfies typeof PluginPermissionReactModule),
+);
 
 jest.mock(
   '../../utils/DialogForm',
@@ -70,12 +96,35 @@ describe('AddProgrammeAdminButton', () => {
     jest.clearAllMocks();
   });
 
-  it('should only render a button initially', async () => {
-    const { renderComponent, mockAlertApi, mockProgrammeAdminApi } = setup();
+  it('should not render when the user is not allowed to create delivery programmes', async () => {
+    const { mockAlertApi, mockProgrammeAdminApi, renderComponent } = setup();
+    usePermission.mockReturnValue({ allowed: false, loading: false });
 
     const { result } = await renderComponent({
       content: 'Test button',
       deliveryProgrammeId: '123',
+      entityRef: 'programme-group-123',
+    });
+
+    expect(result.baseElement).toMatchSnapshot();
+    expect(mockAlertApi.alert$).not.toHaveBeenCalled();
+    expect(mockAlertApi.post).not.toHaveBeenCalled();
+    expect(mockProgrammeAdminApi.create).not.toHaveBeenCalled();
+    expect(mockProgrammeAdminApi.delete).not.toHaveBeenCalled();
+    expect(mockProgrammeAdminApi.getAll).not.toHaveBeenCalled();
+    expect(
+      mockProgrammeAdminApi.getByDeliveryProgrammeId,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should only render a button initially', async () => {
+    const { renderComponent, mockAlertApi, mockProgrammeAdminApi } = setup();
+    usePermission.mockReturnValue({ allowed: true, loading: false });
+
+    const { result } = await renderComponent({
+      content: 'Test button',
+      deliveryProgrammeId: '123',
+      entityRef: 'programme-group-123',
     });
 
     expect(result.baseElement).toMatchSnapshot();
@@ -92,10 +141,12 @@ describe('AddProgrammeAdminButton', () => {
   it('should render the dialog when the button is clicked', async () => {
     const { renderComponent, mockAlertApi, mockProgrammeAdminApi } = setup();
     DialogForm.mockReturnValue(<span>Test dialog</span>);
+    usePermission.mockReturnValue({ allowed: true, loading: false });
 
     const { result } = await renderComponent({
       content: 'Test button',
       deliveryProgrammeId: '123',
+      entityRef: 'programme-group-123',
     });
     await userEvent.click(result.getByTestId('add-programme-admin-button'));
 
@@ -134,10 +185,12 @@ describe('AddProgrammeAdminButton', () => {
   it('should close the dialog when the form is cancelled', async () => {
     const { renderComponent, mockAlertApi, mockProgrammeAdminApi } = setup();
     DialogForm.mockReturnValue(<span>Test dialog</span>);
+    usePermission.mockReturnValue({ allowed: true, loading: false });
 
     const { result } = await renderComponent({
       content: 'Test button',
       deliveryProgrammeId: '123',
+      entityRef: 'programme-group-123',
     });
     await userEvent.click(result.getByTestId('add-programme-admin-button'));
 
@@ -159,6 +212,7 @@ describe('AddProgrammeAdminButton', () => {
 
   it('should call onCreated when the form closes with a value', async () => {
     const { renderComponent, mockAlertApi, mockProgrammeAdminApi } = setup();
+    usePermission.mockReturnValue({ allowed: true, loading: false });
     DialogForm.mockReturnValue(<span>Test dialog</span>);
     const onCreated: jest.MockedFn<
       Exclude<AddProgrammeAdminButtonProps['onCreated'], undefined>
@@ -167,6 +221,7 @@ describe('AddProgrammeAdminButton', () => {
     const { result } = await renderComponent({
       content: 'Test button',
       deliveryProgrammeId: '123',
+      entityRef: 'programme-group-123',
       onCreated,
     });
     await userEvent.click(result.getByTestId('add-programme-admin-button'));
@@ -191,11 +246,13 @@ describe('AddProgrammeAdminButton', () => {
 
   it('should call the API when submitting', async () => {
     const { renderComponent, mockAlertApi, mockProgrammeAdminApi } = setup();
+    usePermission.mockReturnValue({ allowed: true, loading: false });
     DialogForm.mockReturnValue(<span>Test dialog</span>);
 
     const { result } = await renderComponent({
       content: 'Test button',
       deliveryProgrammeId: 'programme-1',
+      entityRef: 'programme-group-123',
     });
     await userEvent.click(result.getByTestId('add-programme-admin-button'));
 
@@ -214,7 +271,7 @@ describe('AddProgrammeAdminButton', () => {
     const submitResult = await formProps.submit(fields);
     expect(submitResult).toMatchObject({ type: 'success' });
     expect(mockProgrammeAdminApi.create.mock.calls).toMatchObject([
-      ['programme-1', 'user-1234'],
+      ['programme-1', 'user-1234', 'programme-group-123'],
     ]);
     expect(mockProgrammeAdminApi.delete).not.toHaveBeenCalled();
     expect(mockProgrammeAdminApi.getAll).not.toHaveBeenCalled();
@@ -235,6 +292,7 @@ describe('AddProgrammeAdminButton', () => {
 
   it('should catch validation errors when submitting', async () => {
     const { renderComponent, mockAlertApi, mockProgrammeAdminApi } = setup();
+    usePermission.mockReturnValue({ allowed: true, loading: false });
     DialogForm.mockReturnValue(<span>Test dialog</span>);
     const validationErrors: IValidationError[] = [
       {
@@ -251,6 +309,7 @@ describe('AddProgrammeAdminButton', () => {
     const { result } = await renderComponent({
       content: 'Test button',
       deliveryProgrammeId: 'programme-2',
+      entityRef: 'programme-group-123',
     });
     await userEvent.click(result.getByTestId('add-programme-admin-button'));
 
@@ -270,7 +329,7 @@ describe('AddProgrammeAdminButton', () => {
       errors: validationErrors,
     });
     expect(mockProgrammeAdminApi.create.mock.calls).toMatchObject([
-      ['programme-2', 'user-1234'],
+      ['programme-2', 'user-1234', 'programme-group-123'],
     ]);
     expect(mockProgrammeAdminApi.delete).not.toHaveBeenCalled();
     expect(mockProgrammeAdminApi.getAll).not.toHaveBeenCalled();
