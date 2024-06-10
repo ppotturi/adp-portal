@@ -11,7 +11,6 @@ import fetchApiFactory, {
   fetchApiHeadersMiddleware,
   fetchApiRef,
 } from '@internal/plugin-fetch-api-backend';
-import { addAdoNameTransformer, addCatalogPermissionRules } from './modules';
 import { requestContextProviderRef } from '@internal/plugin-request-context-provider-backend';
 
 const legacyPlugin = makeLegacyPlugin(
@@ -60,7 +59,6 @@ backend.add(import('@backstage/plugin-auth-backend-module-microsoft-provider'));
 backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
 backend.add(import('@backstage/plugin-permission-backend/alpha'));
 backend.add(import('@internal/plugin-permission-backend-module-adp'));
-backend.add(addCatalogPermissionRules);
 
 // Backstage
 backend.add(import('@backstage/plugin-app-backend/alpha'));
@@ -70,8 +68,6 @@ backend.add(
 );
 backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
 backend.add(import('@backstage/plugin-catalog-backend-module-msgraph/alpha'));
-backend.add(addAdoNameTransformer);
-backend.add(import('@internal/plugin-catalog-backend-module-adp'));
 backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 backend.add(import('@backstage/plugin-search-backend/alpha'));
@@ -86,6 +82,7 @@ backend.add(import('@backstage-community/plugin-azure-devops-backend'));
 backend.add(legacyPlugin('adp', import('./plugins/adp')));
 backend.add(import('@internal/plugin-scaffolder-backend-module-adp'));
 backend.add(import('@internal/plugin-techdocs-backend-module-adp'));
+backend.add(import('@internal/plugin-catalog-backend-module-adp'));
 
 // 3rd Party
 backend.add(

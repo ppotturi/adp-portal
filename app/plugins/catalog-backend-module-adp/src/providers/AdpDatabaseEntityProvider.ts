@@ -3,17 +3,17 @@ import type {
   EntityProvider,
   EntityProviderConnection,
 } from '@backstage/plugin-catalog-node';
-import type { Logger } from 'winston';
 import * as uuid from 'uuid';
 import type {
   AuthService,
   DiscoveryService,
+  LoggerService,
 } from '@backstage/backend-plugin-api';
 import type { FetchApi } from '@internal/plugin-fetch-api-backend';
 import { AdpDatabaseEntityProviderConnection } from './AdpDatabaseEntityProviderConnection';
 
 export class AdpDatabaseEntityProvider implements EntityProvider {
-  readonly #logger: Logger;
+  readonly #logger: LoggerService;
   readonly #taskRunner: TaskRunner;
   readonly #discovery: DiscoveryService;
   readonly #fetchApi: FetchApi;
@@ -21,7 +21,7 @@ export class AdpDatabaseEntityProvider implements EntityProvider {
 
   static create(options: {
     discovery: DiscoveryService;
-    logger: Logger;
+    logger: LoggerService;
     fetchApi: FetchApi;
     schedule?: TaskRunner;
     scheduler?: PluginTaskScheduler;
@@ -50,7 +50,7 @@ export class AdpDatabaseEntityProvider implements EntityProvider {
   }
 
   private constructor(
-    logger: Logger,
+    logger: LoggerService,
     discovery: DiscoveryService,
     taskRunner: TaskRunner,
     fetchApi: FetchApi,
@@ -90,7 +90,7 @@ export class AdpDatabaseEntityProvider implements EntityProvider {
             this.#auth,
             logger,
           ).refresh();
-        } catch (error) {
+        } catch (error: any) {
           logger.error(
             `${AdpDatabaseEntityProvider.name} refresh failed, ${error}`,
             error,
