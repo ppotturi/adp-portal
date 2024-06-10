@@ -14,7 +14,10 @@ export class RbacUtilities {
 
   private readonly groupPrefix: string = 'group:default/';
 
-  constructor(private logger: LoggerService, rbacGroups: RbacGroups) {
+  constructor(
+    private logger: LoggerService,
+    rbacGroups: RbacGroups,
+  ) {
     this.platformAdminsGroup = `${
       this.groupPrefix
     }${rbacGroups.platformAdminsGroup.toLowerCase()}`;
