@@ -1,8 +1,5 @@
 import { errorHandler } from '@backstage/backend-common';
-import {
-  getBearerTokenFromAuthorizationHeader,
-  type IdentityApi,
-} from '@backstage/plugin-auth-node';
+import { type IdentityApi } from '@backstage/plugin-auth-node';
 import type { IDeliveryProgrammeAdminStore } from '../deliveryProgrammeAdmin';
 import express from 'express';
 import Router from 'express-promise-router';
@@ -13,14 +10,19 @@ import { assertUUID, createParser, respond } from './util';
 import { z } from 'zod';
 import {
   deliveryProgrammeAdminCreatePermission,
+  deliveryProgrammeAdminDeletePermission,
   type CreateDeliveryProgrammeAdminRequest,
   type DeleteDeliveryProgrammeAdminRequest,
 } from '@internal/plugin-adp-common';
 import { getUserEntityFromCatalog } from './catalog';
+import type { AuthorizePermissionRequest } from '@backstage/plugin-permission-common';
 import { AuthorizeResult } from '@backstage/plugin-permission-common';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
 import { stringifyEntityRef } from '@backstage/catalog-model';
 import type {
+  AuthService,
+  BackstageCredentials,
+  HttpAuthService,
   LoggerService,
   PermissionsService,
 } from '@backstage/backend-plugin-api';
@@ -37,8 +39,8 @@ const parseCreateDeliveryProgrammeAdminRequest =
 const parseDeleteDeliveryProgrammeAdminRequest =
   createParser<DeleteDeliveryProgrammeAdminRequest>(
     z.object({
-      aadEntityRefId: z.string(),
-      deliveryProgrammeId: z.string(),
+      delivery_programme_admin_id: z.string(),
+      group_entity_ref: z.string(),
     }),
   );
 
@@ -75,15 +77,27 @@ export interface DeliveryProgrammeAdminRouterOptions {
   deliveryProgrammeAdminStore: IDeliveryProgrammeAdminStore;
   catalog: CatalogApi;
   permissions: PermissionsService;
+  httpAuth: HttpAuthService;
+  auth: AuthService;
 }
 
 export function createDeliveryProgrammeAdminRouter(
   options: DeliveryProgrammeAdminRouterOptions,
 ): express.Router {
-  const { logger, catalog, deliveryProgrammeAdminStore, permissions } = options;
+  const {
+    logger,
+    catalog,
+    deliveryProgrammeAdminStore,
+    permissions,
+    httpAuth,
+    auth,
+  } = options;
 
   const permissionIntegrationRouter = createPermissionIntegrationRouter({
-    permissions: [deliveryProgrammeAdminCreatePermission],
+    permissions: [
+      deliveryProgrammeAdminCreatePermission,
+      deliveryProgrammeAdminDeletePermission,
+    ],
   });
 
   const router = Router();
@@ -134,24 +148,21 @@ export function createDeliveryProgrammeAdminRouter(
     const body = parseCreateDeliveryProgrammeAdminRequest(req.body);
     assertUUID(body.delivery_programme_id);
 
-    const token = getBearerTokenFromAuthorizationHeader(
-      req.header('authorization'),
+    const credentials = await httpAuth.credentials(req);
+    const { token } = await auth.getPluginRequestToken({
+      onBehalfOf: credentials,
+      targetPluginId: 'catalog',
+    });
+    await checkPermissions(
+      credentials,
+      [
+        {
+          permission: deliveryProgrammeAdminCreatePermission,
+          resourceRef: body.group_entity_ref,
+        },
+      ],
+      permissions,
     );
-    const decision = (
-      await permissions.authorize(
-        [
-          {
-            permission: deliveryProgrammeAdminCreatePermission,
-            resourceRef: body.group_entity_ref,
-          },
-        ],
-        { token },
-      )
-    )[0];
-
-    if (decision.result === AuthorizeResult.DENY) {
-      throw new NotAllowedError('Unauthorized');
-    }
 
     const catalogUser = await getUserEntityFromCatalog(
       body.user_catalog_name,
@@ -181,39 +192,45 @@ export function createDeliveryProgrammeAdminRouter(
   });
 
   router.delete('/deliveryProgrammeAdmin', async (req, res) => {
-    try {
-      const body = parseDeleteDeliveryProgrammeAdminRequest(req.body);
+    const body = parseDeleteDeliveryProgrammeAdminRequest(req.body);
 
-      const deliveryProgrammeAdmin =
-        await deliveryProgrammeAdminStore.getByAADEntityRef(
-          body.aadEntityRefId,
-          body.deliveryProgrammeId,
-        );
+    const credentials = await httpAuth.credentials(req);
+    await checkPermissions(
+      credentials,
+      [
+        {
+          permission: deliveryProgrammeAdminDeletePermission,
+          resourceRef: body.group_entity_ref,
+        },
+      ],
+      permissions,
+    );
 
-      if (deliveryProgrammeAdmin !== undefined) {
-        await deliveryProgrammeAdminStore.delete(deliveryProgrammeAdmin.id);
+    await deliveryProgrammeAdminStore.delete(body.delivery_programme_admin_id);
 
-        logger.info(
-          `DELETE /deliveryProgrammeAdmin: Deleted Delivery Programme Admin with aadEntityRefId ${body.aadEntityRefId} and deliveryProgrammeId ${body.deliveryProgrammeId}`,
-        );
+    logger.info(
+      `DELETE /deliveryProgrammeAdmin: Deleted Delivery Programme Admin with ID ${body.delivery_programme_admin_id}`,
+    );
 
-        res.status(204).end();
-      } else {
-        logger.warn(
-          `DELETE /deliveryProgrammeAdmin: Could not find Delivery Programme Admin with aadEntityRefId ${body.aadEntityRefId} and deliveryProgrammeId ${body.deliveryProgrammeId}`,
-        );
-        res.status(404).end();
-      }
-    } catch (error) {
-      const typedError = error as Error;
-      logger.error(
-        `DELETE /deliveryProgrammeAdmin. Could not delete delivery programme admin: ${typedError.message}`,
-        typedError,
-      );
-      throw new InputError(typedError.message);
-    }
+    res.status(204).end();
   });
 
   router.use(errorHandler());
   return router;
+}
+
+async function checkPermissions(
+  credentials: BackstageCredentials,
+  permissions: AuthorizePermissionRequest[],
+  permissionsService: PermissionsService,
+) {
+  const decisions = await permissionsService.authorize(permissions, {
+    credentials: credentials,
+  });
+
+  for (const decision of decisions) {
+    if (decision.result === AuthorizeResult.DENY) {
+      throw new NotAllowedError('Unauthorized');
+    }
+  }
 }
