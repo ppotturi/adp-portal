@@ -4,7 +4,11 @@ import {
 } from '@backstage/backend-plugin-api';
 import { fetchApiRef } from '@internal/plugin-fetch-api-backend';
 import { ArmsLengthBodyStore } from './armsLengthBody';
-import { DeliveryProjectStore, FluxConfigApi } from './deliveryProject';
+import {
+  DeliveryProjectStore,
+  FluxConfigApi,
+  AdoProjectApi,
+} from './deliveryProject';
 import { DeliveryProgrammeStore } from './deliveryProgramme';
 import { DeliveryProgrammeAdminStore } from './deliveryProgrammeAdmin';
 import { DeliveryProjectUserStore } from './deliveryProjectUser';
@@ -77,6 +81,8 @@ export const adpPlugin = createBackendPlugin({
           deliveryProgrammeStore,
           fetchApi,
         );
+        const adoProjectApi = new AdoProjectApi(config, fetchApi);
+        const entraIdApi = new EntraIdApi(config, fetchApi);
         const catalog = new CatalogClient({ discoveryApi: discovery });
         const teamSyncronizer = new DeliveryProjectGithubTeamsSyncronizer(
           githubTeamsApi,
@@ -86,7 +92,7 @@ export const adpPlugin = createBackendPlugin({
         );
         const entraIdGroupSyncronizer =
           new DeliveryProjectEntraIdGroupsSyncronizer(
-            new EntraIdApi(config, fetchApi),
+            entraIdApi,
             deliveryProjectStore,
             deliveryProjectUserStore,
           );
@@ -127,6 +133,8 @@ export const adpPlugin = createBackendPlugin({
             deliveryProjectUserStore,
             deliveryProgrammeAdminStore,
             fluxConfigApi,
+            entraIdApi,
+            adoProjectApi,
             httpAuth,
             permissions,
           }),
