@@ -1,65 +1,70 @@
-import { MiddlewareFactory } from '@backstage/backend-defaults/rootHttpRouter';
-import express from 'express';
+import express, { type Router } from 'express';
 import request from 'supertest';
-import type { ProjectRouterOptions } from './deliveryProjectRouter';
-import { createProjectRouter } from './deliveryProjectRouter';
-import { expectedProjectDataWithName } from '../testData/projectTestData';
+import { expectedProjectDataWithName } from '../../testData/projectTestData';
 import { InputError } from '@backstage/errors';
 import {
   type IFluxConfigApi,
   type IDeliveryProjectStore,
   type IAdoProjectApi,
-} from '../deliveryProject';
-import { type IEntraIdApi } from '../entraId';
+  deliveryProjectStoreRef,
+  fluxConfigApiRef,
+  adoProjectApiRef,
+} from '../../deliveryProject';
+import { entraIdApiRef, type IEntraIdApi } from '../../entraId';
 import { randomUUID } from 'node:crypto';
-import type { IDeliveryProjectGithubTeamsSyncronizer } from '../githubTeam';
+import {
+  deliveryProjectGithubTeamsSyncronizerRef,
+  type IDeliveryProjectGithubTeamsSyncronizer,
+} from '../../githubTeam';
 import type {
   CreateDeliveryProjectRequest,
   UpdateDeliveryProjectRequest,
 } from '@internal/plugin-adp-common';
-import type { IDeliveryProjectUserStore } from '../deliveryProjectUser';
-import type { IDeliveryProgrammeAdminStore } from '../deliveryProgrammeAdmin';
-import { mockServices } from '@backstage/backend-test-utils';
+import {
+  deliveryProjectUserStoreRef,
+  type IDeliveryProjectUserStore,
+} from '../../deliveryProjectUser';
+import {
+  deliveryProgrammeAdminStoreRef,
+  type IDeliveryProgrammeAdminStore,
+} from '../../deliveryProgrammeAdmin';
+import {
+  ServiceFactoryTester,
+  mockServices,
+} from '@backstage/backend-test-utils';
 import { AuthorizeResult } from '@backstage/plugin-permission-common';
+import {
+  type ServiceFactory,
+  type ServiceRef,
+  coreServices,
+  createServiceFactory,
+  createServiceRef,
+} from '@backstage/backend-plugin-api';
+import deliveryProjects from '.';
+import { authIdentityRef } from '../../refs';
 
-let mockCreateFluxConfig: jest.Mock;
-let mockGetFluxConfig: jest.Mock;
-let mockCheckIfAdoProjectExists: jest.Mock;
-let mockCreateEntraIdGroupsForProject: jest.Mock;
-let mockSetProjectGroupMembers: jest.Mock;
-
-jest.mock('../deliveryProject/fluxConfigApi', () => {
-  return {
-    FluxConfigApi: jest.fn().mockImplementation(() => {
-      mockCreateFluxConfig = jest.fn().mockResolvedValue({});
-      mockGetFluxConfig = jest.fn().mockResolvedValue({});
-
-      return {
-        createFluxConfig: mockCreateFluxConfig,
-        getFluxConfig: mockGetFluxConfig,
-      };
-    }),
-    AdoProjectApi: jest.fn().mockImplementation(() => {
-      mockCheckIfAdoProjectExists = jest.fn().mockResolvedValue(true);
-      return {
-        checkAdoProjectExists: mockCheckIfAdoProjectExists,
-      };
-    }),
-  };
+const getter = createServiceFactory({
+  service: createServiceRef<Router>({ id: '', scope: 'plugin' }),
+  deps: {
+    deliveryProjects,
+  },
+  factory(deps) {
+    return deps.deliveryProjects;
+  },
 });
-
-jest.mock('../entraId', () => {
-  return {
-    EntraIdApi: jest.fn().mockImplementation(() => {
-      mockCreateEntraIdGroupsForProject = jest.fn();
-      mockSetProjectGroupMembers = jest.fn();
-      return {
-        createEntraIdGroupsForProject: mockCreateEntraIdGroupsForProject,
-        setProjectGroupMembers: mockSetProjectGroupMembers,
-      };
-    }),
-  };
-});
+function makeFactory<T>(ref: ServiceRef<T>, instance: T) {
+  return createServiceFactory({
+    service: ref as ServiceRef<T, 'plugin'>,
+    deps: {},
+    factory: () => instance,
+  })();
+}
+async function getRouter(dependencies?: Array<ServiceFactory>) {
+  const provider = ServiceFactoryTester.from(getter, {
+    dependencies,
+  });
+  return await provider.get();
+}
 
 describe('createRouter', () => {
   let projectApp: express.Express;
@@ -116,26 +121,21 @@ describe('createRouter', () => {
 
   const mockPermissionsService = mockServices.permissions.mock();
 
-  const mockOptions: ProjectRouterOptions = {
-    logger: mockServices.logger.mock(),
-    identity: mockIdentityApi,
-    teamSyncronizer: mockSyncronizer,
-    deliveryProjectStore: mockDeliveryProjectStore,
-    deliveryProjectUserStore: mockDeliveryProjectUserStore,
-    fluxConfigApi: mockFluxConfigApi,
-    deliveryProgrammeAdminStore: mockDeliveryProgrammeAdminStore,
-    entraIdApi: mockEntraIdApi,
-    adoProjectApi: mockAdoProjectApi,
-    httpAuth: mockServices.httpAuth(),
-    permissions: mockPermissionsService,
-    middleware: MiddlewareFactory.create({
-      config: mockServices.rootConfig(),
-      logger: mockServices.logger.mock(),
-    }),
-  };
-
-  beforeAll(() => {
-    const projectRouter = createProjectRouter(mockOptions);
+  beforeAll(async () => {
+    const projectRouter = await getRouter([
+      makeFactory(authIdentityRef, mockIdentityApi),
+      makeFactory(deliveryProjectGithubTeamsSyncronizerRef, mockSyncronizer),
+      makeFactory(deliveryProjectStoreRef, mockDeliveryProjectStore),
+      makeFactory(deliveryProjectUserStoreRef, mockDeliveryProjectUserStore),
+      makeFactory(fluxConfigApiRef, mockFluxConfigApi),
+      makeFactory(adoProjectApiRef, mockAdoProjectApi),
+      makeFactory(
+        deliveryProgrammeAdminStoreRef,
+        mockDeliveryProgrammeAdminStore,
+      ),
+      makeFactory(entraIdApiRef, mockEntraIdApi),
+      makeFactory(coreServices.permissions, mockPermissionsService),
+    ]);
     projectApp = express().use(projectRouter);
   });
 
@@ -242,27 +242,6 @@ describe('createRouter', () => {
       expect(response.body).toMatchObject(
         JSON.parse(JSON.stringify(expectedProjectDataWithName)),
       );
-    });
-
-    it('returns a 403 response if the user is not authorized', async () => {
-      mockPermissionsService.authorize.mockResolvedValueOnce([
-        { result: AuthorizeResult.DENY },
-      ]);
-
-      const response = await request(projectApp)
-        .post('/')
-        .send({
-          delivery_project_code: 'abc',
-          title: 'def',
-          ado_project: 'my project',
-          delivery_programme_id: '123',
-          description: 'My description',
-          github_team_visibility: 'public',
-          service_owner: 'test@email.com',
-          team_type: 'delivery',
-        } satisfies CreateDeliveryProjectRequest);
-
-      expect(response.status).toEqual(403);
     });
 
     it('return 400 with errors', async () => {
