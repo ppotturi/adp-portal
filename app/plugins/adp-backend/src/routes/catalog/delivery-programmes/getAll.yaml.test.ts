@@ -1,5 +1,5 @@
 import {
-  type IDeliveryProgrammeStore,
+  DeliveryProgrammeStore,
   deliveryProgrammeStoreRef,
 } from '../../../deliveryProgramme';
 import getAllYaml from './getAll.yaml';
@@ -9,33 +9,6 @@ import { coreServices } from '@backstage/backend-plugin-api';
 import { mockServices } from '@backstage/backend-test-utils';
 
 describe('default', () => {
-  async function setup() {
-    const config = mockServices.rootConfig({
-      data: {
-        app: {
-          baseUrl: 'http://defra-adp:3000',
-        },
-      },
-    });
-
-    const programmes: jest.Mocked<IDeliveryProgrammeStore> = {
-      add: jest.fn(),
-      get: jest.fn(),
-      getAll: jest.fn(),
-      update: jest.fn(),
-      getByName: jest.fn(),
-    };
-
-    const handler = await testHelpers.getAutoServiceRef(getAllYaml, [
-      testHelpers.provideService(deliveryProgrammeStoreRef, programmes),
-      testHelpers.provideService(coreServices.rootConfig, config),
-    ]);
-
-    const app = testHelpers.makeApp(x => x.get('/index.yaml', handler));
-
-    return { handler, app, programmes };
-  }
-
   it('Should return ok with the data from the store', async () => {
     const { app, programmes } = await setup();
     programmes.getAll.mockResolvedValueOnce([
@@ -61,6 +34,9 @@ kind: Location
 metadata:
   name: delivery-programmes
   description: All the delivery programmes available in the system
+  annotations:
+    backstage.io/edit-url: http://defra-adp:3000/onboarding/delivery-programmes
+    backstage.io/view-url: http://defra-adp:3000/onboarding/delivery-programmes
 spec:
   type: url
   targets:
@@ -72,3 +48,24 @@ spec:
     });
   });
 });
+
+async function setup() {
+  const config = mockServices.rootConfig({
+    data: {
+      app: {
+        baseUrl: 'http://defra-adp:3000',
+      },
+    },
+  });
+
+  const programmes = mockInstance(DeliveryProgrammeStore);
+
+  const handler = await testHelpers.getAutoServiceRef(getAllYaml, [
+    testHelpers.provideService(deliveryProgrammeStoreRef, programmes),
+    testHelpers.provideService(coreServices.rootConfig, config),
+  ]);
+
+  const app = testHelpers.makeApp(x => x.get('/index.yaml', handler));
+
+  return { handler, app, programmes };
+}

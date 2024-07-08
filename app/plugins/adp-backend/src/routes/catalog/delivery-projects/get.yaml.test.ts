@@ -1,56 +1,23 @@
 import {
-  type IDeliveryProgrammeStore,
+  DeliveryProgrammeStore,
   deliveryProgrammeStoreRef,
 } from '../../../deliveryProgramme';
 import {
-  type IDeliveryProjectStore,
+  DeliveryProjectStore,
   deliveryProjectStoreRef,
 } from '../../../deliveryProject';
 import {
-  type IDeliveryProjectUserStore,
+  DeliveryProjectUserStore,
   deliveryProjectUserStoreRef,
 } from '../../../deliveryProjectUser';
 import getYaml from './get.yaml';
 import { testHelpers } from '../../../utils/testHelpers';
 import request from 'supertest';
 import { randomUUID } from 'node:crypto';
+import { mockServices } from '@backstage/backend-test-utils';
+import { coreServices } from '@backstage/backend-plugin-api';
 
 describe('default', () => {
-  async function setup() {
-    const programmes: jest.Mocked<IDeliveryProgrammeStore> = {
-      add: jest.fn(),
-      get: jest.fn(),
-      getAll: jest.fn(),
-      update: jest.fn(),
-      getByName: jest.fn(),
-    };
-    const projects: jest.Mocked<IDeliveryProjectStore> = {
-      add: jest.fn(),
-      getAll: jest.fn(),
-      get: jest.fn(),
-      getByName: jest.fn(),
-      update: jest.fn(),
-    };
-    const projectUsers: jest.Mocked<IDeliveryProjectUserStore> = {
-      add: jest.fn(),
-      delete: jest.fn(),
-      get: jest.fn(),
-      getAll: jest.fn(),
-      getByDeliveryProject: jest.fn(),
-      update: jest.fn(),
-    };
-
-    const handler = await testHelpers.getAutoServiceRef(getYaml, [
-      testHelpers.provideService(deliveryProgrammeStoreRef, programmes),
-      testHelpers.provideService(deliveryProjectStoreRef, projects),
-      testHelpers.provideService(deliveryProjectUserStoreRef, projectUsers),
-    ]);
-
-    const app = testHelpers.makeApp(x => x.get('/:name/entity.yaml', handler));
-
-    return { handler, app, programmes, projects, projectUsers };
-  }
-
   it('Should return ok with the data from the store', async () => {
     const { app, programmes, projects, projectUsers } = await setup();
     const programmeId = randomUUID();
@@ -78,7 +45,6 @@ describe('default', () => {
       created_at: new Date(),
       updated_at: new Date(),
       arms_length_body_id: randomUUID(),
-      delivery_programme_admins: [],
       delivery_programme_code: randomUUID(),
       description: randomUUID(),
       id: randomUUID(),
@@ -122,6 +88,8 @@ metadata:
   links: []
   annotations:
     adp.defra.gov.uk/delivery-project-id: ${projectId}
+    backstage.io/edit-url: http://defra-adp:3000/onboarding/delivery-projects
+    backstage.io/view-url: http://defra-adp:3000/onboarding/delivery-projects
 spec:
   type: delivery-project
   parent: group:default/test-programme
@@ -133,3 +101,28 @@ spec:
     });
   });
 });
+
+async function setup() {
+  const config = mockServices.rootConfig({
+    data: {
+      app: {
+        baseUrl: 'http://defra-adp:3000',
+      },
+    },
+  });
+
+  const programmes = mockInstance(DeliveryProgrammeStore);
+  const projects = mockInstance(DeliveryProjectStore);
+  const projectUsers = mockInstance(DeliveryProjectUserStore);
+
+  const handler = await testHelpers.getAutoServiceRef(getYaml, [
+    testHelpers.provideService(deliveryProgrammeStoreRef, programmes),
+    testHelpers.provideService(deliveryProjectStoreRef, projects),
+    testHelpers.provideService(deliveryProjectUserStoreRef, projectUsers),
+    testHelpers.provideService(coreServices.rootConfig, config),
+  ]);
+
+  const app = testHelpers.makeApp(x => x.get('/:name/entity.yaml', handler));
+
+  return { handler, app, programmes, projects, projectUsers };
+}

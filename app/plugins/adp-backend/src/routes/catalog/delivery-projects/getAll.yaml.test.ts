@@ -4,39 +4,12 @@ import request from 'supertest';
 import { coreServices } from '@backstage/backend-plugin-api';
 import { mockServices } from '@backstage/backend-test-utils';
 import {
-  type IDeliveryProjectStore,
+  DeliveryProjectStore,
   deliveryProjectStoreRef,
 } from '../../../deliveryProject';
 import type { DeliveryProject } from '@internal/plugin-adp-common';
 
 describe('default', () => {
-  async function setup() {
-    const config = mockServices.rootConfig({
-      data: {
-        app: {
-          baseUrl: 'http://defra-adp:3000',
-        },
-      },
-    });
-
-    const projects: jest.Mocked<IDeliveryProjectStore> = {
-      add: jest.fn(),
-      get: jest.fn(),
-      getAll: jest.fn(),
-      update: jest.fn(),
-      getByName: jest.fn(),
-    };
-
-    const handler = await testHelpers.getAutoServiceRef(getAllYaml, [
-      testHelpers.provideService(deliveryProjectStoreRef, projects),
-      testHelpers.provideService(coreServices.rootConfig, config),
-    ]);
-
-    const app = testHelpers.makeApp(x => x.get('/index.yaml', handler));
-
-    return { handler, app, projects };
-  }
-
   it('Should return ok with the data from the store', async () => {
     const { app, projects } = await setup();
     projects.getAll.mockResolvedValueOnce([
@@ -61,6 +34,9 @@ kind: Location
 metadata:
   name: delivery-projects
   description: All the delivery projects available in the system
+  annotations:
+    backstage.io/edit-url: http://defra-adp:3000/onboarding/delivery-projects
+    backstage.io/view-url: http://defra-adp:3000/onboarding/delivery-projects
 spec:
   type: url
   targets:
@@ -72,3 +48,24 @@ spec:
     });
   });
 });
+
+async function setup() {
+  const config = mockServices.rootConfig({
+    data: {
+      app: {
+        baseUrl: 'http://defra-adp:3000',
+      },
+    },
+  });
+
+  const projects = mockInstance(DeliveryProjectStore);
+
+  const handler = await testHelpers.getAutoServiceRef(getAllYaml, [
+    testHelpers.provideService(deliveryProjectStoreRef, projects),
+    testHelpers.provideService(coreServices.rootConfig, config),
+  ]);
+
+  const app = testHelpers.makeApp(x => x.get('/index.yaml', handler));
+
+  return { handler, app, projects };
+}

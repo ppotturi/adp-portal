@@ -4,38 +4,11 @@ import request from 'supertest';
 import { coreServices } from '@backstage/backend-plugin-api';
 import { mockServices } from '@backstage/backend-test-utils';
 import {
+  ArmsLengthBodyStore,
   armsLengthBodyStoreRef,
-  type IArmsLengthBodyStore,
 } from '../../../armsLengthBody';
 
 describe('default', () => {
-  async function setup() {
-    const config = mockServices.rootConfig({
-      data: {
-        app: {
-          baseUrl: 'http://defra-adp:3000',
-        },
-      },
-    });
-
-    const albs: jest.Mocked<IArmsLengthBodyStore> = {
-      add: jest.fn(),
-      get: jest.fn(),
-      getAll: jest.fn(),
-      update: jest.fn(),
-      getByName: jest.fn(),
-    };
-
-    const handler = await testHelpers.getAutoServiceRef(getAllYaml, [
-      testHelpers.provideService(armsLengthBodyStoreRef, albs),
-      testHelpers.provideService(coreServices.rootConfig, config),
-    ]);
-
-    const app = testHelpers.makeApp(x => x.get('/index.yaml', handler));
-
-    return { handler, app, albs };
-  }
-
   it('Should return ok with the data from the store', async () => {
     const { app, albs } = await setup();
     albs.getAll.mockResolvedValueOnce([
@@ -61,6 +34,9 @@ kind: Location
 metadata:
   name: arms-length-bodies
   description: All the arms length bodies available in the system
+  annotations:
+    backstage.io/edit-url: http://defra-adp:3000/onboarding/arms-length-bodies
+    backstage.io/view-url: http://defra-adp:3000/onboarding/arms-length-bodies
 spec:
   type: url
   targets:
@@ -72,3 +48,24 @@ spec:
     });
   });
 });
+
+async function setup() {
+  const config = mockServices.rootConfig({
+    data: {
+      app: {
+        baseUrl: 'http://defra-adp:3000',
+      },
+    },
+  });
+
+  const albs = mockInstance(ArmsLengthBodyStore);
+
+  const handler = await testHelpers.getAutoServiceRef(getAllYaml, [
+    testHelpers.provideService(armsLengthBodyStoreRef, albs),
+    testHelpers.provideService(coreServices.rootConfig, config),
+  ]);
+
+  const app = testHelpers.makeApp(x => x.get('/index.yaml', handler));
+
+  return { handler, app, albs };
+}

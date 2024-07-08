@@ -11,13 +11,11 @@ import {
   deliveryProjectUserPermissions,
 } from '@internal/plugin-adp-common';
 import { deliveryProgrammeRules, deliveryProjectRules } from '../permissions';
-import { deliveryProgrammeStoreRef } from '../deliveryProgramme';
-import { deliveryProjectStoreRef } from '../deliveryProject';
-import { deliveryProjectUserStoreRef } from '../deliveryProjectUser';
-import { deliveryProgrammeAdminStoreRef } from '../deliveryProgrammeAdmin';
 import type { Router } from 'express';
-import { getDeliveryProgramme } from './deliveryProgrammes';
-import { getDeliveryProject } from './deliveryProjects';
+import {
+  deliveryProgrammeServiceRef,
+  deliveryProjectServiceRef,
+} from '../services';
 
 export default createServiceRef<Router>({
   id: 'adp.router.auth',
@@ -27,17 +25,10 @@ export default createServiceRef<Router>({
       createServiceFactory({
         service,
         deps: {
-          deliveryProjects: deliveryProjectStoreRef,
-          deliveryProjectUsers: deliveryProjectUserStoreRef,
-          deliveryProgrammes: deliveryProgrammeStoreRef,
-          deliveryProgrammeAdmins: deliveryProgrammeAdminStoreRef,
+          deliveryProjects: deliveryProjectServiceRef,
+          deliveryProgrammes: deliveryProgrammeServiceRef,
         },
-        factory({
-          deliveryProjects,
-          deliveryProjectUsers,
-          deliveryProgrammes,
-          deliveryProgrammeAdmins,
-        }) {
+        factory({ deliveryProjects, deliveryProgrammes }) {
           const deliveryProjectPermissionRules =
             Object.values(deliveryProjectRules);
           const deliveryProgrammePermissionRules = Object.values(
@@ -54,31 +45,18 @@ export default createServiceRef<Router>({
               {
                 resourceType: DELIVERY_PROJECT_RESOURCE_TYPE,
                 rules: deliveryProjectPermissionRules,
-                getResources: async (resourceRefs: string[]) => {
+                async getResources(ids) {
                   return await Promise.all(
-                    resourceRefs.map(async (ref: string) => {
-                      return await getDeliveryProject(
-                        deliveryProjects,
-                        deliveryProjectUsers,
-                        deliveryProgrammeAdmins,
-                        ref,
-                      );
-                    }),
+                    ids.map(id => deliveryProjects.getById(id)),
                   );
                 },
               },
               {
                 resourceType: DELIVERY_PROGRAMME_RESOURCE_TYPE,
                 rules: deliveryProgrammePermissionRules,
-                getResources: async (resourceRefs: string[]) => {
+                async getResources(ids) {
                   return await Promise.all(
-                    resourceRefs.map(async (ref: string) => {
-                      return await getDeliveryProgramme(
-                        deliveryProgrammes,
-                        deliveryProgrammeAdmins,
-                        ref,
-                      );
-                    }),
+                    ids.map(id => deliveryProgrammes.getById(id)),
                   );
                 },
               },

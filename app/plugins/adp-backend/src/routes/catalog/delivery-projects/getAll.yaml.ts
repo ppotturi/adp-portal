@@ -1,9 +1,14 @@
-import type { LocationEntity } from '@backstage/catalog-model';
+import {
+  ANNOTATION_EDIT_URL,
+  ANNOTATION_VIEW_URL,
+  type LocationEntity,
+} from '@backstage/catalog-model';
 import { deliveryProjectStoreRef } from '../../../deliveryProject';
 import { createEndpointRef } from '../../util';
 import { coreServices } from '@backstage/backend-plugin-api';
 
 export default createEndpointRef({
+  name: 'getDeliveryProjectsIndexYaml',
   deps: {
     deliveryProjectStore: deliveryProjectStoreRef,
     config: coreServices.rootConfig,
@@ -19,6 +24,10 @@ export default createEndpointRef({
         metadata: {
           name: 'delivery-projects',
           description: 'All the delivery projects available in the system',
+          annotations: {
+            [ANNOTATION_EDIT_URL]: `${baseUrl}/delivery-projects`,
+            [ANNOTATION_VIEW_URL]: `${baseUrl}/delivery-projects`,
+          },
         },
         spec: {
           type: 'url',

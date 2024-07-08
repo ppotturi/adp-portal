@@ -1,58 +1,23 @@
 import {
-  type IDeliveryProgrammeStore,
+  DeliveryProgrammeStore,
   deliveryProgrammeStoreRef,
 } from '../../../deliveryProgramme';
 import {
-  type IArmsLengthBodyStore,
+  ArmsLengthBodyStore,
   armsLengthBodyStoreRef,
 } from '../../../armsLengthBody';
 import {
-  type IDeliveryProgrammeAdminStore,
+  DeliveryProgrammeAdminStore,
   deliveryProgrammeAdminStoreRef,
 } from '../../../deliveryProgrammeAdmin';
 import getYaml from './get.yaml';
 import { testHelpers } from '../../../utils/testHelpers';
 import request from 'supertest';
 import { randomUUID } from 'node:crypto';
+import { coreServices } from '@backstage/backend-plugin-api';
+import { mockServices } from '@backstage/backend-test-utils';
 
 describe('default', () => {
-  async function setup() {
-    const albs: jest.Mocked<IArmsLengthBodyStore> = {
-      add: jest.fn(),
-      get: jest.fn(),
-      getAll: jest.fn(),
-      update: jest.fn(),
-      getByName: jest.fn(),
-    };
-    const programmes: jest.Mocked<IDeliveryProgrammeStore> = {
-      add: jest.fn(),
-      get: jest.fn(),
-      getAll: jest.fn(),
-      update: jest.fn(),
-      getByName: jest.fn(),
-    };
-    const programmeAdmins: jest.Mocked<IDeliveryProgrammeAdminStore> = {
-      add: jest.fn(),
-      getAll: jest.fn(),
-      delete: jest.fn(),
-      getByAADEntityRef: jest.fn(),
-      getByDeliveryProgramme: jest.fn(),
-    };
-
-    const handler = await testHelpers.getAutoServiceRef(getYaml, [
-      testHelpers.provideService(armsLengthBodyStoreRef, albs),
-      testHelpers.provideService(deliveryProgrammeStoreRef, programmes),
-      testHelpers.provideService(
-        deliveryProgrammeAdminStoreRef,
-        programmeAdmins,
-      ),
-    ]);
-
-    const app = testHelpers.makeApp(x => x.get('/:name/entity.yaml', handler));
-
-    return { handler, app, albs, programmes, programmeAdmins };
-  }
-
   it('Should return ok with the data from the store', async () => {
     const { app, albs, programmes, programmeAdmins } = await setup();
     const albId = randomUUID();
@@ -61,7 +26,6 @@ describe('default', () => {
       arms_length_body_id: albId,
       id: programmeId,
       created_at: new Date(),
-      delivery_programme_admins: [],
       delivery_programme_code: 'ABC',
       description: 'My test delivery programme',
       name: 'test-programme',
@@ -119,6 +83,8 @@ metadata:
     - url: https://test.com
   annotations:
     adp.defra.gov.uk/delivery-programme-id: ${programmeId}
+    backstage.io/edit-url: http://defra-adp:3000/onboarding/delivery-programmes
+    backstage.io/view-url: http://defra-adp:3000/onboarding/delivery-programmes
 spec:
   type: delivery-programme
   parent: group:default/test-alb
@@ -130,3 +96,28 @@ spec:
     });
   });
 });
+
+async function setup() {
+  const config = mockServices.rootConfig({
+    data: {
+      app: {
+        baseUrl: 'http://defra-adp:3000',
+      },
+    },
+  });
+
+  const albs = mockInstance(ArmsLengthBodyStore);
+  const programmes = mockInstance(DeliveryProgrammeStore);
+  const programmeAdmins = mockInstance(DeliveryProgrammeAdminStore);
+
+  const handler = await testHelpers.getAutoServiceRef(getYaml, [
+    testHelpers.provideService(armsLengthBodyStoreRef, albs),
+    testHelpers.provideService(deliveryProgrammeStoreRef, programmes),
+    testHelpers.provideService(deliveryProgrammeAdminStoreRef, programmeAdmins),
+    testHelpers.provideService(coreServices.rootConfig, config),
+  ]);
+
+  const app = testHelpers.makeApp(x => x.get('/:name/entity.yaml', handler));
+
+  return { handler, app, albs, programmes, programmeAdmins };
+}

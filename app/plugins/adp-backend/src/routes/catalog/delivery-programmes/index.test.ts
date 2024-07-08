@@ -1,41 +1,12 @@
 import express from 'express';
 import { testHelpers } from '../../../utils/testHelpers';
 import index from './index';
-import health from './health';
 import request from 'supertest';
 import getAllYaml from './getAll.yaml';
 import getYaml from './get.yaml';
+import { healthCheck } from '../../util';
 
 describe('default', () => {
-  async function setup() {
-    function mockHandler<T extends (...args: never) => unknown>() {
-      return jest.fn(() => {
-        throw new Error('Unexpected call');
-      }) as unknown as jest.MockedFn<T>;
-    }
-
-    const mockGetAllYaml = mockHandler<(typeof getAllYaml)['T']>();
-    const mockGetYaml = mockHandler<(typeof getYaml)['T']>();
-    const mockHealth = mockHandler<(typeof health)['T']>();
-
-    const handler = await testHelpers.getAutoServiceRef(index, [
-      testHelpers.provideService(getAllYaml, mockGetAllYaml),
-      testHelpers.provideService(getYaml, mockGetYaml),
-      testHelpers.provideService(health, mockHealth),
-    ]);
-
-    const app = express();
-    app.use(handler);
-
-    return {
-      handler,
-      app,
-      mockGetAllYaml,
-      mockGetYaml,
-      mockHealth,
-    };
-  }
-
   describe('GET /entity.yaml', () => {
     it('Should call getAllYaml', async () => {
       const { app, mockGetAllYaml } = await setup();
@@ -72,7 +43,7 @@ describe('default', () => {
   });
   describe('GET /health', () => {
     it('Should call health', async () => {
-      const { app, mockHealth } = await setup();
+      const { app, mockHealthCheck: mockHealth } = await setup();
       mockHealth.mockImplementationOnce((_, res) =>
         res.status(200).json({ result: 'Success!' }),
       );
@@ -87,3 +58,26 @@ describe('default', () => {
     });
   });
 });
+
+async function setup() {
+  const mockGetAllYaml = testHelpers.strictFn<(typeof getAllYaml)['T']>();
+  const mockGetYaml = testHelpers.strictFn<(typeof getYaml)['T']>();
+  const mockHealthCheck = testHelpers.strictFn<(typeof healthCheck)['T']>();
+
+  const handler = await testHelpers.getAutoServiceRef(index, [
+    testHelpers.provideService(getAllYaml, mockGetAllYaml),
+    testHelpers.provideService(getYaml, mockGetYaml),
+    testHelpers.provideService(healthCheck, mockHealthCheck),
+  ]);
+
+  const app = express();
+  app.use(handler);
+
+  return {
+    handler,
+    app,
+    mockGetAllYaml,
+    mockGetYaml,
+    mockHealthCheck,
+  };
+}

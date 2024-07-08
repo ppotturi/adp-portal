@@ -1,20 +1,20 @@
-import { createRouterRef } from '../../util';
+import { createRouterRef, healthCheck } from '../../util';
 import getAllYaml from './getAll.yaml';
 import getYaml from './get.yaml';
-import health from './health';
 import { middlewareFactoryRef } from '../../../refs';
 
 export default createRouterRef({
+  name: 'deliveryProgrammeEntities',
   deps: {
     middleware: middlewareFactoryRef,
     getAllYaml,
     getYaml,
-    health,
+    healthCheck,
   },
   factory({ router, deps }) {
     router.get('/entity.yaml', deps.getAllYaml);
     router.get('/:name/entity.yaml', deps.getYaml);
-    router.get('/health', deps.health);
+    router.get('/health', deps.healthCheck);
     router.use(deps.middleware.error());
   },
 });

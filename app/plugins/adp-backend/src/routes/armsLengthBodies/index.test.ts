@@ -6,62 +6,16 @@ import create from './create';
 import edit from './edit';
 import getAll from './getAll';
 import getNames from './getNames';
-import health from './health';
 import request from 'supertest';
-import checkAuth from '../checkAuth';
+import checkAuth, { type CheckAuthFactory } from '../checkAuth';
 import { NotAllowedError } from '@backstage/errors';
 import {
   armsLengthBodyCreatePermission,
   armsLengthBodyUpdatePermission,
 } from '@internal/plugin-adp-common';
+import healthCheck from '../util/healthCheck';
 
 describe('default', () => {
-  async function setup() {
-    function mockHandler<T extends (...args: never) => unknown>() {
-      return jest.fn(() => {
-        throw new Error('Unexpected call');
-      }) as unknown as jest.MockedFn<T>;
-    }
-
-    const mockCreate = mockHandler<(typeof create)['T']>();
-    const mockEdit = mockHandler<(typeof edit)['T']>();
-    const mockGet = mockHandler<(typeof get)['T']>();
-    const mockGetAll = mockHandler<(typeof getAll)['T']>();
-    const mockGetNames = mockHandler<(typeof getNames)['T']>();
-    const mockHealth = mockHandler<(typeof health)['T']>();
-    const mockCheckAuth = mockHandler<(typeof checkAuth)['T']>();
-
-    const handler = await testHelpers.getAutoServiceRef(index, [
-      testHelpers.provideService(create, mockCreate),
-      testHelpers.provideService(edit, mockEdit),
-      testHelpers.provideService(get, mockGet),
-      testHelpers.provideService(getAll, mockGetAll),
-      testHelpers.provideService(getNames, mockGetNames),
-      testHelpers.provideService(health, mockHealth),
-      testHelpers.provideService(
-        checkAuth,
-        getRequests =>
-          (...args) =>
-            mockCheckAuth(getRequests)(...args),
-      ),
-    ]);
-
-    const app = express();
-    app.use(handler);
-
-    return {
-      handler,
-      app,
-      mockCreate,
-      mockEdit,
-      mockGet,
-      mockGetAll,
-      mockGetNames,
-      mockHealth,
-      mockCheckAuth,
-    };
-  }
-
   describe('GET /', () => {
     it('Should call getAll', async () => {
       const { app, mockGetAll } = await setup();
@@ -80,14 +34,14 @@ describe('default', () => {
   });
   describe('GET /health', () => {
     it('Should call health', async () => {
-      const { app, mockHealth } = await setup();
-      mockHealth.mockImplementationOnce((_, res) =>
+      const { app, mockHealthCheck } = await setup();
+      mockHealthCheck.mockImplementationOnce((_, res) =>
         res.status(200).json({ result: 'Success!' }),
       );
 
       const { status, body } = await request(app).get('/health');
 
-      expect(mockHealth).toHaveBeenCalledTimes(1);
+      expect(mockHealthCheck).toHaveBeenCalledTimes(1);
       expect({ status, body }).toMatchObject({
         status: 200,
         body: { result: 'Success!' },
@@ -171,7 +125,7 @@ describe('default', () => {
     });
   });
   describe('PATCH /', () => {
-    it('Should call create if you have permission', async () => {
+    it('Should call edit if you have permission', async () => {
       const { app, mockEdit, mockCheckAuth } = await setup();
       mockCheckAuth.mockReturnValue((_req, _res, next) => next());
       mockEdit.mockImplementationOnce((_, res) =>
@@ -182,7 +136,9 @@ describe('default', () => {
 
       expect(mockCheckAuth).toHaveBeenCalledTimes(1);
       expect(
-        mockCheckAuth.mock.calls[0][0]({ body: { id: '123' } } as any),
+        mockCheckAuth.mock.calls[0][0](
+          testHelpers.expressRequest({ body: { id: '123' } }),
+        ),
       ).toMatchObject({
         permission: armsLengthBodyUpdatePermission,
         resourceRef: '123',
@@ -193,7 +149,7 @@ describe('default', () => {
         body: { result: 'Success!' },
       });
     });
-    it('Should not call create if you dont have permission', async () => {
+    it('Should not call edit if you dont have permission', async () => {
       const { app, mockEdit, mockCheckAuth } = await setup();
       mockCheckAuth.mockReturnValue((_req, _res, next) =>
         next(new NotAllowedError('Unauthorized')),
@@ -203,7 +159,9 @@ describe('default', () => {
 
       expect(mockCheckAuth).toHaveBeenCalledTimes(1);
       expect(
-        mockCheckAuth.mock.calls[0][0]({ body: { id: '123' } } as any),
+        mockCheckAuth.mock.calls[0][0](
+          testHelpers.expressRequest({ body: { id: '123' } }),
+        ),
       ).toMatchObject({
         permission: armsLengthBodyUpdatePermission,
         resourceRef: '123',
@@ -221,3 +179,41 @@ describe('default', () => {
     });
   });
 });
+
+async function setup() {
+  const mockCreate = testHelpers.strictFn<(typeof create)['T']>();
+  const mockEdit = testHelpers.strictFn<(typeof edit)['T']>();
+  const mockGet = testHelpers.strictFn<(typeof get)['T']>();
+  const mockGetAll = testHelpers.strictFn<(typeof getAll)['T']>();
+  const mockGetNames = testHelpers.strictFn<(typeof getNames)['T']>();
+  const mockHealthCheck = testHelpers.strictFn<(typeof healthCheck)['T']>();
+  const mockCheckAuth = testHelpers.strictFn<(typeof checkAuth)['T']>();
+
+  const handler = await testHelpers.getAutoServiceRef(index, [
+    testHelpers.provideService(create, mockCreate),
+    testHelpers.provideService(edit, mockEdit),
+    testHelpers.provideService(get, mockGet),
+    testHelpers.provideService(getAll, mockGetAll),
+    testHelpers.provideService(getNames, mockGetNames),
+    testHelpers.provideService(healthCheck, mockHealthCheck),
+    testHelpers.provideService(
+      checkAuth,
+      testHelpers.deferFunctionFactory(mockCheckAuth as CheckAuthFactory),
+    ),
+  ]);
+
+  const app = express();
+  app.use(handler);
+
+  return {
+    handler,
+    app,
+    mockCreate,
+    mockEdit,
+    mockGet,
+    mockGetAll,
+    mockGetNames,
+    mockHealthCheck,
+    mockCheckAuth,
+  };
+}
