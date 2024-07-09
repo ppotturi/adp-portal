@@ -132,9 +132,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -235,11 +233,11 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -253,7 +251,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -270,7 +268,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -305,7 +303,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -340,7 +338,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -375,7 +373,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -410,35 +408,18 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-3-hidden-text-24"
+                              data-rbd-drag-handle-context-id="3"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="3"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-3-hidden-text-24"
-                                data-rbd-drag-handle-context-id="3"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="3"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
@@ -454,11 +435,12 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Programme 0"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                               href="/catalog/default/group/programme-0"
+                              title="View Programme 0 in the catalog"
                             >
                               Programme 0
                             </a>
@@ -487,7 +469,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -495,8 +477,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
@@ -504,19 +485,25 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                               href="/catalog/default/group/programme-0/manage-delivery-programme-admins"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Programme Admins"
+                              title="Manage members for Programme 0. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -524,11 +511,11 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                                 class="MuiTouchRipple-root"
                               />
                             </a>
-                             
                             <button
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
                               data-testid="delivery-programme-edit-button-0"
                               tabindex="0"
+                              title="Edit Programme 0"
                               type="button"
                             >
                               <span
@@ -931,9 +918,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -1034,11 +1019,11 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -1052,7 +1037,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -1069,7 +1054,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1104,7 +1089,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1139,7 +1124,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1174,7 +1159,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1209,35 +1194,18 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is c
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-3-hidden-text-24"
+                              data-rbd-drag-handle-context-id="3"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="3"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-3-hidden-text-24"
-                                data-rbd-drag-handle-context-id="3"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="3"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
@@ -1608,9 +1576,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -1711,11 +1677,11 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -1729,7 +1695,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -1746,7 +1712,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1781,7 +1747,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1816,7 +1782,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1851,7 +1817,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1886,35 +1852,18 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-4-hidden-text-32"
+                              data-rbd-drag-handle-context-id="4"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="4"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-4-hidden-text-32"
-                                data-rbd-drag-handle-context-id="4"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="4"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
@@ -1930,11 +1879,12 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Programme 0"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                               href="/catalog/default/group/programme-0"
+                              title="View Programme 0 in the catalog"
                             >
                               Programme 0
                             </a>
@@ -1963,7 +1913,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -1971,8 +1921,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
@@ -1980,19 +1929,25 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                               href="/catalog/default/group/programme-0/manage-delivery-programme-admins"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Programme Admins"
+                              title="Manage members for Programme 0. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -2000,11 +1955,11 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                                 class="MuiTouchRipple-root"
                               />
                             </a>
-                             
                             <button
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
                               data-testid="delivery-programme-edit-button-0"
                               tabindex="0"
+                              title="Edit Programme 0"
                               type="button"
                             >
                               <span
@@ -2044,11 +1999,12 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Programme 1"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                               href="/catalog/default/group/programme-1"
+                              title="View Programme 1 in the catalog"
                             >
                               Programme 1
                             </a>
@@ -2077,7 +2033,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -2085,8 +2041,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
@@ -2094,19 +2049,25 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                               href="/catalog/default/group/programme-1/manage-delivery-programme-admins"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Programme Admins"
+                              title="Manage members for Programme 1. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -2114,11 +2075,11 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                                 class="MuiTouchRipple-root"
                               />
                             </a>
-                             
                             <button
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
                               data-testid="delivery-programme-edit-button-1"
                               tabindex="0"
+                              title="Edit Programme 1"
                               type="button"
                             >
                               <span
@@ -2517,9 +2478,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -2620,11 +2579,11 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -2638,7 +2597,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -2655,7 +2614,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -2690,7 +2649,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -2725,7 +2684,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -2760,7 +2719,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -2795,35 +2754,18 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-4-hidden-text-32"
+                              data-rbd-drag-handle-context-id="4"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="4"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-4-hidden-text-32"
-                                data-rbd-drag-handle-context-id="4"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="4"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
@@ -2839,11 +2781,12 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Programme 0"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                               href="/catalog/default/group/programme-0"
+                              title="View Programme 0 in the catalog"
                             >
                               Programme 0
                             </a>
@@ -2872,7 +2815,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -2880,8 +2823,7 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
@@ -2889,19 +2831,25 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                               href="/catalog/default/group/programme-0/manage-delivery-programme-admins"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Programme Admins"
+                              title="Manage members for Programme 0. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -2909,11 +2857,11 @@ exports[`DeliveryProgrammeViewPageComponent Should refresh when a programme is e
                                 class="MuiTouchRipple-root"
                               />
                             </a>
-                             
                             <button
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
                               data-testid="delivery-programme-edit-button-0"
                               tabindex="0"
+                              title="Edit Programme 0"
                               type="button"
                             >
                               <span
@@ -3316,9 +3264,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page when the prog
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -3419,11 +3365,11 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page when the prog
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -3437,7 +3383,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page when the prog
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -3454,7 +3400,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page when the prog
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -3489,7 +3435,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page when the prog
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -3524,7 +3470,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page when the prog
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -3559,7 +3505,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page when the prog
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -3594,35 +3540,18 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page when the prog
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-2-hidden-text-16"
+                              data-rbd-drag-handle-context-id="2"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="2"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-2-hidden-text-16"
-                                data-rbd-drag-handle-context-id="2"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="2"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
@@ -3993,9 +3922,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -4096,11 +4023,11 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -4114,7 +4041,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -4131,7 +4058,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -4166,7 +4093,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -4201,7 +4128,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -4236,7 +4163,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -4271,35 +4198,18 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-0-hidden-text-0"
+                              data-rbd-drag-handle-context-id="0"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="0"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-0-hidden-text-0"
-                                data-rbd-drag-handle-context-id="0"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="0"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
@@ -4315,11 +4225,12 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Programme 0"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                               href="/catalog/default/group/programme-0"
+                              title="View Programme 0 in the catalog"
                             >
                               Programme 0
                             </a>
@@ -4348,7 +4259,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -4356,8 +4267,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
@@ -4365,19 +4275,25 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                               href="/catalog/default/group/programme-0/manage-delivery-programme-admins"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Programme Admins"
+                              title="Manage members for Programme 0. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -4385,11 +4301,11 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                                 class="MuiTouchRipple-root"
                               />
                             </a>
-                             
                             <button
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
                               data-testid="delivery-programme-edit-button-0"
                               tabindex="0"
+                              title="Edit Programme 0"
                               type="button"
                             >
                               <span
@@ -4429,11 +4345,12 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Programme 1"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                               href="/catalog/default/group/programme-1"
+                              title="View Programme 1 in the catalog"
                             >
                               Programme 1
                             </a>
@@ -4462,7 +4379,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -4470,8 +4387,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
@@ -4479,19 +4395,25 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                               href="/catalog/default/group/programme-1/manage-delivery-programme-admins"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Programme Admins"
+                              title="Manage members for Programme 1. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -4499,11 +4421,11 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                                 class="MuiTouchRipple-root"
                               />
                             </a>
-                             
                             <button
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
                               data-testid="delivery-programme-edit-button-1"
                               tabindex="0"
+                              title="Edit Programme 1"
                               type="button"
                             >
                               <span
@@ -4543,13 +4465,14 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Programme 10"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
-                              href="/catalog/default/group/programme-2"
+                              href="/catalog/default/group/programme-10"
+                              title="View Programme 10 in the catalog"
                             >
-                              Programme 2
+                              Programme 10
                             </a>
                           </td>
                           <td
@@ -4576,7 +4499,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -4584,28 +4507,33 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiButtonBase-root MuiButton-root MuiButton-outlined"
-                              href="/catalog/default/group/programme-2/manage-delivery-programme-admins"
+                              href="/catalog/default/group/programme-10/manage-delivery-programme-admins"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Programme Admins"
+                              title="Manage members for Programme 10. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -4613,11 +4541,11 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                                 class="MuiTouchRipple-root"
                               />
                             </a>
-                             
                             <button
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
-                              data-testid="delivery-programme-edit-button-2"
+                              data-testid="delivery-programme-edit-button-10"
                               tabindex="0"
+                              title="Edit Programme 10"
                               type="button"
                             >
                               <span
@@ -4630,10 +4558,10 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
     created_at: 1970-01-01T00:00:00.000Z,
     delivery_programme_code: 'ABC',
     description: 'My description',
-    id: '2',
-    name: 'programme-2',
+    id: '10',
+    name: 'programme-10',
     delivery_programme_admins: [],
-    title: 'Programme 2',
+    title: 'Programme 10',
     updated_at: 1970-01-01T00:00:00.000Z,
     alias: 'Cool',
     children: [],
@@ -4657,13 +4585,14 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Programme 11"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
-                              href="/catalog/default/group/programme-3"
+                              href="/catalog/default/group/programme-11"
+                              title="View Programme 11 in the catalog"
                             >
-                              Programme 3
+                              Programme 11
                             </a>
                           </td>
                           <td
@@ -4690,7 +4619,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -4698,28 +4627,33 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiButtonBase-root MuiButton-root MuiButton-outlined"
-                              href="/catalog/default/group/programme-3/manage-delivery-programme-admins"
+                              href="/catalog/default/group/programme-11/manage-delivery-programme-admins"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Programme Admins"
+                              title="Manage members for Programme 11. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -4727,11 +4661,11 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                                 class="MuiTouchRipple-root"
                               />
                             </a>
-                             
                             <button
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
-                              data-testid="delivery-programme-edit-button-3"
+                              data-testid="delivery-programme-edit-button-11"
                               tabindex="0"
+                              title="Edit Programme 11"
                               type="button"
                             >
                               <span
@@ -4744,10 +4678,10 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
     created_at: 1970-01-01T00:00:00.000Z,
     delivery_programme_code: 'ABC',
     description: 'My description',
-    id: '3',
-    name: 'programme-3',
+    id: '11',
+    name: 'programme-11',
     delivery_programme_admins: [],
-    title: 'Programme 3',
+    title: 'Programme 11',
     updated_at: 1970-01-01T00:00:00.000Z,
     alias: 'Cool',
     children: [],
@@ -4771,13 +4705,14 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Programme 12"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
-                              href="/catalog/default/group/programme-4"
+                              href="/catalog/default/group/programme-12"
+                              title="View Programme 12 in the catalog"
                             >
-                              Programme 4
+                              Programme 12
                             </a>
                           </td>
                           <td
@@ -4804,7 +4739,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -4812,28 +4747,33 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiButtonBase-root MuiButton-root MuiButton-outlined"
-                              href="/catalog/default/group/programme-4/manage-delivery-programme-admins"
+                              href="/catalog/default/group/programme-12/manage-delivery-programme-admins"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Programme Admins"
+                              title="Manage members for Programme 12. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -4841,11 +4781,11 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
                                 class="MuiTouchRipple-root"
                               />
                             </a>
-                             
                             <button
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
-                              data-testid="delivery-programme-edit-button-4"
+                              data-testid="delivery-programme-edit-button-12"
                               tabindex="0"
+                              title="Edit Programme 12"
                               type="button"
                             >
                               <span
@@ -4858,10 +4798,10 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with many pro
     created_at: 1970-01-01T00:00:00.000Z,
     delivery_programme_code: 'ABC',
     description: 'My description',
-    id: '4',
-    name: 'programme-4',
+    id: '12',
+    name: 'programme-12',
     delivery_programme_admins: [],
-    title: 'Programme 4',
+    title: 'Programme 12',
     updated_at: 1970-01-01T00:00:00.000Z,
     alias: 'Cool',
     children: [],
@@ -5232,9 +5172,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with no progr
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -5335,11 +5273,11 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with no progr
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -5353,7 +5291,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with no progr
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -5370,7 +5308,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with no progr
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -5405,7 +5343,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with no progr
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -5440,7 +5378,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with no progr
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -5475,7 +5413,7 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with no progr
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -5510,35 +5448,18 @@ exports[`DeliveryProgrammeViewPageComponent Should render the page with no progr
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-1-hidden-text-8"
+                              data-rbd-drag-handle-context-id="1"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="1"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-1-hidden-text-8"
-                                data-rbd-drag-handle-context-id="1"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="1"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>

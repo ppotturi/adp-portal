@@ -132,9 +132,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -235,11 +233,11 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -253,7 +251,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -270,7 +268,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -305,7 +303,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -340,7 +338,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -375,7 +373,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -410,35 +408,18 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-3-hidden-text-24"
+                              data-rbd-drag-handle-context-id="3"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="3"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-3-hidden-text-24"
-                                data-rbd-drag-handle-context-id="3"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="3"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
@@ -454,11 +435,12 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Project 0"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                               href="/catalog/default/group/project-0"
+                              title="View Project 0 in the catalog"
                             >
                               ABC Project 0
                             </a>
@@ -487,7 +469,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -495,8 +477,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
@@ -504,19 +485,25 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                               href="/catalog/default/group/project-0/manage-delivery-project-users"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Project team members"
+                              title="Manage members for Project 0. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -529,6 +516,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
                               data-testid="delivery-project-edit-button-0"
                               tabindex="0"
+                              title="Edit Project 0"
                               type="button"
                             >
                               <span
@@ -935,9 +923,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -1038,11 +1024,11 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -1056,7 +1042,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -1073,7 +1059,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1108,7 +1094,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1143,7 +1129,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1178,7 +1164,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1213,35 +1199,18 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is creat
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-3-hidden-text-24"
+                              data-rbd-drag-handle-context-id="3"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="3"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-3-hidden-text-24"
-                                data-rbd-drag-handle-context-id="3"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="3"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
@@ -1612,9 +1581,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -1715,11 +1682,11 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -1733,7 +1700,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -1750,7 +1717,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1785,7 +1752,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1820,7 +1787,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1855,7 +1822,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -1890,35 +1857,18 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-4-hidden-text-32"
+                              data-rbd-drag-handle-context-id="4"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="4"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-4-hidden-text-32"
-                                data-rbd-drag-handle-context-id="4"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="4"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
@@ -1934,11 +1884,12 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Project 0"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                               href="/catalog/default/group/project-0"
+                              title="View Project 0 in the catalog"
                             >
                               ABC Project 0
                             </a>
@@ -1967,7 +1918,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -1975,8 +1926,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
@@ -1984,19 +1934,25 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                               href="/catalog/default/group/project-0/manage-delivery-project-users"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Project team members"
+                              title="Manage members for Project 0. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -2009,6 +1965,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
                               data-testid="delivery-project-edit-button-0"
                               tabindex="0"
+                              title="Edit Project 0"
                               type="button"
                             >
                               <span
@@ -2052,11 +2009,12 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Project 1"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                               href="/catalog/default/group/project-1"
+                              title="View Project 1 in the catalog"
                             >
                               ABC Project 1
                             </a>
@@ -2085,7 +2043,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -2093,8 +2051,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
@@ -2102,19 +2059,25 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                               href="/catalog/default/group/project-1/manage-delivery-project-users"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Project team members"
+                              title="Manage members for Project 1. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -2127,6 +2090,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
                               data-testid="delivery-project-edit-button-1"
                               tabindex="0"
+                              title="Edit Project 1"
                               type="button"
                             >
                               <span
@@ -2529,9 +2493,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -2632,11 +2594,11 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -2650,7 +2612,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -2667,7 +2629,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -2702,7 +2664,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -2737,7 +2699,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -2772,7 +2734,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -2807,35 +2769,18 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-4-hidden-text-32"
+                              data-rbd-drag-handle-context-id="4"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="4"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-4-hidden-text-32"
-                                data-rbd-drag-handle-context-id="4"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="4"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
@@ -2851,11 +2796,12 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Project 0"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                               href="/catalog/default/group/project-0"
+                              title="View Project 0 in the catalog"
                             >
                               ABC Project 0
                             </a>
@@ -2884,7 +2830,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -2892,8 +2838,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
@@ -2901,19 +2846,25 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                               href="/catalog/default/group/project-0/manage-delivery-project-users"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Project team members"
+                              title="Manage members for Project 0. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -2926,6 +2877,7 @@ exports[`DeliveryProjectViewPageComponent Should refresh when a project is edite
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
                               data-testid="delivery-project-edit-button-0"
                               tabindex="0"
+                              title="Edit Project 0"
                               type="button"
                             >
                               <span
@@ -3332,9 +3284,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page when the projec
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -3435,11 +3385,11 @@ exports[`DeliveryProjectViewPageComponent Should render the page when the projec
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -3453,7 +3403,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page when the projec
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -3470,7 +3420,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page when the projec
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -3505,7 +3455,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page when the projec
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -3540,7 +3490,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page when the projec
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -3575,7 +3525,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page when the projec
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -3610,35 +3560,18 @@ exports[`DeliveryProjectViewPageComponent Should render the page when the projec
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-2-hidden-text-16"
+                              data-rbd-drag-handle-context-id="2"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="2"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-2-hidden-text-16"
-                                data-rbd-drag-handle-context-id="2"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="2"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
@@ -4009,9 +3942,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -4112,11 +4043,11 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -4130,7 +4061,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -4147,7 +4078,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -4182,7 +4113,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -4217,7 +4148,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -4252,7 +4183,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -4287,35 +4218,18 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-0-hidden-text-0"
+                              data-rbd-drag-handle-context-id="0"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="0"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-0-hidden-text-0"
-                                data-rbd-drag-handle-context-id="0"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="0"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
@@ -4331,11 +4245,12 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Project 0"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                               href="/catalog/default/group/project-0"
+                              title="View Project 0 in the catalog"
                             >
                               ABC Project 0
                             </a>
@@ -4364,7 +4279,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -4372,8 +4287,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
@@ -4381,19 +4295,25 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                               href="/catalog/default/group/project-0/manage-delivery-project-users"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Project team members"
+                              title="Manage members for Project 0. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -4406,6 +4326,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
                               data-testid="delivery-project-edit-button-0"
                               tabindex="0"
+                              title="Edit Project 0"
                               type="button"
                             >
                               <span
@@ -4449,11 +4370,12 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Project 1"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                               href="/catalog/default/group/project-1"
+                              title="View Project 1 in the catalog"
                             >
                               ABC Project 1
                             </a>
@@ -4482,7 +4404,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -4490,8 +4412,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
@@ -4499,19 +4420,25 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                               href="/catalog/default/group/project-1/manage-delivery-project-users"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Project team members"
+                              title="Manage members for Project 1. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -4524,6 +4451,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
                               data-testid="delivery-project-edit-button-1"
                               tabindex="0"
+                              title="Edit Project 1"
                               type="button"
                             >
                               <span
@@ -4567,13 +4495,14 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Project 10"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
-                              href="/catalog/default/group/project-2"
+                              href="/catalog/default/group/project-10"
+                              title="View Project 10 in the catalog"
                             >
-                              ABC Project 2
+                              ABC Project 10
                             </a>
                           </td>
                           <td
@@ -4600,7 +4529,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -4608,28 +4537,33 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiButtonBase-root MuiButton-root MuiButton-outlined"
-                              href="/catalog/default/group/project-2/manage-delivery-project-users"
+                              href="/catalog/default/group/project-10/manage-delivery-project-users"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Project team members"
+                              title="Manage members for Project 10. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -4640,8 +4574,9 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                              
                             <button
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
-                              data-testid="delivery-project-edit-button-2"
+                              data-testid="delivery-project-edit-button-10"
                               tabindex="0"
+                              title="Edit Project 10"
                               type="button"
                             >
                               <span
@@ -4649,9 +4584,9 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                               >
                                 Edit
                                 {
-  id: '2',
-  name: 'project-2',
-  title: 'Project 2',
+  id: '10',
+  name: 'project-10',
+  title: 'Project 10',
   ado_project: 'My ado project',
   created_at: 1970-01-01T00:00:00.000Z,
   delivery_programme_code: 'ABC',
@@ -4685,13 +4620,14 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Project 11"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
-                              href="/catalog/default/group/project-3"
+                              href="/catalog/default/group/project-11"
+                              title="View Project 11 in the catalog"
                             >
-                              ABC Project 3
+                              ABC Project 11
                             </a>
                           </td>
                           <td
@@ -4718,7 +4654,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -4726,28 +4662,33 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiButtonBase-root MuiButton-root MuiButton-outlined"
-                              href="/catalog/default/group/project-3/manage-delivery-project-users"
+                              href="/catalog/default/group/project-11/manage-delivery-project-users"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Project team members"
+                              title="Manage members for Project 11. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -4758,8 +4699,9 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                              
                             <button
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
-                              data-testid="delivery-project-edit-button-3"
+                              data-testid="delivery-project-edit-button-11"
                               tabindex="0"
+                              title="Edit Project 11"
                               type="button"
                             >
                               <span
@@ -4767,9 +4709,9 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                               >
                                 Edit
                                 {
-  id: '3',
-  name: 'project-3',
-  title: 'Project 3',
+  id: '11',
+  name: 'project-11',
+  title: 'Project 11',
   ado_project: 'My ado project',
   created_at: 1970-01-01T00:00:00.000Z,
   delivery_programme_code: 'ABC',
@@ -4803,13 +4745,14 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
                             style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            value="Project 12"
                           >
                             <a
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
-                              href="/catalog/default/group/project-4"
+                              href="/catalog/default/group/project-12"
+                              title="View Project 12 in the catalog"
                             >
-                              ABC Project 4
+                              ABC Project 12
                             </a>
                           </td>
                           <td
@@ -4836,7 +4779,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit;"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                             value="Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)"
                           >
                             1/1/1970, 12:00:00 AM
@@ -4844,28 +4787,33 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                           <td
                             class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             icons="[object Object]"
-                            style="box-sizing: border-box; font-family: inherit; font-weight: 700;"
-                            value="[object Object]"
+                            style="box-sizing: border-box; font-family: inherit; font-weight: inherit; white-space: nowrap;"
                           >
                             <a
                               aria-disabled="false"
                               class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiButtonBase-root MuiButton-root MuiButton-outlined"
-                              href="/catalog/default/group/project-4/manage-delivery-project-users"
+                              href="/catalog/default/group/project-12/manage-delivery-project-users"
                               role="button"
                               tabindex="0"
-                              title="View Delivery Project team members"
+                              title="Manage members for Project 12. This will open in a new tab"
                             >
                               <span
                                 class="MuiButton-label"
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="MuiSvgIcon-root"
+                                  class="v5-MuiSvgIcon-root v5-MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                  data-testid="ManageAccountsIcon"
                                   focusable="false"
                                   viewBox="0 0 24 24"
                                 >
+                                  <circle
+                                    cx="10"
+                                    cy="8"
+                                    r="4"
+                                  />
                                   <path
-                                    d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"
+                                    d="M10.67 13.02c-.22-.01-.44-.02-.67-.02-2.42 0-4.68.67-6.61 1.82-.88.52-1.39 1.5-1.39 2.53V20h9.26c-.79-1.13-1.26-2.51-1.26-4 0-1.07.25-2.07.67-2.98M20.75 16c0-.22-.03-.42-.06-.63l1.14-1.01-1-1.73-1.45.49c-.32-.27-.68-.48-1.08-.63L18 11h-2l-.3 1.49c-.4.15-.76.36-1.08.63l-1.45-.49-1 1.73 1.14 1.01c-.03.21-.06.41-.06.63s.03.42.06.63l-1.14 1.01 1 1.73 1.45-.49c.32.27.68.48 1.08.63L16 21h2l.3-1.49c.4-.15.76-.36 1.08-.63l1.45.49 1-1.73-1.14-1.01c.03-.21.06-.41.06-.63M17 18c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
                                   />
                                 </svg>
                               </span>
@@ -4876,8 +4824,9 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                              
                             <button
                               class="MuiButtonBase-root MuiButton-root MuiButton-contained"
-                              data-testid="delivery-project-edit-button-4"
+                              data-testid="delivery-project-edit-button-12"
                               tabindex="0"
+                              title="Edit Project 12"
                               type="button"
                             >
                               <span
@@ -4885,9 +4834,9 @@ exports[`DeliveryProjectViewPageComponent Should render the page with many proje
                               >
                                 Edit
                                 {
-  id: '4',
-  name: 'project-4',
-  title: 'Project 4',
+  id: '12',
+  name: 'project-12',
+  title: 'Project 12',
   ado_project: 'My ado project',
   created_at: 1970-01-01T00:00:00.000Z,
   delivery_programme_code: 'ABC',
@@ -5268,9 +5217,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with no project
               >
                 <h2
                   class="MuiTypography-root MuiTypography-h5"
-                >
-                  View all
-                </h2>
+                />
               </div>
               <div
                 class="ForwardRef(MTableToolbarRef)-spacer"
@@ -5371,11 +5318,11 @@ exports[`DeliveryProjectViewPageComponent Should render the page with no project
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; color: rgb(0, 0, 0); box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                              class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
                               role="button"
                               tabindex="0"
                             >
@@ -5389,7 +5336,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with no project
                                 role="button"
                                 tabindex="0"
                               >
-                                Title
+                                Name
                               </div>
                               <svg
                                 aria-hidden="true"
@@ -5406,7 +5353,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with no project
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -5441,7 +5388,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with no project
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -5476,7 +5423,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with no project
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -5511,7 +5458,7 @@ exports[`DeliveryProjectViewPageComponent Should render the page with no project
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
                             <span
                               aria-disabled="false"
@@ -5546,35 +5493,18 @@ exports[`DeliveryProjectViewPageComponent Should render the page with no project
                           <th
                             class="MuiTableCell-root MuiTableCell-head ForwardRef(MTableHeaderRef)-header BackstageTableHeader-header MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                             scope="col"
-                            style="color: rgb(0, 0, 0); box-sizing: border-box;"
+                            style="white-space: nowrap; box-sizing: border-box;"
                           >
-                            <span
-                              aria-disabled="false"
-                              class="MuiButtonBase-root MuiTableSortLabel-root"
+                            <div
+                              aria-describedby="rbd-hidden-text-1-hidden-text-8"
+                              data-rbd-drag-handle-context-id="1"
+                              data-rbd-drag-handle-draggable-id="5"
+                              data-rbd-draggable-context-id="1"
+                              data-rbd-draggable-id="5"
+                              draggable="false"
                               role="button"
                               tabindex="0"
-                            >
-                              <div
-                                aria-describedby="rbd-hidden-text-1-hidden-text-8"
-                                data-rbd-drag-handle-context-id="1"
-                                data-rbd-drag-handle-draggable-id="5"
-                                data-rbd-draggable-context-id="1"
-                                data-rbd-draggable-id="5"
-                                draggable="false"
-                                role="button"
-                                tabindex="0"
-                              />
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                                />
-                              </svg>
-                            </span>
+                            />
                           </th>
                         </tr>
                       </thead>
