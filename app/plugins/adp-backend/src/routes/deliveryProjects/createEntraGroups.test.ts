@@ -21,15 +21,16 @@ describe('default', () => {
       github_username: randomUUID(),
       user_entity_ref: randomUUID(),
     }));
-    service.createEntraIdGroupsForProject.mockResolvedValueOnce();
+    service.createEntraIdGroupsForProjectIfNotExists.mockResolvedValueOnce();
 
     const { status, body } = await request(app).post('/my-project').send(data);
 
-    expect(service.createEntraIdGroupsForProject).toHaveBeenCalledTimes(1);
-    expect(service.createEntraIdGroupsForProject).toHaveBeenCalledWith(
-      data,
-      'my-project',
-    );
+    expect(
+      service.createEntraIdGroupsForProjectIfNotExists,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      service.createEntraIdGroupsForProjectIfNotExists,
+    ).toHaveBeenCalledWith(data, 'my-project');
     expect({ status, body }).toMatchObject({
       status: 204,
       body: {},
