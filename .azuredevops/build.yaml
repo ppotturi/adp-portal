@@ -51,8 +51,24 @@ extends:
       imageRepoName: 'adp-portal'
       dockerfilePath: './packages/backend/Dockerfile'
       snykPolicyFilePath: './packages/backend/.snyk'
-      appPath: '/'
+      appPath: '/'      
     appDeployConfig:
       filepath: '.azuredevops/backstage.yaml'
       variableGroups:
         - adp-portal-web-<environment>
+    appTestConfig:
+      testEnvs:
+        acceptanceTests:
+          - env: ssv_dev
+            tags: '' # Defaults to all tests. Can be overridden by setting or separated list of tags e.g https://cucumber.io/docs/cucumber/api/?lang=java#tag-expressions
+      testEnvKvSecrets:
+        - E2E-TEST-ACCOUNTS-ADPTESTUSER1-EMAIL
+        - E2E-TEST-ACCOUNTS-ADPTESTUSER1-PASSWORD
+        - E2E-TEST-ACCOUNTS-ADPTESTUSER2-EMAIL
+        - E2E-TEST-ACCOUNTS-ADPTESTUSER2-PASSWORD
+        - E2E-TEST-ACCOUNTS-ADPTESTUSER3-EMAIL
+        - E2E-TEST-ACCOUNTS-ADPTESTUSER3-PASSWORD
+        - E2E-TEST-ACCOUNTS-ADPTESTUSER4-EMAIL
+        - E2E-TEST-ACCOUNTS-ADPTESTUSER4-PASSWORD
+        - E2E-TEST-ACCOUNTS-ADPTESTUSER5-EMAIL
+        - E2E-TEST-ACCOUNTS-ADPTESTUSER5-PASSWORD
